@@ -27,12 +27,12 @@ export class AppComponent {
     },
     {
       label: 'Home',
-      icon: 'person',
+      icon: 'home',
       route: 'Home',
     },
     {
       label: 'create-user-account',
-      icon: 'search',
+      icon: 'person',
       route: 'Create-User-Account',
     },
   ];
