@@ -14,6 +14,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import { RouterModule } from '@angular/router';
+import { MatSortModule } from '@angular/material/sort';
 
 @NgModule({
   declarations: [
@@ -34,6 +35,8 @@ import { RouterModule } from '@angular/router';
     MatIconModule,
     MatSelectModule,
     MatToolbarModule,
+    MatSortModule
+
   ],
   providers: [],
   bootstrap: [AppComponent]
