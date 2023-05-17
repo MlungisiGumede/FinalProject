@@ -21,19 +21,39 @@ export class AppComponent {
   title = 'IBIS-App';
   tabs: TabItem[] = [
     {
-      label: 'Login',
-      icon: 'login',
-      route: 'Login',
+      label: 'Dashboard',
+      icon: 'dashboard',
+      route: 'Dashboard',
     },
     {
-      label: 'Home',
-      icon: 'home',
-      route: 'Home',
+      label: 'Inventory',
+      icon: 'inventory',
+      route: 'Inventory',
     },
     {
-      label: 'create-user-account',
-      icon: 'person',
-      route: 'Create-User-Account',
+      label: 'Products',
+      icon: 'product',
+      route: 'Products',
+    },
+    {
+      label: 'Suppliers',
+      icon: 'supplier',
+      route: 'Suppliers',
+    },
+    {
+      label: 'Reports',
+      icon: 'report',
+      route: 'Reports',
+    },
+    {
+      label: 'Orders',
+      icon: 'order',
+      route: 'Orders',
+    },
+    {
+      label: 'Recipes',
+      icon: 'recipe',
+      route: 'Recipes',
     },
   ];
 }
