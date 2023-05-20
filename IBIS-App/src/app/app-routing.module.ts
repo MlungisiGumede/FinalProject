@@ -78,6 +78,13 @@ loadChildren: () =>
     (m) => m.RecipesModule
   ),
 },
+{
+  path: 'Register',
+  loadChildren: () =>
+    import('./ComponentModules/register.module').then(
+      (m) => m.RegisterModule
+    ),
+  },
 
 
 
