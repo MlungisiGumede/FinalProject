@@ -26,9 +26,25 @@ export class ProductsComponent implements OnInit {
   }
 
   getProducts(){
-    this.productService.getProductsList().subscribe(result=>(this.data = result));
-    console.log("data",this.products)
+    this.productService.getProductList().subscribe(response => {
+      console.log(response);
+      this.data = response;
+    })
+    
 
+  }
+
+
+  async delete(event: Event){
+
+let trID = (event.target as HTMLInputElement).id
+
+
+this.productService.deleteProduct(trID).subscribe(Response => {
+  console.log(Response);
+  this.data = Response;
+this.getProducts();
+})
   }
 
   
