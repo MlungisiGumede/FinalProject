@@ -4,6 +4,7 @@ import { MatSort } from '@angular/material/sort';
 import { DataSource } from '@angular/cdk/table';
 import { Product } from '../Models/Product';
 import { ProductService } from '../Services/product.service';
+import { Router } from '@angular/router';
 
 
 
@@ -18,7 +19,7 @@ export class ProductsComponent implements OnInit {
   products: Product[] = [];
   idtodelete :any;
 
-  constructor(private productService: ProductService) { 
+  constructor(private productService: ProductService,public router: Router) { 
     productService = {} as ProductService;
 
   }
@@ -45,6 +46,13 @@ this.productService.delete(this.idtodelete).subscribe(Response => {
   this.data = Response;
 this.getProducts();
 })
+  }
+
+
+  addproduct(){
+
+    this.router.navigate(['/AddProduct']);
+
   }
 
   
