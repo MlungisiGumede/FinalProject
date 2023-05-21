@@ -16,6 +16,8 @@ import { ProductService } from '../Services/product.service';
 export class ProductsComponent implements OnInit {
   data:any
   products: Product[] = [];
+  idtodelete :any;
+
   constructor(private productService: ProductService) { 
     productService = {} as ProductService;
 
@@ -35,12 +37,10 @@ export class ProductsComponent implements OnInit {
   }
 
 
-  async delete(event: Event){
+  async delete(id: number){
+    this.idtodelete = id;
 
-let trID = (event.target as HTMLInputElement).id
-
-
-this.productService.deleteProduct(trID).subscribe(Response => {
+this.productService.delete(this.idtodelete).subscribe(Response => {
   console.log(Response);
   this.data = Response;
 this.getProducts();

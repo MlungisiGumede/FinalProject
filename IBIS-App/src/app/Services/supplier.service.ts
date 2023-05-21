@@ -73,8 +73,8 @@ export class SupplierService {
        }
       
     
-       deleteSupplier(id: string): Observable<{}> {
-         return this.httpClient.delete(this.apiUrl + '/api/Dealerships/' +  id , this.httpOptions)
+       deleteSupplier(id: string): Observable<any> {
+         return this.httpClient.delete(`${this.apiUrl}/${id}` , this.httpOptions)
            .pipe(
              catchError(this.handleError)
            );

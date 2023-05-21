@@ -12,6 +12,8 @@ import { MatButtonModule } from '@angular/material/button';
     RouterModule.forChild([{ path: '', component: HomeComponent}]),
     MatCardModule,
     MatButtonModule,
+
   ],
 })
 export class HomeModule {}
+
