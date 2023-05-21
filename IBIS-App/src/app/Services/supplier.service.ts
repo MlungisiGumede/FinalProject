@@ -39,7 +39,7 @@ export class SupplierService {
       
       
       
-       createDealership(sup: Supplier){
+       createProduct(sup: Supplier){
         return this.httpClient.post(this.apiUrl + '/createsup' , sup, this.httpOptions)
       }
   
@@ -63,7 +63,7 @@ export class SupplierService {
            )
        }
       
-       updateDealership(id: string, item: any): Observable<Supplier> {
+       updateSupplier(id: string, item: any): Observable<Supplier> {
          return this.httpClient
            .put<Supplier>(this.apiUrl + '/PutDealership' + id, item, this.httpOptions)
            .pipe(
@@ -73,7 +73,7 @@ export class SupplierService {
        }
       
     
-       deleteDealership(id: string): Observable<{}> {
+       deleteSupplier(id: string): Observable<{}> {
          return this.httpClient.delete(this.apiUrl + '/api/Dealerships/' +  id , this.httpOptions)
            .pipe(
              catchError(this.handleError)
