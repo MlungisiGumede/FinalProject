@@ -85,6 +85,13 @@ loadChildren: () =>
       (m) => m.RegisterModule
     ),
   },
+  {
+    path: 'AddProduct',
+    loadChildren: () =>
+      import('./ComponentModules/CreateProduct.module').then(
+        (m) => m.CreateProductModule
+      ),
+  }
 
 
 
