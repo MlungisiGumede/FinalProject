@@ -1,3 +1,10 @@
+.folder{
+
+  backdrop-filter: blur(10px);
+}
+
+
+
 .p1{
 
     color: white;
@@ -16,8 +23,10 @@ color: lightblue;
   width: 360px;
   padding: 8% 0 0;
   margin: auto;
+  backdrop-filter: blur(10px);
 }
 .form {
+  backdrop-filter: blur(10px);
   position: relative;
   z-index: 1;
   background: #FFFFFF;
@@ -99,12 +108,4 @@ color: lightblue;
 }
 .container .info span .fa {
   color: #EF3B3A;
-}
-body {
-  background: yellow; /* fallback for old browsers */
-  background: yellow;
-  background: linear-gradient(90deg, rgba(141,194,111,1) 0%, rgba(118,184,82,1) 50%);
-  font-family: "Roboto", sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;      
 }
