@@ -1,1 +1,22 @@
-<p>suppliers works!</p>
+<h2>Suppliers</h2>
+
+
+
+<table class="t">
+  <tr>
+    <th>Supplier ID</th>
+    <th>Supplier Name</th>
+    <th>Contact Name</th>
+    <th>Address</th>
+    <th>Phone</th>
+  </tr>
+  <tr *ngFor="let item of data" class="row">
+    <td>{{item.supplier_ID}}</td>
+    <td>{{item.companyName}}</td>
+    <td>{{item.companyName}}</td>
+    <td>{{item.addressline}}</td>
+    <td>{{item.phone}}</td>
+    <button  mat-flat-button color="warn">View</button>
+    <button  mat-flat-button color="primary">Remove</button>
+  </tr>
+</table>

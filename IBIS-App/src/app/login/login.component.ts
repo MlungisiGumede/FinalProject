@@ -20,9 +20,9 @@ export class LoginComponent implements OnInit {
    }
 
   ngOnInit(){
-this.getUsers();
-this.loginservice.getUserList().subscribe((result: User[])=>(this.users = result));
-console.log("data",this.users)
+//this.getUsers();
+//this.loginservice.getUserList().subscribe((result: User[])=>(this.users = result));
+//console.log("data",this.users)
 
 
   }
