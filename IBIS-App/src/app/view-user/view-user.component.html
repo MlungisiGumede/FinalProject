@@ -1,0 +1,18 @@
+<div class="back">
+
+    <p class="p1">Username: {{data.username}}</p>
+    <p class="p1">Password: {{data.Password}}  </p>
+    
+    <div *ngFor="let item of data">
+    
+        
+          <label for=""><strong>username: </strong> </label>
+            <label>{{item.username}}</label>
+          
+            <label for=""><strong>password: </strong> </label>
+            <label>{{item.password}}</label>
+          
+        
+        </div>
+    
+    </div>
