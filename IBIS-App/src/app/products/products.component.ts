@@ -2,6 +2,8 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
 import { DataSource } from '@angular/cdk/table';
+import { Product } from '../Models/Product';
+import { ProductService } from '../Services/product.service';
 
 
 
@@ -12,12 +14,24 @@ import { DataSource } from '@angular/cdk/table';
   styleUrls: ['./products.component.css']
 })
 export class ProductsComponent implements OnInit {
+  data:any
+  products: Product[] = [];
+  constructor(private productService: ProductService) { 
+    productService = {} as ProductService;
 
-  constructor() { }
+  }
 
   ngOnInit() {
-    
+    this.getProducts()
   }
+
+  getProducts(){
+    this.productService.getProductsList().subscribe(result=>(this.data = result));
+    console.log("data",this.products)
+
+  }
+
+  
 
  
 }
