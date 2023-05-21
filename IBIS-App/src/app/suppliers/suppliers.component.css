@@ -6,10 +6,19 @@ table {
   }
   
   td, th {
-    border: 1px solid #dddddd;
+    border: 1px solid grey;
     text-align: left;
     padding: 8px;
     color: white;
+  }
+
+  .h{
+color: white;
+  }
+
+  .thead{
+
+    color: red;
   }
   
   

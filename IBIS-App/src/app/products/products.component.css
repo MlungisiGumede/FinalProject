@@ -2,14 +2,36 @@ table {
     font-family: arial, sans-serif;
     border-collapse: collapse;
     width: 100%;
+    background-color: black;
   }
   
   td, th {
-    border: 1px solid #dddddd;
+    border: 1px solid #5b5b5b;
     text-align: left;
     padding: 8px;
+    color: white;
   }
+
+  .add{
   
-  tr:nth-child(even) {
-    background-color: #dddddd;
+    
+    font-style: normal;
+    font-weight: 700;
+   
+
+
+
+left: 75%;
+color: black;
+background-color:#FAF244;
+
   }
+
+  .h{
+    color: white;
+      }
+
+      .thead{
+
+        color: red;
+      }

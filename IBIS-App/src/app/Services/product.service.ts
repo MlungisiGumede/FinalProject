@@ -1,19 +1,13 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpErrorResponse} from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Observable, catchError, retry, throwError } from 'rxjs';
-import { Supplier } from '../Models/Supplier';
-
+import { Product } from '../Models/Product';
 
 @Injectable({
   providedIn: 'root'
 })
-export class SupplierService {
-
-
-  apiUrl = 'https://localhost:7226/api/Suppliers';
-
-
-  
+export class ProductService {
+  apiUrl = 'https://localhost:7226/api/Products';
 
   constructor(private httpClient: HttpClient) { }
 
@@ -39,33 +33,33 @@ export class SupplierService {
       
       
       
-       createProduct(sup: Supplier){
-        return this.httpClient.post(this.apiUrl + '/createsup' , sup, this.httpOptions)
+       createProduct(prod: Product){
+        return this.httpClient.post(this.apiUrl + '/createsup' , prod, this.httpOptions)
       }
   
     
     
-       getSupplierList(): Observable<Supplier> {
+       getProductList(): Observable<Product> {
          return this.httpClient
-         .get<Supplier>(this.apiUrl + '/getAll')
+         .get<Product>(this.apiUrl + '/getAll')
            .pipe(
              retry(2),
              catchError(this.handleError)
            )
        }
     
-       getSup(id: string): Observable<Supplier> {
+       getSup(id: string): Observable<Product> {
          return this.httpClient
-           .get<Supplier>(this.apiUrl + '/api/supplier/id?id=' + id)
+           .get<Product>(this.apiUrl + '/api/supplier/id?id=' + id)
            .pipe(
              retry(2),
              catchError(this.handleError)
            )
        }
       
-       updateSupplier(id: string, item: any): Observable<Supplier> {
+       updateSupplier(id: string, item: any): Observable<Product> {
          return this.httpClient
-           .put<Supplier>(this.apiUrl + '/PutDealership' + id, item, this.httpOptions)
+           .put<Product>(this.apiUrl + '/PutProduct' + id, item, this.httpOptions)
            .pipe(
              retry(2),
              catchError(this.handleError)
@@ -73,8 +67,8 @@ export class SupplierService {
        }
       
     
-       deleteSupplier(id: string): Observable<{}> {
-         return this.httpClient.delete(this.apiUrl + '/api/Dealerships/' +  id , this.httpOptions)
+       deleteProduct(id: any): Observable<{}> {
+         return this.httpClient.delete(this.apiUrl  + '/' + id , this.httpOptions)
            .pipe(
              catchError(this.handleError)
            );
@@ -82,4 +76,8 @@ export class SupplierService {
      }
 
 
+
+
+
+  
 

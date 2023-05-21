@@ -1,40 +1,28 @@
-<h2>Products</h2>
+<h2 class="h">Products</h2>
 
-<table>
-  <tr>
-    <th>Company</th>
-    <th>Contact</th>
-    <th>Country</th>
+
+<button mat-flat-button color="primary" class="add">Add Product</button>
+<table class="t">
+  <tr class="thead">
+    <th class="thead">Product ID</th>
+    <th class="thead">Product Name</th>
+    <th class="thead">Category</th>
+    <th class="thead">Subcategory</th>
+    <th class="thead">Price per category</th>
+    <th class="thead">Quantity</th>
+    <th class="thead">Expiry Date</th>
   </tr>
-  <tr>
-    <td>Alfreds Futterkiste</td>
-    <td>Maria Anders</td>
-    <td>Germany</td>
-  </tr>
-  <tr>
-    <td>Centro comercial Moctezuma</td>
-    <td>Francisco Chang</td>
-    <td>Mexico</td>
-  </tr>
-  <tr>
-    <td>Ernst Handel</td>
-    <td>Roland Mendel</td>
-    <td>Austria</td>
-  </tr>
-  <tr>
-    <td>Island Trading</td>
-    <td>Helen Bennett</td>
-    <td>UK</td>
-  </tr>
-  <tr>
-    <td>Laughing Bacchus Winecellars</td>
-    <td>Yoshi Tannamuri</td>
-    <td>Canada</td>
-  </tr>
-  <tr>
-    <td>Magazzini Alimentari Riuniti</td>
-    <td>Giovanni Rovelli</td>
-    <td>Italy</td>
+  <tr *ngFor="let item of data" class="row">
+    <td>{{item.product_ID}}</td>
+    <td>{{item.product_Name}}</td>
+    <td>{{item.category}}</td>
+    <td>{{item.subcategory}}</td>
+    <td>{{item.price}}</td>
+    <td>{{item.quantity}}</td>
+    <td>{{item.expiry}}</td>
+    
+    <button  mat-flat-button color="warn">View</button>
+    <button  mat-flat-button color="primary" (click)="delete($event)">Remove</button>
   </tr>
 </table>
 

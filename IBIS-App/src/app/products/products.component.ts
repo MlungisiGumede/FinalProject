@@ -2,6 +2,8 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
 import { DataSource } from '@angular/cdk/table';
+import { Product } from '../Models/Product';
+import { ProductService } from '../Services/product.service';
 
 
 
@@ -12,12 +14,40 @@ import { DataSource } from '@angular/cdk/table';
   styleUrls: ['./products.component.css']
 })
 export class ProductsComponent implements OnInit {
+  data:any
+  products: Product[] = [];
+  constructor(private productService: ProductService) { 
+    productService = {} as ProductService;
 
-  constructor() { }
+  }
 
   ngOnInit() {
-    
+    this.getProducts()
   }
+
+  getProducts(){
+    this.productService.getProductList().subscribe(response => {
+      console.log(response);
+      this.data = response;
+    })
+    
+
+  }
+
+
+  async delete(event: Event){
+
+let trID = (event.target as HTMLInputElement).id
+
+
+this.productService.deleteProduct(trID).subscribe(Response => {
+  console.log(Response);
+  this.data = Response;
+this.getProducts();
+})
+  }
+
+  
 
  
 }
