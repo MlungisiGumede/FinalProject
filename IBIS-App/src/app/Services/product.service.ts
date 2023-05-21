@@ -66,13 +66,19 @@ export class ProductService {
            )
        }
       
+       delete(id:number){
+        return this.httpClient.delete<Product>(`${this.apiUrl}/${id}` , this.httpOptions);
+     }
+
+
+
     
-       deleteProduct(id: any): Observable<{}> {
-         return this.httpClient.delete(this.apiUrl  + '/' + id , this.httpOptions)
-           .pipe(
-             catchError(this.handleError)
-           );
-       }
+       deleteProduct(id: string): Observable<any> {
+        return this.httpClient.delete(`${this.apiUrl}/${id}` , this.httpOptions)
+          .pipe(
+            catchError(this.handleError)
+          );
+      }
      }
 
 

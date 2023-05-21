@@ -1,7 +1,7 @@
 <h2 class="h">Products</h2>
 
 
-<button mat-flat-button color="primary" class="add">Add Product</button>
+<button (click)="addproduct()" mat-flat-button color="primary" class="add" >Add Product</button>
 <table class="t">
   <tr class="thead">
     <th class="thead">Product ID</th>
@@ -22,7 +22,7 @@
     <td>{{item.expiry}}</td>
     
     <button  mat-flat-button color="warn">View</button>
-    <button  mat-flat-button color="primary" >Remove</button>
+    <button (click)="delete(item.product_ID)" mat-flat-button color="primary">Remove</button>
   </tr>
 </table>
 

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Supplier } from '../Models/Supplier';
 import { SupplierService } from '../Services/supplier.service';
+import { Router } from '@angular/router';
 
 
 
@@ -16,7 +17,7 @@ export class SuppliersComponent implements OnInit {
 
 
 
-  constructor(private supply: SupplierService) { 
+  constructor(private supply: SupplierService,public router: Router) { 
 
     supply = {} as SupplierService;
   }
@@ -38,4 +39,14 @@ this.getall();
 
   }
 
-}
+
+
+  addsupplier(){
+  
+
+      this.router.navigate(['/AddProduct']);
+  
+    }
+  }
+
+

@@ -4,6 +4,7 @@ import { MatSort } from '@angular/material/sort';
 import { DataSource } from '@angular/cdk/table';
 import { Product } from '../Models/Product';
 import { ProductService } from '../Services/product.service';
+import { Router } from '@angular/router';
 
 
 
@@ -16,7 +17,9 @@ import { ProductService } from '../Services/product.service';
 export class ProductsComponent implements OnInit {
   data:any
   products: Product[] = [];
-  constructor(private productService: ProductService) { 
+  idtodelete :any;
+
+  constructor(private productService: ProductService,public router: Router) { 
     productService = {} as ProductService;
 
   }
@@ -35,16 +38,21 @@ export class ProductsComponent implements OnInit {
   }
 
 
-  async delete(event: Event){
+  async delete(id: number){
+    this.idtodelete = id;
 
-let trID = (event.target as HTMLInputElement).id
-
-
-this.productService.deleteProduct(trID).subscribe(Response => {
+this.productService.delete(this.idtodelete).subscribe(Response => {
   console.log(Response);
   this.data = Response;
 this.getProducts();
 })
+  }
+
+
+  addproduct(){
+
+    this.router.navigate(['/AddProduct']);
+
   }
 
   

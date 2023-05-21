@@ -15,11 +15,16 @@ import { FormsModule } from '@angular/forms';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import { RouterModule } from '@angular/router';
 import { MatSortModule } from '@angular/material/sort';
-//import { MdbModalModule } from 'mdb-angular-ui-kit/modal';
+import { ViewProductComponent } from './view-product/view-product.component';
+import { ViewSupplierComponent } from './view-supplier/view-supplier.component';
+import { AddSupplierComponent } from './add-supplier/add-supplier.component';
 
 @NgModule({
   declarations: [
     AppComponent,
+    ViewProductComponent,
+    ViewSupplierComponent,
+    AddSupplierComponent,
   
   ],
   imports: [

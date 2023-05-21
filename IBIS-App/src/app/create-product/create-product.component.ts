@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { ProductService } from '../Services/product.service';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+
 
 @Component({
   selector: 'app-create-product',
@@ -7,7 +10,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class CreateProductComponent implements OnInit {
 
-  constructor() { }
+  constructor(private productService: ProductService) { }
 
   ngOnInit(): void {
   }
