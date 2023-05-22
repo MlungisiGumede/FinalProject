@@ -24,6 +24,7 @@ import { RegisterComponent } from './register/register.component';
 import {MatExpansionModule} from '@angular/material/expansion';
 
 
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -31,7 +32,8 @@ import {MatExpansionModule} from '@angular/material/expansion';
     ViewSupplierComponent,
     AddSupplierComponent,
     LoginComponent,
-    RegisterComponent
+    RegisterComponent,
+ 
   
   ],
   imports: [
@@ -41,7 +43,8 @@ import {MatExpansionModule} from '@angular/material/expansion';
       {path: 'Login', component: LoginComponent},
       {path: 'Register', component: RegisterComponent},
       {path: 'view-supplier/:id', component: ViewSupplierComponent},
-      {path: 'add-supplier', component: AddSupplierComponent}
+      {path: 'add-supplier', component: AddSupplierComponent},
+    
 
     ]),
     AppRoutingModule,

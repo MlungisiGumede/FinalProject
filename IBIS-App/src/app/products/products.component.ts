@@ -22,7 +22,7 @@ export class ProductsComponent implements OnInit {
   idtodelete :any;
 
   constructor(private productService: ProductService,public router: Router,
-    private dialog: MatDialog) { 
+    private dialog: MatDialog, public overlaydelete: DeleteProductDialogComponent) { 
     productService = {} as ProductService;
 
   }
@@ -58,7 +58,7 @@ this.getProducts();
 
   }
 
-  deleteProduct(product: Product): void{
+  deleteProduct(product: Product){
     const dialogRef = this.dialog.open(DeleteProductDialogComponent, { 
       width: '400px',
       data: { id: product.productID}
