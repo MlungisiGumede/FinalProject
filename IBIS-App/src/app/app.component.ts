@@ -1,7 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import { Router } from '@angular/router';
-
+import { LoginService } from './Services/login.service';
 
 
 
@@ -22,7 +22,20 @@ export interface userprofile {
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
+  logged=false;
+
+constructor(private log : LoginService){
+
+}
+  ngOnInit(): void {
+   // this.log.setlogin(false)
+
+    this.log.getlogin().subscribe((value) => {
+      this.logged = value;
+      console.log("login status: ",this.logged)
+    });
+  }
   panelOpenState = false;
   title = 'IBIS-App';
   use: userprofile[] = [

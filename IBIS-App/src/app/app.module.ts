@@ -37,6 +37,7 @@ import {MatExpansionModule} from '@angular/material/expansion';
   imports: [
     BrowserModule,
     RouterModule.forRoot([
+      {path: '', redirectTo: '/Login', pathMatch: 'full'},
       {path: 'Login', component: LoginComponent},
       {path: 'Register', component: RegisterComponent},
       {path: 'view-supplier/:id', component: ViewSupplierComponent},

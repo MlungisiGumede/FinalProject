@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Supplier } from '../Models/Supplier';
 import { SupplierService } from '../Services/supplier.service';
 import { ActivatedRoute, Router } from '@angular/router';
-
+import { LoginService } from '../Services/login.service';
 
 
 @Component({
@@ -14,10 +14,11 @@ export class SuppliersComponent implements OnInit {
 
   data: any;
   Suppliers : Supplier[]=[];
+  bool= false;
 
 id: any;
 
-  constructor(private supply: SupplierService,public router: Router,private route: ActivatedRoute) { 
+  constructor(private supply: SupplierService,public router: Router,private route: ActivatedRoute,private logged: LoginService) { 
 
     supply = {} as SupplierService;
   }
@@ -49,6 +50,19 @@ this.getall();
       this.router.navigate(['/AddProduct']);
   
     }
+
+logout(){
+this.logged.setlogin(false)
+
+this.logged.getlogin().subscribe((value) => {
+  this.bool = value;
+  console.log("you are no longer logged in",this.bool)
+});
+
+this.router.navigate(['/Login']);
+}
+
+
   }
 
 
