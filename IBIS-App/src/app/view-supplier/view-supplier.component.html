@@ -1,4 +1,3 @@
-<title>Registration Form</title>
 
 <body>
 <div class="container">
@@ -7,52 +6,24 @@
    <form action="#">
      <div class="user-details">
        <div class="input-box">
-         <span class="details">Full Name</span>
-         <input type="text" placeholder="Enter your name" required>
+         <span class="details">Supplier Name</span>
+         <input type="text" placeholder={{data.companyName}} [(ngModel)]="data.companyName" [ngModelOptions]="{standalone: true}">
        </div>
        <div class="input-box">
-         <span class="details">Username</span>
-         <input type="text" placeholder="Enter your username" required>
+         <span class="details">Contact Name</span>
+         <input type="text" placeholder={{data.addressline}} [(ngModel)]="data.addressline" [ngModelOptions]="{standalone: true}">
        </div>
        <div class="input-box">
-         <span class="details">Email</span>
-         <input type="text" placeholder="Enter your email" required>
+         <span class="details">Address</span>
+         <input type="text" placeholder={{data.city}} [(ngModel)]="data.city" [ngModelOptions]="{standalone: true}">
        </div>
        <div class="input-box">
-         <span class="details">Phone Number</span>
-         <input type="text" placeholder="Enter your number" required>
-       </div>
-       <div class="input-box">
-         <span class="details">Password</span>
-         <input type="text" placeholder="Enter your password" required>
-       </div>
-       <div class="input-box">
-         <span class="details">Confirm Password</span>
-         <input type="text" placeholder="Confirm your password" required>
-       </div>
-     </div>
-     <div class="gender-details">
-       <input type="radio" name="gender" id="dot-1">
-       <input type="radio" name="gender" id="dot-2">
-       <input type="radio" name="gender" id="dot-3">
-       <span class="gender-title">Gender</span>
-       <div class="category">
-         <label for="dot-1">
-         <span class="dot one"></span>
-         <span class="gender">Male</span>
-       </label>
-       <label for="dot-2">
-         <span class="dot two"></span>
-         <span class="gender">Female</span>
-       </label>
-       <label for="dot-3">
-         <span class="dot three"></span>
-         <span class="gender">Prefer not to say</span>
-         </label>
+         <span class="details">Phone number</span>
+         <input type="text" placeholder={{data.phone}} [(ngModel)]="data.phone" [ngModelOptions]="{standalone: true}">
        </div>
      </div>
      <div class="button">
-       <input type="submit" value="Register">
+       <input type="submit" value="update" (click)="update()">
      </div>
    </form>
  </div>

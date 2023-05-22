@@ -10,7 +10,7 @@ import { Supplier } from '../Models/Supplier';
 export class SupplierService {
 
 
-  apiUrl = 'https://localhost:7226/api/Suppliers';
+  apiUrl = 'https://localhost:7226/api/Suppliers/';
 
 
   
@@ -39,33 +39,33 @@ export class SupplierService {
       
       
       
-       createProduct(sup: Supplier){
-        return this.httpClient.post(this.apiUrl + '/createsup' , sup, this.httpOptions)
+       createSupplier(sup: Supplier){
+        return this.httpClient.post(this.apiUrl , sup, this.httpOptions)
       }
   
     
     
        getSupplierList(): Observable<Supplier> {
          return this.httpClient
-         .get<Supplier>(this.apiUrl + '/getAll')
+         .get<Supplier>(this.apiUrl + 'getAll')
            .pipe(
              retry(2),
              catchError(this.handleError)
            )
        }
     
-       getSup(id: string): Observable<Supplier> {
+       getSup(id: any): Observable<Supplier> {
          return this.httpClient
-           .get<Supplier>(this.apiUrl + '/api/supplier/id?id=' + id)
+           .get<Supplier>(this.apiUrl  + id)
            .pipe(
              retry(2),
              catchError(this.handleError)
            )
        }
       
-       updateSupplier(id: string, item: any): Observable<Supplier> {
+       updateSupplier(id: any, data: any): Observable<Supplier> {
          return this.httpClient
-           .put<Supplier>(this.apiUrl + '/PutDealership' + id, item, this.httpOptions)
+           .put<Supplier>(this.apiUrl + id, data, this.httpOptions)
            .pipe(
              retry(2),
              catchError(this.handleError)

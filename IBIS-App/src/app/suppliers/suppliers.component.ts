@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Supplier } from '../Models/Supplier';
 import { SupplierService } from '../Services/supplier.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 
 
@@ -15,14 +15,16 @@ export class SuppliersComponent implements OnInit {
   data: any;
   Suppliers : Supplier[]=[];
 
+id: any;
 
-
-  constructor(private supply: SupplierService,public router: Router) { 
+  constructor(private supply: SupplierService,public router: Router,private route: ActivatedRoute) { 
 
     supply = {} as SupplierService;
   }
 
   ngOnInit() {
+
+   
 
 this.getall();
 

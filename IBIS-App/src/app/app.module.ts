@@ -21,6 +21,8 @@ import { AddSupplierComponent } from './add-supplier/add-supplier.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
+import {MatExpansionModule} from '@angular/material/expansion';
+
 
 @NgModule({
   declarations: [
@@ -36,7 +38,10 @@ import { RegisterComponent } from './register/register.component';
     BrowserModule,
     RouterModule.forRoot([
       {path: 'Login', component: LoginComponent},
-      {path: 'Register', component: RegisterComponent}
+      {path: 'Register', component: RegisterComponent},
+      {path: 'view-supplier/:id', component: ViewSupplierComponent},
+      {path: 'add-supplier', component: AddSupplierComponent}
+
     ]),
     AppRoutingModule,
     HttpClientModule,
@@ -51,7 +56,8 @@ import { RegisterComponent } from './register/register.component';
     MatSelectModule,
     MatToolbarModule,
     MatSortModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MatExpansionModule
 
   ],
   providers: [],

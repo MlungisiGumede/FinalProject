@@ -22,8 +22,8 @@
 
 </div>
 
-<form [formGroup]="loginForm">
-<form class="folder">
+<form>
+<form  class="folder">
 <div class="login-page">
     <div class="form">
       <form class="register-form">
@@ -33,7 +33,7 @@
         <button>create</button>
         <p class="message">Already registered? <a href="#">Sign In</a></p>
       </form>
-      <form class="login-form">
+      <form [formGroup]="loginForm" class="login-form">
         <input formControlName="username" type="text" placeholder="username"/>
         <input formControlName="password" type="password" placeholder="password"/>
         <button (click)="onlogin()">login</button>

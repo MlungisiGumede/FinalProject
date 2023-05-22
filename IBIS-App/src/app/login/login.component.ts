@@ -39,7 +39,7 @@ if(this.loginForm.valid){
       next: (res)=>{
         alert(res.message)
         this.loginForm.reset();
-        this.router.navigate(['home'])
+        this.router.navigate(['/Home'])
       },
       error:(err) =>{
         alert(err?.error.message)
