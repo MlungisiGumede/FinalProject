@@ -18,6 +18,9 @@ import { MatSortModule } from '@angular/material/sort';
 import { ViewProductComponent } from './view-product/view-product.component';
 import { ViewSupplierComponent } from './view-supplier/view-supplier.component';
 import { AddSupplierComponent } from './add-supplier/add-supplier.component';
+import { ReactiveFormsModule } from '@angular/forms';
+import { LoginComponent } from './login/login.component';
+import { RegisterComponent } from './register/register.component';
 
 @NgModule({
   declarations: [
@@ -25,10 +28,16 @@ import { AddSupplierComponent } from './add-supplier/add-supplier.component';
     ViewProductComponent,
     ViewSupplierComponent,
     AddSupplierComponent,
+    LoginComponent,
+    RegisterComponent
   
   ],
   imports: [
     BrowserModule,
+    RouterModule.forRoot([
+      {path: 'Login', component: LoginComponent},
+      {path: 'Register', component: RegisterComponent}
+    ]),
     AppRoutingModule,
     HttpClientModule,
     FormsModule,
@@ -41,7 +50,8 @@ import { AddSupplierComponent } from './add-supplier/add-supplier.component';
     MatIconModule,
     MatSelectModule,
     MatToolbarModule,
-    MatSortModule
+    MatSortModule,
+    ReactiveFormsModule
 
   ],
   providers: [],
