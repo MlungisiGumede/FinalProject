@@ -24,6 +24,7 @@ export interface userprofile {
 })
 export class AppComponent implements OnInit {
   logged=false;
+  search : String ="";
 
 constructor(private log : LoginService, public router: Router){
 

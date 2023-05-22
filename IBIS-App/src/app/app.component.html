@@ -1,6 +1,10 @@
 <mat-toolbar class="toolbartop" *ngIf="this.logged">
   <h1 class="heading">KMJ Butchery IBIS</h1>
-  <div  class="md-toolbar-tools search-bar">
+  <mat-form-field class="example-full-width">
+    <span matPrefix> </span>
+    <input type="tel" matInput placeholder="Search" name= "search" [(ngModel)]= "search">
+    <button matSuffix mat-button><mat-icon >search</mat-icon></button>
+    </mat-form-field>
   <mat-form-field class="formfields">
     <mat-icon class="colr">user</mat-icon>
     <mat-select>
