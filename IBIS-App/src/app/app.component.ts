@@ -25,14 +25,29 @@ export interface userprofile {
 export class AppComponent implements OnInit {
   logged=false;
 
-constructor(private log : LoginService){
+constructor(private log : LoginService, public router: Router){
 
 }
   ngOnInit(): void {
+
+
+
+
+
    // this.log.setlogin(false)
 
     this.log.getlogin().subscribe((value) => {
       this.logged = value;
+
+if(!this.logged){
+
+  this.router.navigate(['/Login']);
+
+
+}
+
+
+
       console.log("login status: ",this.logged)
     });
   }

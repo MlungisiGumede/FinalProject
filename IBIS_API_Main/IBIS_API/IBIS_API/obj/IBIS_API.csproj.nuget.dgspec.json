@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\alber\\source\\repos\\IBIS_API\\IBIS_API\\IBIS_API.csproj": {}
+    "C:\\Users\\alber\\OneDrive\\Documents\\GitHub\\inf370-team6\\IBIS_API_Main\\IBIS_API\\IBIS_API\\IBIS_API.csproj": {}
   },
   "projects": {
-    "C:\\Users\\alber\\source\\repos\\IBIS_API\\IBIS_API\\IBIS_API.csproj": {
+    "C:\\Users\\alber\\OneDrive\\Documents\\GitHub\\inf370-team6\\IBIS_API_Main\\IBIS_API\\IBIS_API\\IBIS_API.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\alber\\source\\repos\\IBIS_API\\IBIS_API\\IBIS_API.csproj",
+        "projectUniqueName": "C:\\Users\\alber\\OneDrive\\Documents\\GitHub\\inf370-team6\\IBIS_API_Main\\IBIS_API\\IBIS_API\\IBIS_API.csproj",
         "projectName": "IBIS_API",
-        "projectPath": "C:\\Users\\alber\\source\\repos\\IBIS_API\\IBIS_API\\IBIS_API.csproj",
+        "projectPath": "C:\\Users\\alber\\OneDrive\\Documents\\GitHub\\inf370-team6\\IBIS_API_Main\\IBIS_API\\IBIS_API\\IBIS_API.csproj",
         "packagesPath": "C:\\Users\\alber\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\alber\\source\\repos\\IBIS_API\\IBIS_API\\obj\\",
+        "outputPath": "C:\\Users\\alber\\OneDrive\\Documents\\GitHub\\inf370-team6\\IBIS_API_Main\\IBIS_API\\IBIS_API\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\alber\\AppData\\Roaming\\NuGet\\NuGet.Config",
