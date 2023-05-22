@@ -1,5 +1,14 @@
 <mat-toolbar class="toolbartop">
-  <mat-icon>home</mat-icon><h1 class="heading">KMJ Butchery IBIS</h1>
+  <h1 class="heading">KMJ Butchery IBIS</h1>
+  <mat-form-field class="formfields">
+    <mat-icon class="colr">user</mat-icon>
+    <mat-label>User</mat-label>
+    <mat-select>
+      <mat-option *ngFor="let user of use" [value]="user.value" [routerLink]="user.route" routerLinkActive #rla="routerLinkActive">
+        {{user.viewValue}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
 </mat-toolbar>
 
 

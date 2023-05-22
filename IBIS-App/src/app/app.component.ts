@@ -10,6 +10,11 @@ export interface TabItem {
   icon: string;
   route: string;
 }
+export interface userprofile {
+  value: string;
+  viewValue: string;
+  route: string;
+}
 
 
 @Component({
@@ -18,7 +23,13 @@ export interface TabItem {
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
+  panelOpenState = false;
   title = 'IBIS-App';
+  use: userprofile[] = [
+    {value: 'user-0', viewValue: 'Display Settings',route: 'Dashboard'},
+    {value: 'user-1', viewValue: 'Profile',route: 'Products'},
+    {value: 'user-2', viewValue: 'Logout',route: 'Suppliers'},
+  ];
   tabs: TabItem[] = [
     {
       label: 'Dashboard',

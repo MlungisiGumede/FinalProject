@@ -9,7 +9,7 @@ import { User } from '../Models/User';
 })
 export class LoginService {
 
-  apiUrl = 'https://localhost:7226/api/User';
+  apiUrl = 'https://localhost:7226/api/User/';
 
   constructor(private httpClient: HttpClient) { }
 
@@ -23,6 +23,16 @@ export class LoginService {
     public getUserList(): Observable<User[]> {
       return this.httpClient
         .get<User[]>(this.apiUrl)
+    }
+
+    login(loginObj: any){
+
+      return this.httpClient.post<any>(`${this.apiUrl}authenticate`,loginObj)
+    }
+
+    Register(userObj: any){
+
+return this.httpClient.post<any>(`${this.apiUrl}Register`,userObj)
     }
 
 

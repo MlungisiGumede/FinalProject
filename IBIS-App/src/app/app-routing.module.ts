@@ -8,13 +8,6 @@ const routes: Routes = [
   redirectTo: 'one',
 },
 {
-  path: 'Login',
-  loadChildren: () =>
-  import('./Login.module').then(
-    (m) => m.LoginModule
-  )
-},
-{
   path: 'Home',
   loadChildren: () =>
     import('./home.module').then(
@@ -78,13 +71,6 @@ loadChildren: () =>
     (m) => m.RecipesModule
   ),
 },
-{
-  path: 'Register',
-  loadChildren: () =>
-    import('./ComponentModules/register.module').then(
-      (m) => m.RegisterModule
-    ),
-  },
   {
     path: 'AddProduct',
     loadChildren: () =>

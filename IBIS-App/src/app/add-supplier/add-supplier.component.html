@@ -1,1 +1,30 @@
-<p>add-supplier works!</p>
+<body>
+    <div class="container">
+     <div class="title">Add Supplier</div>
+     <div class="content">
+       <form action="#">
+         <div class="user-details">
+           <div class="input-box">
+             <span class="details">Supplier Name</span>
+             <input type="text" placeholder="name" [(ngModel)]="data.companyName" [ngModelOptions]="{standalone: true}" >
+           </div>
+           <div class="input-box">
+             <span class="details">Contact Name</span>
+             <input type="text" placeholder="contact name" [(ngModel)]="data.addressline" [ngModelOptions]="{standalone: true}">
+           </div>
+           <div class="input-box">
+             <span class="details">Address</span>
+             <input type="text" placeholder="address" [(ngModel)]="data.city"  [ngModelOptions]="{standalone: true}">
+           </div>
+           <div class="input-box">
+             <span class="details">Phone number</span>
+             <input type="text" placeholder="phone number" [(ngModel)]="data.phone" [ngModelOptions]="{standalone: true}">
+           </div>
+         </div>
+         <div class="button">
+           <input type="submit" value="update"  (click)="createSupplier()"> 
+         </div>
+       </form>
+     </div>
+    </div>
+    </body>
