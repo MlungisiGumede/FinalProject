@@ -9,6 +9,7 @@ import { Product } from '../Models/Product';
 export class ProductService {
   apiUrl = 'https://localhost:7226/api/Products';
 
+
   constructor(private httpClient: HttpClient) { }
 
   httpOptions = {
@@ -34,7 +35,7 @@ export class ProductService {
       
       
        createProduct(prod: Product){
-        return this.httpClient.post(this.apiUrl + '/createsup' , prod, this.httpOptions)
+        return this.httpClient.post(this.apiUrl, prod, this.httpOptions)
       }
   
     
@@ -48,18 +49,18 @@ export class ProductService {
            )
        }
     
-       getSup(id: string): Observable<Product> {
+       getprod(id: any): Observable<Product> {
          return this.httpClient
-           .get<Product>(this.apiUrl + '/api/supplier/id?id=' + id)
+           .get<Product>(this.apiUrl + "/" +id)
            .pipe(
              retry(2),
              catchError(this.handleError)
            )
        }
       
-       updateSupplier(id: string, item: any): Observable<Product> {
+       updateProduct(id: any, data: any): Observable<Product> {
          return this.httpClient
-           .put<Product>(this.apiUrl + '/PutProduct' + id, item, this.httpOptions)
+           .put<Product>(this.apiUrl + '/' + id, data, this.httpOptions)
            .pipe(
              retry(2),
              catchError(this.handleError)

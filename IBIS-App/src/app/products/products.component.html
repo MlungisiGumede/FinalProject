@@ -21,7 +21,7 @@
     <td>{{item.quantity}}</td>
     <td>{{item.expiry}}</td>
     
-    <button  mat-flat-button color="warn">View</button>
+    <button  mat-flat-button color="warn"  [routerLink]="['/view-product', item.product_ID]">View</button>
     <button (click)="delete(item.product_ID)" mat-flat-button color="primary">Remove</button>
   </tr>
 </table>

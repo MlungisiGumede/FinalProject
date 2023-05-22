@@ -22,6 +22,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 import {MatExpansionModule} from '@angular/material/expansion';
+import { AddProductComponent } from './add-product/add-product.component';
 
 
 @NgModule({
@@ -31,7 +32,8 @@ import {MatExpansionModule} from '@angular/material/expansion';
     ViewSupplierComponent,
     AddSupplierComponent,
     LoginComponent,
-    RegisterComponent
+    RegisterComponent,
+    AddProductComponent
   
   ],
   imports: [
@@ -41,7 +43,10 @@ import {MatExpansionModule} from '@angular/material/expansion';
       {path: 'Login', component: LoginComponent},
       {path: 'Register', component: RegisterComponent},
       {path: 'view-supplier/:id', component: ViewSupplierComponent},
-      {path: 'add-supplier', component: AddSupplierComponent}
+      {path: 'add-supplier', component: AddSupplierComponent},
+      {path: 'add-product', component: AddProductComponent},
+      {path: 'view-product/:id', component: ViewProductComponent}
+
 
     ]),
     AppRoutingModule,

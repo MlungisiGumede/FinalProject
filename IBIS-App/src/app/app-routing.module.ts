@@ -74,23 +74,6 @@ loadChildren: () =>
     (m) => m.RecipesModule
   ),
 },
-  {
-    path: 'AddProduct',
-    loadChildren: () =>
-      import('./ComponentModules/CreateProduct.module').then(
-        (m) => m.CreateProductModule
-      ),
-  },
-  {
-    path: 'add-Product',
-    loadChildren: () =>
-      import('./ComponentModules/add-product.module').then(
-        (m) => m.AddProductModule
-      ),
-  }
-
-
-
 ];
 
 @NgModule({

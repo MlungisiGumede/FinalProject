@@ -51,7 +51,7 @@ this.getProducts();
 
   addproduct(){
 
-    this.router.navigate(['/AddProduct']);
+    this.router.navigate(['/add-product']);
 
   }
 
