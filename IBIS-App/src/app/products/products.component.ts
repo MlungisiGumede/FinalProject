@@ -5,6 +5,8 @@ import { DataSource } from '@angular/cdk/table';
 import { Product } from '../Models/Product';
 import { ProductService } from '../Services/product.service';
 import { Router } from '@angular/router';
+import { MatDialog} from '@angular/material/dialog';
+import { DeleteProductDialogComponent } from '../delete-product-dialog/delete-product-dialog.component';
 
 
 
@@ -19,7 +21,8 @@ export class ProductsComponent implements OnInit {
   products: Product[] = [];
   idtodelete :any;
 
-  constructor(private productService: ProductService,public router: Router) { 
+  constructor(private productService: ProductService,public router: Router,
+    private dialog: MatDialog) { 
     productService = {} as ProductService;
 
   }
@@ -55,6 +58,21 @@ this.getProducts();
 
   }
 
+  deleteProduct(product: Product): void{
+    const dialogRef = this.dialog.open(DeleteProductDialogComponent, { 
+      width: '400px',
+      data: { id: product.productID}
+    }); 
+
+    dialogRef.afterClosed().subscribe((confirm: boolean) => {
+      if(confirm){
+        this.productService.deleteProduct(product.productID).subscribe(() => {
+          this.products = this.products.filter(p => p.productID !== product.productID);
+        })
+      }
+    })
+  }
+  
   
 
  

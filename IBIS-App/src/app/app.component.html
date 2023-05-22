@@ -1,4 +1,4 @@
-<mat-toolbar class="toolbartop" *ngIf="this.logged">
+<mat-toolbar class="toolbartop" *ngIf="!this.logged">
   <h1 class="heading">KMJ Butchery IBIS</h1>
   <mat-form-field class="formfields">
     <mat-icon class="colr">user</mat-icon>
@@ -11,7 +11,7 @@
 </mat-toolbar>
 
 
-<nav mat-tab-nav-bar class="yellow" *ngIf="this.logged">
+<nav mat-tab-nav-bar class="yellow" *ngIf="!this.logged">
   <a mat-tab-link *ngFor="let tabItem of tabs" [routerLink]="tabItem.route" routerLinkActive #rla="routerLinkActive"
     [active]="rla.isActive">
     <mat-icon class="mr-8">{{tabItem.icon}}</mat-icon>
