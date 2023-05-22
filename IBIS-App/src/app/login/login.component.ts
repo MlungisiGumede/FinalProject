@@ -38,8 +38,9 @@ if(this.loginForm.valid){
     this.loginservice.login(this.loginForm.value).subscribe({
       next: (res)=>{
         alert(res.message)
+        this.loginservice.setlogin(true);
         this.loginForm.reset();
-        this.router.navigate(['/Home'])
+        this.router.navigate(['/Home']);
       },
       error:(err) =>{
         alert(err?.error.message)
