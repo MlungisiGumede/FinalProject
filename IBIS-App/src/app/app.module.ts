@@ -23,7 +23,8 @@ import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 import {MatExpansionModule} from '@angular/material/expansion';
 import { AddProductComponent } from './add-product/add-product.component';
-
+import { ViewUserComponent } from './view-user/view-user.component';
+import { NewPasswordComponent } from './new-password/new-password.component';
 
 @NgModule({
   declarations: [
@@ -33,7 +34,9 @@ import { AddProductComponent } from './add-product/add-product.component';
     AddSupplierComponent,
     LoginComponent,
     RegisterComponent,
-    AddProductComponent
+    AddProductComponent,
+    ViewUserComponent,
+    NewPasswordComponent
   
   ],
   imports: [
@@ -45,7 +48,10 @@ import { AddProductComponent } from './add-product/add-product.component';
       {path: 'view-supplier/:id', component: ViewSupplierComponent},
       {path: 'add-supplier', component: AddSupplierComponent},
       {path: 'add-product', component: AddProductComponent},
-      {path: 'view-product/:id', component: ViewProductComponent}
+      {path: 'view-product/:id', component: ViewProductComponent},
+      {path: 'viewUser', component: ViewUserComponent},
+      {path: 'newPassword', component: NewPasswordComponent}
+
 
 
     ]),

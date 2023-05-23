@@ -1,18 +1,38 @@
-<div class="back">
+<title>Registration Form</title>
 
-    <p class="p1">Username: {{data.username}}</p>
-    <p class="p1">Password: {{data.Password}}  </p>
-    
-    <div *ngFor="let item of data">
-    
-        
-          <label for=""><strong>username: </strong> </label>
-            <label>{{item.username}}</label>
-          
-            <label for=""><strong>password: </strong> </label>
-            <label>{{item.password}}</label>
-          
-        
-        </div>
-    
-    </div>
+<body>
+<div class="container">
+ <div class="title">View User</div>
+ <div class="content">
+   <form   action="#">
+     <div class="user-details">
+       <div class="input-box">
+         <span class="details">Full Name</span>
+         <input type="text" placeholder="David" required>
+       </div>
+       <div class="input-box">
+         <span class="details">Username</span>
+         <input type="text" placeholder="Spider" required>
+       </div>
+       <div class="input-box">
+         <span class="details">Email</span>
+         <input  type="text" placeholder="David@gmail.com" required>
+       </div>
+       <div class="input-box">
+         <span class="details">Phone Number</span>
+         <input  type="text" placeholder="0837647843" required>
+       </div>
+       <div class="input-box">
+         <span class="details">Password</span>
+         <input  type="text" placeholder="12345678" required>
+       </div>
+       <div class="input-box">
+         <span class="details">Enter surname</span>
+         <input  type="text" placeholder="Janine" required>
+       </div>
+     </div>
+   </form>
+ </div>
+ <button (click)="update()" mat-flat-button color="primary" class="but" >update</button>
+</div>
+</body>

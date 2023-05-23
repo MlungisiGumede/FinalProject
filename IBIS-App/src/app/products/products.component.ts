@@ -18,6 +18,7 @@ export class ProductsComponent implements OnInit {
   data:any
   products: Product[] = [];
   idtodelete :any;
+  search= "";
 
   constructor(private productService: ProductService,public router: Router) { 
     productService = {} as ProductService;

@@ -1,20 +1,21 @@
-<mat-toolbar class="toolbartop" *ngIf="this.logged">
-  <h1 class="heading">KMJ Butchery IBIS</h1>
+<mat-toolbar class="toolbartop" *ngIf="this.logged"><img
+  src="https://aheioqhobo.cloudimg.io/v7/_playground-bucket-v2.teleporthq.io_/c275214c-1566-4620-8ed4-77d53acf793c/51e02260-b657-44dd-9783-c129dbd276fb?org_if_sml=14054"
+  alt="Rectangle44037"
+  class="signup-rectangle4"
+/><h1 class="heading">KMJ Butchery IBIS</h1>
   <mat-form-field class="example-full-width">
     <span matPrefix> </span>
-    <input type="tel" matInput placeholder="Search" name= "search" [(ngModel)]= "search">
-    <button matSuffix mat-button><mat-icon >search</mat-icon></button>
+    <input type="tel" matInput placeholder="Search here..." name= "search" [(ngModel)]= "search">
+    <button matSuffix mat-button class="btns"><mat-icon class="btns" >search</mat-icon></button>
     </mat-form-field>
-    <div  class="md-toolbar-toolssearch-bar">
   <mat-form-field class="formfields">
-    <mat-icon class="colr">user</mat-icon>
+    <i class="material-icons">account_circle</i>
     <mat-select>
       <mat-option *ngFor="let user of use" [value]="user.value" [routerLink]="user.route" routerLinkActive #rla="routerLinkActive">
         {{user.viewValue}}
       </mat-option>
     </mat-select>
   </mat-form-field>
-  </div>
 </mat-toolbar>
 
 

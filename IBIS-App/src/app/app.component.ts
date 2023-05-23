@@ -56,8 +56,8 @@ if(!this.logged){
   title = 'IBIS-App';
   use: userprofile[] = [
     {value: 'user-0', viewValue: 'Display Settings',route: 'Dashboard'},
-    {value: 'user-1', viewValue: 'Profile',route: 'Products'},
-    {value: 'user-2', viewValue: 'Logout',route: 'Suppliers'},
+    {value: 'user-1', viewValue: 'Profile',route: 'viewUser'},
+    {value: 'user-2', viewValue: 'Logout',route: 'Login'},
   ];
   tabs: TabItem[] = [
     {
@@ -72,12 +72,12 @@ if(!this.logged){
     },
     {
       label: 'Products',
-      icon: 'product',
+      icon: 'kitchen',
       route: 'Products',
     },
     {
       label: 'Suppliers',
-      icon: 'supplier',
+      icon: 'local_grocery_store',
       route: 'Suppliers',
     },
     {
@@ -87,12 +87,12 @@ if(!this.logged){
     },
     {
       label: 'Orders',
-      icon: 'order',
+      icon: 'price_change ',
       route: 'Orders',
     },
     {
       label: 'Recipes',
-      icon: 'recipe',
+      icon: 'playlist_add_check',
       route: 'Recipes',
     },
   ];

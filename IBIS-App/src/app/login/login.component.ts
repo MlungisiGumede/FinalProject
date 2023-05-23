@@ -40,7 +40,7 @@ if(this.loginForm.valid){
         alert(res.message)
         this.loginservice.setlogin(true);
         this.loginForm.reset();
-        this.router.navigate(['/Home']);
+        this.router.navigate(['/Dashboard']);
       },
       error:(err) =>{
         alert(err?.error.message)

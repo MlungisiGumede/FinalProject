@@ -36,17 +36,18 @@ left: 40%;
     color: white;
 }
 
-.material-symbols-outlined {
- 
-  color: white;
- 
+.btns{
+color: grey;
+
+
 }
 
 .example-full-width{
 
-    left: 5%;
+    left: 2%;
 
     color: white;
+    top: 5%;
 
 
 
@@ -55,18 +56,20 @@ left: 40%;
 .formfields{
     
 color: white;
+left: 60%;
 
 }
 
 .colr{
+  
     
-color: white;
+color: yellow;
 
 }
-.md-toolbar-toolssearch-bar{
-    color: white;
-    left: 80%;
 
+.material-icons{
+    font-weight: 300;
+    color: lightgray;
 }
 
 

@@ -15,7 +15,7 @@ export class SuppliersComponent implements OnInit {
   data: any;
   Suppliers : Supplier[]=[];
   bool= false;
-
+  idtodelete :any;
 id: any;
 
   constructor(private supply: SupplierService,public router: Router,private route: ActivatedRoute,private logged: LoginService) { 
@@ -50,6 +50,18 @@ this.getall();
       this.router.navigate(['/AddProduct']);
   
     }
+
+    async delete(id: number){
+      this.idtodelete = id;
+  
+  this.supply.delete(this.idtodelete).subscribe(Response => {
+    console.log(Response);
+    this.data = Response;
+  this.getall();
+  })
+    }
+
+
 
 logout(){
 this.logged.setlogin(false)
