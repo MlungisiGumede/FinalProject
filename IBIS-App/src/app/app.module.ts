@@ -26,6 +26,7 @@ import { AddProductComponent } from './add-product/add-product.component';
 import { ViewUserComponent } from './view-user/view-user.component';
 import { NewPasswordComponent } from './new-password/new-password.component';
 import { AddInventoryItemComponent } from './add-inventory-item/add-inventory-item.component';
+import { IonicModule } from '@ionic/angular';
 
 @NgModule({
   declarations: [
@@ -71,7 +72,8 @@ import { AddInventoryItemComponent } from './add-inventory-item/add-inventory-it
     MatToolbarModule,
     MatSortModule,
     ReactiveFormsModule,
-    MatExpansionModule
+    MatExpansionModule,
+    IonicModule.forRoot()
 
   ],
   providers: [],
