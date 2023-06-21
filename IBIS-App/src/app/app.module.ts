@@ -53,7 +53,8 @@ import { IonicModule } from '@ionic/angular';
       {path: 'add-product', component: AddProductComponent},
       {path: 'view-product/:id', component: ViewProductComponent},
       {path: 'viewUser', component: ViewUserComponent},
-      {path: 'newPassword', component: NewPasswordComponent}
+      {path: 'newPassword', component: NewPasswordComponent},
+      {path: 'add-inventory-item', component: AddInventoryItemComponent},
 
 
 
