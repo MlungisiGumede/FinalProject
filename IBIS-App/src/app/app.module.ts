@@ -25,6 +25,7 @@ import {MatExpansionModule} from '@angular/material/expansion';
 import { AddProductComponent } from './add-product/add-product.component';
 import { ViewUserComponent } from './view-user/view-user.component';
 import { NewPasswordComponent } from './new-password/new-password.component';
+import { AddInventoryItemComponent } from './add-inventory-item/add-inventory-item.component';
 
 @NgModule({
   declarations: [
@@ -36,7 +37,8 @@ import { NewPasswordComponent } from './new-password/new-password.component';
     RegisterComponent,
     AddProductComponent,
     ViewUserComponent,
-    NewPasswordComponent
+    NewPasswordComponent,
+    AddInventoryItemComponent
   
   ],
   imports: [
