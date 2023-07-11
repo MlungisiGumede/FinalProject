@@ -1,21 +1,31 @@
-<h2>Inventory</h2>
+<h2 class="h">Inventory</h2>
 
-<table>
-  <tr>
-    <th>Inventory</th>
-    <th>Inventory items</th>
-    <th>Supplier ID</th>
-    <th>Quantity</th>
-    <th>Invoice ID</th>
+<button mat-flat-button color="primary" class="add" >Add Inventory item</button>
+<table class="t">
+  <tr class="thead">
+    <th class="thead">Product ID</th>
+    <th class="thead">Product Name</th>
+    <th class="thead">Category</th>
+    <th class="thead">Subcategory</th>
+    <th class="thead">Price per category</th>
+    <th class="thead">Quantity</th>
+    <th class="thead">Expiry Date</th>
   </tr>
-  <tr>
-    <td>2342749823</td>
-    <td>ribs</td>
-    <td>1</td>
-    <td>34</td>
-    <td>1231231</td>
-   
+  <tr class="row">
+    <td>product_ID</td>
+    <td>product_Name</td>
+    <td>category</td>
+    <td>subcategory</td>
+    <td>price</td>
+    <td>quantity</td>
+    <td>expiry</td>
+    
+    <button  mat-flat-button color="warn">View</button>
+    <button  mat-flat-button color="primary">Remove</button>
   </tr>
- 
 </table>
+
+
+
+
 
