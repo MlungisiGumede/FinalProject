@@ -43,7 +43,7 @@ this.getInventory();
 
   addInventoryItem(){
 
-    this.router.navigate(['/add-inventory']);
+    this.router.navigate(['/add-inventory-item']);
 
   }
 
