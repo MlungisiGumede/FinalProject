@@ -20,8 +20,8 @@
     <td>{{item.quantity}}</td>
     <td>{{item.sku}}</td>
     
-    <button  mat-flat-button color="warn">View</button>
-    <button  mat-flat-button color="primary">Remove</button>
+    <button  mat-flat-button color="warn" [routerLink]="['/view-inventory-item', item.inventory_ID]" >View</button>
+    <button  mat-flat-button color="primary" (click)="delete(item.inventory_ID)">Remove</button>
   </tr>
 </table>
 

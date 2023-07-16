@@ -27,6 +27,7 @@ import { ViewUserComponent } from './view-user/view-user.component';
 import { NewPasswordComponent } from './new-password/new-password.component';
 import { AddInventoryItemComponent } from './add-inventory-item/add-inventory-item.component';
 import { IonicModule } from '@ionic/angular';
+import { ViewInventoryItemComponent } from './view-inventory-item/view-inventory-item.component';
 
 @NgModule({
   declarations: [
@@ -39,7 +40,8 @@ import { IonicModule } from '@ionic/angular';
     AddProductComponent,
     ViewUserComponent,
     NewPasswordComponent,
-    AddInventoryItemComponent
+    AddInventoryItemComponent,
+    ViewInventoryItemComponent
   
   ],
   imports: [
@@ -55,6 +57,7 @@ import { IonicModule } from '@ionic/angular';
       {path: 'viewUser', component: ViewUserComponent},
       {path: 'newPassword', component: NewPasswordComponent},
       {path: 'add-inventory-item', component: AddInventoryItemComponent},
+      {path: 'view-inventory-item/:id', component: ViewInventoryItemComponent},
 
 
 
