@@ -1,4 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { IonicModule } from '@ionic/angular';
+import { Orders } from '../Models/Orders';
+import { Router } from '@angular/router';
+import { OrdersService } from '../Services/orders.service';
 
 @Component({
   selector: 'app-orders',
@@ -7,9 +11,42 @@ import { Component, OnInit } from '@angular/core';
 })
 export class OrdersComponent implements OnInit {
 
-  constructor() { }
+  data:any
+  ord: Orders[] = [];
+  idtodelete :any;
+  search= "";
+
+  constructor(public router: Router, private orderservice : OrdersService) { }
 
   ngOnInit(): void {
+    this.getOrders()
   }
 
+  getOrders(){
+    this.orderservice.getOrderList().subscribe(response => {
+      console.log(response);
+      this.data = response;
+    })
+    
+
+  }
+
+
+  async delete(id: number){
+    this.idtodelete = id;
+
+this.orderservice.delete(this.idtodelete).subscribe(Response => {
+  console.log(Response);
+  this.data = Response;
+this.getOrders();
+})
+  }
+
+
+
+  addInventoryItem(){
+
+    this.router.navigate(['/add-inventory-item']);
+
+  }
 }
