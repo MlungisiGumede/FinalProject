@@ -1,6 +1,6 @@
 <ion-content class="ion-margin">
     <div class="contents">
-      <ion-title><h1>Search Your Fleet</h1></ion-title>
+      <ion-title><h1>Orders</h1></ion-title>
       <ion-searchbar></ion-searchbar>
         <ion-grid class="ion-margin" class="ion-grid-padding">
           <ion-row>
@@ -18,15 +18,15 @@
               <ion-label>{{item.order_ID}}</ion-label>
             </ion-col>
             <ion-col>
-              <ion-label> hello</ion-label>
+              <ion-label> loading</ion-label>
             </ion-col>
             <ion-col>
-              <ion-button class="red-Btn" >Remove</ion-button>
-              <ion-button class="light-Btn" >View</ion-button>
+              <ion-button class="red-Btn" (click)="delete(item.order_ID)" >Remove</ion-button>
+              <ion-button class="light-Btn" [routerLink]="['/view-order', item.order_ID]">View</ion-button>
             </ion-col>
           </ion-row>
           <ion-item-divider></ion-item-divider>
         </ion-grid>
-        <ion-button class="light-Btn">Add</ion-button>
+        <ion-button class="light-Btn" (click)="addOrder()">Add</ion-button>
     </div>
   </ion-content>

@@ -44,9 +44,9 @@ this.getOrders();
 
 
 
-  addInventoryItem(){
+  addOrder(){
 
-    this.router.navigate(['/add-inventory-item']);
+    this.router.navigate(['/add-order']);
 
   }
 }

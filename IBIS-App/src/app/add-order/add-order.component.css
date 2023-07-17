@@ -4,7 +4,6 @@
   padding: 0;
   box-sizing: border-box;
   font-family: 'Poppins',sans-serif;
-  
 }
 body{
   height: 100vh;
@@ -44,7 +43,7 @@ body{
   flex-wrap: wrap;
   justify-content: space-between;
   margin: 20px 0 12px 0;
-  color: yellow;
+  color: white;
 }
 form .user-details .input-box{
   margin-bottom: 15px;
@@ -94,7 +93,15 @@ form .input-box span.details{
   border: 5px solid transparent;
   transition: all 0.3s ease;
 }
-
+ #dot-1:checked ~ .category label .one,
+ #dot-2:checked ~ .category label .two,
+ #dot-3:checked ~ .category label .three{
+   background: #9b59b6;
+   border-color: #d9d9d9;
+ }
+ form input[type="radio"]{
+   display: none;
+ }
  form .button{
    height: 45px;
    margin: 35px 0;
@@ -105,7 +112,7 @@ form .input-box span.details{
 
  .input-box{
 
-color: yellow;
+color: black;
 
  }
 
@@ -141,7 +148,7 @@ color: yellow;
 form .user-details .input-box{
     margin-bottom: 15px;
     width: 100%;
-    color: yellow;
+    color:black;
   }
   form .category{
     width: 100%;

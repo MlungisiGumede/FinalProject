@@ -29,8 +29,7 @@ this.loginForm = this.fb.group({
   username : ['', Validators.required],
   password : ['', Validators.required]
 })
-
-
+this.loginservice.setlogin(false)
   }
 
   onlogin(){
