@@ -30,6 +30,8 @@ import { IonicModule } from '@ionic/angular';
 import { ViewInventoryItemComponent } from './view-inventory-item/view-inventory-item.component';
 import { ViewOrderComponent } from './view-order/view-order.component';
 import { AddOrderComponent } from './add-order/add-order.component';
+import { WriteOffComponent } from './write-off/write-off.component';
+import { OrderFromSupplierComponent } from './order-from-supplier/order-from-supplier.component';
 
 @NgModule({
   declarations: [
@@ -45,7 +47,9 @@ import { AddOrderComponent } from './add-order/add-order.component';
     AddInventoryItemComponent,
     ViewInventoryItemComponent,
     ViewOrderComponent,
-    AddOrderComponent
+    AddOrderComponent,
+    WriteOffComponent,
+    OrderFromSupplierComponent
   
   ],
   imports: [
