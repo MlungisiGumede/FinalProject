@@ -22,6 +22,7 @@
         <input formControlName="username" type="text" placeholder="username"/>
         <input formControlName="password" type="password" placeholder="password"/>
         <button (click)="onlogin()">login</button>
+        <button (click)="presentToast('top')">show toast</button>
         <p class="message">Not registered? <a [routerLink]="['/Register']">Create an account</a></p>
         <p class="message">Forgot password? <a [routerLink]="['/newPassword']">reset password</a></p>
       </form>

@@ -18,5 +18,6 @@
     <td>{{item.phone}}</td>
     <button  mat-flat-button color="warn" [routerLink]="['/view-supplier', item.supplier_ID]">View</button>
     <button (click)="delete(item.supplier_ID)"  mat-flat-button color="primary">Remove</button>
+    <button mat-flat-button color="primary">Order from Supplier</button>
   </tr>
 </table>

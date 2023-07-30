@@ -3,6 +3,8 @@ import { LoginService } from '../Services/login.service';
 import { User } from '../Models/User';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Route, Router } from '@angular/router';
+import { ToastController } from '@ionic/angular';
+
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -13,7 +15,7 @@ export class LoginComponent implements OnInit {
   users : User[]=[];
   username ="";
   loginForm!: FormGroup;
-  constructor(private loginservice: LoginService,private fb: FormBuilder, private router: Router) {
+  constructor(private loginservice: LoginService,private fb: FormBuilder, private router: Router,private toastController: ToastController) {
 
 
     loginservice = {} as LoginService;
@@ -37,6 +39,7 @@ if(this.loginForm.valid){
     this.loginservice.login(this.loginForm.value).subscribe({
       next: (res)=>{
         alert(res.message)
+        this.presentToast
         this.loginservice.setlogin(true);
         this.loginForm.reset();
         this.router.navigate(['/Dashboard']);
@@ -57,6 +60,17 @@ if(this.loginForm.valid){
       console.log("method 2", this.data)
     });
 
+  }
+
+  async presentToast(position: 'top' | 'middle' | 'bottom') {
+    const toast = await this.toastController.create({
+      message: 'Login Successfull',
+      duration: 5000,
+      position: position,
+      color: 'success'
+    });
+
+    await toast.present();
   }
 
 

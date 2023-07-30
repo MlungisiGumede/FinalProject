@@ -67,8 +67,9 @@ import { OrderFromSupplierComponent } from './order-from-supplier/order-from-sup
       {path: 'add-inventory-item', component: AddInventoryItemComponent},
       {path: 'view-inventory-item/:id', component: ViewInventoryItemComponent},
       {path: 'add-order', component: AddOrderComponent},
-      {path: 'view-order/:id', component: ViewOrderComponent}
-
+      {path: 'view-order/:id', component: ViewOrderComponent},
+      {path: 'write-off', component: WriteOffComponent},
+      {path: 'order-from-supplier/:id', component: OrderFromSupplierComponent}
 
 
 
