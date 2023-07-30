@@ -22,12 +22,13 @@ color: white;
   }
   .add{
   
-    
     font-style: normal;
     font-weight: 700;
-    left: 66.8%;
+    left:  56%;
     color: black;
     background-color:#FAF244;
+    align-items: end;
+    
 
   }
  

@@ -13,7 +13,8 @@ import { IonicModule } from '@ionic/angular';
     RouterModule.forChild([{ path: '', component: InventoryComponent}]),
     MatCardModule,
     MatButtonModule,
-    IonicModule
+    IonicModule,
+    IonicModule.forRoot()
   ],
 })
 export class InventoryModule {}

@@ -3,6 +3,7 @@ import { IonicModule } from '@ionic/angular';
 import { Orders } from '../Models/Orders';
 import { Router } from '@angular/router';
 import { OrdersService } from '../Services/orders.service';
+import { SupplierService } from '../Services/supplier.service';
 
 @Component({
   selector: 'app-orders',
@@ -16,14 +17,14 @@ export class OrdersComponent implements OnInit {
   idtodelete :any;
   search= "";
 
-  constructor(public router: Router, private orderservice : OrdersService) { }
+  constructor(public router: Router, private orderservice : SupplierService) { }
 
   ngOnInit(): void {
     this.getOrders()
   }
 
   getOrders(){
-    this.orderservice.getOrderList().subscribe(response => {
+    this.orderservice.getSupplierList().subscribe(response => {
       console.log(response);
       this.data = response;
     })

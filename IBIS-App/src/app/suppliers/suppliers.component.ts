@@ -3,7 +3,7 @@ import { Supplier } from '../Models/Supplier';
 import { SupplierService } from '../Services/supplier.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LoginService } from '../Services/login.service';
-
+import { IonicModule } from '@ionic/angular';
 
 @Component({
   selector: 'app-suppliers',

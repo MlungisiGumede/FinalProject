@@ -32,6 +32,10 @@ import { ViewOrderComponent } from './view-order/view-order.component';
 import { AddOrderComponent } from './add-order/add-order.component';
 import { WriteOffComponent } from './write-off/write-off.component';
 import { OrderFromSupplierComponent } from './order-from-supplier/order-from-supplier.component';
+import { RecipesComponent } from './recipes/recipes.component';
+import { CreateRecipeComponent } from './create-recipe/create-recipe.component';
+import { ViewRecipeComponent } from './view-recipe/view-recipe.component';
+import { CreateSupplierOrderComponent } from './create-supplier-order/create-supplier-order.component';
 
 @NgModule({
   declarations: [
@@ -49,7 +53,10 @@ import { OrderFromSupplierComponent } from './order-from-supplier/order-from-sup
     ViewOrderComponent,
     AddOrderComponent,
     WriteOffComponent,
-    OrderFromSupplierComponent
+    OrderFromSupplierComponent,
+    CreateRecipeComponent,
+    ViewRecipeComponent,
+    CreateSupplierOrderComponent
   
   ],
   imports: [
@@ -68,8 +75,14 @@ import { OrderFromSupplierComponent } from './order-from-supplier/order-from-sup
       {path: 'view-inventory-item/:id', component: ViewInventoryItemComponent},
       {path: 'add-order', component: AddOrderComponent},
       {path: 'view-order/:id', component: ViewOrderComponent},
-      {path: 'write-off', component: WriteOffComponent},
-      {path: 'order-from-supplier/:id', component: OrderFromSupplierComponent}
+      {path: 'write-off/:id', component: WriteOffComponent},
+      {path: 'order-from-supplier/:id', component: OrderFromSupplierComponent},
+      {path: 'Recipes', component: RecipesComponent},
+      {path: 'create-recipe', component: CreateRecipeComponent},
+      {path: 'view-recipe/:id', component: ViewRecipeComponent},
+      {path: 'create-supplier-order/:id', component: CreateSupplierOrderComponent}
+      
+
 
 
 

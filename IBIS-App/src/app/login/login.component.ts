@@ -38,14 +38,15 @@ this.loginservice.setlogin(false)
 if(this.loginForm.valid){
     this.loginservice.login(this.loginForm.value).subscribe({
       next: (res)=>{
+        this.presentToast('top')
         alert(res.message)
-        this.presentToast
         this.loginservice.setlogin(true);
         this.loginForm.reset();
         this.router.navigate(['/Dashboard']);
       },
       error:(err) =>{
         alert(err?.error.message)
+        this.presentUnsuccessfulToast('top')
       }
     })
   }
@@ -68,6 +69,17 @@ if(this.loginForm.valid){
       duration: 5000,
       position: position,
       color: 'success'
+    });
+
+    await toast.present();
+  }
+
+  async presentUnsuccessfulToast(position: 'top' | 'middle' | 'bottom') {
+    const toast = await this.toastController.create({
+      message: 'Login failed, try again',
+      duration: 5000,
+      position: position,
+      color: 'danger'
     });
 
     await toast.present();

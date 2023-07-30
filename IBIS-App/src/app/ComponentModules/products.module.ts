@@ -4,6 +4,7 @@ import { RouterModule } from '@angular/router';
 import { ProductsComponent } from '../products/products.component';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
+import { IonicModule } from '@ionic/angular';
 
 @NgModule({
   declarations: [ProductsComponent],
@@ -12,6 +13,7 @@ import { MatButtonModule } from '@angular/material/button';
     RouterModule.forChild([{ path: '', component: ProductsComponent}]),
     MatCardModule,
     MatButtonModule,
+    IonicModule.forRoot()
   ],
 })
 export class ProductsModule {}

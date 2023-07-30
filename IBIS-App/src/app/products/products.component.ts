@@ -5,7 +5,7 @@ import { DataSource } from '@angular/cdk/table';
 import { Product } from '../Models/Product';
 import { ProductService } from '../Services/product.service';
 import { Router } from '@angular/router';
-
+import { IonicModule } from '@ionic/angular';
 
 
 

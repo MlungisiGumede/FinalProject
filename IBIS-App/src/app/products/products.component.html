@@ -1,4 +1,5 @@
 <h2 class="h">Products</h2>
+<ion-searchbar></ion-searchbar>
 
 <button (click)="addproduct()" mat-flat-button color="primary" class="add" >Add Product</button>
 <table class="t">
@@ -22,7 +23,7 @@
     
     <button  mat-flat-button color="warn"  [routerLink]="['/view-product', item.product_ID]">View</button>
     <button (click)="delete(item.product_ID)" mat-flat-button color="primary">Remove</button>
-    <button  mat-flat-button color="secondary" [routerLink]="['/write-off']">write off</button>
+    <button  mat-flat-button color="secondary" [routerLink]="['/write-off', item.product_ID]">write off</button>
   </tr>
 </table>
 

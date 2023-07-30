@@ -1,4 +1,53 @@
-<ion-searchbar>search write offs</ion-searchbar>
+
+
+
+<h1 class="newheading">Write off: </h1>
 
 <ion-range aria-label="Range with ionChange" (ionChange)="onIonChange($event)"></ion-range>
-<ion-label class="color">ionChange emitted value: {{ lastEmittedValue }}</ion-label>
+<ion-label class="color">select amount to write off: {{ lastEmittedValue }}</ion-label>
+
+
+
+<table class="t">
+    <tr class="thead">
+      <th class="thead">Product ID</th>
+      <th class="thead">Product Name</th>
+      <th class="thead">Category</th>
+      <th class="thead">Subcategory</th>
+      <th class="thead">Price per category</th>
+      <th class="thead">Quantity</th>
+      <th class="thead">Expiry Date</th>
+    </tr>
+    <tr  class="row">
+        <td>{{data.product_ID}}</td>
+    <td>{{data.product_Name}}</td>
+    <td>{{data.category}}</td>
+    <td>{{data.subcategory}}</td>
+    <td>{{data.price}}</td>
+    <td>{{data.quantity}}</td>
+    <td>{{data.expiry}}</td>
+    </tr>
+</table>
+
+
+<div>
+      <ion-list>
+        <ion-item>
+          <ion-select aria-label="Fruit" interface="action-sheet" placeholder="Select reason">
+            <ion-select-option value="apples">Apples</ion-select-option>
+            <ion-select-option value="oranges">Oranges</ion-select-option>
+            <ion-select-option value="bananas">Bananas</ion-select-option>
+          </ion-select>
+        </ion-item>
+      </ion-list>
+    
+    
+    <ion-button>upload file</ion-button>
+
+    <h1>label</h1>
+
+<ion-label [(ngModel)]="data.product_Name" [ngModelOptions]="{standalone: true}"></ion-label>
+
+      <ion-button>Submit</ion-button>
+
+    </div>
