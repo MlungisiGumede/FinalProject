@@ -45,8 +45,9 @@ if(this.loginForm.valid){
         this.router.navigate(['/Dashboard']);
       },
       error:(err) =>{
-        alert(err?.error.message)
+        //alert(err?.error.message)
         this.presentUnsuccessfulToast('top')
+        this.loginForm.reset();
       }
     })
   }
