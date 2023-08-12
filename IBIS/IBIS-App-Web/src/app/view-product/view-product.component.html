@@ -1,0 +1,40 @@
+<body>
+  <div class="container">
+   <div class="title">View Product</div>
+   <div class="content">
+     <form action="#">
+       <div class="user-details">
+         <div class="input-box">
+           <span class="details">Product Name</span>
+           <input  type="text" placeholder="name" [(ngModel)]="data.product_Name" [ngModelOptions]="{standalone: true}">
+         </div>
+         <div class="input-box">
+           <span class="details">category</span>
+           <input   type="text" placeholder="Category" [(ngModel)]="data.category" [ngModelOptions]="{standalone: true}">
+         </div>
+         <div class="input-box">
+           <span class="details">sub-category</span>
+           <input  type="text" placeholder="sub-category" [(ngModel)]="data.subcategory" [ngModelOptions]="{standalone: true}">
+         </div>
+         <div class="input-box">
+           <span class="details">Expiry</span>
+           <input  type="text" placeholder="details" [(ngModel)]="data.details" [ngModelOptions]="{standalone: true}">
+         </div>
+         <div class="input-box">
+          <span class="details">Quantity</span>
+          <input  type="text" placeholder="Quantity" [(ngModel)]="data.quantity" [ngModelOptions]="{standalone: true}">
+        </div>
+        <div class="input-box">
+          <span class="details">Price</span>
+          <input  type="text" placeholder="Price" [(ngModel)]="data.price" [ngModelOptions]="{standalone: true}">
+        </div>
+       </div>
+       <div class="buttondiv">
+       <div class="button">
+         <input type="submit" value="update" (click)="update()">
+       </div>
+      </div>
+     </form>
+   </div>
+  </div>
+  </body>

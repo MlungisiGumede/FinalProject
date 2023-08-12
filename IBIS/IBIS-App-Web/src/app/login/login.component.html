@@ -1,0 +1,34 @@
+<body>
+  
+
+  
+  
+  
+  
+  
+  <form [formGroup]="loginForm" novalidate>
+<form  class="folder">
+<div class="login-page">
+    <div class="form">
+      <form class="register-form">
+        <input type="text" placeholder="name"/>
+        <input type="password" placeholder="password"/>
+        <input type="text" placeholder="email address"/>
+        <button>create</button>
+        <p class="message">Already registered? <a href="#">Sign In</a></p>
+      </form>
+      <form [formGroup]="loginForm" class="login-form">
+        <h1>Login</h1>
+        <input formControlName="username" type="text" placeholder="username" required/>
+        <input formControlName="password" type="password" placeholder="password" required/>
+        <button (click)="onlogin()">login</button>
+        <p class="message">Not registered? <a [routerLink]="['/Register']">Create an account</a></p>
+        <p class="message">Forgot password? <a [routerLink]="['/newPassword']">reset password</a></p>
+      </form>
+    </div>
+  </div>
+</form>
+</form>
+
+
+</body>

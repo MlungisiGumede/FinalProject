@@ -1,0 +1,22 @@
+<h2 class="h">Suppliers</h2>
+<div><ion-searchbar></ion-searchbar></div>
+<button mat-flat-button color="primary" class="add" [routerLink]="'/add-supplier'">Add Supplier</button>
+<table class="t">
+  <tr>
+    <th class="thead">Supplier ID</th>
+    <th class="thead">Supplier Name</th>
+    <th class="thead">Contact Name</th>
+    <th class="thead">Address</th>
+    <th class="thead">Phone</th>
+  </tr>
+  <tr *ngFor="let item of data" class="row">
+    <td>{{item.supplier_ID}}</td>
+    <td>{{item.companyName}}</td>
+    <td>{{item.addressline}}</td>
+    <td>{{item.city}}</td>
+    <td>{{item.phone}}</td>
+    <button  mat-flat-button color="warn" [routerLink]="['/view-supplier', item.supplier_ID]">View</button>
+    <button (click)="delete(item.supplier_ID)"  mat-flat-button color="primary">Remove</button>
+    <button [routerLink]="['/create-supplier-order', item.supplier_ID]" mat-flat-button color="secondary">Order from Supplier</button>
+  </tr>
+</table>

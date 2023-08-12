@@ -1,0 +1,21 @@
+<h2 class="h">Orders</h2>
+<div><ion-searchbar></ion-searchbar></div>
+<button mat-flat-button color="primary" class="add" [routerLink]="'/create-customer-order'">New Customer Order</button>
+<table class="t">
+  <tr>
+    <th class="thead">Order Number</th>
+    <th class="thead">Quantity</th>
+    <th class="thead">Supplier ID</th>
+    <th class="thead">Supplier Name</th>
+    <th class="thead">Order Status</th>
+  </tr>
+  <tr *ngFor="let item of data" class="row">
+    <td>{{item.supplier_Order_Id}}</td>
+    <td>{{item.quantity}}</td>
+    <td>{{item.supplier_ID}}</td>
+    <td>{{item.companyName}}</td>
+    <td>in progress</td>
+    <button  mat-flat-button color="warn" [routerLink]="['/view-supplier', item.supplier_ID]">View</button>
+    <button (click)="delete(item.supplier_ID)"  mat-flat-button color="primary">Remove</button>
+  </tr>
+</table>

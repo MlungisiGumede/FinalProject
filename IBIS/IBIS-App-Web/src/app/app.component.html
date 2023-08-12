@@ -1,0 +1,45 @@
+<mat-toolbar class="toolbartop" *ngIf="this.logged"><img
+  src="https://aheioqhobo.cloudimg.io/v7/_playground-bucket-v2.teleporthq.io_/c275214c-1566-4620-8ed4-77d53acf793c/51e02260-b657-44dd-9783-c129dbd276fb?org_if_sml=14054"
+  alt="Rectangle44037"
+  class="signup-rectangle4"
+/><h1 class="heading">KMJ Butchery IBIS</h1>
+  <mat-form-field class="example-full-width">
+    <span matPrefix> </span>
+    <input type="tel" matInput placeholder="Search here..." name= "search" [(ngModel)]= "search">
+    <button matSuffix mat-button class="btns"><mat-icon class="btns" >search</mat-icon></button>
+    </mat-form-field>
+  <mat-form-field class="formfields">
+    <i class="material-icons">account_circle</i>
+    <mat-select>
+      <mat-option *ngFor="let user of use" [value]="user.value" [routerLink]="user.route" routerLinkActive #rla="routerLinkActive">
+        {{user.viewValue}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+</mat-toolbar>
+
+
+<nav mat-tab-nav-bar class="yellow" *ngIf="this.logged">
+  <a mat-tab-link *ngFor="let tabItem of tabs" [routerLink]="tabItem.route" routerLinkActive #rla="routerLinkActive"
+    [active]="rla.isActive">
+    <mat-icon class="mr-8">{{tabItem.icon}}</mat-icon>
+    {{tabItem.label}}
+  </a>
+</nav>
+
+<router-outlet></router-outlet>
+
+
+
+
+<!---<nav mat-tab-nav-bar>
+    <a *ngFor="let link of navLinks" mat-tab-link
+      #rla="routerLinkActive"
+      [active]="isViewInitialized && isLinkActive(rla)"
+      [routerLink]="link.path"
+      routerLinkActive>
+      {{link.label}}
+    </a>
+  </nav>
+  
+  <router-outlet></router-outlet>-->

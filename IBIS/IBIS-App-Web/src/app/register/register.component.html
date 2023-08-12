@@ -1,0 +1,38 @@
+<title>Registration Form</title>
+
+<body>
+<div class="container">
+ <div class="title">Register</div>
+ <div class="content">
+   <form  [formGroup]="registerform" action="#">
+     <div class="user-details">
+       <div class="input-box">
+         <span class="details">Full Name</span>
+         <input formControlName="name"type="text" placeholder="Enter your name" required>
+       </div>
+       <div class="input-box">
+         <span class="details">Username</span>
+         <input formControlName="username" type="text" placeholder="Enter your username" required>
+       </div>
+       <div class="input-box">
+         <span class="details">Email</span>
+         <input formControlName="address" type="text" placeholder="Enter your email" required>
+       </div>
+       <div class="input-box">
+         <span class="details">Phone Number</span>
+         <input formControlName="Cellphone_Number" type="text" placeholder="Enter your number" required>
+       </div>
+       <div class="input-box">
+         <span class="details">Password</span>
+         <input formControlName="password" type="text" placeholder="Enter your password" required>
+       </div>
+       <div class="input-box">
+         <span class="details">Enter surname</span>
+         <input formControlName="surname" type="text" placeholder="surname" required>
+       </div>
+     </div>
+   </form>
+ </div>
+ <button (click)="onRegister()" mat-flat-button color="primary" class="but" >Register</button>
+</div>
+</body>

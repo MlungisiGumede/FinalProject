@@ -1,0 +1,32 @@
+
+<body>
+<div class="container">
+ <div class="title">View Supplier</div>
+ <div class="content">
+   <form action="#">
+     <div class="user-details">
+       <div class="input-box">
+         <span class="details">Supplier Name</span>
+         <input type="text" placeholder={{data.companyName}} [(ngModel)]="data.companyName" [ngModelOptions]="{standalone: true}">
+       </div>
+       <div class="input-box">
+         <span class="details">Contact Name</span>
+         <input type="text" placeholder={{data.addressline}} [(ngModel)]="data.addressline" [ngModelOptions]="{standalone: true}">
+       </div>
+       <div class="input-box">
+         <span class="details">Address</span>
+         <input type="text" placeholder={{data.city}} [(ngModel)]="data.city" [ngModelOptions]="{standalone: true}">
+       </div>
+       <div class="input-box">
+         <span class="details">Phone number</span>
+         <input type="text" placeholder={{data.phone}} [(ngModel)]="data.phone" [ngModelOptions]="{standalone: true}">
+       </div>
+     </div>
+     <div class="button">
+       <input type="submit" value="update" (click)="update()">
+     </div>
+   </form>
+ </div>
+</div>
+</body>
+

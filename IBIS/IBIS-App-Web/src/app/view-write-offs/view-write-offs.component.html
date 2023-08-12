@@ -1,0 +1,24 @@
+<h2 class="h">Write offs</h2>
+<ion-searchbar></ion-searchbar>
+
+
+<table class="t">
+  <tr class="thead">
+    <th class="thead">Product ID</th>
+    <th class="thead">Product Name</th>
+    <th class="thead">Quantity</th>
+    <th class="thead">Reason</th>
+    <th class="thead">image</th>
+
+    
+  </tr>
+  <tr *ngFor="let item of data" class="row">
+    <td>{{item.product_ID}}</td>
+    <td>{{item.product_Name}}</td>
+    <td>{{item.quantity}}</td>
+    <td>{{item.reason}}</td>
+    <td>{{item.image}}</td>
+    
+    <button (click)="delete(item.product_ID)" mat-flat-button color="primary">Remove</button>
+  </tr>
+</table>
