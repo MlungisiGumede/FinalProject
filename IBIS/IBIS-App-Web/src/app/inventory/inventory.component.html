@@ -5,7 +5,6 @@
     <th class="thead">Inventory ID</th>
     <th class="thead">Inventory Items</th>
     <th class="thead">Item Name</th>
-    <th class="thead">Products</th>
     <th class="thead">Quantity</th>
     <th class="thead">SKU</th>
   </tr>
@@ -13,7 +12,6 @@
     <td>{{item.inventory_ID}}</td>
     <td>{{item.inventory_Items}}</td>
     <td>{{item.itemName}}</td>
-    <td>{{item.products}}</td>
     <td>{{item.quantity}}</td>
     <td>{{item.sku}}</td>
     
@@ -21,6 +19,8 @@
     <button  mat-flat-button color="primary" (click)="delete(item.inventory_ID)">Remove</button>
   </tr>
 </table>
+
+<button mat-flat-button class="report">Generate Report</button>
 
 
 

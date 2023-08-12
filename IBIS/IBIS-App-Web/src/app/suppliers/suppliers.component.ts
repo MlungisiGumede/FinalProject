@@ -67,7 +67,7 @@ this.getall();
 
 
 logout(){
-this.logged.setlogin(false)
+this.logged.setlogin(true)
 
 this.logged.getlogin().subscribe((value) => {
   this.bool = value;

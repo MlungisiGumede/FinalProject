@@ -6,6 +6,7 @@ import { Product } from '../Models/Product';
 import { ProductService } from '../Services/product.service';
 import { Router } from '@angular/router';
 import { IonicModule, ToastController } from '@ionic/angular';
+import { ChartDataset, ChartType, ChartOptions } from 'chart.js';
 
 
 
