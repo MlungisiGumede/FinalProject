@@ -6,5 +6,5 @@ export class Product{
     Price?: number;
     Recipe?: string;
     ExpiryDate?: String;
-
+    Quantity?: number;
 }

@@ -18,23 +18,20 @@
            </div>
            <div class="input-box">
              <span class="details">Price</span>
-             <input  type="text" placeholder="details" [(ngModel)]="data.price" [ngModelOptions]="{standalone: true}">
+             <input  type="number" placeholder="Price" [(ngModel)]="data.price" [ngModelOptions]="{standalone: true}">
            </div>
            <div class="input-box">
             <span class="details">Quantity</span>
-            <input  type="text" placeholder="Quantity" [(ngModel)]="data.quantity" [ngModelOptions]="{standalone: true}">
+            <input  type="number" placeholder="Quantity" [(ngModel)]="data.quantity" [ngModelOptions]="{standalone: true}">
           </div>
           <div class="input-box">
             <span class="details">Expiry</span>
-            <input  type="text" placeholder="phone number" [(ngModel)]="data.expiry" [ngModelOptions]="{standalone: true}">
+            <input  type="text" placeholder="Expiry Date" [(ngModel)]="data.expiry" [ngModelOptions]="{standalone: true}">
           </div>
          </div>
          <div class="buttondiv">
          <div class="button">
-           <input type="submit" value="update" (click)="update()">
-         </div>
-         <div class="button">
-            <input type="submit" value="submit" (click)="createSupplier()">
+            <input type="submit" value="submit" (click)="createProduct()">
           </div>
         </div>
        </form>

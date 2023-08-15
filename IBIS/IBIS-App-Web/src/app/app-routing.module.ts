@@ -74,6 +74,13 @@ loadChildren: () =>
     (m) => m.RecipesModule
   ),
 },
+{
+  path: 'Product-Report',
+  loadChildren: () =>
+    import('./ComponentModules/ProductReport.module').then(
+      (m) => m.ProductReportModule
+    )
+},
 ];
 
 @NgModule({

@@ -10,7 +10,6 @@ import { Router } from '@angular/router';
 })
 export class AddProductComponent implements OnInit {
 
-
 data:any;
 prod!: Product;
 
@@ -20,23 +19,14 @@ prod!: Product;
 
   ngOnInit(): void {
 
-
-
-  }
-
-  update(){
-
-
   }
 
 
 
-  createSupplier(){
-
+  createProduct(){
     this.prodService.createProduct(this.data).subscribe(res=>{
     console.log("success", res);
-    })
-    
-    }
+    })  
+  }
 
 }

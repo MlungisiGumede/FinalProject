@@ -116,12 +116,17 @@ color: black;
 
  }
 
- .buttondiv{
+ /* .buttondiv{
 
     display: grid;
     grid-template-columns: 1fr 1fr;
     grid-gap: 10px;
 
+ } */
+ .button{
+  flex-shrink: 0;
+  width: 205px;
+  height: 46px;
  }
 
  form .button input{
