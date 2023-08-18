@@ -12,7 +12,8 @@ export class RecipesComponent implements OnInit {
   data:any
   recipe: Recipe[] = [];
   idtodelete :any;
-  search= "";
+  filterTerm!: string;
+
 
   constructor(private recService: RecipeService,public router: Router,private toastController: ToastController) {
     recService = {} as RecipeService;

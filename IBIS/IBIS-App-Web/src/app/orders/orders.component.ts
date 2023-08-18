@@ -15,7 +15,7 @@ export class OrdersComponent implements OnInit {
   data:any
   ord: Orders[] = [];
   idtodelete :any;
-  search= "";
+  filterTerm!: string;
 
   constructor(public router: Router, private orderservice : SupplierService) { }
 

@@ -1,20 +1,32 @@
-<h2 class="h">Recipes</h2>
-<div><ion-searchbar></ion-searchbar></div>
-<button mat-flat-button color="primary" class="add" (click)="addRecipe()">Create recipe</button>
-<table class="t">
-  <tr>
-    <th class="thead">Recipe ID</th>
-    <th class="thead">Ingredients</th>
-    <th class="thead">Recipe Name</th>
-
-  </tr>
-  <tr *ngFor="let item of data" class="row">
-    <td>{{item.recipe_ID}}</td>
-    <td>{{item.recipe_Ingredients}}</td>
-    <td>{{item.recipe_Name}}</td>
-    
-    <button  [routerLink]="['/view-recipe', item.recipe_ID]" mat-flat-button color="warn"><ion-icon name="pencil-outline"></ion-icon></button>
-    <button (click)="delete(item.recipe_ID)"  mat-flat-button color="primary"><ion-icon name="trash-outline"></ion-icon></button>
-    
-  </tr>
-</table>
+<ion-content class="ion-margin" id="htmlData">
+  <div class="contents">
+    <ion-title><h1>Recipes</h1></ion-title>
+    <ion-searchbar class="isb" placeholder="Search Recipes..." showCancelButton="focus" [(ngModel)]="filterTerm" animated></ion-searchbar><br/>
+      <ion-grid class="ion-margin" class="ion-grid-padding">
+        <ion-row>
+          <ion-col>Recipe ID</ion-col>
+          <ion-col>Ingredients</ion-col>
+          <ion-col>Recipe Name</ion-col>
+          <ion-col></ion-col>
+        </ion-row>
+        <ion-item-divider></ion-item-divider>
+        <ion-row *ngFor="let item of data | filter: filterTerm">
+          <ion-col>
+            <ion-label>{{item.recipe_ID}}</ion-label>
+          </ion-col>
+          <ion-col>
+            <ion-label>{{item.recipe_Ingredients}}</ion-label>
+          </ion-col>
+          <ion-col>
+            <ion-label>{{item.recipe_Name}}</ion-label>
+          </ion-col>
+          <ion-col>
+            <ion-button class="red-Btn" [routerLink]="['/view-recipe', item.recipe_ID]">Edit</ion-button>
+            <ion-button class="light-Btn"  (click)="delete(item.recipe_ID)">Remove</ion-button>
+          </ion-col>
+        </ion-row>
+        <ion-item-divider></ion-item-divider>
+      </ion-grid>
+      <ion-button class="light-Btn" (click)="addRecipe()">Add</ion-button>
+      <ion-button class="red-Btn">Generate Report</ion-button>
+  </div>

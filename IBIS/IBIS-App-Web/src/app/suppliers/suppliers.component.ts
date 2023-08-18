@@ -17,7 +17,7 @@ export class SuppliersComponent implements OnInit {
   bool= false;
   idtodelete :any;
 id: any;
-searchTerm= "";
+filterTerm!: string;
   
 
   constructor(private supply: SupplierService,public router: Router,private route: ActivatedRoute,private logged: LoginService,private toastController: ToastController) { 

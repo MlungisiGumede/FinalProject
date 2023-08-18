@@ -25,6 +25,7 @@ export class ProductsComponent implements OnInit {
   productItems: any;
   itemNames: any;
   itemQuantities: any;
+  filterTerm!: string;
 
   constructor(private productService: ProductService,public router: Router,private toastController: ToastController) { 
     productService = {} as ProductService;

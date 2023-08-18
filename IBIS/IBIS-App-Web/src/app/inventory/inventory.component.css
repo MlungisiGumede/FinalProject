@@ -35,7 +35,7 @@
   }
 
 .light-Btn{
-    --background: yellow;
+    --background: #FFD700;
     color: black;
     --border-radius: 20em;
     float: right;

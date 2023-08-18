@@ -1,21 +1,45 @@
-<h2 class="h">Orders</h2>
-<div><ion-searchbar></ion-searchbar></div>
-<button mat-flat-button color="primary" class="add" [routerLink]="'/create-customer-order'">New Customer Order</button>
-<table class="t">
-  <tr>
-    <th class="thead">Order Number</th>
-    <th class="thead">Quantity</th>
-    <th class="thead">Supplier ID</th>
-    <th class="thead">Supplier Name</th>
-    <th class="thead">Order Status</th>
-  </tr>
-  <tr *ngFor="let item of data" class="row">
-    <td>{{item.supplier_Order_Id}}</td>
-    <td>{{item.quantity}}</td>
-    <td>{{item.supplier_ID}}</td>
-    <td>{{item.companyName}}</td>
-    <td>in progress</td>
-    <button  mat-flat-button color="warn" [routerLink]="['/view-supplier', item.supplier_ID]">View</button>
-    <button (click)="delete(item.supplier_ID)"  mat-flat-button color="primary">Remove</button>
-  </tr>
-</table>
+<ion-content class="ion-margin" id="htmlData">
+  <div class="contents">
+    <ion-title><h1>Orders</h1></ion-title>
+    <ion-searchbar class="isb" placeholder="Search Orders..." showCancelButton="focus" [(ngModel)]="filterTerm" animated></ion-searchbar><br/>
+      <ion-grid class="ion-margin" class="ion-grid-padding">
+        <ion-row>
+          <ion-col>Order Number</ion-col>
+          <ion-col>Quantity</ion-col>
+          <ion-col>Supplier ID</ion-col>
+          <ion-col>Supplier Name</ion-col>
+          <ion-col>Order Status</ion-col>
+          <ion-col></ion-col>
+        </ion-row>
+        <ion-item-divider></ion-item-divider>
+        <ion-row *ngFor="let item of data | filter: filterTerm">
+          <ion-col>
+            <ion-label>{{item.supplier_Order_Id}}</ion-label>
+          </ion-col>
+          <ion-col>
+            <ion-label>{{item.quantity}}</ion-label>
+          </ion-col>
+          <ion-col>
+            <ion-label>{{item.supplier_ID}}</ion-label>
+          </ion-col>
+          <ion-col>
+            <ion-label>{{item.companyName}}</ion-label>
+          </ion-col>
+          <ion-col>
+            <ion-label>in progress</ion-label>
+          </ion-col>
+          <ion-col>
+            <ion-button class="red-Btn" [routerLink]="['/view-supplier', item.supplier_ID]">View</ion-button>
+            <ion-button class="light-Btn" (click)="delete(item.supplier_ID)">Remove</ion-button>
+          </ion-col>
+        </ion-row>
+        <ion-item-divider></ion-item-divider>
+      </ion-grid>
+      <ion-button class="light-Btn" [routerLink]="'/create-customer-order'">Add Customer Order</ion-button>
+      <ion-button class="red-Btn" >Generate Report</ion-button>
+  </div>
+
+
+
+
+
