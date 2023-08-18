@@ -38,6 +38,12 @@ import { ViewRecipeComponent } from './view-recipe/view-recipe.component';
 import { CreateSupplierOrderComponent } from './create-supplier-order/create-supplier-order.component';
 import { CustomerOrderComponent } from './customer-order/customer-order.component';
 import { ViewWriteOffsComponent } from './view-write-offs/view-write-offs.component';
+import { Ng2SearchPipeModule } from 'ng2-search-filter';
+import { ReportsComponent } from './reports/reports.component';
+import { InventoryComponent } from './inventory/inventory.component';
+import { OrdersComponent } from './orders/orders.component';
+import { ProductsComponent } from './products/products.component';
+import { SuppliersComponent } from './suppliers/suppliers.component';
 
 @NgModule({
   declarations: [
@@ -60,11 +66,18 @@ import { ViewWriteOffsComponent } from './view-write-offs/view-write-offs.compon
     ViewRecipeComponent,
     CreateSupplierOrderComponent,
     CustomerOrderComponent,
-    ViewWriteOffsComponent
+    ViewWriteOffsComponent,
+    ReportsComponent,
+    InventoryComponent,
+    RecipesComponent,
+    OrdersComponent,
+    ProductsComponent,
+    SuppliersComponent
   
   ],
   imports: [
     BrowserModule,
+    Ng2SearchPipeModule,
     RouterModule.forRoot([
       {path: '', redirectTo: '/Login', pathMatch: 'full'},
       {path: 'Login', component: LoginComponent},
@@ -86,7 +99,16 @@ import { ViewWriteOffsComponent } from './view-write-offs/view-write-offs.compon
       {path: 'view-recipe/:id', component: ViewRecipeComponent},
       {path: 'create-supplier-order/:id', component: CreateSupplierOrderComponent},
       {path: 'create-customer-order', component: CustomerOrderComponent},
-      {path: 'view-write-off', component: ViewWriteOffsComponent}
+      {path: 'view-write-off', component: ViewWriteOffsComponent},
+      {path: 'Reports', component: ReportsComponent},
+      {path: 'Inventory', component: InventoryComponent},
+      {path: 'Orders', component: OrdersComponent},
+      {path: 'Recipes', component: RecipesComponent},
+      {path: 'Products', component: ProductsComponent},
+      {path: 'Suppliers', component: SuppliersComponent}
+
+
+
       
 
 

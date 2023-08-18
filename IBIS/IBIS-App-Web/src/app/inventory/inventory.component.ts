@@ -5,6 +5,7 @@ import { Inventory } from '../Models/Inventory';
 import { ToastController } from '@ionic/angular';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
+import { Ng2SearchPipe } from 'ng2-search-filter/src/ng2-filter.pipe';
 @Component({
   selector: 'app-inventory',
   templateUrl: './inventory.component.html',
@@ -14,7 +15,7 @@ export class InventoryComponent implements OnInit {
   data:any
   invent: Inventory[] = [];
   idtodelete :any;
-  search= "";
+  filterTerm!: string;
 
   constructor(public router: Router, private inv : InventoryService,private toastController: ToastController) { }
 

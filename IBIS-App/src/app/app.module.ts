@@ -36,6 +36,8 @@ import { RecipesComponent } from './recipes/recipes.component';
 import { CreateRecipeComponent } from './create-recipe/create-recipe.component';
 import { ViewRecipeComponent } from './view-recipe/view-recipe.component';
 import { CreateSupplierOrderComponent } from './create-supplier-order/create-supplier-order.component';
+import { ReportsComponent } from './reports/reports.component';
+
 
 @NgModule({
   declarations: [
@@ -56,8 +58,8 @@ import { CreateSupplierOrderComponent } from './create-supplier-order/create-sup
     OrderFromSupplierComponent,
     CreateRecipeComponent,
     ViewRecipeComponent,
-    CreateSupplierOrderComponent
-  
+    CreateSupplierOrderComponent,
+   
   ],
   imports: [
     BrowserModule,
@@ -80,7 +82,9 @@ import { CreateSupplierOrderComponent } from './create-supplier-order/create-sup
       {path: 'Recipes', component: RecipesComponent},
       {path: 'create-recipe', component: CreateRecipeComponent},
       {path: 'view-recipe/:id', component: ViewRecipeComponent},
-      {path: 'create-supplier-order/:id', component: CreateSupplierOrderComponent}
+      {path: 'create-supplier-order/:id', component: CreateSupplierOrderComponent},
+  
+
       
 
 
@@ -103,6 +107,7 @@ import { CreateSupplierOrderComponent } from './create-supplier-order/create-sup
     ReactiveFormsModule,
     MatExpansionModule,
     IonicModule.forRoot()
+    
 
   ],
   providers: [],

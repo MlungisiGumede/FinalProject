@@ -32,49 +32,6 @@ const routes: Routes = [
     ),
 },
 {
-  path: 'Inventory',
-  loadChildren: () =>
-    import('./ComponentModules/inventory.module').then(
-      (m) => m.InventoryModule
-    ),
-},
-{
-  path: 'Products',
-  loadChildren: () =>
-    import('./ComponentModules/products.module').then(
-      (m) => m.ProductsModule
-    ),
-},
-{
-  path: 'Orders',
-  loadChildren: () =>
-    import('./ComponentModules/orders.module').then(
-      (m) => m.OrderModule
-    ),
-},
-
-{
-  path: 'Suppliers',
-  loadChildren: () =>
-    import('./ComponentModules/suppliers.module').then(
-      (m) => m.SuppliersModule
-    ),
-},
-{
-  path: 'Reports',
-  loadChildren: () =>
-    import('./ComponentModules/reports.module').then(
-      (m) => m.ReportsModule
-    ),
-},
-{
-path: 'Recipes',
-loadChildren: () =>
-  import('./ComponentModules/recipes.module').then(
-    (m) => m.RecipesModule
-  ),
-},
-{
   path: 'Product-Report',
   loadChildren: () =>
     import('./ComponentModules/ProductReport.module').then(
