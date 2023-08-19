@@ -88,28 +88,29 @@ Filesystem.readdir({
   directory: Directory.Data,
   path: IMAGE_DIR
 }).then(result =>{
-console.log('here: ',result);
-//this.loadFileData(result.files);
+console.log('here: ',result.files);
+this.loadFileData(result.files);
 //console.log('yess:',this.loadFileData(result.files));
 
 
-}, async err =>{
-  console.log('err:', err)
+}, async () =>{
+  //console.log('err:', err)
   await Filesystem.mkdir({
     directory: Directory.Data,
     path: IMAGE_DIR
   
-  }).then(_ =>{
+  });
+  }).then(_=>{
     loading.dismiss();
   })
-})
+
 
 
 
 }
 
 
-async loadFileData(fileNames: string[]){
+async loadFileData(fileNames: any[]){
 
 for(let f of fileNames){
   const filePath = `${IMAGE_DIR}/${f}`;
@@ -122,6 +123,11 @@ const readFile = await Filesystem.readFile({
 });
 console.log('READ: ', readFile);
 
+this.images.push({
+  name: f,
+  path: filePath,
+  data: `data:image/jpeg;base64,${readFile.data}`
+})
 
 
 }
