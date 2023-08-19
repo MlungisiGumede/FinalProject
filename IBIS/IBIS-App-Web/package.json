@@ -21,6 +21,8 @@
     "@angular/platform-browser-dynamic": "^14.2.0",
     "@angular/router": "^14.2.0",
     "@canvasjs/angular-charts": "^1.0.3",
+    "@capacitor/camera": "^5.0.7",
+    "@capacitor/filesystem": "^5.1.2",
     "@ionic/angular": "latest",
     "chart.js": "^4.3.3",
     "jspdf": "^2.5.1",
