@@ -9,14 +9,6 @@ const routes: Routes = [
     redirectTo: 'one',
   }*/
   { path: '', redirectTo: '/Login', pathMatch: 'full' },
-  
-{
-  path: 'Home',
-  loadChildren: () =>
-    import('./home.module').then(
-      (m) => m.HomeModule
-    ),
-},
 {
   path: 'Create-User-Account',
   loadChildren: () =>

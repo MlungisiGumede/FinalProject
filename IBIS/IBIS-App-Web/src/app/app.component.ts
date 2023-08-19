@@ -62,7 +62,7 @@ if(!this.logged){
     {
       label: 'Dashboard',
       icon: 'dashboard',
-      route: 'Dashboard',
+      route: 'home',
     },
     {
       label: 'Inventory',

@@ -44,6 +44,8 @@ import { InventoryComponent } from './inventory/inventory.component';
 import { OrdersComponent } from './orders/orders.component';
 import { ProductsComponent } from './products/products.component';
 import { SuppliersComponent } from './suppliers/suppliers.component';
+import { CanvasJSAngularChartsModule } from '@canvasjs/angular-charts';
+import { HomeComponent } from './home/home.component';
 
 @NgModule({
   declarations: [
@@ -72,11 +74,13 @@ import { SuppliersComponent } from './suppliers/suppliers.component';
     RecipesComponent,
     OrdersComponent,
     ProductsComponent,
-    SuppliersComponent
+    SuppliersComponent,
+    HomeComponent
   
   ],
   imports: [
     BrowserModule,
+    CanvasJSAngularChartsModule,
     Ng2SearchPipeModule,
     RouterModule.forRoot([
       {path: '', redirectTo: '/Login', pathMatch: 'full'},
@@ -105,8 +109,8 @@ import { SuppliersComponent } from './suppliers/suppliers.component';
       {path: 'Orders', component: OrdersComponent},
       {path: 'Recipes', component: RecipesComponent},
       {path: 'Products', component: ProductsComponent},
-      {path: 'Suppliers', component: SuppliersComponent}
-
+      {path: 'Suppliers', component: SuppliersComponent},
+      {path: 'home', component:HomeComponent}
 
 
       

@@ -1,3 +1,32 @@
-.p1{
-    color: white;
+
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+}
+
+.block {
+    width: 50%;
+    float: left;
+    height: 0;
+    padding-bottom: 50%;
+}
+
+.one {
+    background: yellow;
+}
+
+.two {
+    background: lightblue;
+}
+
+.three {
+    background: orange;
+}
+
+.four {
+    background: red;
 }
