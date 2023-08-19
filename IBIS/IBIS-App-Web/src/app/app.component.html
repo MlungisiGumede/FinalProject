@@ -9,7 +9,7 @@
     <button matSuffix mat-button class="btns"><mat-icon class="btns" >search</mat-icon></button>
     </mat-form-field>
   <mat-form-field class="formfields">
-    <i class="material-icons">account_circle</i>
+    <ion-icon name="person-outline"></ion-icon>
     <mat-select>
       <mat-option *ngFor="let user of use" [value]="user.value" [routerLink]="user.route" routerLinkActive #rla="routerLinkActive">
         {{user.viewValue}}

@@ -1,24 +1,41 @@
-<h2 class="h">Write offs</h2>
-<ion-searchbar></ion-searchbar>
+<ion-content class="ion-margin" id="htmlData">
+  <div class="contents">
+    <ion-title><h1>Write offs</h1></ion-title>
+    <ion-searchbar class="isb" placeholder="Search Products..." showCancelButton="focus" [(ngModel)]="filterTerm" animated></ion-searchbar><br/>
+      <ion-grid class="ion-margin" class="ion-grid-padding">
+        <ion-row>
+          <ion-col>Product ID</ion-col>
+          <ion-col>Product Name</ion-col>
+          <ion-col>Quantity</ion-col>
+          <ion-col>Reason</ion-col>
+          <ion-col>Image</ion-col>
+          <ion-col></ion-col>
+        </ion-row>
+        <ion-item-divider></ion-item-divider>
+        <ion-row *ngFor="let item of data | filter: filterTerm">
+          <ion-col>
+            <ion-label>{{item.product_ID}}</ion-label>
+          </ion-col>
+          <ion-col>
+            <ion-label>{{item.product_Name}}</ion-label>
+          </ion-col>
+          <ion-col>
+            <ion-label>{{item.quantity}}</ion-label>
+          </ion-col>
+          <ion-col>
+            <ion-label>{{item.reason}}</ion-label>
+          </ion-col>
+          <ion-col>
+            <ion-label>{{item.image}}</ion-label>
+          </ion-col>
+          <ion-col class="inside">
+            <ion-button class="light-Btn">View</ion-button>
+          </ion-col>
+          <ion-col>
+            <ion-button class="red-Btn" (click)="delete(item.product_ID)">Remove</ion-button>
+          </ion-col>
+        </ion-row>
+        <ion-item-divider></ion-item-divider>
+      </ion-grid>
+  </div>
 
-
-<table class="t">
-  <tr class="thead">
-    <th class="thead">Product ID</th>
-    <th class="thead">Product Name</th>
-    <th class="thead">Quantity</th>
-    <th class="thead">Reason</th>
-    <th class="thead">image</th>
-
-    
-  </tr>
-  <tr *ngFor="let item of data" class="row">
-    <td>{{item.product_ID}}</td>
-    <td>{{item.product_Name}}</td>
-    <td>{{item.quantity}}</td>
-    <td>{{item.reason}}</td>
-    <td>{{item.image}}</td>
-    
-    <button (click)="delete(item.product_ID)" mat-flat-button color="primary">Remove</button>
-  </tr>
-</table>

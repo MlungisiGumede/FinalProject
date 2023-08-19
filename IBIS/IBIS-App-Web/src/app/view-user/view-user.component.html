@@ -1,38 +1,38 @@
-<title>Registration Form</title>
+
 
 <body>
-<div class="container">
+<div class="container" aria-readonly="true">
  <div class="title">View User</div>
  <div class="content">
    <form   action="#">
      <div class="user-details">
        <div class="input-box">
          <span class="details">Full Name</span>
-         <input type="text" placeholder="David" required>
+         <input type="text" placeholder="David" readonly>
        </div>
        <div class="input-box">
          <span class="details">Username</span>
-         <input type="text" placeholder="Spider" required>
+         <input type="text" placeholder="Spider" readonly>
        </div>
        <div class="input-box">
          <span class="details">Email</span>
-         <input  type="text" placeholder="David@gmail.com" required>
+         <input  type="text" placeholder="David@gmail.com" readonly>
        </div>
        <div class="input-box">
          <span class="details">Phone Number</span>
-         <input  type="text" placeholder="0837647843" required>
+         <input  type="text" placeholder="0837647843" readonly>
        </div>
        <div class="input-box">
          <span class="details">Password</span>
-         <input  type="text" placeholder="12345678" required>
+         <input  type="text" placeholder="12345678" readonly>
        </div>
        <div class="input-box">
          <span class="details">Enter surname</span>
-         <input  type="text" placeholder="Janine" required>
+         <input  type="text" placeholder="Janine" readonly>
        </div>
      </div>
    </form>
  </div>
- <button (click)="update()" mat-flat-button color="primary" class="but" >update</button>
+ <ion-button (click)="update()" class="but" >update</ion-button>
 </div>
 </body>

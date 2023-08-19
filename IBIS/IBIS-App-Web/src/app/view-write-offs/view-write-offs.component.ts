@@ -17,8 +17,8 @@ export class ViewWriteOffsComponent implements OnInit {
   data:any
   products: Product[] = [];
   idtodelete :any;
-  search= "";
-
+  filterTerm!: string;
+  
   constructor(private productService: ProductService,public router: Router) { 
     productService = {} as ProductService;
 
