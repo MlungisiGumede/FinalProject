@@ -1,6 +1,6 @@
 export class Inventory{
 
-    InventoryId?: string;
+    inventory_ID!: string;
     Name?: string;
     SKU?: string;
     Quantity?: number;

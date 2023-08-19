@@ -1,5 +1,28 @@
 import { Component, OnInit } from '@angular/core';
 import { Ng2SearchPipe } from 'ng2-search-filter';
+var pdfMake = require('pdfmake/build/pdfmake');
+var pdfFonts = require('pdfmake/build/vfs_fonts');
+pdfMake.vfs = pdfFonts.pdfMake.vfs;
+
+class Product{
+  name = 'hello';
+  price= 500;
+  qty= 7;
+}
+class Invoice{
+  customerName= 'Johnny';
+  address= '74 riding st';
+  contactNo = 982734786;
+  email= 'John@gmail';
+  
+  products: Product[] = [];
+  additionalDetails!: string;
+
+  constructor(){
+    // Initially one empty product row we will show 
+    this.products.push(new Product());
+  }
+}
 
 @Component({
   selector: 'app-reports',
@@ -7,6 +30,7 @@ import { Ng2SearchPipe } from 'ng2-search-filter';
   styleUrls: ['./reports.component.css']
 })
 export class ReportsComponent implements OnInit {
+
 
   filterTerm!: string;
 
@@ -77,5 +101,120 @@ export class ReportsComponent implements OnInit {
 
   ngOnInit(): void {
   }
+
+
+
+
+    invoice = new Invoice(); 
+    
+    generatePDF() {
+      let docDefinition = {
+        content: [
+          {
+            text: 'Reports',
+            fontSize: 16,
+            alignment: 'center',
+            color: '#047886'
+          },
+          {
+            text: 'New Report',
+            fontSize: 20,
+            bold: true,
+            alignment: 'center',
+            decoration: 'underline',
+            color: 'skyblue'
+          },
+          {
+            text: 'Details',
+            style: 'sectionHeader'
+          },
+          {
+            columns: [
+              [
+                {
+                  text: this.invoice.customerName,
+                  bold:true
+                },
+                { text: this.invoice.address },
+                { text: this.invoice.email },
+                { text: this.invoice.contactNo }
+              ],
+              [
+                {
+                  text: `Date: ${new Date().toLocaleString()}`,
+                  alignment: 'right'
+                },
+                { 
+                  text: `Bill No : ${((Math.random() *1000).toFixed(0))}`,
+                  alignment: 'right'
+                }
+              ]
+            ]
+          },
+          {
+            text: 'report Details',
+            style: 'sectionHeader'
+          },
+          {
+            table: {
+              headerRows: 1,
+              widths: ['*', 'auto', 'auto', 'auto'],
+              body: [
+                ['Product', 'Price', 'Quantity', 'Amount'],
+                ...this.invoice.products.map(p => ([p.name, p.price, p.qty, (p.price*p.qty).toFixed(2)])),
+                [{text: 'Total Amount', colSpan: 3}, {}, {}, this.invoice.products.reduce((sum, p)=> sum + (p.qty * p.price), 0).toFixed(2)]
+              ]
+            }
+          },
+          {
+            text: 'Additional Details',
+            style: 'sectionHeader'
+          },
+          {
+              text: this.invoice.additionalDetails,
+              margin: [0, 0 ,0, 15]          
+          },
+          {
+            columns: [
+              [{ qr: `${this.invoice.customerName}`, fit: '50' }],
+              [{ text: 'Signature', alignment: 'right', italics: true}],
+            ]
+          },
+          {
+            text: 'Terms and Conditions',
+            style: 'sectionHeader'
+          },
+          {
+              ul: [
+                'Order can be return in max 10 days.',
+                'Warrenty of the product will be subject to the manufacturer terms and conditions.',
+                'This is system generated invoice.',
+              ],
+          }
+        ],
+        styles: {
+          sectionHeader: {
+            bold: true,
+            decoration: 'underline',
+            fontSize: 14,
+            margin: [0, 15,0, 15]          
+          }
+        }
+      };
+  
+     
+        pdfMake.createPdf(docDefinition).download();
+        pdfMake.createPdf(docDefinition).print();      
+     
+        pdfMake.createPdf(docDefinition).open();      
+     
+  
+    }
+
+
+
+
+
+
 
 }
