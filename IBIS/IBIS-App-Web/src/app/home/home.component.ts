@@ -30,7 +30,7 @@ export class HomeComponent implements OnInit {
 
   chartOptions = {
 	  title: {
-		  text: "Monthly Sales Data"
+		  text: "Monthly Product Supply"
 	  },
 	  theme: "light2",
 	  animationEnabled: true,
@@ -66,7 +66,7 @@ export class HomeComponent implements OnInit {
 	  theme: "dark2",
 	  exportEnabled: true,
 	  title: {
-		text: "Developer Work Week"
+		text: "Weekly Orders"
 	  },
 	  subtitles: [{
 		text: "Median hours/week"
@@ -75,11 +75,11 @@ export class HomeComponent implements OnInit {
 		type: "pie", //change type to column, line, area, doughnut, etc
 		indexLabel: "{name}: {y}%",
 		dataPoints: [
-			{ name: "Overhead", y: 9.1 },
-			{ name: "Problem Solving", y: 3.7 },
-			{ name: "Debugging", y: 36.4 },
-			{ name: "Writing Code", y: 30.7 },
-			{ name: "Firefighting", y: 20.1 }
+			{ name: "Steak", y: 9.1 },
+			{ name: "Boere wors", y: 3.7 },
+			{ name: "Bacon", y: 36.4 },
+			{ name: "Panchetta", y: 30.7 },
+			{ name: "Ham", y: 20.1 }
 		]
 	  }]
 	}
