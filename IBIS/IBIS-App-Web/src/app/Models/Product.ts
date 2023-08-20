@@ -1,10 +1,10 @@
 export class Product{
-    productID: any;
-    Name?: string;
-    Category?: string;
-    SubCategory?: string;
-    Price?: number;
+    product_ID: any;
+    product_Name?: string;
+    category?: string;
+    subcategory?: string;
+    price?: number;
     Recipe?: string;
-    ExpiryDate?: String;
-    Quantity?: number;
+    expiry?: String;
+    quantity?: string;
 }

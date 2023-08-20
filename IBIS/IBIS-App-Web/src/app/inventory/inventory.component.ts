@@ -32,7 +32,7 @@ export class InventoryComponent implements OnInit {
   inID: any;
 
   constructor(public router: Router, private inv : InventoryService,private toastController: ToastController,private fb : FormBuilder) {
-    this.inventory = new Inventory();
+    //this.inventory = new Inventory();
    }
 
 
