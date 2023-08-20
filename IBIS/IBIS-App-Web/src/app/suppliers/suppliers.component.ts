@@ -147,7 +147,7 @@ export class SuppliersComponent implements OnInit {
             widths: ['*', 'auto', 'auto', 'auto'],
             body: [
               ['Supplier', 'Supplier Name', 'Address', 'Phone'],
-              ...this.data.map((p: { SupplierID: any; SupplierName: any; Address: any; Phone: any}) => ([p.SupplierID, p.SupplierName, p.Address, p.Phone])),
+              ...this.data.map((p: { supplier_ID: any; companyName: any; addressline: any; phone: any}) => ([p.supplier_ID, p.companyName, p.addressline, p.phone])),
               
             ]
           }
