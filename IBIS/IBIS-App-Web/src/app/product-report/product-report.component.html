@@ -1,3 +1,23 @@
-<p>product-report works!</p>
 
-<canvas id="productsChart" width="400" height="400"></canvas>
+
+<div>
+    <h2 class="data-title">Product Report</h2>
+  </div>
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th>Item Name</th>
+        <th>Quantity</th>
+        <th>Price</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of combinedData">
+        <td class="data-entry">{{ item.Name }}</td>
+        <td class="data-entry">{{ item.Quantity }}</td>
+        <td class="data-entry">{{ item.Price }}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <canvas id="productsChart" width="400" height="400"></canvas>

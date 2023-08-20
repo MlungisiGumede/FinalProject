@@ -19,6 +19,7 @@ declare var myChart: any;
 })
 export class ProductsComponent implements OnInit {
   data:any
+  data2: Product[] = [];
   products: Product[] = [];
   idtodelete :any;
   search= "";
@@ -27,12 +28,24 @@ export class ProductsComponent implements OnInit {
   itemQuantities: any;
   filterTerm!: string;
 
+  combinedData: { Name: string, Quantity: number , Price: number}[] = [];
+
   constructor(private productService: ProductService,public router: Router,private toastController: ToastController) { 
     productService = {} as ProductService;
   }
 
   ngOnInit() {
     this.getProducts()
+
+    
+    this.data2 = [
+      { productID: 1, Name: 'Product A', Quantity: 10, Price: 30 },
+      { productID: 2, Name: 'Product B', Quantity: 15, Price: 50 },
+      { productID: 3, Name: 'Product C', Quantity: 8, Price: 44 },
+      { productID: 4, Name: 'Product D', Quantity: 20, Price: 25 },
+      { productID: 5, Name: 'Product E', Quantity: 5, Price: 30 }
+    ];
+
   }
 
   getProducts(){
@@ -89,7 +102,7 @@ export class ProductsComponent implements OnInit {
         //   itemQuantities.push(item.Quantity || 0)
         // }
         
-        this.router.navigate(['/Product-Report'],{
+        this.router.navigate(['/product-report'],{
           queryParams: {
             itemNames: JSON.stringify(this.itemNames),
             itemQuantities: JSON.stringify(this.itemQuantities)
@@ -100,6 +113,28 @@ export class ProductsComponent implements OnInit {
         console.error('Error fetching product data:', error);
       }
     );
+  }
+
+  generateReport2() {
+    // Process dummy data and navigate to the report component
+    this.combinedData = this.data2.map(item => ({ Name: item.Name || '', Quantity: item.Quantity || 0, Price: item.Price || 0 }));
+
+
+    this.router.navigate(['/product-report'], {
+      queryParams: {
+        combinedData: JSON.stringify(this.combinedData)
+      }
+    });
+  }
+
+  generateReport3(){
+    this.combinedData = this.data2.map(item => ({ Name: item.Name || '', Quantity: item.Quantity || 0 , Price: item.Price || 0}));
+    this.router.navigate(['Reports'], {
+      queryParams: {
+        combinedData: JSON.stringify(this.combinedData)
+      }
+    });
+
   }
 
  

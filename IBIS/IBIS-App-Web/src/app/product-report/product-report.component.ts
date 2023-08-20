@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Chart } from 'chart.js';
+import { MatTable } from '@angular/material/table';
+import { MatTableModule } from '@angular/material/table';
+import { MatTableDataSource } from '@angular/material/table';
 
 @Component({
   selector: 'app-product-report',
@@ -10,47 +13,25 @@ import { Chart } from 'chart.js';
 
 export class ProductReportComponent implements OnInit {
 
+  // itemNames: string[] = []; // Define itemNames property
+  // itemQuantities: number[] = []; 
+
   chart: any = [];
+  combinedData: { Name: string, Quantity: number, Price: number}[] = [];
   constructor(private route: ActivatedRoute) { }
 
   ngOnInit() {
     this.route.queryParams.subscribe((params) => {
-      const itemNames: string[] = JSON.parse(params['itemNames'] || '[]');
-      const itemQuantities: number[] = JSON.parse(params['itemQuantities'] || '[]');
-
-      this.createBarChart(itemNames, itemQuantities);
+      this.combinedData = JSON.parse(params['combinedData'] || '[]');
+      // const combinedData: { Name: string, Quantity: number }[] = JSON.parse(params['combinedData'] || '[]');
+      const itemNames: string[] = this.combinedData.map(item => item.Name);
+      const itemQuantities: number[] = this.combinedData.map(item => item.Quantity);
+      const itemPrices: number[] = this.combinedData.map(item =>item.Price )
+      console.log('yes we received the data from the product component',  itemNames, itemQuantities, itemPrices)
+      
     });
   }
 
-  createBarChart(labels: string[], data: number[]){
-    const ctx = document.getElementById('productsChart') as HTMLCanvasElement;;
-    
-    this.chart = new Chart(ctx, { 
-      type: 'bar',
-      data: {
-      labels: labels,
-        datasets: [
-          {
-            label: 'Quantity',
-            data: data,
-            backgroundColor: 'rgba(54, 162, 235, 0.6)',
-            borderColor: 'rgba(54, 162, 235, 1)',
-            borderWidth: 1
-          }
-        ]
-      },
-      options: {
-        responsive: true,
-        scales: {
-          x: {
-            beginAtZero: true
-          },
-          y: {
-            beginAtZero: true
-          }
-        }
-      }
-    });
-  }
+  
 
 }

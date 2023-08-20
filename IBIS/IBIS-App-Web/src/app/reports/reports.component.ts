@@ -1,14 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { Ng2SearchPipe } from 'ng2-search-filter';
+import { ActivatedRoute } from '@angular/router';
+import { ProductService } from '../Services/product.service';
+import { Product } from '../Models/Product';
 var pdfMake = require('pdfmake/build/pdfmake');
 var pdfFonts = require('pdfmake/build/vfs_fonts');
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
-class Product{
-  name = 'hello';
-  price= 500;
-  qty= 7;
-}
+
 class Invoice{
   customerName= 'Johnny';
   address= '74 riding st';
@@ -17,11 +16,8 @@ class Invoice{
   
   products: Product[] = [];
   additionalDetails!: string;
-
-  constructor(){
-    // Initially one empty product row we will show 
-    this.products.push(new Product());
-  }
+  
+  
 }
 
 @Component({
@@ -31,11 +27,11 @@ class Invoice{
 })
 export class ReportsComponent implements OnInit {
 
- //jamie = new Product();
- 
-  filterTerm!: string;
 
-  constructor() { }
+  filterTerm!: string;
+  
+  combinedData: { Name: string, Quantity: number, Price: number }[] = [];
+  constructor(private productService: ProductService, private route: ActivatedRoute) { }
 
   userRecords = [
     {
@@ -100,7 +96,16 @@ export class ReportsComponent implements OnInit {
     },
   ];
 
-  ngOnInit(): void {
+  ngOnInit() {
+    this.route.queryParams.subscribe((params) => {
+      this.combinedData = JSON.parse(params['combinedData'] || '[]');
+      // const combinedData: { Name: string, Quantity: number }[] = JSON.parse(params['combinedData'] || '[]');
+      const itemNames: string[] = this.combinedData.map(item => item.Name);
+      const itemQuantities: number[] = this.combinedData.map(item => item.Quantity);
+      const itemPrices: number[] = this.combinedData.map(item =>item.Price )
+      console.log('yes we received the data from the product component', this.combinedData)
+      
+    });
   }
 
 
@@ -108,7 +113,25 @@ export class ReportsComponent implements OnInit {
 
     invoice = new Invoice(); 
     
+    
     generatePDF() {
+
+      // this.productService.getProductList().subscribe(
+      //   (response) => {
+      //     const products: Product[] = response.data.products;
+      //     this.invoice.products = products.map(product => ({
+      //       name: product.Name || '',
+      //       price: product.Price || 0,
+      //       qty: product.Quantity || 0
+      //     }));
+
+
+      // this.invoice.products = this.combinedData.map(product => ({
+      //   name: product.Name || '',
+      //   price: product.Price || 0,
+      //   quantity: product.Quantity || 0
+      // }))
+
       let docDefinition = {
         content: [
           {
@@ -162,9 +185,10 @@ export class ReportsComponent implements OnInit {
               widths: ['*', 'auto', 'auto', 'auto'],
               body: [
                 ['Product', 'Price', 'Quantity', 'Amount'],
-                ...this.invoice.products.map(p => ([p.name, p.price, p.qty, (p.price*p.qty).toFixed(2)])),
-                [{text: 'Total Amount', colSpan: 3}, {}, {}, this.invoice.products.reduce((sum, p)=> sum + (p.qty * p.price), 0).toFixed(2)]
+                ...this.invoice.products.map(p => ([p.Name, p.Price, p.Quantity, (p.Price!*p.Quantity!).toFixed(2)])),
+                [{text: 'Total Amount', colSpan: 3}, {}, {}, this.invoice.products.reduce((sum, p)=> sum + (p.Quantity! * p.Price!), 0).toFixed(2)]
               ]
+              
             }
           },
           {
