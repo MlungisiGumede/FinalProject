@@ -187,8 +187,8 @@ export class ProductsComponent implements OnInit {
             widths: ['*', 'auto', 'auto', 'auto'],
             body: [
               ['Product', 'Price', 'Quantity', 'Amount'],
-              ...this.data.map((p: { Product_ID: any; Product_Items: any; Quantity: any; }) => ([p.Product_ID, p.Product_Items, p.Quantity, (p.Product_Items*p.Quantity).toFixed(2)])),
-              [{text: 'Total Amount', colSpan: 3}, {}, {}, this.data.reduce((sum: number, p: { qty: number; price: number; })=> sum + (p.qty * p.price), 0).toFixed(2)]
+              ...this.data.map((p: { product_ID: any; product_Name: any; quantity: any; }) => ([p.product_ID, p.product_Name, p.quantity, (p.product_Name*p.quantity).toFixed(2)])),
+              [{text: 'Total Amount', colSpan: 3}, {}, {}, this.data.reduce((sum: number, p: { quantity: number; price: number; })=> sum + (p.quantity * p.price), 0).toFixed(2)]
             ]
           }
         },
