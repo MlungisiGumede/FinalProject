@@ -17,14 +17,14 @@ export class OrdersComponent implements OnInit {
   idtodelete :any;
   filterTerm!: string;
 
-  constructor(public router: Router, private orderservice : SupplierService) { }
+  constructor(public router: Router, private orderservice : OrdersService) { }
 
   ngOnInit(): void {
     this.getOrders()
   }
 
   getOrders(){
-    this.orderservice.getSupplierList().subscribe(response => {
+    this.orderservice.getOrderList().subscribe(response => {
       console.log(response);
       this.data = response;
     })

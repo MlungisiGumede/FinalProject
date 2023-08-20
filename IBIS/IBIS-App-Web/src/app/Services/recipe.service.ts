@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Observable, catchError, retry, throwError } from 'rxjs';
 import { Product } from '../Models/Product';
+import { Recipe } from '../Models/Recipes';
 
 @Injectable({
   providedIn: 'root'
@@ -34,33 +35,33 @@ export class RecipeService {
       
       
       
-       createRecipe(prod: Product){
-        return this.httpClient.post(this.apiUrl, prod, this.httpOptions)
+       createRecipe(rec: Recipe){
+        return this.httpClient.post(this.apiUrl,rec, this.httpOptions)
       }
   
     
     
-       getRecipeList(): Observable<Product> {
+       getRecipeList(): Observable<Recipe> {
          return this.httpClient
-         .get<Product>(this.apiUrl + '/getAll')
+         .get<Recipe>(this.apiUrl + '/getAll')
            .pipe(
              retry(2),
              catchError(this.handleError)
            )
        }
     
-       getrec(id: any): Observable<Product> {
+       getrec(id: any): Observable<Recipe> {
          return this.httpClient
-           .get<Product>(this.apiUrl + "/" +id)
+           .get<Recipe>(this.apiUrl + "/" +id)
            .pipe(
              retry(2),
              catchError(this.handleError)
            )
        }
       
-       updateRecipe(id: any, data: any): Observable<Product> {
+       updateRecipe(id: any, data: any): Observable<Recipe> {
          return this.httpClient
-           .put<Product>(this.apiUrl + '/' + id, data, this.httpOptions)
+           .put<Recipe>(this.apiUrl + '/' + id, data, this.httpOptions)
            .pipe(
              retry(2),
              catchError(this.handleError)
@@ -68,7 +69,7 @@ export class RecipeService {
        }
       
        delete(id:number){
-        return this.httpClient.delete<Product>(`${this.apiUrl}/${id}` , this.httpOptions);
+        return this.httpClient.delete<Recipe>(`${this.apiUrl}/${id}` , this.httpOptions);
      }
 
 

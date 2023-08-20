@@ -61,7 +61,7 @@ export class SuppliersComponent implements OnInit {
   this.supply.delete(this.idtodelete).subscribe(Response => {
     console.log(Response);
     this.data = Response;
-    this.presentToast
+    this.presentToast('top')
   this.getall();
   })
     }

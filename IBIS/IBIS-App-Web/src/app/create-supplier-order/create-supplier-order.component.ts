@@ -14,6 +14,7 @@ export class CreateSupplierOrderComponent implements OnInit {
   data: any;
   sup!: Supplier;
   id:any;
+  ord: any;
 
   viewordersupplierform!: FormGroup;
   constructor(private supply: SupplierService,public router:Router,private toastController: ToastController,private route : ActivatedRoute,private fb : FormBuilder) { 
@@ -24,9 +25,11 @@ export class CreateSupplierOrderComponent implements OnInit {
     this.id = this.route.snapshot.params['id']
     this.viewordersupplierform = this.fb.group({
 
-      supplier_Order_Id : ['', Validators.required],
+      supplier_ID : ['', Validators.required],
       inventory_Item_Id: ['', Validators.required],
-      quantity : ['', Validators.required]
+      quantity : ['', Validators.required],
+      order_Status : ['', Validators.required],
+      Suppliername: ['', Validators.required]
     })
     this.id = this.route.snapshot.params['id']
 
@@ -38,6 +41,7 @@ export class CreateSupplierOrderComponent implements OnInit {
       console.log('order:', this.data)
       });
 
+      this.ord = this.data;
 
   }
 

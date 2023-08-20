@@ -5,28 +5,30 @@
        <form action="#">
          <div class="user-details">
            <div class="input-box">
-             <span class="details">Order id</span>
+             <span class="details">Order ID</span>
              <input  type="text" placeholder="name" [(ngModel)]="data.order_ID" [ngModelOptions]="{standalone: true}">
            </div>
            <div class="input-box">
-             <span class="details">loading</span>
-             <input   type="text" placeholder="Category">
+             <span class="details">Supplier Name</span>
+             <input   type="text" placeholder="Category"  [(ngModel)]="data.supplierName" [ngModelOptions]="{standalone: true}">
            </div>
            <div class="input-box">
-             <span class="details">loading</span>
-             <input  type="text" placeholder="sub-category" >
+             <span class="details">Quantity</span>
+             <input  type="text"  [(ngModel)]="data.quantity" [ngModelOptions]="{standalone: true}" placeholder="sub-category" >
            </div>
            <div class="input-box">
-            <span class="details">quantity</span>
-            <input  type="text" placeholder="Quantity" [(ngModel)]="data.quantity" [ngModelOptions]="{standalone: true}">
-          </div>
+            <span class="details">Order Status</span>
+            <ion-list>
+              <ion-item>
+                <ion-select [(ngModel)]="data.order_Status"  [ngModelOptions]="{standalone: true}">
+                  <ion-select-option value="in-progress">in-progress</ion-select-option>
+                  <ion-select-option value="Finished">Finished</ion-select-option>
+                </ion-select>
+              </ion-item>
+          </ion-list>
          </div>
-         <div class="buttondiv">
          <div class="button">
-           <input type="submit" value="update" (click)="update()">
-         </div>
-         <div class="button">
-            <input type="submit" value="submit" >
+          <ion-button (click)="update()">Conclude Order</ion-button>
           </div>
         </div>
        </form>

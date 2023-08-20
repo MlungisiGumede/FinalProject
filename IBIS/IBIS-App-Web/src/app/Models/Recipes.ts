@@ -1,6 +1,8 @@
 export class Recipe{
-    RecipeId?: number;
-    recipeName?: string;
-    Qauntity?: number;
-    Ingredients?: string;
+    recipe_ID?: number;
+    recipe_Name?: string;
+    products_Quantity?: number;
+    recipe_Ingredients?: string;
+    product_ID?:string
+    time_Required?:0;
 }

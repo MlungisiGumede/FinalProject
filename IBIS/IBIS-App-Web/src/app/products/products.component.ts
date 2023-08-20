@@ -137,7 +137,7 @@ export class ProductsComponent implements OnInit {
     let docDefinition = {
       content: [
         {
-          text: 'Reports',
+          text: 'Products Report',
           fontSize: 16,
           alignment: 'center',
           color: '#047886'
@@ -158,12 +158,12 @@ export class ProductsComponent implements OnInit {
           columns: [
             [
               {
-                text: 'this.invoice.customerName',
+                text: 'products',
                 bold:true
               },
-              { text: 'this.invoice.address' },
-              { text: 'this.invoice.email '},
-              { text: 'this.invoice.contactNo' }
+              { text: 'New Report' },
+              { text: 'Information '},
+              { text: 'See information below' }
             ],
             [
               {
@@ -187,8 +187,9 @@ export class ProductsComponent implements OnInit {
             widths: ['*', 'auto', 'auto', 'auto'],
             body: [
               ['Product', 'Price', 'Quantity', 'Amount'],
-              ...this.data.map((p: { product_ID: any; product_Name: any; quantity: any; }) => ([p.product_ID, p.product_Name, p.quantity, (p.product_Name*p.quantity).toFixed(2)])),
-              [{text: 'Total Amount', colSpan: 3}, {}, {}, this.data.reduce((sum: number, p: { quantity: number; price: number; })=> sum + (p.quantity * p.price), 0).toFixed(2)]
+              ...this.data.map((p: { product_Name: any; price: any; quantity: any; }) => ([p.product_Name, p.price, p.quantity, (p.price*p.quantity).toFixed(2)])),
+              [{text: 'Total Amount', colSpan: 3}, {}, {}, this.data.reduce((sum: number, p: { quantity: number; price: number; })=> sum + (p.quantity * p.price), 0).toFixed(2)],
+              [{text: 'Total Quantity:', colSpan: 3}, {}, {}, this.data.reduce((sum: number, p: { quantity: number; })=> sum + (p.quantity), 0).toFixed(2)]
             ]
           }
         },

@@ -5,16 +5,20 @@
        <form action="#">
          <div class="user-details">
            <div class="input-box">
-             <span class="details">Inventory Item</span>
-             <input  type="text" placeholder="Inventory Item" [(ngModel)]="data.inventory_Item_Id" [ngModelOptions]="{standalone: true}">
+             <span class="details">Supplier</span>
+             <input  type="text" placeholder="Inventory Item" [(ngModel)]="ord.supplier_ID" [ngModelOptions]="{standalone: true}">
            </div>
            <div class="input-box">
-             <span class="details">Order description</span>
-             <input   type="text" placeholder="Order description" [(ngModel)]="data.supplier_Order_Id" [ngModelOptions]="{standalone: true}">
+             <span class="details">order status</span>
+             <input   type="text" placeholder="pending" [(ngModel)]="ord.order_Status" [ngModelOptions]="{standalone: true}">
            </div>
+           <div class="input-box">
+            <span class="details">Order Items</span>
+            <input   type="text" placeholder="Order items">
+          </div>
            <div class="input-box">
             <span class="details">Quantity</span>
-            <input   type="text" placeholder="Quantity" [(ngModel)]="data.quantity" [ngModelOptions]="{standalone: true}">
+            <input   type="text" placeholder="Quantity" [(ngModel)]="ord.quantity" [ngModelOptions]="{standalone: true}">
           </div>
          </div>
          <div class="buttondiv">
