@@ -23,13 +23,13 @@ const routes: Routes = [
       (m) => m.DashboardModule
     ),
 },
-{
-  path: 'Product-Report',
-  loadChildren: () =>
-    import('./ComponentModules/ProductReport.module').then(
-      (m) => m.ProductReportModule
-    )
-},
+// {
+//   path: 'Product-Report',
+//   loadChildren: () =>
+//     import('./ComponentModules/ProductReport.module').then(
+//       (m) => m.ProductReportModule
+//     )
+// },
 ];
 
 @NgModule({

@@ -46,6 +46,7 @@ import { ProductsComponent } from './products/products.component';
 import { SuppliersComponent } from './suppliers/suppliers.component';
 import { CanvasJSAngularChartsModule } from '@canvasjs/angular-charts';
 import { HomeComponent } from './home/home.component';
+import { ProductReportComponent } from './product-report/product-report.component';
 
 @NgModule({
   declarations: [
@@ -75,7 +76,8 @@ import { HomeComponent } from './home/home.component';
     OrdersComponent,
     ProductsComponent,
     SuppliersComponent,
-    HomeComponent
+    HomeComponent,
+    ProductReportComponent
   
   ],
   imports: [
@@ -110,7 +112,9 @@ import { HomeComponent } from './home/home.component';
       {path: 'Recipes', component: RecipesComponent},
       {path: 'Products', component: ProductsComponent},
       {path: 'Suppliers', component: SuppliersComponent},
-      {path: 'home', component:HomeComponent}
+      {path: 'home', component:HomeComponent},
+      {path: 'product-report', component: ProductReportComponent}
+
 
 
       
