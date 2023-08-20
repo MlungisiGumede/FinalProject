@@ -29,9 +29,10 @@ export class InventoryComponent implements OnInit {
   filterTerm!: string;
   viewinventoryform!: FormGroup;
   inventory: any;
+  inID: any;
 
   constructor(public router: Router, private inv : InventoryService,private toastController: ToastController,private fb : FormBuilder) {
-    //this.inventory = new Inventory();
+    this.inventory = new Inventory();
    }
 
 
@@ -52,7 +53,14 @@ export class InventoryComponent implements OnInit {
     this.inv.getInventoryList().subscribe(response => {
       console.log(response);
       this.data = response;
-      //let inventory = JSON.stringify(response["inventory_ID"]);
+      //console.log(this.data[0].inventory_ID);
+      
+      this.inID = this.data[0].inventory_ID;
+    
+
+
+      //let inventory = JSON.stringify(response.inventory_ID);
+      
      // console.log('this is:',JSON.stringify(response['inventory_ID']))
     // console.log('finally',response);
      
@@ -163,7 +171,7 @@ this.presentToast('top')
           columns: [
             [
               {
-                text: this.inventory,
+                text: this.inID,
                 bold:true
               },
               { text: ''},
@@ -263,5 +271,149 @@ this.presentToast('top')
 
     await toast.present();
   }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  generPDF() {
+    let docDefinition = {
+      content: [
+        {
+          text: 'Reports',
+          fontSize: 16,
+          alignment: 'center',
+          color: '#047886'
+        },
+        {
+          text: 'New Report',
+          fontSize: 20,
+          bold: true,
+          alignment: 'center',
+          decoration: 'underline',
+          color: 'skyblue'
+        },
+        {
+          text: 'Details',
+          style: 'sectionHeader'
+        },
+        {
+          columns: [
+            [
+              {
+                text: 'this.invoice.customerName',
+                bold:true
+              },
+              { text: 'this.invoice.address' },
+              { text: 'this.invoice.email '},
+              { text: 'this.invoice.contactNo' }
+            ],
+            [
+              {
+                text: `Date: ${new Date().toLocaleString()}`,
+                alignment: 'right'
+              },
+              { 
+                text: `Bill No : ${((Math.random() *1000).toFixed(0))}`,
+                alignment: 'right'
+              }
+            ]
+          ]
+        },
+        {
+          text: 'report Details',
+          style: 'sectionHeader'
+        },
+        {
+          table: {
+            headerRows: 1,
+            widths: ['*', 'auto', 'auto', 'auto'],
+            body: [
+              ['Product', 'Price', 'Quantity', 'Amount'],
+              ...this.data.map((p: { inventory_ID: any; inventory_Items: any; quantity: any; }) => ([p.inventory_ID, p.inventory_Items, p.quantity, (p.inventory_Items*p.quantity).toFixed(2)])),
+              [{text: 'Total Amount', colSpan: 3}, {}, {}, this.data.reduce((sum: number, p: { qty: number; price: number; })=> sum + (p.qty * p.price), 0).toFixed(2)]
+            ]
+          }
+        },
+        {
+          text: 'Additional Details',
+          style: 'sectionHeader'
+        },
+        {
+            text: 'this.invoice.additionalDetails',
+            margin: [0, 0 ,0, 15]          
+        },
+        {
+          columns: [
+            [{ qr: `${'this.invoice.customerName'}`, fit: '50' }],
+            [{ text: 'Signature', alignment: 'right', italics: true}],
+          ]
+        },
+        {
+          text: 'Terms and Conditions',
+          style: 'sectionHeader'
+        },
+        {
+            ul: [
+              'Order can be return in max 10 days.',
+              'Warrenty of the product will be subject to the manufacturer terms and conditions.',
+              'This is system generated invoice.',
+            ],
+        }
+      ],
+      styles: {
+        sectionHeader: {
+          bold: true,
+          decoration: 'underline',
+          fontSize: 14,
+          margin: [0, 15,0, 15]          
+        }
+      }
+    };
+
+   
+      pdfMake.createPdf(docDefinition).download();
+      pdfMake.createPdf(docDefinition).print();      
+   
+      pdfMake.createPdf(docDefinition).open();      
+   
+
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 }

@@ -31,7 +31,8 @@ class Invoice{
 })
 export class ReportsComponent implements OnInit {
 
-
+ //jamie = new Product();
+ 
   filterTerm!: string;
 
   constructor() { }
