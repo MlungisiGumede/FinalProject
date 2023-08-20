@@ -2,30 +2,10 @@
     <div class="contents">
       <ion-title><h1>Reports</h1></ion-title>
       <ion-searchbar class="isb" placeholder="Search Report..." showCancelButton="focus" [(ngModel)]="filterTerm" animated></ion-searchbar><br/>
-        <ion-grid class="ion-margin" class="ion-grid-padding">
-          <ion-row>
-            <ion-col>Report</ion-col>
-            <ion-col>ID</ion-col>
-            <ion-col>Date</ion-col>
-            <ion-col></ion-col>
-          </ion-row>
-          <ion-item-divider></ion-item-divider>
-          <ion-row *ngFor="let user of userRecords | filter: filterTerm">
-            <ion-col>
-              <ion-label>{{ user.id }}</ion-label>
-            </ion-col>
-            <ion-col>
-              <ion-label>{{ user.name }}</ion-label>
-            </ion-col>
-            <ion-col>
-              <ion-label>{{ user.username }}</ion-label>
-            </ion-col>
-            <ion-col>
-              <ion-button class="red-Btn" >Remove</ion-button>
-              <ion-button class="light-Btn" (click)="generatePDF()">View</ion-button>
-            </ion-col>
-          </ion-row>
-          <ion-item-divider></ion-item-divider>
-        </ion-grid>
-        <ion-button class="light-Btn" (click)="generatePDF()">Add</ion-button>
+       
+        <ion-button class="light-Btn" (click)="generatePDF()">Inventory Report</ion-button>
+        <ion-button class="light-Btn" (click)="generatePDF()">Products Report</ion-button>
+        <ion-button class="light-Btn" (click)="generatePDF()">Orders Report</ion-button>
+        <ion-button class="light-Btn" (click)="generatePDF()">Suppliers Report</ion-button>
+        <ion-button class="light-Btn" (click)="generatePDF()">Write Off Report</ion-button>
     </div>

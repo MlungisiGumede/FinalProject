@@ -9,7 +9,7 @@ import { Inventory } from '../Models/Inventory';
 export class InventoryService {
 
 
-  apiUrl = 'https://localhost:7226/api/Inventories';
+  apiUrl = 'https://localhost:7226/api/Item';
 
   constructor(private httpClient: HttpClient) { }
 
