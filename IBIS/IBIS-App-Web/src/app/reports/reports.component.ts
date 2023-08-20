@@ -185,8 +185,8 @@ export class ReportsComponent implements OnInit {
               widths: ['*', 'auto', 'auto', 'auto'],
               body: [
                 ['Product', 'Price', 'Quantity', 'Amount'],
-                ...this.invoice.products.map(p => ([p.Name, p.Price, p.Quantity, (p.Price!*p.Quantity!).toFixed(2)])),
-                [{text: 'Total Amount', colSpan: 3}, {}, {}, this.invoice.products.reduce((sum, p)=> sum + (p.Quantity! * p.Price!), 0).toFixed(2)]
+                ...this.invoice.products.map(p => ([p.product_Name, p.price, p.quantity, (p.price!*p.quantity!).toFixed(2)])),
+                [{text: 'Total Amount', colSpan: 3}, {}, {}, this.invoice.products.reduce((sum, p)=> sum + (p.quantity! * p.price!), 0).toFixed(2)]
               ]
               
             }

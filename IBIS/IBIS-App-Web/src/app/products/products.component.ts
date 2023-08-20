@@ -45,11 +45,11 @@ export class ProductsComponent implements OnInit {
 
     
     this.data2 = [
-      { productID: 1, Name: 'Product A', Quantity: 10, Price: 30 },
-      { productID: 2, Name: 'Product B', Quantity: 15, Price: 50 },
-      { productID: 3, Name: 'Product C', Quantity: 8, Price: 44 },
-      { productID: 4, Name: 'Product D', Quantity: 20, Price: 25 },
-      { productID: 5, Name: 'Product E', Quantity: 5, Price: 30 }
+      { product_ID: 1, product_Name: 'Product A', quantity: 10, price: 30 },
+      { product_ID: 2, product_Name: 'Product B', quantity: 15, price: 50 },
+      { product_ID: 3, product_Name: 'Product C', quantity: 8, price: 44 },
+      { product_ID: 4, product_Name: 'Product D', quantity: 20, price: 25 },
+      { product_ID: 5, product_Name: 'Product E', quantity: 5, price: 30 }
     ];
 
   }
@@ -123,7 +123,7 @@ export class ProductsComponent implements OnInit {
 
   generateReport2() {
     // Process dummy data and navigate to the report component
-    this.combinedData = this.data2.map(item => ({ Name: item.Name || '', Quantity: item.Quantity || 0, Price: item.Price || 0 }));
+    this.combinedData = this.data2.map(item => ({ Name: item.product_Name|| '', Quantity: item.quantity || 0, Price: item.price|| 0 }));
 
 
     this.router.navigate(['/product-report'], {
