@@ -384,9 +384,9 @@ generateInventoryReport(){
             headerRows: 1,
             widths: ['*', 'auto', 'auto', 'auto'],
             body: [
-              ['Product', 'Price', 'Quantity', 'Amount'],
-              ...this.dataInventory.map((p: { inventory_ID: any; inventory_Items: any; quantity: any; }) => ([p.inventory_ID, p.inventory_Items, p.quantity, (p.inventory_Items*p.quantity).toFixed(2)])),
-              [{text: 'Total Amount', colSpan: 3}, {}, {}, this.dataInventory.reduce((sum: number, p: { qty: number; price: number; })=> sum + (p.qty * p.price), 0).toFixed(2)]
+              ['Inventory_ID', 'Inventory_Items', 'Quantity', 'Amount'],
+              ...this.dataInventory.map((p: { inventory_ID: any; inventory_Items: any; quantity: any; }) => ([p.inventory_ID, p.inventory_Items, p.quantity, (p.quantity).toFixed(2)])),
+              [{text: 'Total inventory', colSpan: 3}, {}, {}, this.dataInventory.reduce((sum: number, p: { quantity: number;  })=> sum + (p.quantity), 0).toFixed(2)]
             ]
           }
         },
