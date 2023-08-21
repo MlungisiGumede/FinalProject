@@ -35,8 +35,10 @@
         </ion-row>
         <ion-item-divider></ion-item-divider>
       </ion-grid>
-      <ion-button class="light-Btn" [routerLink]="'/create-customer-order'">Add Customer Order, coming soon...</ion-button>
-      <ion-button class="red-Btn" >Generate Report</ion-button>
+      <ion-button class="light-Btn" [routerLink]="'/create-customer-order'">Add</ion-button>
+      <ion-button class="red-Btn" (click)=" generateInProgress()">Generate in-progress Report</ion-button>
+      <ion-button class="red-Btn" >Generate pending Report</ion-button>
+      <ion-button class="red-Btn" >Generate Finished Report</ion-button>
   </div>
 
 

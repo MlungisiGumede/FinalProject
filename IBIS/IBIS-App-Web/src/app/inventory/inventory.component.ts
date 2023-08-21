@@ -55,7 +55,7 @@ export class InventoryComponent implements OnInit {
       this.data = response;
       //console.log(this.data[0].inventory_ID);
       
-      this.inID = this.data[0].inventory_ID;
+      //this.inID = this.data[0].inventory_ID;
     
 
 

@@ -5,6 +5,7 @@ import { ProductService } from '../Services/product.service';
 import { Product } from '../Models/Product';
 import { InventoryService } from '../Services/inventory.service';
 import { SupplierService } from '../Services/supplier.service';
+import { OrdersService } from '../Services/orders.service';
 var pdfMake = require('pdfmake/build/pdfmake');
 var pdfFonts = require('pdfmake/build/vfs_fonts');
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
@@ -36,7 +37,8 @@ export class ReportsComponent implements OnInit {
   filterTerm!: string;
   
   combinedData: { Name: string, Quantity: number, Price: number }[] = [];
-  constructor(private productService: ProductService, private route: ActivatedRoute, private inv : InventoryService,private supply: SupplierService) { }
+  constructor(private productService: ProductService, private route: ActivatedRoute,
+     private inv : InventoryService,private supply: SupplierService,private orderservice : OrdersService) { }
 
   ngOnInit() {
 
@@ -44,6 +46,7 @@ export class ReportsComponent implements OnInit {
     this.getInventory();
     this.getProducts();
     this.getSuppliers();
+    this.getOrders();
 
 
     this.route.queryParams.subscribe((params) => {
@@ -313,11 +316,121 @@ generateSupplierReport(){
 }
 
 
+getOrders(){
+  this.orderservice.getOrderList().subscribe(response => {
+    console.log(response);
+    this.dataOrder = response;
+  })
+  
 
+}
 generateOrdersReport(){
+  
+    let docDefinition = {
+      content: [
+        {
+          text: 'Report',
+          fontSize: 16,
+          alignment: 'center',
+          color: '#047886'
+        },
+        {
+          text: 'Orders',
+          fontSize: 20,
+          bold: true,
+          alignment: 'center',
+          decoration: 'underline',
+          color: 'skyblue'
+        },
+        {
+          text: 'Details',
+          style: 'sectionHeader'
+        },
+        {
+          columns: [
+            [
+              {
+                text: 'this.invoice.customerName',
+                bold:true
+              },
+              { text: 'this.invoice.address' },
+              { text: 'this.invoice.email '},
+              { text: 'this.invoice.contactNo' }
+            ],
+            [
+              {
+                text: `Date: ${new Date().toLocaleString()}`,
+                alignment: 'right'
+              },
+              { 
+                text: `Bill No : ${((Math.random() *1000).toFixed(0))}`,
+                alignment: 'right'
+              }
+            ]
+          ]
+        },
+        {
+          text: 'report Details',
+          style: 'sectionHeader'
+        },
+        {
+          table: {
+            headerRows: 1,
+            widths: ['*', 'auto', 'auto', 'auto'],
+            body: [
+              ['Orders ID', 'Supplier Name', 'Quantity', 'Amount'],
+              ...this.dataOrder.map((p: { order_ID: any; supplierName: any; quantity: any; }) => ([p.order_ID, p.supplierName, p.quantity, (p.quantity).toFixed(2)])),
+              [{text: 'Total Order Quantity', colSpan: 3}, {}, {}, this.dataOrder.reduce((sum: number, p: { quantity: number;  })=> sum + (p.quantity), 0).toFixed(2)]
+            ]
+          }
+        },
+        {
+          text: 'Additional Details',
+          style: 'sectionHeader'
+        },
+        {
+            text: 'this.invoice.additionalDetails',
+            margin: [0, 0 ,0, 15]          
+        },
+        {
+          columns: [
+            [{ qr: `${'this.invoice.customerName'}`, fit: '50' }],
+            [{ text: 'Signature', alignment: 'right', italics: true}],
+          ]
+        },
+        {
+          text: 'Terms and Conditions',
+          style: 'sectionHeader'
+        },
+        {
+            ul: [
+              'Order can be return in max 10 days.',
+              'Warrenty of the product will be subject to the manufacturer terms and conditions.',
+              'This is system generated invoice.',
+            ],
+        }
+      ],
+      styles: {
+        sectionHeader: {
+          bold: true,
+          decoration: 'underline',
+          fontSize: 14,
+          margin: [0, 15,0, 15]          
+        }
+      }
+    };
+
+   
+      pdfMake.createPdf(docDefinition).download();
+      //pdfMake.createPdf(docDefinition).print();      
+   
+      pdfMake.createPdf(docDefinition).open();      
+   
+
+  }
 
   
-}
+
 
 generateWriteOffsReport(){
 

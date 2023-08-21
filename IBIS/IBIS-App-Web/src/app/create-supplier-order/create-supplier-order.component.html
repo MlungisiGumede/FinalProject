@@ -6,19 +6,20 @@
          <div class="user-details">
            <div >
              <span class="details">Supplier Name</span>
-             <ion-input class="back" type="text"  [(ngModel)]="ord.supplierName" [ngModelOptions]="{standalone: true}">{{data.companyName}}</ion-input>
+             <ion-input class="back" type="text"  [(ngModel)]="ord.supplierName" placeholder="{{data.companyName}}" [ngModelOptions]="{standalone: true}">
+             </ion-input>
            </div>
            <div >
             <span class="details">Supplier ID</span>
-            <ion-input class="back" type="text" [(ngModel)]="ord.supplier" [ngModelOptions]="{standalone: true}">{{data.supplier_ID}}</ion-input>
+            <ion-input class="back" type="text" [(ngModel)]="ord.supplier" placeholder="{{data.supplier_ID}}" [ngModelOptions]="{standalone: true}"></ion-input>
           </div>
            <div >
              <span class="details">order status</span>
-             <ion-input class="back"  type="text" [(ngModel)]="ord.order_Status" [ngModelOptions]="{standalone: true}">Pending</ion-input>
+             <ion-input class="back"  type="text" placeholder="Pending" [(ngModel)]="ord.order_Status" [ngModelOptions]="{standalone: true}"></ion-input>
            </div>
            <div class="input-box">
             <span class="details">Order Items</span>
-            <input   type="text" placeholder="Order items">
+            <input   type="text" >
           </div>
            <div class="input-box">
             <span class="details">Quantity</span>
