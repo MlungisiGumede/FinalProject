@@ -36,11 +36,11 @@ export class OrdersComponent implements OnInit {
   async delete(id: number){
     this.idtodelete = id;
 
-this.orderservice.delete(this.idtodelete).subscribe(Response => {
-  console.log(Response);
-  this.data = Response;
-this.getOrders();
-})
+    this.orderservice.delete(this.idtodelete).subscribe(Response => {
+      console.log(Response);
+      this.data = Response;
+      this.getOrders();
+    })
   }
 
 

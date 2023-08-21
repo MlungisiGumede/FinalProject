@@ -24,6 +24,7 @@ color: lightblue;
   padding: 8% 0 0;
   margin: auto;
   backdrop-filter: blur(10px);
+  
 }
 .form {
   backdrop-filter: blur(10px);
@@ -35,6 +36,7 @@ color: lightblue;
   padding: 45px;
   text-align: center;
   box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
+  border-radius: 25px;
 }
 .form input {
   font-family: "Roboto", sans-serif;
@@ -46,6 +48,7 @@ color: lightblue;
   padding: 15px;
   box-sizing: border-box;
   font-size: 14px;
+  border-radius: 25px;
 }
 .form button {
   font-family: "Roboto", sans-serif;
@@ -60,6 +63,7 @@ color: lightblue;
   -webkit-transition: all 0.3 ease;
   transition: all 0.3 ease;
   cursor: pointer;
+  border-radius: 25px;
 }
 .form button:hover,.form button:active,.form button:focus {
   background: yellow;
