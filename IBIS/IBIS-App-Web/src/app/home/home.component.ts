@@ -1,6 +1,7 @@
 import { AfterViewInit, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router, RouterLinkActive, Routes } from '@angular/router';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { ProductService } from '../Services/product.service';
 
 
 @Component({
@@ -12,8 +13,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 
 
 export class HomeComponent implements OnInit {
-
-
+data: any;
+inID: any;
   
 
 
@@ -22,11 +23,33 @@ export class HomeComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private changeDetector: ChangeDetectorRef) { }
+    private changeDetector: ChangeDetectorRef,
+    private prod: ProductService) { }
 
   ngOnInit() {
+    this.getInventory();
   }
 
+  getInventory(){
+    this.prod.getProductList().subscribe(response => {
+      console.log(response);
+      this.data = response;
+      //console.log(this.data[0].inventory_ID);
+      
+      this.inID = this.data[0].inventory_ID;
+    
+console.log('the name',JSON.stringify(this.data[0].product_Name));
+
+
+      //let inventory = JSON.stringify(response.inventory_ID);
+      
+     // console.log('this is:',JSON.stringify(response['inventory_ID']))
+    // console.log('finally',response);
+     
+    })
+    
+
+  }
 
   chartOptions = {
 	  title: {
