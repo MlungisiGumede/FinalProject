@@ -13,6 +13,14 @@ export class AddProductComponent implements OnInit {
 data:any;
 prod!: Product;
 
+categories: string[] = ['Meat', 'Vegetables', 'Sides'];
+  subcategories: { [key: string]: string[] } = {
+    'Meat': ['Pork', 'Beef', 'Lamb', 'Chicken', 'Fish'],
+    'Vegetables': ['Pumpkin', 'Lettuce', 'Potatoes', 'Butternut'],
+    'Sides': ['Chakalaka', 'Atchaar']
+  };
+
+
   constructor(private prodService: ProductService,public router:Router){
     this.data = new Product();
   } 
@@ -21,12 +29,14 @@ prod!: Product;
 
   }
 
-
-
   createProduct(){
     this.prodService.createProduct(this.data).subscribe(res=>{
     console.log("success", res);
     })  
+  }
+
+  updateSubcategories() {
+    this.data.subcategory = ''; // Reset subcategory when category changes
   }
 
 }

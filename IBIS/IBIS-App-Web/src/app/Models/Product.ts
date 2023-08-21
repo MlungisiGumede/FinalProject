@@ -5,6 +5,6 @@ export class Product{
     subcategory?: string;
     price?: number;
     Recipe?: string;
-    expiry?: String;
+    expiry?: string;
     quantity?: number;
 }

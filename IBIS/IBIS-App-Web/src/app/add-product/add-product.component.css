@@ -21,6 +21,7 @@ body{
   padding: 25px 30px;
   border-radius: 5px;
   box-shadow: 0 5px 10px rgba(0,0,0,0.15);
+  justify-content: center;
 }
 .container .title{
   font-size: 25px;
@@ -115,6 +116,20 @@ form .input-box span.details{
 color: grey;
 
  }
+.subcategory{
+  display: block;
+  font-weight: 500;
+  margin-bottom: 5px;
+  width: 300px;
+}
+
+.category{
+  display: block;
+  font-weight: 500;
+  margin-bottom: 5px;
+  width: 300px;
+}
+ 
 
  /* .buttondiv{
 
@@ -127,6 +142,7 @@ color: grey;
   flex-shrink: 0;
   width: 205px;
   height: 46px;
+  justify-content: center;
  }
 
  form .button input{

@@ -8,31 +8,39 @@
              <span class="details">Product Name</span>
              <input  type="text" placeholder="name" [(ngModel)]="data.product_Name" [ngModelOptions]="{standalone: true}">
            </div>
+
            <div class="input-box">
-             <span class="details">category</span>
-             <input   type="text" placeholder="Category" [(ngModel)]="data.category" [ngModelOptions]="{standalone: true}">
+            <span class="details">Price</span>
+            <input  type="number" placeholder="Price" [(ngModel)]="data.price" [ngModelOptions]="{standalone: true}">
+          </div>
+
+           <div class="input-box">
+             <span class="category">Category</span>
+             <select [(ngModel)]="data.category" [ngModelOptions]="{standalone: true}" (change)="updateSubcategories()">
+             <option value="" disabled selected>Select a category</option>
+              <option *ngFor="let category of categories" [value]="category">{{ category }}</option>
+            </select>
            </div>
            <div class="input-box">
-             <span class="details">sub-category</span>
-             <input  type="text" placeholder="sub-category" [(ngModel)]="data.subcategory" [ngModelOptions]="{standalone: true}">
+            <span class="subcategory">Sub-category</span>
+            <select [(ngModel)]="data.subcategory" [ngModelOptions]="{standalone: true}">
+              <option value="" disabled selected>Select a subcategory</option>
+              <option *ngFor="let subcategory of subcategories[data.category]" [value]="subcategory">{{ subcategory }}</option>
+            </select>
            </div>
-           <div class="input-box">
-             <span class="details">Price</span>
-             <input  type="number" placeholder="Price" [(ngModel)]="data.price" [ngModelOptions]="{standalone: true}">
-           </div>
+           
            <div class="input-box">
             <span class="details">Quantity</span>
             <input  type="number" placeholder="Quantity" [(ngModel)]="data.quantity" [ngModelOptions]="{standalone: true}">
           </div>
           <div class="input-box">
             <span class="details">Expiry</span>
-              <input  type="text" placeholder="expiry" [(ngModel)]="data.expiry" [ngModelOptions]="{standalone: true}">
+              <input  type="date" placeholder="expiry" [(ngModel)]="data.expiry" [ngModelOptions]="{standalone: true}">
           </div>
          </div>
-         <div class="buttondiv">
+         
          <div class="button">
             <input type="submit" value="submit" (click)="createProduct()">
-          </div>
         </div>
        </form>
      </div>
