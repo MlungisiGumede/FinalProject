@@ -4,6 +4,8 @@ import { ToastController } from '@ionic/angular';
 import { SupplierService } from '../Services/supplier.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Supplier } from '../Models/Supplier';
+import { OrdersService } from '../Services/orders.service';
+import { Orders } from '../Models/Orders';
 
 @Component({
   selector: 'app-create-supplier-order',
@@ -17,7 +19,10 @@ export class CreateSupplierOrderComponent implements OnInit {
   ord: any;
 
   viewordersupplierform!: FormGroup;
-  constructor(private supply: SupplierService,public router:Router,private toastController: ToastController,private route : ActivatedRoute,private fb : FormBuilder) { 
+  constructor(private supply: SupplierService,public router:Router,
+    private toastController: ToastController,private route : ActivatedRoute,
+    private fb : FormBuilder,private ordersservice: OrdersService) { 
+      this.ord= new Orders();
   }
 
   ngOnInit(): void {
@@ -41,7 +46,7 @@ export class CreateSupplierOrderComponent implements OnInit {
       console.log('order:', this.data)
       });
 
-      this.ord = this.data;
+      //this.ord = this.data;
 
   }
 
@@ -55,6 +60,16 @@ export class CreateSupplierOrderComponent implements OnInit {
 
   });
 }
+
+createSupplierOrder(){
+
+  this.ordersservice.createOrder(this.ord).subscribe(res=>{
+  console.log("success", res);
+  this.presentToast('top')
+  this.router.navigate(["/Orders"])
+  })
+  
+  }
 
 
 async presentToast(position: 'top' | 'middle' | 'bottom') {

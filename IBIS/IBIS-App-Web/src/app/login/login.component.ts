@@ -31,7 +31,7 @@ this.loginForm = this.fb.group({
   username : ['', Validators.required],
   password : ['', Validators.required]
 })
-this.loginservice.setlogin(true)
+this.loginservice.setlogin(false)
   }
 
   onlogin(){
@@ -43,7 +43,7 @@ if(this.loginForm.valid){
         //alert(res.message)
         this.loginservice.setlogin(true);
         this.loginForm.reset();
-        this.router.navigate(['/Dashboard']);
+        this.router.navigate(['/home']);
       },
       error:(err) =>{
         //alert(err?.error.message)

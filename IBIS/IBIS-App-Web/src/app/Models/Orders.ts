@@ -1,8 +1,8 @@
 export class Orders{
 
-    Supplier_Order_ID?: string;
-    Inventory_Item_ID?: string;
-    Inventory_Item?: string;
-    Quantity?: number;
-    Order_Status?: boolean;
+    order_ID?: string;
+    quantity?: number;
+    supplier?: any;
+    supplierName?: string;
+    order_Status?: string;
   }

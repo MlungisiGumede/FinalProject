@@ -60,25 +60,25 @@ console.log('the name',JSON.stringify(this.data[0].product_Name));
 	  exportEnabled: true,
 	  axisY: {
 		includeZero: true,
-		valueFormatString: "$#,##0k"
+		valueFormatString: "R#,##0k"
 	  },
 	  data: [{
 		type: "column", //change type to bar, line, area, pie, etc
-		yValueFormatString: "$#,##0k",
+		yValueFormatString: "$#,##0K",
 		color: "#01b8aa",
 		dataPoints: [
-			{ label: "Jan", y: 172 },
-			{ label: "Feb", y: 189 },
-			{ label: "Mar", y: 201 },
-			{ label: "Apr", y: 240 },
-			{ label: "May", y: 166 },
-			{ label: "Jun", y: 196 },
-			{ label: "Jul", y: 218 },
-			{ label: "Aug", y: 167 },
-			{ label: "Sep", y: 175 },
-			{ label: "Oct", y: 152 },
-			{ label: "Nov", y: 156 },
-			{ label: "Dec", y: 164 }
+			{ label: "Jan", y: 72 },
+			{ label: "Feb", y: 89 },
+			{ label: "Mar", y: 31 },
+			{ label: "Apr", y: 40 },
+			{ label: "May", y: 66 },
+			{ label: "Jun", y: 96 },
+			{ label: "Jul", y: 18 },
+			{ label: "Aug", y: 67 },
+			{ label: "Sep", y: 75 },
+			{ label: "Oct", y: 52 },
+			{ label: "Nov", y: 56 },
+			{ label: "Dec", y: 64 }
 		]
 	  }]
 	}
@@ -115,25 +115,25 @@ console.log('the name',JSON.stringify(this.data[0].product_Name));
  
   chartOptions2 = {
     title: {
-      text: "Temperature of Each Boiler",
+      text: "Supplier Inventory Orders",
       fontFamily: "Trebuchet MS, Helvetica, sans-serif"
     },
     axisY: {
-      title: "Temperature (°C)",
+      title: "inventory Orders",
       includeZero: true,
-      suffix: " °C"
+      suffix: "units"
     },
     data: [{
       type: "column",	
-      yValueFormatString: "#,### °C",
+      yValueFormatString: "#,### ",
       indexLabel: "{y}",
       dataPoints: [
-        { label: "boiler1", y: 206 },
-        { label: "boiler2", y: 163 },
-        { label: "boiler3", y: 154 },
-        { label: "boiler4", y: 176 },
-        { label: "boiler5", y: 184 },
-        { label: "boiler6", y: 122 }
+        { label: "Cold Meat co", y: 206 },
+        { label: "Pork Lovers", y: 163 },
+        { label: "Simon and reggie", y: 154 },
+        { label: "wilders", y: 176 },
+        { label: "siemens", y: 184 },
+        { label: "Henny", y: 122 }
       ]
     }]
   }
@@ -154,7 +154,7 @@ console.log('the name',JSON.stringify(this.data[0].product_Name));
       deltaY = Math.round(2 + Math.random() *(-2-2));
       yVal = deltaY + dps[i].y > 0 ? dps[i].y + deltaY : 0;
       boilerColor = yVal > 200 ? "#C62828" : yVal >= 170 ? "#FF6F00" : yVal < 170 ? "#1B5E20 " : null;
-      dps[i] = {label: "Boiler "+(i+1) , y: yVal, color: boilerColor};
+      dps[i] = {label: "supplier"+(i+1) , y: yVal, color: boilerColor};
     }
     this.chart.options.data[0].dataPoints = dps; 
     this.chart.render();

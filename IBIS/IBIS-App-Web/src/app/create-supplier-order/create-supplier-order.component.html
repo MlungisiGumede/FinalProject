@@ -4,13 +4,17 @@
      <div class="content">
        <form action="#">
          <div class="user-details">
-           <div class="input-box">
-             <span class="details">Supplier</span>
-             <input  type="text" placeholder="Inventory Item" [(ngModel)]="ord.supplier_ID" [ngModelOptions]="{standalone: true}">
+           <div >
+             <span class="details">Supplier Name</span>
+             <ion-input class="back" type="text"  [(ngModel)]="ord.supplierName" [ngModelOptions]="{standalone: true}">{{data.companyName}}</ion-input>
            </div>
-           <div class="input-box">
+           <div >
+            <span class="details">Supplier ID</span>
+            <ion-input class="back" type="text" [(ngModel)]="ord.supplier" [ngModelOptions]="{standalone: true}">{{data.supplier_ID}}</ion-input>
+          </div>
+           <div >
              <span class="details">order status</span>
-             <input   type="text" placeholder="pending" [(ngModel)]="ord.order_Status" [ngModelOptions]="{standalone: true}">
+             <ion-input class="back"  type="text" [(ngModel)]="ord.order_Status" [ngModelOptions]="{standalone: true}">Pending</ion-input>
            </div>
            <div class="input-box">
             <span class="details">Order Items</span>
@@ -23,7 +27,7 @@
          </div>
          <div class="buttondiv">
          <div class="button">
-            <input type="submit" value="submit" (click)="update()">
+            <input type="submit" value="submit" (click)="createSupplierOrder()">
           </div>
         </div>
        </form>

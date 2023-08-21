@@ -43,7 +43,7 @@ body{
   flex-wrap: wrap;
   justify-content: space-between;
   margin: 20px 0 12px 0;
-  color: white;
+  color: grey;
 }
 form .user-details .input-box{
   margin-bottom: 15px;
@@ -114,6 +114,10 @@ form .input-box span.details{
 
 color: grey;
 
+ }
+ .back{
+  color: white;
+  
  }
 
  .buttondiv{
