@@ -1,37 +1,125 @@
-table {
-    font-family: arial, sans-serif;
-    border-collapse: collapse;
-    width: 100%;
-    background-color: black;
+.collapsible {
+  position: fixed;
+  bottom: 0; right: 0;
+  z-index: 10;
+  background-color: #1976D2;
+  color: white;
+  cursor: pointer;
+  padding: 0.3rem;
+  width: 27%;
+  border: none;
+  text-align: left;
+  outline: none;
+  font-size: 15px;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+  border-radius: 0.5em 0 0 0;
+}
+
+.active, .collapsible:hover {
+  background-color: #1561ac;
+}
+
+.contents{
+    width: 90%;
+    height: 100%;
+    margin-left: 4vw;
+    margin-bottom: 0px !important;
+    background-color: white;
+    color: black;
   }
   
-  td, th {
-    border: 1px solid #5b5b5b;
-    text-align: left;
-    padding: 8px;
-    color: white;
+  h1{
+    color: #002850;
+    font-size: 1.8em !important;
   }
 
-  .add{
+.light-Btn{
+    --background: #FFD700;
+    color: black;
+    --border-radius: 20em;
+    float: right;
+}
+
+.red-Btn{
+    --background: #E02828;
+    --border-radius: 20em;
+    float: right;
+}
+
+.isb{
+  width: 40%;
+}
+
+ion-label{
+    font-size: 1.125em !important;
+  }
+
+  ion-title{
+    margin-top: 4vh !important;
+    margin-left: -1vw !important;
+  }
   
+  span{
+    color: red;
+    margin-top: 2vh;
+    font-size: 0.8125em;
+    margin-left: 1.4vw;
+  }
+
+ion-grid {
+    --ion-grid-column-padding: 10px;
+    border-collapse:collapse;
+    border-style:hidden;
     
-    font-style: normal;
-    font-weight: 700;
-   
+    ion-row:first-child {
+      font-size: large;
+      color: #585858;
+      margin-bottom: -5vh;
+    }
 
-
-
-left: 67%;
-color: black;
-background-color:#FAF244;
-
+    ion-row:nth-child(even){
+        background: grey;
+    }
+    
+    ion-row:nth-child(odd) {
+      background: white;
+    }
   }
 
-  .h{
-    color: white;
+  @media (max-width: 390px) {
+    .contents{
+      width: 80%;
+      margin-top: 2vh;
+      margin-left: 10vw;
+    }
+      .logo{
+          margin-left: 4vw !important;
       }
-
-      .thead{
-
-        color: red;
+      .accBtn{
+          width: 25vw !important;
       }
+    }
+  
+    @media (max-width: 820px) {
+      .contents{
+        width: 80%;
+        margin-top: 2vh;
+        margin-left: 5vw;
+      }
+      .logo{
+          margin-left: 2vw !important;
+      }
+      .accBtn{
+          width: 15vw !important;
+      }
+      ion-label{
+        font-size: 1.125em !important;
+      }
+      ion-title{
+        margin-bottom: 2% !important;
+      }
+      span{
+        font-size: 0.8125em !important;
+      }
+    }

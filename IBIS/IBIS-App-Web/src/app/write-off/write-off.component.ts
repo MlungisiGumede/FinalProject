@@ -6,6 +6,8 @@ import { ProductService } from '../Services/product.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Camera,CameraResultType,CameraSource,Photo } from '@capacitor/camera';
 import { Directory, FileInfo, Filesystem } from '@capacitor/filesystem';
+import { WriteOffService } from '../Services/write-off.service';
+import { writeOff } from '../Models/writeOff';
 
 
 
@@ -29,24 +31,24 @@ export class WriteOffComponent implements OnInit {
 
 images: LocalFile[]=[];
 
-
-  lastEmittedValue: RangeValue | undefined;
+  newWriteOff!: writeOff;
   id: any;
   data:any;
   viewproductform!: FormGroup;
+  pic: any;
+  datawr:any;
 
-  onIonChange(ev: Event) {
-    this.lastEmittedValue = (ev as RangeCustomEvent).detail.value;
-  }
+  
 
-  constructor(private route : ActivatedRoute,private prod: ProductService,private fb : FormBuilder, private loadingCtrl: LoadingController) { 
-   
+  constructor(private route : ActivatedRoute,private prod: ProductService,private fb : FormBuilder, private loadingCtrl: LoadingController,private writeoffservice: WriteOffService) { 
+    this.datawr = new writeOff();
   }
 
 
   
 
   ngOnInit(): void {
+    
     this.id = this.route.snapshot.params['id']
 
 
@@ -73,6 +75,21 @@ images: LocalFile[]=[];
 
 this.loadFiles();
   }
+
+
+createWriteOff(){
+
+
+  this.writeoffservice.createWriteOff(this.datawr).subscribe(res=>{
+    console.log("success", res);
+    })  
+
+
+
+}
+
+
+
 
 async loadFiles(){
 

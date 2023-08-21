@@ -2,12 +2,6 @@
 
 
 <h1 class="newheading">Write off: </h1>
-
-<ion-range aria-label="Range with ionChange" (ionChange)="onIonChange($event)"></ion-range>
-<ion-label class="color">select amount to write off: {{ lastEmittedValue }}</ion-label>
-
-
-
 <table class="t">
     <tr class="thead">
       <th class="thead">Product ID</th>
@@ -33,7 +27,7 @@
 <div>
       <ion-list>
         <ion-item>
-          <ion-select aria-label="Fruit" interface="action-sheet" placeholder="Select reason">
+          <ion-select aria-label="Fruit" interface="action-sheet" placeholder="Select reason" [(ngModel)]="datawr.reason">
             <ion-select-option value="Expired">Expired product</ion-select-option>
             <ion-select-option value="requirement not met">product requirements not met</ion-select-option>
             <ion-select-option value="other">other</ion-select-option>
@@ -41,13 +35,16 @@
         </ion-item>
       </ion-list>
     
-    
-    <ion-button (click)="selectImage()">upload file</ion-button>
 
-    <h1>label</h1>
+      <label for="">item name</label>
+        <ion-input [(ngModel)]="datawr.item_name">{{data.product_Name}}</ion-input>
+    <ion-button (click)="selectImage()">upload Image</ion-button>
 
-<ion-label [(ngModel)]="data.product_Name" [ngModelOptions]="{standalone: true}"></ion-label>
+    <h1 class="grey">Enter amount to write off</h1>
+    <input class="grey" type="text" [(ngModel)]="datawr.quantity_Written_Off" [ngModelOptions]="{standalone: true}">
 
-      <ion-button  [routerLink]="['/view-write-off']" >Submit</ion-button>
+
+
+      <ion-button  [routerLink]="['/view-write-off']" (click)="createWriteOff()">Submit write Off</ion-button>
 
     </div>

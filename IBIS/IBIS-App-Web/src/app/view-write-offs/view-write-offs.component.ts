@@ -6,6 +6,7 @@ import { Product } from '../Models/Product';
 import { ProductService } from '../Services/product.service';
 import { Router } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
+import { WriteOffService } from '../Services/write-off.service';
 
 @Component({
   selector: 'app-view-write-offs',
@@ -19,8 +20,8 @@ export class ViewWriteOffsComponent implements OnInit {
   idtodelete :any;
   filterTerm!: string;
   
-  constructor(private productService: ProductService,public router: Router) { 
-    productService = {} as ProductService;
+  constructor(private writeOffService: WriteOffService,public router: Router) { 
+    writeOffService = {} as WriteOffService;
 
   }
 
@@ -29,7 +30,7 @@ export class ViewWriteOffsComponent implements OnInit {
   }
 
   getProducts(){
-    this.productService.getProductList().subscribe(response => {
+    this.writeOffService.getWriteOffList().subscribe(response => {
       console.log(response);
       this.data = response;
     })
@@ -41,7 +42,7 @@ export class ViewWriteOffsComponent implements OnInit {
   async delete(id: number){
     this.idtodelete = id;
 
-this.productService.delete(this.idtodelete).subscribe(Response => {
+this.writeOffService.delete(this.idtodelete).subscribe(Response => {
   console.log(Response);
   this.data = Response;
 this.getProducts();
@@ -49,7 +50,7 @@ this.getProducts();
   }
 
 
-  addproduct(){
+  addWriteOff(){
 
     this.router.navigate(['/add-product']);
 

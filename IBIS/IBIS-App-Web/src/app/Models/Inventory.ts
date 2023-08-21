@@ -1,6 +1,6 @@
 export class Inventory{
 
-    inventory_ID?: string;
+    inventory_ID: any;
     inventory_Items?: string;
     itemName?: string;
     products?: string;
