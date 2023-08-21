@@ -21,8 +21,6 @@ prod!: Product;
 
   }
 
-
-
   createProduct(){
     this.prodService.createProduct(this.data).subscribe(res=>{
     console.log("success", res);
