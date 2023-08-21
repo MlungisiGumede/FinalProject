@@ -6,6 +6,7 @@ import { Product } from '../Models/Product';
 import { InventoryService } from '../Services/inventory.service';
 import { SupplierService } from '../Services/supplier.service';
 import { OrdersService } from '../Services/orders.service';
+import { WriteOffService } from '../Services/write-off.service';
 var pdfMake = require('pdfmake/build/pdfmake');
 var pdfFonts = require('pdfmake/build/vfs_fonts');
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
@@ -38,7 +39,7 @@ export class ReportsComponent implements OnInit {
   
   combinedData: { Name: string, Quantity: number, Price: number }[] = [];
   constructor(private productService: ProductService, private route: ActivatedRoute,
-     private inv : InventoryService,private supply: SupplierService,private orderservice : OrdersService) { }
+     private inv : InventoryService,private supply: SupplierService,private orderservice : OrdersService, private writeOffService : WriteOffService) { }
 
   ngOnInit() {
 
@@ -47,6 +48,7 @@ export class ReportsComponent implements OnInit {
     this.getProducts();
     this.getSuppliers();
     this.getOrders();
+    this.getwriteOffs();
 
 
     this.route.queryParams.subscribe((params) => {
@@ -221,7 +223,7 @@ generateSupplierReport(){
         color: '#047886'
       },
       {
-        text: 'New Report',
+        text: 'Supplier Report',
         fontSize: 20,
         bold: true,
         alignment: 'center',
@@ -236,12 +238,12 @@ generateSupplierReport(){
         columns: [
           [
             {
-              text: 'this.invoice.customerName',
+              text: '',
               bold:true
             },
-            { text: 'this.invoice.address' },
-            { text: 'this.invoice.email '},
-            { text: 'this.invoice.contactNo' }
+            { text: '' },
+            { text: ' '},
+            { text: '' }
           ],
           [
             {
@@ -290,7 +292,7 @@ generateSupplierReport(){
       },
       {
           ul: [
-            'Order can be return in max 10 days.',
+            '',
             'Warrenty of the product will be subject to the manufacturer terms and conditions.',
             'This is system generated invoice.',
           ],
@@ -335,7 +337,7 @@ generateOrdersReport(){
           color: '#047886'
         },
         {
-          text: 'Orders',
+          text: 'Orders report',
           fontSize: 20,
           bold: true,
           alignment: 'center',
@@ -350,12 +352,12 @@ generateOrdersReport(){
           columns: [
             [
               {
-                text: 'this.invoice.customerName',
+                text: '',
                 bold:true
               },
-              { text: 'this.invoice.address' },
-              { text: 'this.invoice.email '},
-              { text: 'this.invoice.contactNo' }
+              { text: '' },
+              { text: ''},
+              { text: '' }
             ],
             [
               {
@@ -404,7 +406,7 @@ generateOrdersReport(){
         },
         {
             ul: [
-              'Order can be return in max 10 days.',
+              '',
               'Warrenty of the product will be subject to the manufacturer terms and conditions.',
               'This is system generated invoice.',
             ],
@@ -431,8 +433,115 @@ generateOrdersReport(){
 
   
 
+  async getwriteOffs(){
+    this.writeOffService.getWriteOffList().subscribe(response => {
+      console.log(response);
+      this.dataWriteOff = response;
+    })
+    
 
+  }
 generateWriteOffsReport(){
+  let docDefinition = {
+    content: [
+      {
+        text: 'Reports',
+        fontSize: 16,
+        alignment: 'center',
+        color: '#047886'
+      },
+      {
+        text: 'write off report',
+        fontSize: 20,
+        bold: true,
+        alignment: 'center',
+        decoration: 'underline',
+        color: 'skyblue'
+      },
+      {
+        text: 'Details',
+        style: 'sectionHeader'
+      },
+      {
+        columns: [
+          [
+            {
+              text: '',
+              bold:true
+            },
+            { text: '' },
+            { text: ' '},
+            { text: '' }
+          ],
+          [
+            {
+              text: `Date: ${new Date().toLocaleString()}`,
+              alignment: 'right'
+            },
+            { 
+              text: `Bill No : ${((Math.random() *1000).toFixed(0))}`,
+              alignment: 'right'
+            }
+          ]
+        ]
+      },
+      {
+        text: 'report Details',
+        style: 'sectionHeader'
+      },
+      {
+        table: {
+          headerRows: 1,
+          widths: ['*', 'auto', 'auto', 'auto'],
+          body: [
+            ['write off ID', 'item Name', 'quantity', 'reason'],
+            ...this.dataWriteOff.map((p: { write_Off_Id: any; item_name: any; quantity_Written_Off: any; reason: any}) => ([p.write_Off_Id, p.item_name, p.quantity_Written_Off, p.reason])),
+            
+          ]
+        }
+      },
+      {
+        text: 'Additional Details',
+        style: 'sectionHeader'
+      },
+      {
+          text: '',
+          margin: [0, 0 ,0, 15]          
+      },
+      {
+        columns: [
+          [{ qr: `${'this.invoice.customerName'}`, fit: '50' }],
+          [{ text: 'Signature', alignment: 'right', italics: true}],
+        ]
+      },
+      {
+        text: 'Terms and Conditions',
+        style: 'sectionHeader'
+      },
+      {
+          ul: [
+            '',
+            'Warrenty of the product will be subject to the manufacturer terms and conditions.',
+            'This is system generated invoice.',
+          ],
+      }
+    ],
+    styles: {
+      sectionHeader: {
+        bold: true,
+        decoration: 'underline',
+        fontSize: 14,
+        margin: [0, 15,0, 15]          
+      }
+    }
+  };
+
+ 
+    pdfMake.createPdf(docDefinition).download();
+    pdfMake.createPdf(docDefinition).print();      
+ 
+    pdfMake.createPdf(docDefinition).open();      
+ 
 
   
 }
@@ -454,7 +563,7 @@ generateInventoryReport(){
           color: '#047886'
         },
         {
-          text: 'New Report',
+          text: 'Inventory Report',
           fontSize: 20,
           bold: true,
           alignment: 'center',
@@ -469,12 +578,12 @@ generateInventoryReport(){
           columns: [
             [
               {
-                text: 'this.invoice.customerName',
+                text: '',
                 bold:true
               },
-              { text: 'this.invoice.address' },
-              { text: 'this.invoice.email '},
-              { text: 'this.invoice.contactNo' }
+              { text: '' },
+              { text: ' '},
+              { text: '' }
             ],
             [
               {
@@ -508,7 +617,7 @@ generateInventoryReport(){
           style: 'sectionHeader'
         },
         {
-            text: 'this.invoice.additionalDetails',
+            text: 'information',
             margin: [0, 0 ,0, 15]          
         },
         {
@@ -523,7 +632,7 @@ generateInventoryReport(){
         },
         {
             ul: [
-              'Order can be return in max 10 days.',
+              '',
               'Warrenty of the product will be subject to the manufacturer terms and conditions.',
               'This is system generated invoice.',
             ],

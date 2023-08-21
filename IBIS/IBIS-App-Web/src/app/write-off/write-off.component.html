@@ -40,6 +40,9 @@
         <ion-input [(ngModel)]="datawr.item_name">{{data.product_Name}}</ion-input>
     <ion-button (click)="selectImage()">upload Image</ion-button>
 
+    <h1 class="grey">Enter Product Name</h1>
+    <input class="grey" type="text" [(ngModel)]="datawr.item_name" [ngModelOptions]="{standalone: true}">
+
     <h1 class="grey">Enter amount to write off</h1>
     <input class="grey" type="text" [(ngModel)]="datawr.quantity_Written_Off" [ngModelOptions]="{standalone: true}">
 
