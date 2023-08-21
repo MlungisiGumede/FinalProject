@@ -116,6 +116,20 @@ form .input-box span.details{
 color: grey;
 
  }
+.subcategory{
+  display: block;
+  font-weight: 500;
+  margin-bottom: 5px;
+  width: 300px;
+}
+
+.category{
+  display: block;
+  font-weight: 500;
+  margin-bottom: 5px;
+  width: 300px;
+}
+ 
 
  /* .buttondiv{
 
