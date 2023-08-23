@@ -52,6 +52,7 @@ import { AddCustomerComponent } from './add-customer/add-customer.component';
 import { ViewCustomerComponent } from './view-customer/view-customer.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { AddCustomerOrderComponent } from './add-customer-order/add-customer-order.component';
+import { AuthenticationService } from './Services/authentication.service';
 
 @NgModule({
   declarations: [
