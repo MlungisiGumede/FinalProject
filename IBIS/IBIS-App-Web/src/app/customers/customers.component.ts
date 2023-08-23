@@ -17,7 +17,7 @@ import { AddCustomerOrderComponent } from '../add-customer-order/add-customer-or
 })
 export class CustomersComponent implements OnInit {
 data:any
-filterTerm!:any
+filterTerm!:string;
   constructor(public matDialog:MatDialog,private customerSerivce : CustomerService ,public toastController: ToastController
     ,public cdr:ChangeDetectorRef) { }
 
