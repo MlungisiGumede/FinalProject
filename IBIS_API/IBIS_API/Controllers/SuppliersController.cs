@@ -1,7 +1,16 @@
 ﻿using IBIS_API.Data;
 using IBIS_API.Models;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
+using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 
 namespace IBIS_API.Controllers
@@ -22,7 +31,8 @@ namespace IBIS_API.Controllers
 
             [HttpGet]
             [Route("getAll")]
-            public async Task<ActionResult<IEnumerable<Supplier>>> GetSuppliers()
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        public async Task<ActionResult<IEnumerable<Supplier>>> GetSuppliers()
             {
                 return await _context.Suppliers.ToListAsync();
             }
@@ -30,7 +40,8 @@ namespace IBIS_API.Controllers
 
             // GET: api/Addresses/5
             [HttpGet("{id}")]
-            public async Task<ActionResult<Supplier>> GetSupplier(int id)
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        public async Task<ActionResult<Supplier>> GetSupplier(int id)
             {
                 var sup = await _context.Suppliers.FindAsync(id);
 
@@ -45,7 +56,8 @@ namespace IBIS_API.Controllers
             // PUT: api/Addresses/5
             // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
             [HttpPut("{id}")]
-            public async Task<IActionResult> PutSupplier(int id, Supplier sup)
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        public async Task<IActionResult> PutSupplier(int id, Supplier sup)
             {
                 if (id != sup.Supplier_ID)
                 {
@@ -86,7 +98,8 @@ namespace IBIS_API.Controllers
 
             // DELETE: api/Addresses/5
             [HttpDelete("{id}")]
-            public async Task<IActionResult> DeleteSupplier(int id)
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        public async Task<IActionResult> DeleteSupplier(int id)
             {
                 var sup = await _context.Suppliers.FindAsync(id);
                 if (sup == null)

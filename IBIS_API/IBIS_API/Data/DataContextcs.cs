@@ -1,16 +1,20 @@
 ﻿using IBIS_API.Models;
 using Microsoft.Data.SqlClient;
-using Microsoft.EntityFrameworkCore;
+//using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 using System.Diagnostics.Eventing.Reader;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+//using System.Data.Entity;
+using System.Linq;
 
 namespace IBIS_API.Data
 {
-    public class DataContextcs : DbContext
+    public class DataContextcs : IdentityDbContext<AppUser>
     {
 
-        public DataContextcs(DbContextOptions<DataContextcs> options) : base(options) { }
+        public DataContextcs(DbContextOptions<DataContextcs> options) : base(options)
+        { }
 
 
 

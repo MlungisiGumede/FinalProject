@@ -1,7 +1,15 @@
 ﻿using IBIS_API.Data;
 using IBIS_API.Models;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 using Microsoft.EntityFrameworkCore;
 
 namespace IBIS_API.Controllers
@@ -20,7 +28,8 @@ namespace IBIS_API.Controllers
 
             [HttpGet]
             [Route("getAll")]
-            public async Task<ActionResult<IEnumerable<Product>>> GetSuppliers()
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        public async Task<ActionResult<IEnumerable<Product>>> GetSuppliers()
             {
                 return await _context.Products.ToListAsync();
             }
@@ -28,7 +37,8 @@ namespace IBIS_API.Controllers
 
             // GET: api/Addresses/5
             [HttpGet("{id}")]
-            public async Task<ActionResult<Product>> GetProduct(int id)
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        public async Task<ActionResult<Product>> GetProduct(int id)
             {
                 var prod = await _context.Products.FindAsync(id);
 
@@ -43,7 +53,8 @@ namespace IBIS_API.Controllers
             // PUT: api/Addresses/5
             // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
             [HttpPut("{id}")]
-            public async Task<IActionResult> PutProduct(int id, Product prod)
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        public async Task<IActionResult> PutProduct(int id, Product prod)
             {
                 if (id != prod.Product_ID)
                 {
@@ -74,7 +85,8 @@ namespace IBIS_API.Controllers
             // POST: api/Addresses
             // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
             [HttpPost]
-            public async Task<ActionResult<Product>> PostProduct(Product prod)
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        public async Task<ActionResult<Product>> PostProduct(Product prod)
             {
                 _context.Products.Add(prod);
                 await _context.SaveChangesAsync();
@@ -84,7 +96,8 @@ namespace IBIS_API.Controllers
 
             // DELETE: api/Addresses/5
             [HttpDelete("{id}")]
-            public async Task<IActionResult> DeleteProduct(int id)
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        public async Task<IActionResult> DeleteProduct(int id)
             {
                 var prod = await _context.Products.FindAsync(id);
                 if (prod == null)

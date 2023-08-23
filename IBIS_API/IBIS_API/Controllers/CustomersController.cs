@@ -1,8 +1,11 @@
 ﻿using IBIS_API.Data;
 using IBIS_API.Models;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+
 
 namespace IBIS_API.Controllers
 {
@@ -22,6 +25,7 @@ namespace IBIS_API.Controllers
 
         [HttpGet]
         [Route("getAll")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<ActionResult<IEnumerable<Customer>>> GetCustomer()
         {
             return await _context.Customers.ToListAsync();

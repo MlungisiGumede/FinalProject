@@ -1,13 +1,13 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnInit } from '@angular/core';
 import { BehaviorSubject, Observable, throwError } from 'rxjs';
-import { HttpClient, HttpHeaders, HttpErrorResponse} from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpErrorResponse, HttpInterceptor} from '@angular/common/http';
 import { retry, catchError } from 'rxjs/operators';
 import { User } from '../Models/User';
 
 @Injectable({
   providedIn: 'root'
 })
-export class LoginService {
+export class LoginService  {
 
   private loginstate: BehaviorSubject<boolean>;
 

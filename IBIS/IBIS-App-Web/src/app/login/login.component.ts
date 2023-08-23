@@ -41,7 +41,8 @@ if(this.loginForm.valid){
       next: (res)=>{
         //this.presentToast('top')
         //alert(res.message)
-        this.loginservice.setlogin(true);
+        console.log(res)
+        localStorage.setItem('Token', res)
         this.loginForm.reset();
         this.router.navigate(['/home']);
       },
