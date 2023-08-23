@@ -34,22 +34,22 @@ constructor(private log : LoginService, public router: Router){
 
 
 
-   // this.log.setlogin(false)
+//    // this.log.setlogin(false)
 
-    this.log.getlogin().subscribe((value) => {
-      this.logged = value;
+//     this.log.getlogin().subscribe((value) => {
+//       this.logged = value;
 
-if(!this.logged){
+// if(!this.logged){
 
-  this.router.navigate(['/Login']);
-
-
-}
+//   this.router.navigate(['/Login']);
 
 
+// }
 
-      console.log("login status: ",this.logged)
-    });
+
+
+//       console.log("login status: ",this.logged)
+//     });
   }
   panelOpenState = false;
   title = 'IBIS-App';

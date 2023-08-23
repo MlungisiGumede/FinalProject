@@ -89,7 +89,7 @@ if(this.loginForm.valid){
       message: 'Login failed, try again',
       duration: 3000,
       position: position,
-      color: 'danger'
+      //color: 'danger'
     });
 
     await toast.present();

@@ -11,6 +11,19 @@ using System.Text;
 
 
 var builder = WebApplication.CreateBuilder(args);
+//builder.Services.AddCors(options => options.AddPolicy(name: "new",
+//    policy =>
+//    {
+
+//        policy.WithOrigins("http://localhost:4200").AllowAnyHeader().AllowAnyMethod().AllowCredentials();
+//    }));
+builder.Services.AddCors(options => options.AddDefaultPolicy(
+    include =>
+    {
+        include.AllowAnyHeader();
+        include.AllowAnyMethod();
+        include.AllowAnyOrigin();
+    }));
 builder.Services.AddControllers();
 
 // Add services to the container.
@@ -49,14 +62,15 @@ builder.Services.AddAuthentication()
                     };
                 });
 
+//builder.Services.AddCors(options => options.AddDefaultPolicy(
+//    include =>
+//    {
+//        include.AllowAnyHeader();
+//        include.AllowAnyMethod();
+//        include.AllowAnyOrigin();
+//    }));
+ // with origins before 
 
-builder.Services.AddCors(options => options.AddPolicy(name: "new",
-    policy =>
-    {
-
-        policy.WithOrigins("http://localhost:4200").AllowAnyHeader().AllowAnyMethod();
-    }));
-builder.Services.AddControllers();
 builder.Services.Configure<FormOptions>(o =>
 {
     o.ValueLengthLimit = int.MaxValue;
@@ -66,7 +80,7 @@ builder.Services.Configure<FormOptions>(o =>
 builder.Services.Configure<DataProtectionTokenProviderOptions>(options => options.TokenLifespan = TimeSpan.FromHours(3));
 var app = builder.Build();
 
-
+app.UseCors();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -75,12 +89,12 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseCors("new");
 
+//builder.Services.AddControllers();
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
-app.UseAuthorization();
+//app.UseAuthorization();
 app.UseAuthentication();
 
 app.MapControllers();

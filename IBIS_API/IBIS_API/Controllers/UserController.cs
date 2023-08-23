@@ -14,6 +14,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using NuGet.Protocol.Core.Types;
+using Microsoft.AspNetCore.Cors;
 
 namespace IBIS_API.Controllers
 {
@@ -21,7 +22,7 @@ namespace IBIS_API.Controllers
 
     [Route("api/[controller]")]
     [ApiController]
-
+    //[EnableCors(origins:"*",PolicyName =)]
     public class UserController : ControllerBase
     {
         private readonly DataContextcs _context;
@@ -30,9 +31,15 @@ namespace IBIS_API.Controllers
         private readonly IConfiguration _configuration;
 
 
-        public UserController(DataContextcs context)
+        public UserController(DataContextcs context,UserManager<AppUser> userManager, IUserClaimsPrincipalFactory<AppUser> claimsPrincipalFactory, IConfiguration configuration)
         {
             _context = context;
+            _userManager = userManager;
+            _claimsPrincipalFactory = claimsPrincipalFactory; 
+            _configuration = configuration;
+
+
+
         }
 
          [HttpGet]
@@ -103,7 +110,7 @@ namespace IBIS_API.Controllers
                 {
                     Id = Guid.NewGuid().ToString(),
                     UserName = uvm.Username,
-                    Email = uvm.Username,
+                    Email = uvm.Email,
                     
                 };
 
@@ -148,7 +155,7 @@ namespace IBIS_API.Controllers
         }
 
 
-        [HttpPost("Register")]
+        [HttpPost("registerUser")]
         public async Task<IActionResult> RegisterUser([FromBody] User_Account userobj)
         {
 

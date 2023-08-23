@@ -21,7 +21,7 @@
         <h1>Login</h1>
         <input formControlName="username" type="text" placeholder="username" required/>
         <input formControlName="password" type="password" placeholder="password" required/>
-        <button (click)="onlogin()">login</button>
+        <button (click)="onlogin()" [disabled]="!loginForm.valid">login</button>
         <p class="message">Not registered? <a [routerLink]="['/Register']">Create an account</a></p>
         <p class="message">Forgot password? <a [routerLink]="['/newPassword']">reset password</a></p>
       </form>

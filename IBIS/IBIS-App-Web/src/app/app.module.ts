@@ -10,7 +10,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatTableModule } from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSelectModule } from '@angular/material/select';
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { MatToolbarModule} from '@angular/material/toolbar';
 import { RouterModule } from '@angular/router';
@@ -52,6 +52,7 @@ import { AddCustomerComponent } from './add-customer/add-customer.component';
 import { ViewCustomerComponent } from './view-customer/view-customer.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { AddCustomerOrderComponent } from './add-customer-order/add-customer-order.component';
+import { AuthenticationService } from './Services/authentication.service';
 
 @NgModule({
   declarations: [
@@ -154,7 +155,7 @@ import { AddCustomerOrderComponent } from './add-customer-order/add-customer-ord
 
   ],
   entryComponents: [AddCustomerComponent,ViewCustomerComponent,AddCustomerOrderComponent],
-  providers: [],
+  providers: [{provide:HTTP_INTERCEPTORS,useClass:AuthenticationService,multi:true}],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

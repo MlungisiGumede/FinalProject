@@ -37,12 +37,12 @@ export class LoginService  {
 
     login(loginObj: any){
 
-      return this.httpClient.post<any>(`${this.apiUrl}authenticate`,loginObj)
+      return this.httpClient.post<any>(`${this.apiUrl}Login`,loginObj)
     }
 
     Register(userObj: any){
 
-return this.httpClient.post<any>(`${this.apiUrl}Register`,userObj)
+return this.httpClient.post<any>(`${this.apiUrl}register`,userObj)
     }
 
 

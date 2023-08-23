@@ -22,7 +22,7 @@ filterTerm!:string;
     ,public cdr:ChangeDetectorRef) { }
 
   ngOnInit() {
-
+//localStorage.removeItem("Token")
  
 
     
