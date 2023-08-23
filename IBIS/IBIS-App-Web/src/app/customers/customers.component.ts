@@ -9,6 +9,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { AddCustomerComponent } from '../add-customer/add-customer.component';
 import { ViewCustomerComponent } from '../view-customer/view-customer.component';
 import { ChangeDetectorRef } from '@angular/core';
+import { AddCustomerOrderComponent } from '../add-customer-order/add-customer-order.component';
 @Component({
   selector: 'app-customers',
   templateUrl: './customers.component.html',
@@ -50,6 +51,11 @@ filterTerm!:any
     })
     
 
+  }
+  AddCustomerOrder(item:any){
+  const dialogRef = this.matDialog.open(AddCustomerOrderComponent,{
+    data: item
+  })
   }
 
 

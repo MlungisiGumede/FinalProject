@@ -51,6 +51,7 @@ import { CustomersComponent } from './customers/customers.component';
 import { AddCustomerComponent } from './add-customer/add-customer.component';
 import { ViewCustomerComponent } from './view-customer/view-customer.component';
 import { MatDialogModule } from '@angular/material/dialog';
+import { AddCustomerOrderComponent } from './add-customer-order/add-customer-order.component';
 
 @NgModule({
   declarations: [
@@ -84,7 +85,9 @@ import { MatDialogModule } from '@angular/material/dialog';
     ProductReportComponent,
     CustomersComponent,
     AddCustomerComponent,
-    ViewCustomerComponent
+    ViewCustomerComponent,
+    AddCustomerOrderComponent,
+    WriteOffComponent
   
   ],
   imports: [
@@ -150,7 +153,7 @@ import { MatDialogModule } from '@angular/material/dialog';
     IonicModule.forRoot()
 
   ],
-  entryComponents: [AddCustomerComponent,ViewCustomerComponent],
+  entryComponents: [AddCustomerComponent,ViewCustomerComponent,AddCustomerOrderComponent],
   providers: [],
   bootstrap: [AppComponent]
 })

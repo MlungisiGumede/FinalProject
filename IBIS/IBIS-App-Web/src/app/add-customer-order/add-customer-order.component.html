@@ -1,0 +1,77 @@
+
+<article class="table-header">>
+    <button class="button-add-row" [disabled]="edited" mat-button (click)="addRow()">Add Row</button>
+   
+  </article>
+  <form action="" [formGroup]="form">
+  <table mat-table #orderTable formArrayName="records" [dataSource]="dataSource">
+    <ng-container [matColumnDef]="col.key" *ngFor="let col of columnsSchema">
+      <th mat-header-cell *matHeaderCellDef>
+        {{ col.label }}
+      </th>
+      <td mat-cell *matCellDef="let element; let rowIndex = index"  [formGroupName]="rowIndex">
+        {{disp(rowIndex)}}
+        <div [ngSwitch]="col.type" *ngIf="element.isDone">
+         
+         <section *ngSwitchCase="'isDone'" >
+          <div class="btn-edit">
+            <button [disabled]="edited==true"  mat-button (click)="element.isDone = !element.isDone;editRow(rowIndex)">
+              Edit
+            </button>
+          </div>
+        </section>
+        
+       
+          <div *ngSwitchCase="'isDelete'">
+            
+              <button mat-button (click)="DeleteRow(rowIndex)" >Delete</button>
+            </div>
+            <span *ngSwitchCase="'total'">
+              {{CalculateTotal(rowIndex)}}
+             </span>
+             <span *ngSwitchCase="'Product_ID'">
+              {{element.Product_Name}}
+             </span>
+          
+          <span *ngSwitchDefault>
+            {{ element[col.key] }}
+          </span>
+          <!-- <input type="hidden" [formControlName]="element.IsEdit" #isEdit /> -->
+        </div>
+        <div [ngSwitch]="col.type" *ngIf="!element.isDone">
+         
+          <!-- display2(element) -->
+          <mat-form-field *ngSwitchCase="'Product_ID'"  >
+            <mat-label>Select Product</mat-label>
+            <mat-select formControlName="Product_ID" >
+              <mat-option *ngFor="let product of dropDown" [value]="product.Product_ID">
+                {{product.Name}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+          <div *ngSwitchCase="'isDelete'">
+            <button *ngIf="edited" [disabled]="!form.valid" class="button-add-row" (click)="OnDone(rowIndex)" mat-button style="float: right;">Done</button>
+              <button mat-button (click)="DeleteRow(rowIndex)" >Delete</button>
+            </div>
+            <span *ngSwitchCase="'total'">
+              {{CalculateTotal(rowIndex)}}
+             </span>
+            <div *ngSwitchCase="'isDone'">
+                 <input type="hidden">
+            </div>
+  
+  
+           
+          <mat-form-field *ngSwitchDefault>
+            <input [type]="col.type" matInput [formControlName]="col.key" />
+          </mat-form-field>
+        </div>
+       
+       
+      </td>
+    </ng-container> 
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+  </table>
+  <input *ngIf="dataSource.data.length > 0" style="width: 200px!important;" type="submit" value="SUBMIT" [disabled]="!form.valid ||edited==true">
+  </form>
