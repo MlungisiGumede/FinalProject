@@ -94,6 +94,11 @@ if(!this.logged){
       icon: 'playlist_add_check',
       route: 'Recipes',
     },
+    {
+      label: 'Customers',
+      icon: 'people',
+      route: 'customer',
+    }
   ];
 }
 

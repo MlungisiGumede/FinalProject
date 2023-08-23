@@ -3,6 +3,7 @@ using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 using System.Diagnostics.Eventing.Reader;
+using Microsoft.EntityFrameworkCore;
 
 namespace IBIS_API.Data
 {

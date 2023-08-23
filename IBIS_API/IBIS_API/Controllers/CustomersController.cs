@@ -30,7 +30,7 @@ namespace IBIS_API.Controllers
 
         // GET: api/Addresses/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Customer>> GetOrder(int id)
+        public async Task<ActionResult<Customer>> GetCustomer(int id)
         {
             var cus = await _context.Customers.FindAsync(id);
 
@@ -45,12 +45,12 @@ namespace IBIS_API.Controllers
         // PUT: api/Addresses/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutOrder(int id, Customer cus)
+        public async Task<IActionResult> PutOrder(Customer cus)
         {
-            if (id != cus.Customer_ID)
-            {
-                return BadRequest();
-            }
+            // if (id != cus.Customer_ID)
+            // {
+            //     return BadRequest();
+            // }
 
             _context.Entry(cus).State = EntityState.Modified;
 
@@ -60,14 +60,14 @@ namespace IBIS_API.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!OrderExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                //if (!CustomerExists(id))
+                //{
+                //    return NotFound();
+                //}
+                //else
+                //{
+                //    throw;
+                //}
             }
 
             return NoContent();
@@ -99,7 +99,7 @@ namespace IBIS_API.Controllers
 
             return NoContent();
         }
-        private bool OrderExists(int id)
+        private bool CustomerExists(int id)
         {
             return _context.Customers.Any(e => e.Customer_ID == id);
         }

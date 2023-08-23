@@ -43,13 +43,16 @@ namespace IBIS_API.Migrations
 
             modelBuilder.Entity("IBIS_API.Models.Customer", b =>
                 {
-                    b.Property<int>("Customer_ID")
+                    b.Property<int?>("Customer_ID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Customer_ID"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int?>("Customer_ID"));
 
-                    b.Property<string>("Customer_First_Name")
+                    b.Property<string>("Address")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Customer_FirstName")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Customer_Surname")
@@ -58,7 +61,7 @@ namespace IBIS_API.Migrations
                     b.Property<string>("Email")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Phone_Number")
+                    b.Property<string>("Phone")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Customer_ID");

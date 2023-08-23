@@ -1,0 +1,37 @@
+<body>
+    <div class="container">
+     <div class="title">Add Customer</div>
+     <div class="content">
+       <form action="#">
+         <div class="user-details" [formGroup]=form>
+           <div class="input-box">
+             <span class="details">First Name</span>
+             <input type="text" placeholder="name" formControlName="Customer_FirstName" >
+           </div>
+           <div class="input-box">
+             <span class="details">Surname</span>
+             <input type="text" placeholder="surname" formControlName="Customer_Surname">
+           </div>
+           <div class="input-box">
+             <span class="details">Address</span>
+             <input type="text" placeholder="address" formControlName="Address">
+           </div>
+           <div class="input-box">
+             <span class="details">Phone number</span>
+             <input type="tel" placeholder="phone number" formControlName="Phone" >
+           </div>
+           <div class="input-box">
+            <span class="details">Email</span>
+            <input type="tel" (keyup)="display()" placeholder="email" formControlName="Email" >
+          </div>
+         </div>
+         <div class="button">
+           <input type="submit" style="background-color: white;" mat-dialog-close value="Submit"  [disabled]="!form.valid" (click)="CreateCustomer()"> 
+           <!-- do a conditional render -->
+         </div>
+       </form>
+     </div>
+    </div>
+    </body>
+
+

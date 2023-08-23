@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\alber\\source\\repos\\IBIS_API\\IBIS_API\\IBIS_API.csproj": {}
+    "C:\\Users\\27768\\Documents\\GitHub\\inf370-team6\\IBIS_API\\IBIS_API\\IBIS_API.csproj": {}
   },
   "projects": {
-    "C:\\Users\\alber\\source\\repos\\IBIS_API\\IBIS_API\\IBIS_API.csproj": {
+    "C:\\Users\\27768\\Documents\\GitHub\\inf370-team6\\IBIS_API\\IBIS_API\\IBIS_API.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\alber\\source\\repos\\IBIS_API\\IBIS_API\\IBIS_API.csproj",
+        "projectUniqueName": "C:\\Users\\27768\\Documents\\GitHub\\inf370-team6\\IBIS_API\\IBIS_API\\IBIS_API.csproj",
         "projectName": "IBIS_API",
-        "projectPath": "C:\\Users\\alber\\source\\repos\\IBIS_API\\IBIS_API\\IBIS_API.csproj",
-        "packagesPath": "C:\\Users\\alber\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\alber\\source\\repos\\IBIS_API\\IBIS_API\\obj\\",
+        "projectPath": "C:\\Users\\27768\\Documents\\GitHub\\inf370-team6\\IBIS_API\\IBIS_API\\IBIS_API.csproj",
+        "packagesPath": "C:\\Users\\27768\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\27768\\Documents\\GitHub\\inf370-team6\\IBIS_API\\IBIS_API\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\alber\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\27768\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -92,7 +92,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.400\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.201\\RuntimeIdentifierGraph.json"
         }
       }
     }

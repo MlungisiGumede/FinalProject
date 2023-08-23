@@ -1,0 +1,36 @@
+<body>
+    <div class="container">
+     <div class="title">View Customer</div>
+     <div class="content">
+       <form action="#">
+         <div class="user-details" [formGroup]=form>
+           <div class="input-box">
+             <span class="details">First Name</span>
+             <input type="text" placeholder="name" formControlName="Customer_FirstName" >
+           </div>
+           <div class="input-box">
+             <span class="details">Surname</span>
+             <input type="text" placeholder="surname" formControlName="Customer_Surname">
+           </div>
+           <div class="input-box">
+             <span class="details">Address</span>
+             <input type="text" placeholder="address" formControlName="Address">
+           </div>
+           <div class="input-box">
+             <span class="details">Phone number</span>
+             <input type="tel" placeholder="phone number" formControlName="Phone" >
+           </div>
+           <div class="input-box">
+            <span class="details">Email</span>
+            <input type="tel" placeholder="email" formControlName="Email" >
+          </div>
+         </div>
+         <div class="button">
+           <input type="submit" value="update"  [disabled]="!form.valid" (click)="EditCustomer()"> 
+           <!-- do a conditional render -->
+         </div>
+       </form>
+     </div>
+    </div>
+    </body>
+

@@ -47,6 +47,10 @@ import { SuppliersComponent } from './suppliers/suppliers.component';
 import { CanvasJSAngularChartsModule } from '@canvasjs/angular-charts';
 import { HomeComponent } from './home/home.component';
 import { ProductReportComponent } from './product-report/product-report.component';
+import { CustomersComponent } from './customers/customers.component';
+import { AddCustomerComponent } from './add-customer/add-customer.component';
+import { ViewCustomerComponent } from './view-customer/view-customer.component';
+import { MatDialogModule } from '@angular/material/dialog';
 
 @NgModule({
   declarations: [
@@ -77,13 +81,17 @@ import { ProductReportComponent } from './product-report/product-report.componen
     ProductsComponent,
     SuppliersComponent,
     HomeComponent,
-    ProductReportComponent
+    ProductReportComponent,
+    CustomersComponent,
+    AddCustomerComponent,
+    ViewCustomerComponent
   
   ],
   imports: [
     BrowserModule,
     CanvasJSAngularChartsModule,
     Ng2SearchPipeModule,
+    MatDialogModule,
     RouterModule.forRoot([
       {path: '', redirectTo: '/Login', pathMatch: 'full'},
       {path: 'Login', component: LoginComponent},
@@ -113,7 +121,8 @@ import { ProductReportComponent } from './product-report/product-report.componen
       {path: 'Products', component: ProductsComponent},
       {path: 'Suppliers', component: SuppliersComponent},
       {path: 'home', component:HomeComponent},
-      {path: 'product-report', component: ProductReportComponent}
+      {path: 'product-report', component: ProductReportComponent},
+      {path: 'customer', component: CustomersComponent}
 
 
 
@@ -141,6 +150,7 @@ import { ProductReportComponent } from './product-report/product-report.componen
     IonicModule.forRoot()
 
   ],
+  entryComponents: [AddCustomerComponent,ViewCustomerComponent],
   providers: [],
   bootstrap: [AppComponent]
 })
