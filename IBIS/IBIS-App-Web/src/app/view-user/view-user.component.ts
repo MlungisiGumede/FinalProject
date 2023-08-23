@@ -26,7 +26,7 @@ data:any
 
 update(){
 
-  this.router.navigate(['Dashboard']);
+  this.router.navigate(['onetimepin']);
 
 }
 

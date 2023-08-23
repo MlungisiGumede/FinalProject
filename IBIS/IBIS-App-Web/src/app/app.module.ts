@@ -52,6 +52,7 @@ import { AddCustomerComponent } from './add-customer/add-customer.component';
 import { ViewCustomerComponent } from './view-customer/view-customer.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { AddCustomerOrderComponent } from './add-customer-order/add-customer-order.component';
+import { OtpComponent } from './otp/otp.component';
 
 @NgModule({
   declarations: [
@@ -87,7 +88,8 @@ import { AddCustomerOrderComponent } from './add-customer-order/add-customer-ord
     AddCustomerComponent,
     ViewCustomerComponent,
     AddCustomerOrderComponent,
-    WriteOffComponent
+    WriteOffComponent,
+    OtpComponent
   
   ],
   imports: [
@@ -125,7 +127,8 @@ import { AddCustomerOrderComponent } from './add-customer-order/add-customer-ord
       {path: 'Suppliers', component: SuppliersComponent},
       {path: 'home', component:HomeComponent},
       {path: 'product-report', component: ProductReportComponent},
-      {path: 'customer', component: CustomersComponent}
+      {path: 'customer', component: CustomersComponent},
+      {path: 'onetimepin', component: OtpComponent}
 
 
 
