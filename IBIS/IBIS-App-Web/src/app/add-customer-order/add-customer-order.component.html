@@ -1,5 +1,9 @@
 
-<article class="table-header">>
+<article class="table-header">
+    <h2>Customer Order:</h2>
+    
+    <h2>{{title}}</h2>
+
     <button class="button-add-row" [disabled]="edited" mat-button (click)="addRow()">Add Row</button>
    
   </article>
@@ -10,7 +14,6 @@
         {{ col.label }}
       </th>
       <td mat-cell *matCellDef="let element; let rowIndex = index"  [formGroupName]="rowIndex">
-        {{disp(rowIndex)}}
         <div [ngSwitch]="col.type" *ngIf="element.isDone">
          
          <section *ngSwitchCase="'isDone'" >

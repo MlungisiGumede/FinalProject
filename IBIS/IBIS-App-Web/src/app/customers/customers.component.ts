@@ -54,7 +54,8 @@ filterTerm!:any
   }
   AddCustomerOrder(item:any){
   const dialogRef = this.matDialog.open(AddCustomerOrderComponent,{
-    data: item
+    data: item,
+    //width:'50%'
   })
   }
 

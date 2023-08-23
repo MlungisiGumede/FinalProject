@@ -28,6 +28,7 @@ export class AddCustomerOrderComponent implements OnInit {
   form!:FormGroup
   tableForm:FormGroup
   submitArray:any
+  title:any
   //supplierOrder:SupplierOrder = new SupplierOrder
   //customerOrder:CustomerOrder = new CustomerOrder
   edited = false
@@ -116,7 +117,6 @@ export class AddCustomerOrderComponent implements OnInit {
  displayedColumns: string[] = []
  // dataSource: any;
  orderDef:any
- title:any
   columnsSchema:any
  
   orders:any = []
@@ -179,7 +179,7 @@ dropDown:any= [{
       console.log(typeof(this.dropDown))
       // getSuppliers
       console.log(data)
-      this.title = "Customer Order" + data.customer_Name
+      this.title = data.customer_FirstName + " "+ data.customer_Surname
       // this.productService.getProductList().subscribe((res:any)=>{
       //   //this.products = res
       // })
@@ -199,8 +199,6 @@ dropDown:any= [{
 
   addRow(){
     this.edited = true
-    this.rowIndexTemplate = (this.form.get('records') as FormArray).length  // last index of the array...
-   console.log(this.rowIndexTemplate)
     const control =  this.form.get('records') as FormArray; 
       
     control.push(this.initiateProductForm());
@@ -213,8 +211,11 @@ console.log(this.dropDown)
     
   } 
       editRow(rowIndex:any){
-        this.rowIndexTemplate = rowIndex
         this.edited = true
+        let val = (this.form.get('records') as FormArray).controls[rowIndex].get('isDone')?.setValue(false)
+        const control =  this.form.get('records') as FormArray;
+        console.log(control.value)
+        this.rowIndexTemplate = rowIndex
         let Product_ID =(this.form.get('records') as FormArray).controls[rowIndex].get('Product_ID')?.value
         let productIndex = this.products.findIndex((item:any) => item.Product_ID == Product_ID)
         this.dropDown.push(this.products[productIndex])
@@ -254,6 +255,7 @@ console.log(this.dropDown)
         control.removeAt(rowIndex);
         this.dataSource = new MatTableDataSource((this.form.get('records') as FormArray).value);
         console.log(this.dataSource.data)
+        console.log(control.value)
         this.dataSource._updateChangeSubscription()
         this.cdr.detectChanges()
         console.log(control.value)
