@@ -30,7 +30,7 @@ return new Promise((resolve, reject) => {
  }, (error) => {
    
    // http interceptor sends back to log in
-    
+    console.log("should come here")
     resolve(true)
      // just reject in promise method...
    }
@@ -70,6 +70,7 @@ return new Promise((resolve, reject) => {
     }
    
     }, (error) => {
+      console.log("why though")
      this._router.navigate(['/Login'])
   // interceptor returns to login.
   resolve(false)

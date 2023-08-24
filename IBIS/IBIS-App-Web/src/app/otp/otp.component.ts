@@ -32,8 +32,13 @@ export class OtpComponent implements OnInit {
       this.username = params['username']
       console.log(params['username'])
       console.log(params['username'])
-      console.log(this.username)
-    })
+  })
+  console.log(this.username)
+  if(this.username==undefined){
+    this.BackToLogin()
+  }
+  //console.log("after")
+  
     console.log(this.username) // check on refresh...
   }
   BackToLogin(){
@@ -41,6 +46,10 @@ export class OtpComponent implements OnInit {
   this.router.navigate(['/Login'])
   }
   SendOTP(){
+    if(this.username==undefined){
+      this.BackToLogin()
+      
+    }else{
     console.log("OTP method")
     this.loginservice.SendOTP(this.username).subscribe((res)=>{
      
@@ -56,12 +65,14 @@ export class OtpComponent implements OnInit {
   console.log("there is error")
 }
   }
+  }
   
   SubmitOTP(){
     console.log(this.form.value)
     let otp = this.form.controls['otp'].value
     if(otp==this.otp){
       localStorage.setItem('OTP', this.otp)
+      console.log(localStorage.getItem('Token'))
       this.router.navigate(['/home'])
     }
     else{
