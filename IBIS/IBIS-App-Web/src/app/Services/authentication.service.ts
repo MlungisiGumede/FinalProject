@@ -14,12 +14,12 @@ export class AuthenticationService implements HttpInterceptor {
       //localStorage.getItem('Token') && localStorage.getItem('Token') != null
       let h1 = ""
       let h12 = "a"
-      console.log("hi")
-      console.log(localStorage.getItem('Token'))
-      console.log(localStorage.getItem('Token'))
+      //console.log("hi")
+      //console.log(localStorage.getItem('Token'))
+      //console.log(localStorage.getItem('Token'))
       //let var = localStorage.getItem('Token')
 if (localStorage.getItem('Token') != 'null' && localStorage.getItem('Token') != null) {
-  console.log(localStorage.getItem('Token'))
+  //console.log(localStorage.getItem('Token'))
   const jwt = JSON.parse(localStorage.getItem('Token')!) //console.log(jwt)
  const token = jwt.token
 
@@ -67,7 +67,7 @@ else {
       let val = new Promise((resolve,reject) =>{
      let req =  this.httpClient.get(`${this.apiUrl}Authenticate`,{observe: 'response'}).pipe(
         map((res) =>{
-          console.log("first")
+         
           resolve("success")
           bool=true
         }),
@@ -79,12 +79,12 @@ else {
             
            }
             
-            return err
+            return throwError(err)
         }) // retry is working...
       ).subscribe()
       })
 await val;
-console.log("second")
+
 return val;
 }
   

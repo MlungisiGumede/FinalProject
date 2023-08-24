@@ -13,8 +13,9 @@ import { ToastController } from '@ionic/angular';
 export class LoginComponent implements OnInit {
   data: any;
   users : User[]=[];
-  username ="";
+  name ="";
   loginForm!: FormGroup;
+  
   constructor(private loginservice: LoginService,private fb: FormBuilder, private router: Router,private toastController: ToastController) {
 
 
@@ -36,9 +37,12 @@ this.loginservice.setlogin(true)
   }
 
   onlogin(){
-
+let val = this.loginForm.value
+console.log(val)
   //this.presentToast('top')
-    this.loginservice.login(this.loginForm.value).subscribe({
+  let username = this.loginForm.controls['username'].value
+  console.log(username)
+    this.loginservice.login(val).subscribe({
       next: (res)=>{
         //this.presentToast('top')
         //alert(res.message)
@@ -46,8 +50,12 @@ this.loginservice.setlogin(true)
         localStorage.setItem('Token', JSON.stringify(res))
 
         console.log(localStorage.getItem('Token'))
-        this.loginForm.reset();
-        this.router.navigate(['/otp']);
+       
+       
+        //this.loginForm.reset();
+       
+        console.log(this.name)
+        this.router.navigate(['/otp',username]);
       },
       error:(err) =>{
         

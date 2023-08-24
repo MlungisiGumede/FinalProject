@@ -1,10 +1,10 @@
 <div class="otp-page">
-    <form [formGroup]="otpForm" class="otp-form">
+    <form [formGroup]="form" class="otp-form">
         <button (click)="BackToLogin()">Back to Log In</button>
         <h1>A one-time-pin (OTP) has been sent to you. Enter the OTP in the field below.</h1>
-        <input formControlName="otp" type="text" placeholder="XXXX" required/>
-        <button>Resend pin</button>
-        <button (click)="OnSubmit()">Submit</button>
+        <input formControlName="otp" type="text" placeholder="XXXX" />
+        <button (click)="SendOTP()" >Send pin</button>
+        <button [disabled]="!form.valid" (click)="SubmitOTP()">Submit</button>
         
     </form>
 </div>

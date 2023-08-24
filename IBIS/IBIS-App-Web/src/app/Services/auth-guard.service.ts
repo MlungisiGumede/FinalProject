@@ -21,14 +21,14 @@ return new Promise((resolve, reject) => {
      console.log("Login Authenticate success")
      if(localStorage.getItem('OTP') == 'null' || localStorage.getItem('OTP') == null){
        this._router.navigate(['/otp'])
-       console.log("Login OTP success")
+       
       // check OTP token... then for other routes check OTP token... when deny if OTP token remove.
    }
-   console.log("before false")
+   
    this._router.navigate(['/home'])
    resolve(false)
  }, (error) => {
-   console.log("fail")
+   
    // http interceptor sends back to log in
     
     resolve(true)
@@ -54,7 +54,7 @@ return new Promise((resolve, reject) => {
     )
    }
    if(path=="otp"){
-    console.log("otp path")
+    
     this.authenticationService.Authenticate().then((success) => {
       console.log(localStorage.getItem('OTP'))
       if(localStorage.getItem('OTP') == 'null' || localStorage.getItem('OTP') == null){
@@ -65,7 +65,7 @@ return new Promise((resolve, reject) => {
       this._router.navigateByUrl('/home').then(() => {
         resolve(false)
       })
-      console.log("Otp not null")
+      
      
     }
    

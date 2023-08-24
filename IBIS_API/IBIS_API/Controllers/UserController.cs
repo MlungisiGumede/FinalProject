@@ -15,9 +15,13 @@ using System.Security.Claims;
 using System.Text;
 using NuGet.Protocol.Core.Types;
 using Microsoft.AspNetCore.Cors;
+using System.Net.Mail;
+using System.Net;
+using System.Reflection.Emit;
 
 namespace IBIS_API.Controllers
 {
+   
 
 
     [Route("api/[controller]")]
@@ -25,6 +29,15 @@ namespace IBIS_API.Controllers
     //[EnableCors(origins:"*",PolicyName =)]
     public class UserController : ControllerBase
     {
+        static string smtpAddress = "smtp.gmail.com";
+        static int portNumber = 587;
+        static bool enableSSL = true;
+        static string emailFromAddress = "ma.gaitsmith@gmail.com"; //Sender Email Address  
+                                                                   //Sender Password  
+        static string emailToAddress = "ma.gaitsmith@gmail.com"; //Receiver Email Address  
+        static string subject = "Hello";
+
+        static string body = "Your OTP is: ";
         private readonly DataContextcs _context;
         private readonly UserManager<AppUser> _userManager;
         private readonly IUserClaimsPrincipalFactory<AppUser> _claimsPrincipalFactory;
@@ -77,6 +90,80 @@ namespace IBIS_API.Controllers
         public async Task<ActionResult> Authenticate()
         {
             return Ok();
+        }
+        [HttpPost]
+        [Route("SendOTP")]
+
+        public async Task<IActionResult> SendOTP( User_Account uvm){ // if failiure with otp then just log in...
+            int otp= 4;
+            String Message = "hi";
+            try
+            {
+                int r = 0;
+                var user = await _userManager.FindByNameAsync(uvm.Username);
+                Random generator = new Random();
+                r = generator.Next(100000, 1000000);
+                otp = r;
+                body = body + r;
+
+                using (MailMessage mail = new MailMessage())
+                {
+                    // check when send email to someone who doesnt allow work emails or something...
+                    mail.From = new MailAddress(emailFromAddress);
+                    mail.To.Add(user.Email);
+                    mail.Subject = subject;
+                    mail.Body = body;
+                    mail.IsBodyHtml = true;
+                    //mail.Attachments.Add(new Attachment("D:\\TestFile.txt"));//--Uncomment this to send any attachment  
+                    using (SmtpClient smtp = new SmtpClient(smtpAddress, portNumber))
+                    {
+                        //smtp.UseDefaultCredentials = false;
+                        smtp.Credentials = new NetworkCredential(emailFromAddress, "sxkbtjguspnshajt");
+                        smtp.UseDefaultCredentials = false;
+                        smtp.EnableSsl = enableSSL;
+                        //smtp.DeliveryMethod = SmtpDeliveryMethod.PickupDirectoryFromIis;
+                        // 
+                        // try
+                        //  {
+                        //      Ping myPing = new Ping(); // stack overflow...
+                        //      String host = "google.com";
+                        //       byte[] buffer = new byte[32];
+                        //      int timeout = 1000;
+                        //  PingOptions pingOptions = new PingOptions();
+                        //      PingReply reply = myPing.Send(host, timeout, buffer, pingOptions);
+                        //return (reply.Status == IPStatus.Success);
+                        //   }
+                        //   catch (Exception e)
+                        //  {
+                        //      return BadRequest("Couldnt connect to wifi"); // check status text in front end.
+                        //  }
+
+
+
+                        // if otp generated then navigate to the page...
+
+
+
+
+                        // doesnt work if there is no internet connection so try and catch...
+                        smtp.Send(mail);
+                    }
+                }
+            }
+
+            catch (SmtpException smtpE)
+            {
+                var error = smtpE.Message; // when not connected to wifi status text is Failure sending mail
+                var statuscode = smtpE.StatusCode; // general failiure when not connected to the wifi
+                                                   // ping functionality to see if specifically wifi problem...
+                var baseExc = smtpE.GetBaseException;
+                return BadRequest(error);
+                // retry in front end for emails if this happens...
+            }
+                  return Ok(otp);
+            
+
+
         }
 
         [HttpPost]

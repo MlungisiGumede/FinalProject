@@ -130,7 +130,8 @@ import { AuthGuardService } from './Services/auth-guard.service';
       {path: 'home', component:HomeComponent, canActivate : [AuthGuardService]},
       {path: 'product-report', component: ProductReportComponent},
       {path: 'customer', component: CustomersComponent,canActivate : [AuthGuardService]},
-      {path: 'otp', component: OtpComponent, canActivate : [AuthGuardService]}
+      {path: 'otp', component: OtpComponent, canActivate : [AuthGuardService]},
+      {path: 'otp/:username', component: OtpComponent}
 
 
 

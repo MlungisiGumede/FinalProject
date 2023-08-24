@@ -13,7 +13,7 @@ export class LoginService  {
 
 
 
-
+//const headers
 
 
   apiUrl = 'https://localhost:7226/api/User/';
@@ -29,10 +29,15 @@ export class LoginService  {
      'Content-Type': 'application/json'
      })
       }
-      
+     
     public getUserList(): Observable<User[]> {
       return this.httpClient
         .get<User[]>(this.apiUrl)
+    }
+    public SendOTP(username:any):Observable<any>{
+      let user = new User()
+      user.username = username
+      return this.httpClient.post<any>(`${this.apiUrl}SendOTP`,user)
     }
     public Authenticate():Observable<any>{
       return this.httpClient.get<any>(`${this.apiUrl}Authenticate`)
