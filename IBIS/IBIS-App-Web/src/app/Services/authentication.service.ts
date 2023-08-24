@@ -24,8 +24,8 @@ if (localStorage.getItem('Token') != 'null' && localStorage.getItem('Token') != 
  const token = jwt.token
 
   const cloned = req.clone({
-       headers: req.headers.set(
-           "Bearer " + token,"cache-control:"+ "no-cache")
+       headers:  req.headers.set("Authorization","Bearer " + token)
+       .set('Cache-Control', 'no-cache').set('responseType', 'blob')
    
   });
 

@@ -21,7 +21,7 @@ export class LoginComponent implements OnInit {
     loginservice = {} as LoginService;
     this.data = [];
 
-
+    console.log(localStorage.getItem('Token')!)
    }
 
   ngOnInit(): void{
@@ -35,24 +35,27 @@ this.loginservice.setlogin(true)
   }
 
   onlogin(){
-if(this.loginForm.valid){
-  this.presentToast('top')
+
+  //this.presentToast('top')
     this.loginservice.login(this.loginForm.value).subscribe({
       next: (res)=>{
         //this.presentToast('top')
         //alert(res.message)
         console.log(res)
-        localStorage.setItem('Token', res)
+        localStorage.setItem('Token', JSON.stringify(res))
+        console.log(localStorage.getItem('Token'))
         this.loginForm.reset();
         this.router.navigate(['/home']);
       },
       error:(err) =>{
+        
         //alert(err?.error.message)
+        console.log(err)
         this.presentUnsuccessfulToast('top')
         this.loginForm.reset();
       }
     })
-  }
+  
 
 
   if(this.loginForm.invalid){

@@ -4,7 +4,7 @@
 <div class="container">
  <div class="title">Register</div>
  <div class="content">
-   <form  [formGroup]="registerform" action="#">
+   <form  [formGroup]="registerForm" action="#">
      <div class="user-details">
        <div class="input-box">
          <span class="details">Full Name</span>
@@ -35,6 +35,6 @@
      </div>
    </form>
  </div>
- <button (click)="onRegister()" mat-flat-button color="primary" class="but" >Register</button>
+ <button (click)="onRegister()" [disabled]="!registerForm.valid" mat-flat-button color="primary" class="but" >Register</button>
 </div>
 </body>

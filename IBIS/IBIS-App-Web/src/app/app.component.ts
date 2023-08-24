@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {MatToolbarModule} from '@angular/material/toolbar';
-import { Router } from '@angular/router';
+import { NavigationStart, Router } from '@angular/router';
 import { LoginService } from './Services/login.service';
 
 
@@ -24,32 +24,25 @@ export interface userprofile {
 export class AppComponent implements OnInit {
   logged=false;
   search : String ="";
+  showNavigation:any
+  selectedValue:any
 
-constructor(private log : LoginService, public router: Router){
+constructor(private log : LoginService, public router: Router,){
 
 }
   ngOnInit(): void {
 
-
-
-
-
-//    // this.log.setlogin(false)
-
-//     this.log.getlogin().subscribe((value) => {
-//       this.logged = value;
-
-// if(!this.logged){
-
-//   this.router.navigate(['/Login']);
-
-
-// }
-
-
-
-//       console.log("login status: ",this.logged)
-//     });
+    this.router.events.forEach((event) => {
+      if (event instanceof NavigationStart) {
+        if (event['url'] == '/Login' || event['url'] == '/Register') {
+          this.showNavigation = false;
+        } else {
+          // console.log("NU")
+          this.showNavigation = true;
+        }
+      }
+    })
+    
   }
   panelOpenState = false;
   title = 'IBIS-App';
@@ -99,7 +92,15 @@ constructor(private log : LoginService, public router: Router){
       icon: 'people',
       route: 'customer',
     }
+  
   ];
+  IsLogOut(){
+  if(this.selectedValue == 'user-2'){
+    localStorage.removeItem('Token')
+    this.router.navigate(['/Login'])
+  }
+  }
+
 }
 
 

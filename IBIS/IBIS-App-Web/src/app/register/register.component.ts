@@ -11,13 +11,13 @@ import { Router } from '@angular/router';
 })
 export class RegisterComponent implements OnInit {
 
-  registerform! : FormGroup
+  registerForm! : FormGroup
 
   constructor(private register: LoginService, private fb: FormBuilder,private router:Router) { }
 
   ngOnInit(): void {
 
-this.registerform = this.fb.group({
+this.registerForm = this.fb.group({
 
   username : ['', Validators.required],
   password : ['', Validators.required],
@@ -33,14 +33,15 @@ this.registerform = this.fb.group({
 
 
   onRegister(){
-    this.register.Register(this.registerform.value).subscribe(
+    this.register.Register(this.registerForm.value).subscribe(
        (res)=>{
+
         alert(res.message)
-        this.registerform.reset();
-        this.router.navigate(['Login'])
+       
+      this.router.navigate(['/Login'])
        },
       (err) =>{
-        alert(err?.error.message)
+        alert("Couldnt Register please try again")
       }
     )}
   }
