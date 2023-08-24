@@ -34,6 +34,9 @@ export class LoginService  {
       return this.httpClient
         .get<User[]>(this.apiUrl)
     }
+    public Authenticate():Observable<any>{
+      return this.httpClient.get<any>(`${this.apiUrl}Authenticate`)
+    }
 
     login(loginObj: any){
 

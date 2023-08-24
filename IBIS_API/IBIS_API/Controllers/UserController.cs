@@ -71,7 +71,13 @@ namespace IBIS_API.Controllers
             });
         }
 
-
+        [HttpGet]
+        [Route("Authenticate")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        public async Task<ActionResult> Authenticate()
+        {
+            return Ok();
+        }
 
         [HttpPost]
         [Route("Login")]
@@ -128,31 +134,31 @@ namespace IBIS_API.Controllers
 
 
 
-        [HttpPost("authenticate")]
+        //[HttpPost("authenticate")]
 
-        public async Task<IActionResult> Authenticate([FromBody] User_Account userobj)
-        {
+        //public async Task<IActionResult> Authenticate([FromBody] User_Account userobj)
+        //{
      
 
-                if (userobj == null)
-                return BadRequest();
+        //        if (userobj == null)
+        //        return BadRequest();
 
-            var user = await _context.User_Accounts.
-                FirstOrDefaultAsync(x => x.Username == userobj.Username && x.Password == userobj.Password);
-            if (user == null)
-                return NotFound(new { Message = "User not found" });
+        //    var user = await _context.User_Accounts.
+        //        FirstOrDefaultAsync(x => x.Username == userobj.Username && x.Password == userobj.Password);
+        //    if (user == null)
+        //        return NotFound(new { Message = "User not found" });
 
-            return Ok(new
-            {
+        //    return Ok(new
+        //    {
                 
-                Message = "Login Success"
+        //        Message = "Login Success"
 
                
-            });
+        //    });
 
            
 
-        }
+        //}
 
 
         [HttpPost("registerUser")]

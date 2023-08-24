@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {MatToolbarModule} from '@angular/material/toolbar';
-import { NavigationStart, Router } from '@angular/router';
+import { NavigationError, NavigationStart, Router } from '@angular/router';
 import { LoginService } from './Services/login.service';
 
 
@@ -14,6 +14,7 @@ export interface userprofile {
   value: string;
   viewValue: string;
   route: string;
+  
 }
 
 @Component({
@@ -26,23 +27,39 @@ export class AppComponent implements OnInit {
   search : String ="";
   showNavigation:any
   selectedValue:any
+  url:any
 
-constructor(private log : LoginService, public router: Router,){
+constructor(private loginService : LoginService, public router: Router,){
 
 }
   ngOnInit(): void {
 
     this.router.events.forEach((event) => {
       if (event instanceof NavigationStart) {
-        if (event['url'] == '/Login' || event['url'] == '/Register') {
+        console.log(event['url'])
+        if (event['url'] == '/Login' || event['url'] == '/Register' || event['url'] == '/' ) {
           this.showNavigation = false;
+          // once authentication throws you back to log in this if statement is true
         } else {
           // console.log("NU")
           this.showNavigation = true;
-        }
-      }
-    })
+        }if(event['url'] == '/Login' || event['url'] == '/'){
+          this.loginService.Authenticate().subscribe( (res)=>{
+            this.router.navigate(['/hone'])
+          }) 
+          
+            // cant log in agai
+        
+       }
+      }if(event instanceof NavigationError){
+        this.loginService.Authenticate().subscribe( (res)=>{
+          this.router.navigate(['/home'])
+      })
+    }
     
+    
+  })
+      
   }
   panelOpenState = false;
   title = 'IBIS-App';
