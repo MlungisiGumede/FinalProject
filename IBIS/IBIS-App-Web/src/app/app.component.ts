@@ -37,28 +37,26 @@ constructor(private loginService : LoginService, public router: Router,){
     this.router.events.forEach((event) => {
       if (event instanceof NavigationStart) {
         console.log(event['url'])
-        if (event['url'] == '/Login' || event['url'] == '/Register' || event['url'] == '/' ) {
+        if (event['url'] == '/Login' || event['url'] == '/Register' || event['url'] == '/' || event['url'] == '/otp') {
           this.showNavigation = false;
           // once authentication throws you back to log in this if statement is true
         } else {
           // console.log("NU")
           this.showNavigation = true;
-        }if(event['url'] == '/Login' || event['url'] == '/'){
-          this.loginService.Authenticate().subscribe( (res)=>{
-            this.router.navigate(['/hone'])
-          }) 
+        }
           
             // cant log in agai
         
-       }
-      }if(event instanceof NavigationError){
-        this.loginService.Authenticate().subscribe( (res)=>{
-          this.router.navigate(['/home'])
-      })
-    }
+       
+      }
+      if(event instanceof NavigationError){
+        this.showNavigation = false;
+  }
+})
+
     
     
-  })
+  // })
       
   }
   panelOpenState = false;
@@ -114,6 +112,7 @@ constructor(private loginService : LoginService, public router: Router,){
   IsLogOut(){
   if(this.selectedValue == 'user-2'){
     localStorage.removeItem('Token')
+    localStorage.removeItem('OTP')
     this.router.navigate(['/Login'])
   }
   }

@@ -25,6 +25,7 @@ export class LoginComponent implements OnInit {
    }
 
   ngOnInit(): void{
+    
 
 this.loginForm = this.fb.group({
 
@@ -43,9 +44,10 @@ this.loginservice.setlogin(true)
         //alert(res.message)
         console.log(res)
         localStorage.setItem('Token', JSON.stringify(res))
+
         console.log(localStorage.getItem('Token'))
         this.loginForm.reset();
-        this.router.navigate(['/home']);
+        this.router.navigate(['/otp']);
       },
       error:(err) =>{
         

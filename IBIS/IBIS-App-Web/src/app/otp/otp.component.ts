@@ -15,7 +15,7 @@ export class OtpComponent implements OnInit {
 
   data: any;
   users : User[]=[];
-  otp ="";
+  otp ="otp";
   otpForm!: FormGroup;
   constructor(private loginservice: LoginService,private fb: FormBuilder, private router: Router,private toastController: ToastController) { }
 
@@ -25,6 +25,15 @@ export class OtpComponent implements OnInit {
 
       otp : ['', Validators.required]
     })
+
+  }
+  BackToLogin(){
+    localStorage.removeItem('Token')
+  this.router.navigate(['/Login'])
+  }
+  OnSubmit(){
+    localStorage.setItem('OTP', this.otp)
+    this.router.navigate(['/home'])
 
   }
 

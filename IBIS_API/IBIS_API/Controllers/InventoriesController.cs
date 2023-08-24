@@ -27,7 +27,7 @@ namespace IBIS_API.Controllers
 
         [HttpGet]
         [Route("getAll")]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<ActionResult<IEnumerable<Inventory>>> GetInventoryList()
         {
             return await _context.Inventories.ToListAsync();

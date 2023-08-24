@@ -23,7 +23,8 @@ filterTerm!:string;
 
   ngOnInit() {
 //localStorage.removeItem("Token")
- 
+ console.log(localStorage.getItem('Token'))
+ console.log(localStorage.getItem('OTP'))
 
     
 

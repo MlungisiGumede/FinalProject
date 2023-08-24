@@ -54,6 +54,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { AddCustomerOrderComponent } from './add-customer-order/add-customer-order.component';
 import { AuthenticationService } from './Services/authentication.service';
 import { OtpComponent } from './otp/otp.component';
+import { AuthGuardService } from './Services/auth-guard.service';
 
 @NgModule({
   declarations: [
@@ -100,7 +101,7 @@ import { OtpComponent } from './otp/otp.component';
     MatDialogModule,
     RouterModule.forRoot([
       {path: '', redirectTo: '/Login', pathMatch: 'full'},
-      {path: 'Login', component: LoginComponent},
+      {path: 'Login', component: LoginComponent, canActivate : [AuthGuardService] },
       {path: 'Register', component: RegisterComponent},
       {path: 'view-supplier/:id', component: ViewSupplierComponent},
       {path: 'add-supplier', component: AddSupplierComponent},
@@ -114,22 +115,22 @@ import { OtpComponent } from './otp/otp.component';
       {path: 'view-order/:id', component: ViewOrderComponent},
       {path: 'write-off/:id', component: WriteOffComponent},
       {path: 'order-from-supplier/:id', component: OrderFromSupplierComponent},
-      {path: 'Recipes', component: RecipesComponent},
+      {path: 'Recipes', component: RecipesComponent, canActivate : [AuthGuardService]},
       {path: 'create-recipe', component: CreateRecipeComponent},
       {path: 'view-recipe/:id', component: ViewRecipeComponent},
       {path: 'create-supplier-order/:id', component: CreateSupplierOrderComponent},
       {path: 'create-customer-order', component: CustomerOrderComponent},
       {path: 'view-write-off', component: ViewWriteOffsComponent},
-      {path: 'Reports', component: ReportsComponent},
-      {path: 'Inventory', component: InventoryComponent},
-      {path: 'Orders', component: OrdersComponent},
-      {path: 'Recipes', component: RecipesComponent},
-      {path: 'Products', component: ProductsComponent},
-      {path: 'Suppliers', component: SuppliersComponent},
-      {path: 'home', component:HomeComponent},
+      {path: 'Reports', component: ReportsComponent, canActivate : [AuthGuardService]},
+      {path: 'Inventory', component: InventoryComponent, canActivate : [AuthGuardService]},
+      {path: 'Orders', component: OrdersComponent, canActivate : [AuthGuardService]},
+      {path: 'Recipes', component: RecipesComponent, canActivate : [AuthGuardService]},
+      {path: 'Products', component: ProductsComponent, canActivate : [AuthGuardService]},
+      {path: 'Suppliers', component: SuppliersComponent, canActivate : [AuthGuardService]},
+      {path: 'home', component:HomeComponent, canActivate : [AuthGuardService]},
       {path: 'product-report', component: ProductReportComponent},
-      {path: 'customer', component: CustomersComponent},
-      {path: 'onetimepin', component: OtpComponent}
+      {path: 'customer', component: CustomersComponent,canActivate : [AuthGuardService]},
+      {path: 'otp', component: OtpComponent, canActivate : [AuthGuardService]}
 
 
 
@@ -158,7 +159,8 @@ import { OtpComponent } from './otp/otp.component';
 
   ],
   entryComponents: [AddCustomerComponent,ViewCustomerComponent,AddCustomerOrderComponent],
-  providers: [{provide:HTTP_INTERCEPTORS,useClass:AuthenticationService,multi:true}],
+  providers: [{provide:HTTP_INTERCEPTORS,useClass:AuthenticationService,multi:true}
+  ,AuthGuardService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

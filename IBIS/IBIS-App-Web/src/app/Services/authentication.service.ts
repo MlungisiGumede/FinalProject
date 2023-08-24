@@ -1,6 +1,6 @@
-import { HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest, HttpResponse } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import {tap,catchError} from 'rxjs/operators';
+import {tap,catchError, map} from 'rxjs/operators';
 import { Router } from '@angular/router';
 import {Observable,throwError} from 'rxjs';
 
@@ -8,7 +8,7 @@ import {Observable,throwError} from 'rxjs';
   providedIn: 'root'
 })
 export class AuthenticationService implements HttpInterceptor {
-
+  apiUrl = 'https://localhost:7226/api/User/';
   intercept(req: HttpRequest<any>,
     next: HttpHandler): Observable<HttpEvent<any>> {
       //localStorage.getItem('Token') && localStorage.getItem('Token') != null
@@ -43,24 +43,52 @@ else {
   //   }
   // }
   // )
-  return next.handle(req)
-           .pipe(
-                 catchError((error: HttpErrorResponse) => {
-                  console.log(error)
-                    if (error.status==401) {
-                      this.router.navigate(['/Login'])
-                    }
-                    return throwError(error);
-                  } // else navigate to dashboard or whatever then you need to clear local storage before the test
+   return next.handle(req)
+  //          .pipe(
+  //                catchError((error: HttpErrorResponse) => {
+  //                 console.log(error)
+  //                   if (error.status==401) {
+  //                     console.log("401 error")
+  //                     this.router.navigate(['/Login'])
+  //                   }
+  //                   return throwError(error);
+  //                 } // else navigate to dashboard or whatever then you need to clear local storage before the test
                  
-                 )
+  //                )
                 
-                 )
+  //                )
            
  
 }
+    
     }
-    constructor(private router: Router) {
+    async Authenticate():Promise<any>{
+      let bool = false
+      let val = new Promise((resolve,reject) =>{
+     let req =  this.httpClient.get(`${this.apiUrl}Authenticate`,{observe: 'response'}).pipe(
+        map((res) =>{
+          console.log("first")
+          resolve("success")
+          bool=true
+        }),
+        catchError((err) =>{
+          { // just check numbers of errors for client side and server side...
+            reject("Client side error: Couldn't connect to server (API)") // check actual codes and maybe do this differently
+            bool=false
+         
+            
+           }
+            
+            return err
+        }) // retry is working...
+      ).subscribe()
+      })
+await val;
+console.log("second")
+return val;
+}
+  
+    constructor(private router: Router,private httpClient: HttpClient) {
       
     }
   }
