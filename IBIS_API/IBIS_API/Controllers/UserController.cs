@@ -104,7 +104,7 @@ namespace IBIS_API.Controllers
                 Random generator = new Random();
                 r = generator.Next(100000, 1000000);
                 otp = r;
-                body = body + r;
+                body = "Your OTP is : " + r;
 
                 using (MailMessage mail = new MailMessage())
                 {

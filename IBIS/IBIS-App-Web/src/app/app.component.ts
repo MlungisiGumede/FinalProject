@@ -37,7 +37,7 @@ constructor(private loginService : LoginService, public router: Router,){
     this.router.events.forEach((event) => {
       if (event instanceof NavigationStart) {
         console.log(event['url'])
-        if (event['url'] == '/Login' || event['url'] == '/Register' || event['url'] == '/' || event['url'] == '/otp') {
+        if (event['url'] == '/Login' || event['url'] == '/Register' || event['url'] == '/' || event['url'].startsWith('/otp') || event['url'] == '/otp') {
           this.showNavigation = false;
           // once authentication throws you back to log in this if statement is true
         } else {
