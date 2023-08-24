@@ -36,7 +36,7 @@ this.registerForm = this.fb.group({
     this.register.Register(this.registerForm.value).subscribe(
        (res)=>{
 
-        alert(res.message)
+        //alert(res.message)
        
       this.router.navigate(['/Login'])
        },

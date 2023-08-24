@@ -196,6 +196,41 @@ data: base64Data
   
     return await this.convertBlobToBase64(blob) as string;
   }
+
+  // ReadProducts(){
+  //   this.dataService.Courses().subscribe((result: any[]) => {
+  
+  //     result.forEach(element => {
+  //       //console.log(element.image)
+  //       if(element.image.includes("data:image/")){ // check if this is fine else change it...
+  //         this.domSanitizer.bypassSecurityTrustUrl(element.image); // didnt assign element.image here...
+    
+  //       }else{
+  //       let objectURL = 'data:image/png;base64,' + element.image;
+  //       element.image = this.domSanitizer.bypassSecurityTrustUrl(objectURL);
+  //       }
+  //     });
+      
+  //     this.products = result;
+  //     console.log("dataSource")
+  //     this.productObs = of(result)
+  //     this.datasource = new MatTableDataSource(result);
+  //     //this.datasource.data = [...result]
+  //     this.datasource.paginator = this.paginator
+  //     this.datasource._updateChangeSubscription()
+  //     this.datasource.sortingDataAccessor
+  //     //this.cdf.detectChanges()
+  //     console.log("got it?")
+  //     //this.datasource = [...this.datasource];
+  //     //this.datasource = of(result) -- no errors here...
+  //     //this.datasource.paginator = this.paginator;
+  //     //this.cdf.detectChanges()
+  //    // this.matTable.
+  //   //this.filterArr = result
+  //     //this.productObs = of(this.products)
+    
+  //   })
+  // }
   
   private convertBlobToBase64 = (blob: Blob) => new Promise((resolve, reject) => {
     const reader = new FileReader();
