@@ -7,7 +7,7 @@
           <ion-col>Supplier ID</ion-col>
           <ion-col>Supplier Name</ion-col>
           <ion-col>Contact Name</ion-col>
-          <ion-col>Address</ion-col>
+          <ion-col>Email</ion-col>
           <ion-col>Phone</ion-col>
           <ion-col></ion-col>
           <ion-col></ion-col>
@@ -18,13 +18,13 @@
             <ion-label>{{item.supplier_ID}}</ion-label>
           </ion-col>
           <ion-col>
-            <ion-label>{{item.companyName}}</ion-label>
+            <ion-label>{{item.Name}}</ion-label>
           </ion-col>
           <ion-col>
-            <ion-label>{{item.addressline}}</ion-label>
+            <ion-label>{{item.address}}</ion-label>
           </ion-col>
           <ion-col>
-            <ion-label>{{item.city}}</ion-label>
+            <ion-label>{{item.email}}</ion-label>
           </ion-col>
           <ion-col>
             <ion-label>{{item.phone}}</ion-label>
@@ -33,11 +33,11 @@
             <ion-button  class="light-Btn" [routerLink]="['/view-supplier', item.supplier_ID]">View</ion-button>
             <ion-button  class="red-Btn" (click)="delete(item.supplier_ID)">Remove</ion-button>
         </ion-col>
-        <ion-col> <ion-button class="green-Btn" [routerLink]="['/create-supplier-order', item.supplier_ID]">Order From Supplier</ion-button></ion-col>
+        <ion-col> <ion-button class="green-Btn" (click)="SupplierOrder(item)">Order From Supplier</ion-button></ion-col>
         </ion-row>
         <ion-item-divider></ion-item-divider>
       </ion-grid>
-      <ion-button class="light-Btns" [routerLink]="'/add-supplier'">Add</ion-button>
+      <ion-button class="light-Btns" (click)="AddSupplier()">Add</ion-button>
       <ion-button class="red-Btn" (click)="generPDF()">Generate Report</ion-button>
   </div>
 

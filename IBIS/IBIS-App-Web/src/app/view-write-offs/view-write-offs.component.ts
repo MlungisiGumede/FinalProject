@@ -54,9 +54,9 @@ export class ViewWriteOffsComponent implements OnInit {
     
 
   }
-  ViewImage(){
+  ViewImage(element:any){
 const dialog = this.matDialog.open(ViewImageComponent, {
-  data:this.data,
+  data: element,
   height: '500px',
   width: '500px',
 });

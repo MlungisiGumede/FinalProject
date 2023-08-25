@@ -12,7 +12,7 @@
         </ion-row>
         <ion-item-divider></ion-item-divider>
         <ion-row *ngFor="let item of data | filter: filterTerm">
-          <ion-col (click)="ViewImage()">
+          <ion-col (click)="ViewImage(item)">
             <ion-label><img src="{{item.image}}" alt="error" ></ion-label>
           </ion-col>
           <ion-col>

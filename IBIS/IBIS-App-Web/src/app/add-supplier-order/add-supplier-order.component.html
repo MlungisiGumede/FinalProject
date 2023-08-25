@@ -1,6 +1,6 @@
 
 <article class="table-header">
-    <h2>Customer Order:</h2>
+    <h2>Supplier Order:</h2>
     
     <h2>{{title}}</h2>
 
@@ -15,82 +15,63 @@
       </th>
       <div [ngSwitch]="col.type" >
         <div *ngSwitchCase="'total'">
-         hi
+        
       <td mat-footer-cell *matFooterCellDef>Total: R{{ CalculateSubTotal()}} </td>
         </div>
     <div *ngSwitchDefault>
     <td mat-footer-cell *matFooterCellDef> </td>
     </div>
 </div>
-    
       <td mat-cell *matCellDef="let element; let rowIndex = index"  [formGroupName]="rowIndex">
         <div [ngSwitch]="col.type" *ngIf="element.isDone">
          
-         <section *ngSwitchCase="'isDone'" >
-          <div class="btn-edit">
-            <button [disabled]="edited==true"  mat-button (click)="element.isDone = !element.isDone;editRow(rowIndex)">
-              Edit
-            </button>
-          </div>
-         </section>
-         
-       
+           
         
        
           <div *ngSwitchCase="'isDelete'">
             
               <button mat-button (click)="DeleteRow(rowIndex)" >Delete</button>
-              
             </div>
             <span *ngSwitchCase="'total'">
               {{CalculateTotal(rowIndex)}}
-              
              </span>
-             <span *ngSwitchCase="'Product_ID'">
-              {{element.Product_Name}}
-             
+             <span *ngSwitchCase="'Inventory_ID'">
+              {{element.Name}}
              </span>
           
           <span *ngSwitchDefault>
             {{ element[col.key] }}
-            
           </span>
           <!-- <input type="hidden" [formControlName]="element.IsEdit" #isEdit /> -->
-         </div> 
+        </div>
         <div [ngSwitch]="col.type" *ngIf="!element.isDone">
          
           <!-- display2(element) -->
-          <mat-form-field *ngSwitchCase="'Product_ID'"  >
-            <mat-label>Select Product</mat-label>
-            <mat-select formControlName="Product_ID" >
-              <mat-option *ngFor="let product of dropDown" [value]="product.Product_ID">
-                {{product.Name}}
-              </mat-option>
-            </mat-select>
-            
-          </mat-form-field>
+          
+            <mat-form-field *ngSwitchCase="'Inventory_ID'" >
+                <mat-label>Select Inventory Item</mat-label>
+                <mat-select formControlName="Inventory_ID">
+                  <mat-option *ngFor="let inventory of dropDown" [value]="inventory.Inventory_ID">
+                    {{inventory.Name}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+          
           <div *ngSwitchCase="'isDelete'">
             <button *ngIf="edited" [disabled]="!form.valid" class="button-add-row" (click)="OnDone(rowIndex)" mat-button style="float: right;">Done</button>
               <button mat-button (click)="DeleteRow(rowIndex)" >Delete</button>
-             
             </div>
             <span *ngSwitchCase="'total'">
               {{CalculateTotal(rowIndex)}}
-             
              </span>
             <div *ngSwitchCase="'isDone'">
                  <input type="hidden">
-                
             </div>
-            <div *ngSwitchCase="'Quantity'">
-              <input [type]="col.type" matInput [formControlName]="col.key" step="1" />
-             
-         </div>
+  
   
            
           <mat-form-field *ngSwitchDefault>
             <input [type]="col.type" matInput [formControlName]="col.key" />
-            <td mat-footer-cell *matFooterCellDef> </td>
           </mat-form-field>
         </div>
        
@@ -103,3 +84,4 @@
   </table>
   <input *ngIf="dataSource.data.length > 0" style="width: 200px!important;" type="submit" value="SUBMIT" [disabled]="!form.valid ||edited==true">
   </form>
+

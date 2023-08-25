@@ -1,8 +1,8 @@
 export class Supplier{
 
-    SupplierID: any;
-    SupplierName?: string;
-    ContactName?: string;
-    Address?: string;
-    phone?: string;
+    supplier_ID: any;
+    name: any;
+    email: any;
+    address: any;
+    phone: any;
   }

@@ -1,24 +1,16 @@
-
-
-import { Component, Inject, OnInit } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { ViewChild } from '@angular/core';
-import { MatTable, MatTableDataSource } from '@angular/material/table';
+import { ChangeDetectorRef, Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { ProductService } from '../Services/product.service';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { MatTableDataSource } from '@angular/material/table';
 import { InventoryService } from '../Services/inventory.service';
-import { OrdersService } from '../Services/orders.service';
-import { ChangeDetectorRef } from '@angular/core';
-//import { SupplierOrder } from '../Models/SupplierOrder';
-//import { CustomerOrder } from '../Models/CustomerOrder';
+import { AddSupplierComponent } from '../add-supplier/add-supplier.component';
 
 @Component({
-  selector: 'app-add-customer-order',
-  templateUrl: './add-customer-order.component.html',
-  styleUrls: ['./add-customer-order.component.css']
+  selector: 'app-add-supplier-order',
+  templateUrl: './add-supplier-order.component.html',
+  styleUrls: ['./add-supplier-order.component.css']
 })
-export class AddCustomerOrderComponent implements OnInit {
-
+export class AddSupplierOrderComponent implements OnInit {
 
 
 
@@ -36,45 +28,45 @@ export class AddCustomerOrderComponent implements OnInit {
   globalArray:any
   selectedValue:any
 //@ViewChild(MatTable) myTable: MatTable<any>;
-  CustomercolumnsSchema = [
-    // {
-    //     key: "Customer_Order_ID",
-    //     type: "text",
-    //     label: "Product ID"
-    // },
-    {
-        key: "Product_ID",
-        type: "Product_ID", // maybe just enter in... maybe select...
-        label: "Product"
-    },
-    {
-        key: "Quantity",
-        type: "number",
-        label: "Quantity"
-    },
-    {
-     key:"Price",
-     type:"number",
-     label:"Price per unit (kg)"
+  // CustomercolumnsSchema = [
+  //   // {
+  //   //     key: "Customer_Order_ID",
+  //   //     type: "text",
+  //   //     label: "Product ID"
+  //   // },
+  //   {
+  //       key: "Product_ID",
+  //       type: "Product_ID", // maybe just enter in... maybe select...
+  //       label: "Product"
+  //   },
+  //   {
+  //       key: "Quantity",
+  //       type: "number",
+  //       label: "Quantity"
+  //   },
+  //   {
+  //    key:"Price",
+  //    type:"number",
+  //    label:"Price per unit (kg)"
 
-    },
-    {
-      key:"total",
-      type:"total",
-      label:"Total"
-    },
-    {
-        key: "isDone",
-        type: "isDone",
-        label: ""
-    },
-    {
-      key: "isDelete",
-      type: "isDelete",
-      label: ""
-  }
+  //   },
+  //   {
+  //     key:"total",
+  //     type:"total",
+  //     label:"Total"
+  //   },
+  //   {
+  //       key: "isDone",
+  //       type: "isDone",
+  //       label: ""
+  //   },
+  //   {
+  //     key: "isDelete",
+  //     type: "isDelete",
+  //     label: ""
+  // }
 
-  ]
+  //]
   SuppliercolumnsSchema = [
     // {
     //     key: "Id",
@@ -96,7 +88,11 @@ export class AddCustomerOrderComponent implements OnInit {
      label:"Price per unit (kg)"
 
     },
-
+    {
+      key:"total",
+      type: "total",
+      label:"Total"
+    },
     {
         key: "isDone",
         type: "isDone",
@@ -106,10 +102,6 @@ export class AddCustomerOrderComponent implements OnInit {
       key: "isDelete",
       type: "isDelete",
       label: ""
-  },   {
-    key:"total",
-    type: "total",
-    label:"Total"
   }
 
   ]
@@ -127,35 +119,35 @@ export class AddCustomerOrderComponent implements OnInit {
     { id: 2, title: 'title 2' },
   ]
   
-  products:any = [{
-    Product_ID: '1',
+  inventories:any = [{
+    Inventory_ID: '1',
     Name: 'Beef',
   },{
-    Product_ID: '2',
+    Inventory_ID: '2',
     Name: 'Chicken',
   },
   {
-    Product_ID: '3',
+    Inventory_ID: '3',
     Name: 'Cheese',
   },
   {
-    Product_ID: '4',
+    Inventory_ID: '4',
     Name: 'Meat',
   }
 ]
 
 dropDown:any= [{
-  Product_ID: '1',
+  Inventory_ID: '1',
   Name: 'Beef',
 },{
-  Product_ID: '2',
+  Inventory_ID: '2',
   Name: 'Chicken',
 },  {
-  Product_ID: '3',
+  Inventory_ID: '3',
   Name: 'Cheese',
 },
 {
-  Product_ID: '4',
+  Inventory_ID: '4',
   Name: 'Meat',
 }
 ] // populate from API call not from products
@@ -164,20 +156,22 @@ dropDown:any= [{
 
 
   //formArr:FormArray<any> = new FormArray<any>([])
-  constructor(public dialogRef: MatDialogRef<AddCustomerOrderComponent>,
+  constructor(public dialogRef: MatDialogRef<AddSupplierComponent>,
   @Inject(MAT_DIALOG_DATA) public data: any,private formBuilder:FormBuilder,
-  private productService:ProductService,private inventoryService:InventoryService,
-  public orderService:OrdersService,public cdr:ChangeDetectorRef) {
+  private inventoryService:InventoryService,
+  public cdr:ChangeDetectorRef) {
     this.tableForm = this.formBuilder.group({
       arrayForm: this.formBuilder.array(this.results.map(r => this.formBuilder.group(r)))
     });
     
-      this.columnsSchema = this.CustomercolumnsSchema
-      this.displayedColumns = this.CustomercolumnsSchema.map((col) => col.key);
-    
+      this.columnsSchema = this.SuppliercolumnsSchema
+      this.displayedColumns = this.SuppliercolumnsSchema.map((col) => col.key);
+      console.log(this.dropDown)
+      console.log(this.inventories)
+      console.log(typeof(this.dropDown))
       // getSuppliers
-      
-      this.title = data.customer_FirstName + " "+ data.customer_Surname
+      console.log(data)
+      this.title = data.name
       // this.productService.getProductList().subscribe((res:any)=>{
       //   //this.products = res
       // })
@@ -192,17 +186,18 @@ dropDown:any= [{
   
   
   disp(value:any){
-   
+    console.log(value)
   }
 
   addRow(){
     this.edited = true
     const control =  this.form.get('records') as FormArray; 
       
-    control.push(this.initiateProductForm());
+    control.push(this.initiateInventoryForm());
 
     this.dataSource = new MatTableDataSource((this.form.get('records') as FormArray).value);
-
+console.log((this.form.get('records') as FormArray).value)
+console.log(this.dropDown)
 
   
     
@@ -211,11 +206,11 @@ dropDown:any= [{
         this.edited = true
         let val = (this.form.get('records') as FormArray).controls[rowIndex].get('isDone')?.setValue(false)
         const control =  this.form.get('records') as FormArray;
-     
+        console.log(control.value)
         this.rowIndexTemplate = rowIndex
-        let Product_ID =(this.form.get('records') as FormArray).controls[rowIndex].get('Product_ID')?.value
-        let productIndex = this.products.findIndex((item:any) => item.Product_ID == Product_ID)
-        this.dropDown.push(this.products[productIndex])
+        let Inventory_ID =(this.form.get('records') as FormArray).controls[rowIndex].get('Inventory_ID')?.value
+        let inventoryIndex = this.inventories.findIndex((item:any) => item.Inventory_ID == Inventory_ID)
+        this.dropDown.push(this.inventories[inventoryIndex])
        
        
        
@@ -231,30 +226,42 @@ dropDown:any= [{
         isDelete: new FormControl("")
         });
       }
+      initiateInventoryForm(): FormGroup {
+        return this.formBuilder.group({
+            Inventory_ID:new FormControl("", Validators.required),
+            Name: new FormControl("", ),
+            Quantity: new FormControl("", Validators.required),
+            Price: new FormControl("",Validators.required),
+            isDone: new FormControl(false),   // closest form group id then set it in form...
+            isDelete: new FormControl("")
+          
+        });
+      }
    
       DeleteRow(rowIndex: number) {
         //.edited = false
-       
+        console.log(rowIndex)
         if(this.dataSource.data.length==0){
           this.edited = false
         }
         if((this.form.get('records') as FormArray).controls[rowIndex].get('isDone')?.value == false){
           this.edited = false
         }else{
-          let Product_ID =(this.form.get('records') as FormArray).controls[rowIndex].get('Product_ID')?.value
-          let productIndex = this.products.findIndex((item:any) => item.Product_ID == Product_ID)
+          let Inventory_ID =(this.form.get('records') as FormArray).controls[rowIndex].get('Inventory_ID')?.value
+          let inventoryIndex = this.inventories.findIndex((item:any) => item.Inventory_ID == Inventory_ID)
          
-          this.dropDown.push(this.products[productIndex])
+          this.dropDown.push(this.inventories[inventoryIndex])
         
         }
         const control =  this.form.get('records') as FormArray;
 
         control.removeAt(rowIndex);
         this.dataSource = new MatTableDataSource((this.form.get('records') as FormArray).value);
-       
+        console.log(this.dataSource.data)
+        console.log(control.value)
         this.dataSource._updateChangeSubscription()
         this.cdr.detectChanges()
-       
+        console.log(control.value)
         this.myTable.renderRows()
       }
       CalculateTotal(rowIndex:any){
@@ -265,6 +272,14 @@ dropDown:any= [{
           return quantity*price
         }
        return 
+      }
+     
+  ngOnInit() {
+    this.form = this.formBuilder.group({
+      'records': this.formBuilder.array([])
+    
+      })
+      
       }
       CalculateSubTotal(){
         console.log("sub total")
@@ -279,41 +294,34 @@ dropDown:any= [{
        }
        return total
       }
-     
-  ngOnInit() {
-    this.form = this.formBuilder.group({
-      'records': this.formBuilder.array([])
-    
-      })
-      
-      }
     
     
     OnDone(rowIndex:any){
       this.edited = false
-     
+     console.log(rowIndex)
       let formArr = this.form.get('records') as FormArray
-      
+      console.log(formArr.value)
       let element = formArr.controls[rowIndex].value
-      let Product_ID =(this.form.get('records') as FormArray).controls[rowIndex].get('Product_ID')?.value
-      let productIndex = this.products.findIndex((item:any) => item.Product_ID == Product_ID)
+      let Inventory_ID =(this.form.get('records') as FormArray).controls[rowIndex].get('Inventory_ID')?.value
+      let inventoryIndex= this.inventories.findIndex((item:any) => item.Inventory_ID == Inventory_ID)
       // setting based on product index and not on product ID.
-      formArr.controls[rowIndex].get("Product_Name")?.setValue(this.products[productIndex].Name)
-     
+      formArr.controls[rowIndex].get("Name")?.setValue(this.inventories[inventoryIndex].Name)
+      console.log(formArr.controls[rowIndex].get("Name")?.value)
       let val = formArr.controls[rowIndex].get('isDone')?.setValue(true)
       
-      let index = this.dropDown.findIndex((item:any) => item.Product_ID == element.Product_ID)
+      let index = this.dropDown.findIndex((item:any) => item.Inventory_ID == element.Inventory_ID)
       this.dropDown.splice(index,1)
-     
+      console.log(this.dropDown)
       this.dataSource = new MatTableDataSource((this.form.get('records') as FormArray).value);
      
      
      // let prodct_Name = this.products[index].Name
-     
+      //console.log(prodct_Name)
       this.dataSource._updateChangeSubscription()
     }
  
  
 
-  }
+  
 
+}

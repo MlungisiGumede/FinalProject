@@ -4,6 +4,9 @@ import { SupplierService } from '../Services/supplier.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LoginService } from '../Services/login.service';
 import { IonicModule, ToastController } from '@ionic/angular';
+import { MatDialog } from '@angular/material/dialog';
+import { AddSupplierComponent } from '../add-supplier/add-supplier.component';
+import { AddSupplierOrderComponent } from '../add-supplier-order/add-supplier-order.component';
 
 var pdfMake = require('pdfmake/build/pdfmake');
 var pdfFonts = require('pdfmake/build/vfs_fonts');
@@ -24,7 +27,10 @@ export class SuppliersComponent implements OnInit {
   filterTerm!: string;
   
 
-  constructor(private supply: SupplierService,public router: Router,private route: ActivatedRoute,private logged: LoginService,private toastController: ToastController) { 
+  constructor(private supply: SupplierService,public router: Router,private route: ActivatedRoute,private logged: LoginService,private toastController: ToastController
+    ,private matDialog: MatDialog) {
+      
+    
 
     supply = {} as SupplierService;
   }
@@ -34,6 +40,11 @@ export class SuppliersComponent implements OnInit {
   this.getall();
 
   }
+SupplierOrder(item:any){
+const dialog = this.matDialog.open(AddSupplierOrderComponent, {
+  data:item.name
+})
+}
 
 
 
@@ -48,10 +59,10 @@ export class SuppliersComponent implements OnInit {
 
 
 
-  addsupplier(){
+  AddSupplier(){
   
-
-      this.router.navigate(['/AddProduct']);
+const dialog = this.matDialog.open(AddSupplierComponent);
+     
   
     }
 

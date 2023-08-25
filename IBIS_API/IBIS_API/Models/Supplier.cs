@@ -10,21 +10,21 @@ namespace IBIS_API.Models
 
         [Key]
         public int Supplier_ID { get; set; }
-        public string? postalcode { get; set; }
-        public string? addressline { get; set; }
+        public string? Email { get; set; }
+       // public string? addressline { get; set; }
 
-        public int address { get; set; }
-        public string? CompanyName { get; set; }
+        public string? Address { get; set; }
+        public string? Name { get; set; }
         //[Address] varchar(255),
-        public string? City { get; set; }
-        public string? Region { get; set; }
-        public string? Country { get; set; }
+       // public string? City { get; set; }
+        //public string? Region { get; set; }
+      //  public string? Country { get; set; }
         public string? Phone { get; set; }
 
-        public string? Supplier_Order_Id { get; set; }
-        public string? Inventory_Item_Id { get; set; }
-        public int? Quantity { get; set; }
-        public string? Order_Status { get; set; }
+       // public string? Supplier_Order_Id { get; set; }
+       // public string? Inventory_Item_Id { get; set; }
+       
+      //  public string? Order_Status { get; set; }
 
 
 

@@ -162,18 +162,10 @@ namespace IBIS_API.Migrations
                 {
                     Supplier_ID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    postalcode = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    addressline = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    address = table.Column<int>(type: "int", nullable: false),
-                    CompanyName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    City = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Region = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Country = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Phone = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Supplier_Order_Id = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Inventory_Item_Id = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Quantity = table.Column<int>(type: "int", nullable: true),
-                    Order_Status = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Address = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Phone = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {

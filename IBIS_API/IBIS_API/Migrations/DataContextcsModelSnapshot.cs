@@ -275,40 +275,16 @@ namespace IBIS_API.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Supplier_ID"));
 
-                    b.Property<string>("City")
+                    b.Property<string>("Address")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("CompanyName")
+                    b.Property<string>("Email")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Country")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Inventory_Item_Id")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Order_Status")
+                    b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Phone")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("Quantity")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Region")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Supplier_Order_Id")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("address")
-                        .HasColumnType("int");
-
-                    b.Property<string>("addressline")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("postalcode")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Supplier_ID");

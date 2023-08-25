@@ -3,6 +3,8 @@ import { Supplier } from '../Models/Supplier';
 import { SupplierService } from '../Services/supplier.service';
 import { Router } from '@angular/router';
 import { ToastController } from '@ionic/angular';
+import { MatDialogRef } from '@angular/material/dialog';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-add-supplier',
@@ -12,20 +14,31 @@ import { ToastController } from '@ionic/angular';
 export class AddSupplierComponent implements OnInit {
   data: any;
   sup!: Supplier;
-  constructor(private supply: SupplierService,public router:Router,private toastController: ToastController) { 
+  form!:FormGroup
+  constructor(private supply: SupplierService,public router:Router,private toastController: ToastController
+    ,public matDialogRef:MatDialogRef<AddSupplierComponent>) { 
 
 this.data = new Supplier();
 
   }
 
   ngOnInit(): void {
-
+  this.form = new FormGroup({
+    name: new FormControl('', Validators.required),
+    address: new FormControl('', Validators.required),
+    phone: new FormControl('', [Validators.minLength(10),Validators.maxLength(10),Validators.pattern("^[0-9]*$")]),
+    email: new FormControl('', Validators.email),
+  })
   }
 
 
 createSupplier(){
-
-this.supply.createSupplier(this.data).subscribe(res=>{
+let supplier = new Supplier()
+supplier.name = this.form.controls['name'].value
+supplier.address = this.form.controls['address'].value
+supplier.phone = this.form.controls['phone'].value
+supplier.email = this.form.controls['email'].value
+this.supply.createSupplier(supplier).subscribe(res=>{
 console.log("success", res);
 this.presentToast('top')
 this.router.navigate(["/Suppliers"])

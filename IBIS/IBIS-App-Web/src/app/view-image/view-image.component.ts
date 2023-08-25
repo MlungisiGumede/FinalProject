@@ -13,7 +13,7 @@ imageDisplay:any
 
   ngOnInit(): void {
     console.log(this.image)
-  this.imageDisplay = this.image[0].image
+  this.imageDisplay = this.image.image
   console.log(this.imageDisplay)
   }
 

@@ -40,6 +40,7 @@ export class SupplierService {
       
       
        createSupplier(sup: Supplier){
+        console.log(sup)
         return this.httpClient.post(this.apiUrl , sup, this.httpOptions)
       }
   
