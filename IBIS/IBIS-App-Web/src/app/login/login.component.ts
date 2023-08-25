@@ -40,20 +40,14 @@ this.loginservice.setlogin(true)
 let val = this.loginForm.value
 console.log(val)
   //this.presentToast('top')
+  let user = new User()
+  user.username = this.loginForm.controls['username'].value
+  user.password = this.loginForm.controls['password'].value
   let username = this.loginForm.controls['username'].value
-  console.log(username)
-    this.loginservice.login(val).subscribe({
-      next: (res)=>{
-        //this.presentToast('top')
-        //alert(res.message)
-        console.log(res)
-        localStorage.setItem('Token', JSON.stringify(res))
-
-        console.log(localStorage.getItem('Token'))
-       
-       
-        //this.loginForm.reset();
-       
+  //user.password = this.loginForm.controls['password'].value
+  
+    this.loginservice.login(user).subscribe({
+      next: ()=>{
         console.log(this.name)
         this.router.navigate(['/otp',username]);
       },

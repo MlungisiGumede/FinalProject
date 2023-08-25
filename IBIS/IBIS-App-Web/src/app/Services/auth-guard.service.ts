@@ -19,12 +19,7 @@ return new Promise((resolve, reject) => {
   if(path=="Login" || path==""){ // only login when otp complete.
     this.authenticationService.Authenticate().then((success) => {
      console.log("Login Authenticate success")
-     if(localStorage.getItem('OTP') == 'null' || localStorage.getItem('OTP') == null){
-       this._router.navigate(['/otp'])
-       
       // check OTP token... then for other routes check OTP token... when deny if OTP token remove.
-   }
-   
    this._router.navigate(['/home'])
    resolve(false)
  }, (error) => {
@@ -35,14 +30,26 @@ return new Promise((resolve, reject) => {
      // just reject in promise method...
    }
       
-   )}else{
+   )}   else if(path?.startsWith("otp")){
+    console.log(this._router.url) // when from Login then /Login when from url then just /    ...
+    if(this._router.url=="/"){ // navigate fron elsewhere...
+      this.authenticationService.Authenticate().then((success) => {
+        this._router.navigate(['/home'])
+        resolve(false)
+         // check OTP token... then for other routes check OTP token... when deny if OTP token remove.
+      }, (error) => {
+        this._router.navigate(['/Login'])
+        resolve(false)
+      })
+    }else{
+      resolve(true)
+    }    
+    
+}else{
+  console.log("hitting home")
      this.authenticationService.Authenticate().then((success) => {
        
-       if(localStorage.getItem('OTP') == 'null' || localStorage.getItem('OTP') == null){
-         this._router.navigate(['/otp'])
-        // check OTP token... then for other routes check OTP token... when deny if OTP token remove.
-        
-     }
+     
      resolve(true)
      }, (error) => {
       
@@ -53,31 +60,7 @@ return new Promise((resolve, reject) => {
         
     )
    }
-   if(path=="otp"){
-    
-    this.authenticationService.Authenticate().then((success) => {
-      console.log(localStorage.getItem('OTP'))
-      if(localStorage.getItem('OTP') == 'null' || localStorage.getItem('OTP') == null){
-        resolve(true)
-       // check OTP token... then for other routes check OTP token... when deny if OTP token remove.
-       
-    }else{
-      this._router.navigateByUrl('/home').then(() => {
-        resolve(false)
-      })
-      
-     
-    }
-   
-    }, (error) => {
-      console.log("why though")
-     this._router.navigate(['/Login'])
-  // interceptor returns to login.
-  resolve(false)
-    }
-       
-    )
-}
+
   })
    }
 

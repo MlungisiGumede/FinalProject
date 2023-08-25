@@ -85,9 +85,9 @@ namespace IBIS_API.Controllers
         }
 
         [HttpGet]
-        [Route("Authenticate")]
+        [Route("CheckAuthentication")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        public async Task<ActionResult> Authenticate()
+        public async Task<ActionResult> CheckAuthentication()
         {
             return Ok();
         }
@@ -165,6 +165,22 @@ namespace IBIS_API.Controllers
 
 
         }
+        [HttpPost]
+        [Route("Authenticate")]
+        public async Task<ActionResult> Authenticate(User_Account uvm)
+        {
+            var user = await _userManager.FindByNameAsync(uvm.Username);
+            try
+            {
+                //var principal = await _claimsPrincipalFactory.CreateAsync(user);
+                //await HttpContext.SignInAsync(IdentityConstants.ApplicationScheme, principal);
+                return GenerateJWTToken(user);
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Internal Server Error. Please contact support.");
+            }
+        }
 
         [HttpPost]
         [Route("Login")]
@@ -174,16 +190,7 @@ namespace IBIS_API.Controllers
 
             if (user != null && await _userManager.CheckPasswordAsync(user, uvm.Password))
             {
-                try
-                {
-                    //var principal = await _claimsPrincipalFactory.CreateAsync(user);
-                    //await HttpContext.SignInAsync(IdentityConstants.ApplicationScheme, principal);
-                    return GenerateJWTToken(user);
-                }
-                catch (Exception)
-                {
-                    return StatusCode(StatusCodes.Status500InternalServerError, "Internal Server Error. Please contact support.");
-                }
+                return Ok();
             }
             else
             {

@@ -65,7 +65,7 @@ else {
     async Authenticate():Promise<any>{
       let bool = false
       let val = new Promise((resolve,reject) =>{
-     let req =  this.httpClient.get(`${this.apiUrl}Authenticate`,{observe: 'response'}).pipe(
+     let req =  this.httpClient.get(`${this.apiUrl}CheckAuthentication`,{observe: 'response'}).pipe(
         map((res) =>{
          
           resolve("success")

@@ -5,6 +5,7 @@ import { ToastController } from '@ionic/angular';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LoginService } from '../Services/login.service';
 import { ReactiveFormsModule } from '@angular/forms';
+import { AuthenticationService } from '../Services/authentication.service';
 
 @Component({
   selector: 'app-otp',
@@ -18,6 +19,8 @@ export class OtpComponent implements OnInit {
   otp :any;
   form!: FormGroup;
   username:any
+  user:User = new User()
+  
   constructor(private loginservice: LoginService,private fb: FormBuilder, private router: Router,private toastController: ToastController
     ,private ActivatedRoute: ActivatedRoute) { }
 
@@ -29,27 +32,22 @@ export class OtpComponent implements OnInit {
       
     })
     this.ActivatedRoute.params.subscribe(params => {
+      this.user.username = params['username']
       this.username = params['username']
-      console.log(params['username'])
-      console.log(params['username'])
+     // this.user.password = params['user'].password
+    
   })
-  console.log(this.username)
-  if(this.username==undefined){
-    this.BackToLogin()
-  }
+
   //console.log("after")
   
-    console.log(this.username) // check on refresh...
+    // check on refresh...
   }
   BackToLogin(){
     localStorage.removeItem('Token')
   this.router.navigate(['/Login'])
   }
   SendOTP(){
-    if(this.username==undefined){
-      this.BackToLogin()
-      
-    }else{
+   
     console.log("OTP method")
     this.loginservice.SendOTP(this.username).subscribe((res)=>{
      
@@ -65,15 +63,20 @@ export class OtpComponent implements OnInit {
   console.log("there is error")
 }
   }
-  }
   
   SubmitOTP(){
     console.log(this.form.value)
     let otp = this.form.controls['otp'].value
     if(otp==this.otp){
-      localStorage.setItem('OTP', this.otp)
+      console.log(this.user)
+      this.loginservice.Authenticate(this.user).subscribe((res)=>{
+        console.log(res)
+        localStorage.setItem('Token', JSON.stringify(res))
+        this.router.navigate(['/home'])
+      })
+      //localStorage.setItem('OTP', this.otp)
       console.log(localStorage.getItem('Token'))
-      this.router.navigate(['/home'])
+     
     }
     else{
       this.presentToast('top',"The OTP is Invalid",this.otp)
