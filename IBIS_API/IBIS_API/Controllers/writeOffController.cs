@@ -76,12 +76,12 @@ namespace IBIS_API.Controllers
         // POST: api/Addresses
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Write_Offs>> PostWriteOff(Write_Offs sup)
+        public async Task<ActionResult<Write_Offs>> PostWriteOff(Write_Offs writeOff)
         {
-            _context.Write_Offss.Add(sup);
+            _context.Write_Offss.Add(writeOff);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetwriteOff", new { id = sup.Write_Off_Id }, sup);
+            return CreatedAtAction("GetwriteOff", new { id = writeOff.Write_Off_Id }, writeOff);
         }
 
         // DELETE: api/Addresses/5

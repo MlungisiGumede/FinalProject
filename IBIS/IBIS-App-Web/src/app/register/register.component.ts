@@ -30,7 +30,10 @@ this.registerForm = this.fb.group({
 
 
   }
-
+BackToLogin(){
+  console.log("BackToLogin")
+  this.router.navigate(['/Login'])
+}
 
   onRegister(){
     this.register.Register(this.registerForm.value).subscribe(

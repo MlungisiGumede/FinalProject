@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace IBIS_API.Migrations
 {
     [DbContext(typeof(DataContextcs))]
-    [Migration("20230823172113_inital")]
-    partial class inital
+    [Migration("20230825112259_initial")]
+    partial class initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -350,18 +350,12 @@ namespace IBIS_API.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Write_Off_Id"));
 
                     b.Property<string>("Image")
-                        .HasColumnType("nvarchar(1)");
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Quantity_Written_Off")
+                    b.Property<string>("Quantity")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Reason")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("base64")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("item_name")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Write_Off_Id");

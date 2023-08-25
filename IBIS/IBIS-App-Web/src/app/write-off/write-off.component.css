@@ -40,6 +40,17 @@ background-color:#FAF244;
   .h{
     color: white;
       }
+  /* input[type="file"]::-webkit-file-upload-button{
+        margin-right: 20px;
+  border: none;
+  background: #084cdf;
+  padding: 10px 20px;
+  border-radius: 10px;
+  color: #fff;
+      } */
+      label{
+        cursor: pointer;
+      }
 
       .thead{
 

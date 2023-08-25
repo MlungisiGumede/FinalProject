@@ -4,9 +4,12 @@ import { MatSort } from '@angular/material/sort';
 import { DataSource } from '@angular/cdk/table';
 import { Product } from '../Models/Product';
 import { ProductService } from '../Services/product.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 import { WriteOffService } from '../Services/write-off.service';
+import { DomSanitizer } from '@angular/platform-browser';
+import { MatDialog } from '@angular/material/dialog';
+import { ViewImageComponent } from '../view-image/view-image.component';
 
 var pdfMake = require('pdfmake/build/pdfmake');
 var pdfFonts = require('pdfmake/build/vfs_fonts');
@@ -21,25 +24,74 @@ export class ViewWriteOffsComponent implements OnInit {
 
   data:any
   products: Product[] = [];
+  writeOffs: any;
   idtodelete :any;
   filterTerm!: string;
   
-  constructor(private writeOffService: WriteOffService,public router: Router) { 
+  constructor(private writeOffService: WriteOffService,public router: Router,private domSanitizer:DomSanitizer
+    ,private ActivatedRoute: ActivatedRoute,public matDialog: MatDialog) {
+      
+    
     writeOffService = {} as WriteOffService;
 
   }
 
   ngOnInit() {
-    this.getProducts()
+    this.ActivatedRoute.params.subscribe(params => {
+      console.log("on loaded page")
+      this.getWriteOffs()
+     // this.user.password = params['user'].password
+    
+  })
+    //this.getProducts()
   }
 
-  async getProducts(){
+  async getWriteOffs(){
     this.writeOffService.getWriteOffList().subscribe(response => {
       console.log(response);
       this.data = response;
     })
     
 
+  }
+  ViewImage(){
+const dialog = this.matDialog.open(ViewImageComponent, {
+  data:this.data,
+  height: '500px',
+  width: '500px',
+});
+  }
+
+  ReadWriteOffs(){
+    this.writeOffService.getWriteOffList().subscribe((result: any) => {
+  
+      result.forEach((element:any) => {
+        //console.log(element.image)
+         // check if this is fine else change it...
+        element.image = this.domSanitizer.bypassSecurityTrustUrl(element.image); // didnt assign element.image here...
+    
+        
+      });
+      
+      this.data = result;
+      console.log("dataSource")
+      // this.productObs = of(result)
+      // this.datasource = new MatTableDataSource(result);
+      // //this.datasource.data = [...result]
+      // this.datasource.paginator = this.paginator
+      // this.datasource._updateChangeSubscription()
+      // this.datasource.sortingDataAccessor
+      //this.cdf.detectChanges()
+      console.log("got it?")
+      //this.datasource = [...this.datasource];
+      //this.datasource = of(result) -- no errors here...
+      //this.datasource.paginator = this.paginator;
+      //this.cdf.detectChanges()
+     // this.matTable.
+    //this.filterArr = result
+      //this.productObs = of(this.products)
+    
+    })
   }
 
 
@@ -49,7 +101,7 @@ export class ViewWriteOffsComponent implements OnInit {
 this.writeOffService.delete(this.idtodelete).subscribe(Response => {
   console.log(Response);
   this.data = Response;
-this.getProducts();
+this.getWriteOffs();
 })
   }
 

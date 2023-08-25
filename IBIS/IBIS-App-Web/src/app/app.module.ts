@@ -55,6 +55,7 @@ import { AddCustomerOrderComponent } from './add-customer-order/add-customer-ord
 import { AuthenticationService } from './Services/authentication.service';
 import { OtpComponent } from './otp/otp.component';
 import { AuthGuardService } from './Services/auth-guard.service';
+import { ViewImageComponent } from './view-image/view-image.component';
 
 @NgModule({
   declarations: [
@@ -91,7 +92,8 @@ import { AuthGuardService } from './Services/auth-guard.service';
     ViewCustomerComponent,
     AddCustomerOrderComponent,
     WriteOffComponent,
-    OtpComponent
+    OtpComponent,
+    ViewImageComponent
   
   ],
   imports: [
@@ -103,24 +105,24 @@ import { AuthGuardService } from './Services/auth-guard.service';
       {path: '', redirectTo: '/Login', pathMatch: 'full'},
       {path: 'Login', component: LoginComponent, canActivate : [AuthGuardService] },
       {path: 'Register', component: RegisterComponent},
-      {path: 'view-supplier/:id', component: ViewSupplierComponent},
-      {path: 'add-supplier', component: AddSupplierComponent},
-      {path: 'add-product', component: AddProductComponent},
-      {path: 'view-product/:id', component: ViewProductComponent},
-      {path: 'viewUser', component: ViewUserComponent},
+      {path: 'view-supplier/:id', component: ViewSupplierComponent, canActivate : [AuthGuardService]},
+      {path: 'add-supplier', component: AddSupplierComponent, canActivate : [AuthGuardService]},
+      {path: 'add-product', component: AddProductComponent, canActivate : [AuthGuardService]},
+      {path: 'view-product/:id', component: ViewProductComponent, canActivate : [AuthGuardService]},
+      {path: 'viewUser', component: ViewUserComponent, canActivate : [AuthGuardService]},
       {path: 'newPassword', component: NewPasswordComponent},
-      {path: 'add-inventory-item', component: AddInventoryItemComponent},
-      {path: 'view-inventory-item/:id', component: ViewInventoryItemComponent},
-      {path: 'add-order', component: AddOrderComponent},
-      {path: 'view-order/:id', component: ViewOrderComponent},
-      {path: 'write-off/:id', component: WriteOffComponent},
+      {path: 'add-inventory-item', component: AddInventoryItemComponent, canActivate : [AuthGuardService]},
+      {path: 'view-inventory-item/:id', component: ViewInventoryItemComponent, canActivate : [AuthGuardService]},
+      {path: 'add-order', component: AddOrderComponent, canActivate : [AuthGuardService]},
+      {path: 'view-order/:id', component: ViewOrderComponent, canActivate : [AuthGuardService]},
+      {path: 'write-off/:id', component: WriteOffComponent, canActivate : [AuthGuardService]},
       {path: 'order-from-supplier/:id', component: OrderFromSupplierComponent},
       {path: 'Recipes', component: RecipesComponent, canActivate : [AuthGuardService]},
-      {path: 'create-recipe', component: CreateRecipeComponent},
-      {path: 'view-recipe/:id', component: ViewRecipeComponent},
-      {path: 'create-supplier-order/:id', component: CreateSupplierOrderComponent},
-      {path: 'create-customer-order', component: CustomerOrderComponent},
-      {path: 'view-write-off', component: ViewWriteOffsComponent},
+      {path: 'create-recipe', component: CreateRecipeComponent, canActivate : [AuthGuardService]},
+      {path: 'view-recipe/:id', component: ViewRecipeComponent, canActivate : [AuthGuardService]},
+      {path: 'create-supplier-order/:id', component: CreateSupplierOrderComponent, canActivate : [AuthGuardService]},
+      {path: 'create-customer-order', component: CustomerOrderComponent, canActivate : [AuthGuardService]},
+      {path: 'view-write-off', component: ViewWriteOffsComponent, canActivate : [AuthGuardService]},
       {path: 'Reports', component: ReportsComponent, canActivate : [AuthGuardService]},
       {path: 'Inventory', component: InventoryComponent, canActivate : [AuthGuardService]},
       {path: 'Orders', component: OrdersComponent, canActivate : [AuthGuardService]},
@@ -131,7 +133,8 @@ import { AuthGuardService } from './Services/auth-guard.service';
       {path: 'product-report', component: ProductReportComponent},
       {path: 'customer', component: CustomersComponent,canActivate : [AuthGuardService]},
       {path: 'otp', component: OtpComponent, canActivate : [AuthGuardService]},
-      {path: 'otp/:username', component: OtpComponent,canActivate : [AuthGuardService]}
+      {path: 'otp/:username', component: OtpComponent,canActivate : [AuthGuardService]},
+      {path:'view-write-off/:id',component:ViewWriteOffsComponent,canActivate : [AuthGuardService]},
 
 
 
@@ -159,7 +162,8 @@ import { AuthGuardService } from './Services/auth-guard.service';
     IonicModule.forRoot()
 
   ],
-  entryComponents: [AddCustomerComponent,ViewCustomerComponent,AddCustomerOrderComponent],
+  entryComponents: [AddCustomerComponent,ViewCustomerComponent,AddCustomerOrderComponent,
+  ViewImageComponent],
   providers: [{provide:HTTP_INTERCEPTORS,useClass:AuthenticationService,multi:true}
   ,AuthGuardService],
   bootstrap: [AppComponent]

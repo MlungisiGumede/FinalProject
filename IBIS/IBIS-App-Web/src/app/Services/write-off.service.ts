@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpErrorResponse} from '@angular/common/http';
 import { Observable, catchError, retry, throwError } from 'rxjs';
 import { Supplier } from '../Models/Supplier';
-import { writeOff } from '../Models/writeOff';
+import { WriteOff } from '../Models/writeOff';
 
 
 @Injectable({
@@ -40,33 +40,34 @@ export class WriteOffService {
       
       
       
-       createWriteOff(sup: writeOff){
-        return this.httpClient.post(this.apiUrl , sup, this.httpOptions)
+       createWriteOff(writeOff: WriteOff){
+        console.log(writeOff)
+        return this.httpClient.post(this.apiUrl , writeOff, this.httpOptions)
       }
   
     
     
-       getWriteOffList(): Observable<writeOff> {
+       getWriteOffList(): Observable<WriteOff> {
          return this.httpClient
-         .get<writeOff>(this.apiUrl + 'getAll')
+         .get<WriteOff>(this.apiUrl + 'getAll')
            .pipe(
              retry(2),
              catchError(this.handleError)
            )
        }
     
-       getwriteOff(id: any): Observable<writeOff> {
+       getwriteOff(id: any): Observable<WriteOff> {
          return this.httpClient
-           .get<writeOff>(this.apiUrl  + id)
+           .get<WriteOff>(this.apiUrl  + id)
            .pipe(
              retry(2),
              catchError(this.handleError)
            )
        }
       
-       updateWriteOff(id: any, data: any): Observable<writeOff> {
+       updateWriteOff(id: any, data: any): Observable<WriteOff> {
          return this.httpClient
-           .put<writeOff>(this.apiUrl + id, data, this.httpOptions)
+           .put<WriteOff>(this.apiUrl + id, data, this.httpOptions)
            .pipe(
              retry(2),
              catchError(this.handleError)
@@ -74,7 +75,7 @@ export class WriteOffService {
        }
 
        delete(id:number){
-        return this.httpClient.delete<writeOff>(`${this.apiUrl}${id}` , this.httpOptions);
+        return this.httpClient.delete<WriteOff>(`${this.apiUrl}${id}` , this.httpOptions);
      }
       
     
