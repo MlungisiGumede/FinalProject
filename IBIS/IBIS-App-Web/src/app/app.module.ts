@@ -57,6 +57,8 @@ import { OtpComponent } from './otp/otp.component';
 import { AuthGuardService } from './Services/auth-guard.service';
 import { ViewImageComponent } from './view-image/view-image.component';
 import { AddSupplierOrderComponent } from './add-supplier-order/add-supplier-order.component';
+import { ViewCustomerOrderComponent } from './view-customer-order/view-customer-order.component';
+import { ViewSupplierOrderComponent } from './view-supplier-order/view-supplier-order.component';
 
 @NgModule({
   declarations: [
@@ -95,7 +97,9 @@ import { AddSupplierOrderComponent } from './add-supplier-order/add-supplier-ord
     WriteOffComponent,
     OtpComponent,
     ViewImageComponent,
-    AddSupplierOrderComponent
+    AddSupplierOrderComponent,
+    ViewCustomerOrderComponent,
+    ViewSupplierOrderComponent
   
   ],
   imports: [
@@ -165,7 +169,7 @@ import { AddSupplierOrderComponent } from './add-supplier-order/add-supplier-ord
 
   ],
   entryComponents: [AddCustomerComponent,ViewCustomerComponent,AddCustomerOrderComponent,
-  ViewImageComponent,AddSupplierComponent],
+  ViewImageComponent,AddSupplierComponent,ViewCustomerOrderComponent,ViewSupplierOrderComponent],
   providers: [{provide:HTTP_INTERCEPTORS,useClass:AuthenticationService,multi:true}
   ,AuthGuardService],
   bootstrap: [AppComponent]

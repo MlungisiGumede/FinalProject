@@ -4,6 +4,11 @@ import { Orders } from '../Models/Orders';
 import { Router } from '@angular/router';
 import { OrdersService } from '../Services/orders.service';
 import { SupplierService } from '../Services/supplier.service';
+import { CustomerOrder } from '../Models/CustomerOrder';
+import { SupplierOrder } from '../Models/SupplierOrder';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { ViewSupplierOrderComponent } from '../view-supplier-order/view-supplier-order.component';
+import { ViewCustomerOrderComponent } from '../view-customer-order/view-customer-order.component';
 var pdfMake = require('pdfmake/build/pdfmake');
 var pdfFonts = require('pdfmake/build/vfs_fonts');
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
@@ -19,19 +24,47 @@ export class OrdersComponent implements OnInit {
   ord: Orders[] = [];
   idtodelete :any;
   filterTerm!: string;
+   CustomerOrders:CustomerOrder[]=[
+    {
+      customerOrder_ID: '1',
+      customer_ID: '1',
+      Date_Created: '1'
+    },
+    {
+      customerOrder_ID: '2',
+      customer_ID: '2',
+      Date_Created: '2'
+    }
+   ];
+   supplierOrders:SupplierOrder[]=[
+    {
+      supplierOrder_ID: '1',
+      supplier_ID: '1',
+      Date_Created: '1'
+    },{
+      supplierOrder_ID: '2',
+      supplier_ID: '2',
+      Date_Created: '2'
+    }
+   ];
+   
 
-  constructor(public router: Router, private orderservice : OrdersService) { }
+  constructor(public router: Router, private orderservice : OrdersService,
+    private matDialog: MatDialog) { 
+      this.data = this.supplierOrders
+    }
 
   ngOnInit(): void {
-    this.getOrders()
+    //this.getOrders()
+  
   }
 
   getOrders(){
-    this.orderservice.getOrderList().subscribe(response => {
-      console.log(response);
-      this.data = response;
-    })
-    
+    // this.orderservice.getOrderList().subscribe(response => {
+    //   console.log(response);
+    //   this.data = response;
+    // })
+   
 
   }
 
@@ -41,7 +74,7 @@ export class OrdersComponent implements OnInit {
 
     this.orderservice.delete(this.idtodelete).subscribe(Response => {
       console.log(Response);
-      this.data = Response;
+      //this.data = Response;
       this.getOrders();
     })
   }
@@ -52,6 +85,16 @@ export class OrdersComponent implements OnInit {
 
     this.router.navigate(['/add-order']);
 
+  }
+  ViewSupplierOrder(element:any){
+    this.matDialog.open(ViewSupplierOrderComponent, {
+      data:element
+    })
+  }
+  ViewCustomerOrder(element:any){
+    this.matDialog.open(ViewCustomerOrderComponent, {
+      data:element
+    })
   }
 
 

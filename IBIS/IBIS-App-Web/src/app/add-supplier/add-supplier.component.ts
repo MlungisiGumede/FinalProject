@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { ToastController } from '@ionic/angular';
 import { MatDialogRef } from '@angular/material/dialog';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { AddSupplierOrderComponent } from '../add-supplier-order/add-supplier-order.component';
 
 @Component({
   selector: 'app-add-supplier',
@@ -16,7 +17,7 @@ export class AddSupplierComponent implements OnInit {
   sup!: Supplier;
   form!:FormGroup
   constructor(private supply: SupplierService,public router:Router,private toastController: ToastController
-    ,public matDialogRef:MatDialogRef<AddSupplierComponent>) { 
+    ,public matDialogRef:MatDialogRef<AddSupplierOrderComponent>) { 
 
 this.data = new Supplier();
 
