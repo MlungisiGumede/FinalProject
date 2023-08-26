@@ -138,7 +138,7 @@ import { ViewSupplierOrderComponent } from './view-supplier-order/view-supplier-
       {path: 'home', component:HomeComponent, canActivate : [AuthGuardService]},
       {path: 'product-report', component: ProductReportComponent},
       {path: 'customer', component: CustomersComponent,canActivate : [AuthGuardService]},
-      {path: 'otp', component: OtpComponent, canActivate : [AuthGuardService]},
+    {path: 'otp', component: OtpComponent/*, canActivate : [AuthGuardService]*/},
       {path: 'otp/:username', component: OtpComponent,canActivate : [AuthGuardService]},
       {path:'view-write-off/:id',component:ViewWriteOffsComponent,canActivate : [AuthGuardService]},
 

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { User } from '../Models/User';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { ToastController } from '@ionic/angular';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LoginService } from '../Services/login.service';
@@ -17,7 +17,7 @@ export class OtpComponent implements OnInit {
   data: any;
   users : User[]=[];
   otp :any;
-  form!: FormGroup;
+  otpForm!: FormGroup;
   username:any
   user:User = new User()
   
@@ -26,9 +26,9 @@ export class OtpComponent implements OnInit {
 
   ngOnInit(): void {
 
-    this.form = this.fb.group({
+    this.otpForm = this.fb.group({
 
-      otp : ['', Validators.required]
+      otp : ['', [Validators.required, this.otpValidator.bind(this)]]
       
     })
     this.ActivatedRoute.params.subscribe(params => {
@@ -42,6 +42,15 @@ export class OtpComponent implements OnInit {
   
     // check on refresh...
   }
+
+  otpValidator(control: FormControl): { [key: string]: boolean } | null {
+    const value = control.value;
+    if (value && (isNaN(value) || value.toString().length !== 6)) {
+      return { 'invalidOTP': true };
+    }
+    return null;
+  }
+
   BackToLogin(){
     localStorage.removeItem('Token')
   this.router.navigate(['/Login'])
@@ -65,8 +74,8 @@ export class OtpComponent implements OnInit {
   }
   
   SubmitOTP(){
-    console.log(this.form.value)
-    let otp = this.form.controls['otp'].value
+    console.log(this.otpForm.value)
+    let otp = this.otpForm.controls['otp'].value
     if(otp==this.otp){
       console.log(this.user)
       this.loginservice.Authenticate(this.user).subscribe((res)=>{
