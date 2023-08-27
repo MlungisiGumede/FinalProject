@@ -1,10 +1,18 @@
-<div class="otp-page">
-    <form [formGroup]="form" class="otp-form">
-        <button (click)="BackToLogin()">Back to Log In</button>
-        <h1>A one-time-pin (OTP) has been sent to you. Enter the OTP in the field below.</h1>
-        <input formControlName="otp" type="text" placeholder="XXXX" />
-        <button (click)="SendOTP()" >Send pin</button>
-        <button [disabled]="!form.valid" (click)="SubmitOTP()">Submit</button>
-        
-    </form>
-</div>
+<body>
+    <div class="otp-page">
+        <form [formGroup]="otpForm" class="otp-form">
+            <ion-button fill="clear" (click)="BackToLogin()">Back to Login</ion-button>
+            <h2>A one-time-pin (OTP) has been sent to you.</h2>
+            <h3>Enter the OTP in the field below.</h3>
+            <ion-input formControlName="otp" type="text" placeholder="XXXX" clearInput autocorrect="off" debounce="500"></ion-input>
+            <ion-note class="error-message" *ngIf="otpForm.get('otp')?.hasError('invalidOTP') && otpForm.get('otp')?.touched">
+                Please enter a valid 6-digit OTP.
+            </ion-note>
+            <div>
+                <ion-button class="light-Btn" (click)="SendOTP()">Send pin</ion-button>
+                <ion-button class="green-Btn" (click)="SubmitOTP()" [disabled]="!otpForm.valid">Submit</ion-button>
+            </div>
+            
+        </form>
+    </div>
+</body>

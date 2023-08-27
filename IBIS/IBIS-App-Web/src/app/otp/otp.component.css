@@ -80,6 +80,26 @@ color: lightblue;
     border-left: 5px solid #a94442; 
   } */ */
 
+  .backToLogin {
+    color:crimson;
+    border-radius: 2px;
+  }
+  .light-Btn{
+    --background: #FFD700;
+    --border-radius: 10em;
+    display: inline-block;
+  }
+
+  .green-Btn{
+    --background: #5CB85C;
+    --border-radius: 10em;
+  }
+
+  .error-message {
+    color: red;
+    font-size: 12px;
+    margin-top: 5px;
+  }
 
   .otp-page {
     display: flex;
