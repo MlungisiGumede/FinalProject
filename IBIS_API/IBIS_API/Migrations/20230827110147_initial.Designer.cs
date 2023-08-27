@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace IBIS_API.Migrations
 {
     [DbContext(typeof(DataContextcs))]
-    [Migration("20230825163902_initial")]
+    [Migration("20230827110147_initial")]
     partial class initial
     {
         /// <inheritdoc />
@@ -137,6 +137,53 @@ namespace IBIS_API.Migrations
                     b.ToTable("Customers");
                 });
 
+            modelBuilder.Entity("IBIS_API.Models.CustomerOrder", b =>
+                {
+                    b.Property<int?>("CustomerOrder_ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int?>("CustomerOrder_ID"));
+
+                    b.Property<int?>("Customer_ID")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Date_Created")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("OrderStatus_ID")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("CustomerOrder_ID");
+
+                    b.ToTable("CustomerOrders");
+                });
+
+            modelBuilder.Entity("IBIS_API.Models.CustomerOrderLine", b =>
+                {
+                    b.Property<int>("CustomerOrderLine_ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CustomerOrderLine_ID"));
+
+                    b.Property<int?>("Customer_Order_ID")
+                        .HasColumnType("int");
+
+                    b.Property<double>("Price")
+                        .HasColumnType("float");
+
+                    b.Property<int?>("Product_ID")
+                        .HasColumnType("int");
+
+                    b.Property<double>("Quantity")
+                        .HasColumnType("float");
+
+                    b.HasKey("CustomerOrderLine_ID");
+
+                    b.ToTable("CustomerOrdersLine");
+                });
+
             modelBuilder.Entity("IBIS_API.Models.Inventory", b =>
                 {
                     b.Property<int>("Inventory_ID")
@@ -196,6 +243,22 @@ namespace IBIS_API.Migrations
                     b.ToTable("Orders");
                 });
 
+            modelBuilder.Entity("IBIS_API.Models.OrderStatus", b =>
+                {
+                    b.Property<int?>("OrderStatus_ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int?>("OrderStatus_ID"));
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("OrderStatus_ID");
+
+                    b.ToTable("OrderStatusList");
+                });
+
             modelBuilder.Entity("IBIS_API.Models.Product", b =>
                 {
                     b.Property<int>("Product_ID")
@@ -210,31 +273,16 @@ namespace IBIS_API.Migrations
                     b.Property<string>("Expiry")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Image")
+                    b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("Price")
                         .HasColumnType("int");
 
-                    b.Property<string>("Product_Name")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<int?>("Quantity")
                         .HasColumnType("int");
 
-                    b.Property<string>("Quantity_Written_Off")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Reason")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Subcategory")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("Write_Off_Id")
-                        .HasColumnType("int");
-
-                    b.Property<string>("item_name")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Product_ID");
@@ -293,6 +341,53 @@ namespace IBIS_API.Migrations
                     b.HasKey("Supplier_ID");
 
                     b.ToTable("Suppliers");
+                });
+
+            modelBuilder.Entity("IBIS_API.Models.SupplierOrder", b =>
+                {
+                    b.Property<int?>("SupplierOrder_ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int?>("SupplierOrder_ID"));
+
+                    b.Property<string>("Date_Created")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("OrderStatus_ID")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("Supplier_ID")
+                        .HasColumnType("int");
+
+                    b.HasKey("SupplierOrder_ID");
+
+                    b.ToTable("Supplier_Orders");
+                });
+
+            modelBuilder.Entity("IBIS_API.Models.SupplierOrderLine", b =>
+                {
+                    b.Property<int?>("SupplierOrderLine_ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int?>("SupplierOrderLine_ID"));
+
+                    b.Property<int?>("Inventory_ID")
+                        .HasColumnType("int");
+
+                    b.Property<double?>("Price")
+                        .HasColumnType("float");
+
+                    b.Property<double?>("Quantity")
+                        .HasColumnType("float");
+
+                    b.Property<int?>("Supplier_Order_ID")
+                        .HasColumnType("int");
+
+                    b.HasKey("SupplierOrderLine_ID");
+
+                    b.ToTable("SupplierOrderLines");
                 });
 
             modelBuilder.Entity("IBIS_API.Models.User_Account", b =>

@@ -29,7 +29,7 @@ namespace IBIS_API.Controllers
             [HttpGet]
             [Route("getAll")]
        // [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        public async Task<ActionResult<IEnumerable<Product>>> GetSuppliers()
+        public async Task<ActionResult<IEnumerable<Product>>> GetProducts()
             {
                 return await _context.Products.ToListAsync();
             }

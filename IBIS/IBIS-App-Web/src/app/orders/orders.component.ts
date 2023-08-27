@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
 import { Orders } from '../Models/Orders';
 import { Router } from '@angular/router';
@@ -9,74 +9,218 @@ import { SupplierOrder } from '../Models/SupplierOrder';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { ViewSupplierOrderComponent } from '../view-supplier-order/view-supplier-order.component';
 import { ViewCustomerOrderComponent } from '../view-customer-order/view-customer-order.component';
+import { Observable, forkJoin, of } from 'rxjs';
 var pdfMake = require('pdfmake/build/pdfmake');
 var pdfFonts = require('pdfmake/build/vfs_fonts');
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 @Component({
   selector: 'app-orders',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './orders.component.html',
   styleUrls: ['./orders.component.css']
 })
 export class OrdersComponent implements OnInit {
 
-  data:any
+  data!:any
   ord: Orders[] = [];
   idtodelete :any;
   filterTerm!: string;
-   CustomerOrders:CustomerOrder[]=[
+  selectedStatus:any = 4
+  title:any = "Supplier Orders"
+  // supplierOrders:any
+  // customerOrders:any
+  isCustomerOrder:boolean=false
+   customerOrders:CustomerOrder[]=[
     {
       customerOrder_ID: '1',
       customer_ID: '1',
-      Date_Created: '1'
+      date_Created: '1',
+      orderStatus_ID: '1'
     },
     {
+      customerOrder_ID: '3',
+      customer_ID: '3',
+      date_Created: '3',
+      orderStatus_ID: '3'
+    },    {
+      customerOrder_ID: '4',
+      customer_ID: '4',
+      date_Created: '4',
+      orderStatus_ID: '4'
+    },    {
       customerOrder_ID: '2',
       customer_ID: '2',
-      Date_Created: '2'
+      date_Created: '2',
+      orderStatus_ID: '2'
     }
    ];
    supplierOrders:SupplierOrder[]=[
     {
       supplierOrder_ID: '1',
       supplier_ID: '1',
-      Date_Created: '1'
+      Date_Created: '1',
+      orderStatus_ID: '1'
     },{
       supplierOrder_ID: '2',
       supplier_ID: '2',
-      Date_Created: '2'
+      Date_Created: '2',
+      orderStatus_ID: '2'
+    },
+    {
+      supplierOrder_ID: '3',
+      supplier_ID: '2',
+      Date_Created: '2',
+      orderStatus_ID: '3'
+    },{
+      supplierOrder_ID: '4',
+      supplier_ID: '2',
+      Date_Created: '2',
+      orderStatus_ID: '4'
     }
-   ];
+  ]
+   statusResults:any = [
+      {
+        status_ID: 1,
+        Name: 'Done'
+      },
+      {
+        status_ID: 2,
+        Name: 'Cancelled'
+      },
+      {
+        status_ID: 3,
+        Name: 'In Progress'
+      },
+      {
+        status_ID: 4,
+        Name: 'All'
+      }
+    ] // read from the database or nah...
+   ;
    
 
   constructor(public router: Router, private orderservice : OrdersService,
-    private matDialog: MatDialog) { 
-      this.data = this.supplierOrders
+    private matDialog: MatDialog,public cdr:ChangeDetectorRef) {
+      
     }
+      // this.data = this.supplierOrders
+    
 
   ngOnInit(): void {
     //this.getOrders()
-  
+  //  this.orderservice.getCustomerOrders().then(response => {
+  //   console.log(response)
+  //    this.customerOrders = response
+  //  })
+  //  this.orderservice.getSupplierOrders().then((response) => {
+  //   console.log(response)
+  //   this.supplierOrders = response
+  // })
+  let orders:any
+  this.supplierOrders = [...this.supplierOrders]
+  this.customerOrders = [...this.customerOrders]
+  this.orderservice.getOrders().subscribe((result:any) =>{
+    console.log(result[0])
+    console.log(result[1])
+    this.customerOrders = result[0]
   }
-
-  getOrders(){
-    // this.orderservice.getOrderList().subscribe(response => {
-    //   console.log(response);
-    //   this.data = response;
-    // })
+    
    
-
+   
+    )
+ //this.customerOrders = orders[0]
+  //this.supplierOrders = orders[1]
+ // this.data = this.supplierOrders
+  
+ // this.data = [...this.data]
   }
+  ToSupplier(){
+    // edit records to standardize... then whatever is true is sent to API...
+      console.log("supplier")
+      if(this.isCustomerOrder){
+        this.isCustomerOrder = false
+      this.isCustomerOrder = false
+      this.data = [...this.supplierOrders]
+      this.selectedStatus = 4
+      this.title = "Supplier Orders"
+      }
+     // wadadadadad
+      //this.cdr.detectChanges()
+    }
+    ConvertDate(date:any){
+   //return 
+    }
+   
+   
+  
+  ToCustomer(){
+ if(!this.isCustomerOrder){
+console.log("customer")
+    this.isCustomerOrder = true
+    this.data = [...this.customerOrders]
+    this.selectedStatus = 4
+    
+    this.title = "Customer Orders"
+    //this.cdr.detectChanges()
+ }
+  }
+  
+
+CheckOrderStatus(){
+  console.log(this.selectedStatus)
+  if((this.selectedStatus  == 1 || this.selectedStatus == 2 || this.selectedStatus == 3) && this.isCustomerOrder){
+     this.data = []
+     console.log("ts method hitting")
+     this.isCustomerOrder = true
+    this.customerOrders.forEach(element => {
+      if(element.orderStatus_ID == this.selectedStatus){
+        console.log(element)
+      this.data.push(element)
+    }
+  })
+  console.log(this.data)
+  }else if((this.selectedStatus == 1 || this.selectedStatus == 2 || this.selectedStatus == 3) && !this.isCustomerOrder){
+    this.data = []
+    console.log("ts method htting")
+    this.supplierOrders.forEach(element => {
+      
+      if(element.orderStatus_ID == this.selectedStatus){
+        console.log(element)
+        this.data.push(element)
+      
+    }
+  })
+}else if(this.isCustomerOrder){
+    this.data = this.customerOrders
+  }else{
+     this.data = this.supplierOrders
+  }
+  this.data = [...this.data]
+  console.log(this.data)
+  this.cdr.detectChanges()
+}
 
 
-  async delete(id: number){
-    this.idtodelete = id;
+ 
 
-    this.orderservice.delete(this.idtodelete).subscribe(Response => {
+
+  async delete(element: any){
+    
+  if(this.customerOrders){
+    
+    this.orderservice.DeleteCustomerOrder(element.customerOrder_ID).subscribe((Response:any) => {
       console.log(Response);
+  })
+    
       //this.data = Response;
-      this.getOrders();
-    })
+      //this.getOrders();
+    }else{
+      // let supplierOrder = this.supplierOrders[rowIndex]
+      // this.orderservice.delete(supplierOrder.supplierOrder_ID).subscribe(Response => {
+      //   console.log(Response)
+      // });
+    }
   }
 
 
@@ -86,15 +230,26 @@ export class OrdersComponent implements OnInit {
     this.router.navigate(['/add-order']);
 
   }
-  ViewSupplierOrder(element:any){
-    this.matDialog.open(ViewSupplierOrderComponent, {
-      data:element
-    })
+  View(element:any){
+   // console.log(rowIndex)
+    if(this.isCustomerOrder){
+      console.log(this.customerOrders)
+      //let customerOrder = this.customerOrders[rowIndex]
+      this.matDialog.open(ViewCustomerOrderComponent, {
+        data:element
+      })
+    }else{
+      //let supplierOrder = this.supplierOrders[rowIndex]
+      this.matDialog.open(ViewSupplierOrderComponent, {
+        data:element
+      })
+    }
+   
+   
   }
-  ViewCustomerOrder(element:any){
-    this.matDialog.open(ViewCustomerOrderComponent, {
-      data:element
-    })
+ 
+  Delete(){
+
   }
 
 
@@ -154,11 +309,11 @@ export class OrdersComponent implements OnInit {
           table: {
             headerRows: 1,
             widths: ['*', 'auto', 'auto', 'auto'],
-            body: [
-              ['Inventory_ID', 'Inventory_Items', 'Quantity', 'Amount'],
-              ...this.data[1].map((p: { order_ID: any; supplierName: any; quantity: any; }) => ([p.order_ID, p.supplierName, p.quantity, (p.quantity).toFixed(2)])),
-              [{text: 'Total inventory', colSpan: 3}, {}, {}, this.data.reduce((sum: number, p: { quantity: number;  })=> sum + (p.quantity), 0).toFixed(2)]
-            ]
+            // body: [
+            //   ['Inventory_ID', 'Inventory_Items', 'Quantity', 'Amount'],
+            //   ...this.data[1].map((p: { order_ID: any; supplierName: any; quantity: any; }) => ([p.order_ID, p.supplierName, p.quantity, (p.quantity).toFixed(2)])),
+            //   [{text: 'Total inventory', colSpan: 3}, {}, {}, this.data.reduce((sum: number, p: { quantity: number;  })=> sum + (p.quantity), 0).toFixed(2)]
+            // ]
           }
         },
         {

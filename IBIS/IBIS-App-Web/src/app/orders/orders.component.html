@@ -1,45 +1,104 @@
 <ion-content class="ion-margin" id="htmlData">
   <div class="contents">
-    <ion-title><h1>Orders</h1></ion-title>
+    <ion-title><h1>{{title}}</h1></ion-title>
+    <button (click)="ToCustomer()" >Customer Orders</button>
+    <button (click)="ToSupplier()">Supplier Orders</button>
     <ion-searchbar class="isb" placeholder="Search Orders..." showCancelButton="focus" [(ngModel)]="filterTerm" animated></ion-searchbar><br/>
+    <mat-form-field style="float: right;"  >
+      <mat-label>Select Orders</mat-label>
+      <mat-select (selectionChange)="CheckOrderStatus()" [(ngModel)]="selectedStatus"  >
+        <mat-option *ngFor="let status of statusResults" [value]="status.status_ID">
+          {{status.Name}}
+        </mat-option>
+      </mat-select>
+      
+    </mat-form-field>
       <ion-grid class="ion-margin" class="ion-grid-padding">
+        
         <ion-row>
           <ion-col>Order ID</ion-col>
-          <ion-col>Quantity</ion-col>
-          <ion-col>Supplier ID</ion-col>
-          <ion-col>Supplier Name</ion-col>
-          <ion-col>Order Status</ion-col>
+          <ion-col *ngIf="isCustomerOrder">Customer</ion-col>
+          <ion-col  *ngIf="!isCustomerOrder">Supplier</ion-col>
+          <ion-col>Date Created</ion-col>
+          
           <ion-col></ion-col>
         </ion-row>
+      </ion-grid>
         <ion-item-divider></ion-item-divider>
-        <ion-row *ngFor="let item of supplierOrders | filter: filterTerm">
+        <ion-grid>
+        <ion-row *ngFor="let item of data;let rowIndex;">
+        <div  *ngIf="isCustomerOrder">
+         
           <ion-col>
-            <ion-label>{{item.supplierOrder_ID}}</ion-label>
+            <ion-label>{{item.customerOrder_ID}}</ion-label>
           </ion-col>
-          <!-- <ion-col>
-            <ion-label>{{}}</ion-label>
-          </ion-col>
+
           <ion-col>
-            <ion-label>{{item.supplier}}</ion-label>
+            <ion-label>{{item.customer_ID}}</ion-label>
           </ion-col>
+
           <ion-col>
-            <ion-label>{{item.supplierName}}</ion-label>
+            <ion-label>{{ConvertDate(item.date_Created)}}</ion-label>
           </ion-col>
-          <ion-col>
-            <ion-label>{{item.order_Status}}</ion-label>
-          </ion-col>
-          <ion-col> -->
-            <ion-button class="red-Btn" (click)="ViewCustomerOrder(item.supplierOrder_ID)">View</ion-button>
-            <ion-button class="light-Btn" (click)="delete(item.supplierOrder_ID)">Remove</ion-button>
           
+ 
+        </div>
+      <div *ngIf="!isCustomerOrder">
+        
+          <ion-col>
+            <ion-label>{{item.customer_ID}}</ion-label>
+          </ion-col>
+     
+        
+          </div>
+       <ion-col>
+          <div [ngSwitch]="selectedStatus">
+           
+            <div *ngSwitchCase="1">
+            
+            <ion-button class="red-Btn" id="1" (click)="View(rowIndex)">In progress</ion-button>
+            <mat-icon class="light-Btn" (click)="delete(rowIndex)">delete</mat-icon>
+              <mat-icon class="red-Btn" (click)="View(rowIndex)">edit</mat-icon>
+             
+            </div>
+            <div *ngSwitchCase="2">
+              
+              <ion-button class="red-Btn" (click)="View(rowIndex)">In Progress</ion-button>
+              <ion-button class="light-Btn" (click)="delete(rowIndex)">View Reason</ion-button>
+              <mat-icon  (click)="View(rowIndex)">edit</mat-icon>
+              
+              </div>
+              
+              <div *ngSwitchCase="3">
+              
+                <mat-icon class="red-Btn" (click)="View(rowIndex)">check</mat-icon>
+                <mat-icon class="light-Btn" (click)="delete(rowIndex)">delete</mat-icon>
+                <mat-icon  (click)="View(rowIndex)">edit</mat-icon>
+                
+                </div>
+                <div *ngSwitchCase="4">
+                  
+                  <mat-icon (click)="View(rowIndex)">edit</mat-icon>
+                  <mat-icon class="light-Btn" (click)="delete(rowIndex)">delete</mat-icon>
+                  
+                  </div>
+                  </div>
+                </ion-col>
         </ion-row>
         <ion-item-divider></ion-item-divider>
       </ion-grid>
-      <ion-button class="light-Btn" [routerLink]="'/create-customer-order'">Add</ion-button>
-      <ion-button class="red-Btn" (click)=" generateInProgress()">Generate in-progress Report</ion-button>
-      <ion-button class="red-Btn" >Generate pending Report</ion-button>
-      <ion-button class="red-Btn" >Generate Finished Report</ion-button>
-  </div>
+      <ion-grid>
+      <ion-item-divider></ion-item-divider>
+      <ion-item-divider></ion-item-divider>
+      <!-- <ion-button class="light-Btn" [routerLink]="'/create-customer-order'">Add</ion-button>
+    <ion-button class="red-Btn" (click)=" generateInProgress()">Generate in-progress Report</ion-button>
+    <ion-button class="red-Btn" >Generate pending Report</ion-button>
+    <ion-button class="red-Btn" >Generate Finished Report</ion-button> -->
+    </ion-grid>
+    </div>
+        
+
+</ion-content>
 
 
 

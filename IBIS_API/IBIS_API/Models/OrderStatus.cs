@@ -3,14 +3,14 @@ using System.ComponentModel.DataAnnotations;
 
 namespace IBIS_API.Models
 {
-    public class Order_Status
+    public class OrderStatus
     {
 
         [Key]
 
-        public int Order_Status_ID { get; set; }
+        public int? OrderStatus_ID { get; set; }
 	//public virtual Order? Order_ID { get; set; }
-	public Boolean IsCompleted { get; set; }
+	public String? Name { get; set; }
 
 
 

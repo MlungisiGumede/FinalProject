@@ -65,6 +65,37 @@ namespace IBIS_API.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "CustomerOrders",
+                columns: table => new
+                {
+                    CustomerOrder_ID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Customer_ID = table.Column<int>(type: "int", nullable: true),
+                    Date_Created = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    OrderStatus_ID = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CustomerOrders", x => x.CustomerOrder_ID);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "CustomerOrdersLine",
+                columns: table => new
+                {
+                    CustomerOrderLine_ID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Customer_Order_ID = table.Column<int>(type: "int", nullable: true),
+                    Product_ID = table.Column<int>(type: "int", nullable: true),
+                    Quantity = table.Column<double>(type: "float", nullable: false),
+                    Price = table.Column<double>(type: "float", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CustomerOrdersLine", x => x.CustomerOrderLine_ID);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Customers",
                 columns: table => new
                 {
@@ -117,22 +148,30 @@ namespace IBIS_API.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "OrderStatusList",
+                columns: table => new
+                {
+                    OrderStatus_ID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_OrderStatusList", x => x.OrderStatus_ID);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Products",
                 columns: table => new
                 {
                     Product_ID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Product_Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Category = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Subcategory = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Price = table.Column<int>(type: "int", nullable: true),
                     Quantity = table.Column<int>(type: "int", nullable: true),
-                    Expiry = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Write_Off_Id = table.Column<int>(type: "int", nullable: true),
-                    item_name = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Quantity_Written_Off = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Reason = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Image = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Expiry = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -154,6 +193,37 @@ namespace IBIS_API.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Recipes", x => x.Recipe_ID);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Supplier_Orders",
+                columns: table => new
+                {
+                    SupplierOrder_ID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Supplier_ID = table.Column<int>(type: "int", nullable: true),
+                    Date_Created = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    OrderStatus_ID = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Supplier_Orders", x => x.SupplierOrder_ID);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "SupplierOrderLines",
+                columns: table => new
+                {
+                    SupplierOrderLine_ID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Inventory_ID = table.Column<int>(type: "int", nullable: true),
+                    Supplier_Order_ID = table.Column<int>(type: "int", nullable: true),
+                    Quantity = table.Column<double>(type: "float", nullable: true),
+                    Price = table.Column<double>(type: "float", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SupplierOrderLines", x => x.SupplierOrderLine_ID);
                 });
 
             migrationBuilder.CreateTable(
@@ -370,6 +440,12 @@ namespace IBIS_API.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "CustomerOrders");
+
+            migrationBuilder.DropTable(
+                name: "CustomerOrdersLine");
+
+            migrationBuilder.DropTable(
                 name: "Customers");
 
             migrationBuilder.DropTable(
@@ -379,10 +455,19 @@ namespace IBIS_API.Migrations
                 name: "Orders");
 
             migrationBuilder.DropTable(
+                name: "OrderStatusList");
+
+            migrationBuilder.DropTable(
                 name: "Products");
 
             migrationBuilder.DropTable(
                 name: "Recipes");
+
+            migrationBuilder.DropTable(
+                name: "Supplier_Orders");
+
+            migrationBuilder.DropTable(
+                name: "SupplierOrderLines");
 
             migrationBuilder.DropTable(
                 name: "Suppliers");

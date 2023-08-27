@@ -32,6 +32,18 @@ namespace IBIS_API.Data
         public DbSet<Customer> Customers { get; set; }
         public DbSet<Write_Offs> Write_Offss { get; set; }
 
+        public DbSet<CustomerOrder> CustomerOrders { get; set; }
+
+        
+
+        public DbSet<CustomerOrderLine> CustomerOrdersLine { get; set; }
+
+        public DbSet<SupplierOrderLine> SupplierOrderLines { get; set; }
+
+        public DbSet<SupplierOrder> Supplier_Orders { get; set; }
+
+        public DbSet<OrderStatus> OrderStatusList { get; }
+
         /*
         public DbSet<Equipment> Equipment { get; set; } 
         public  DbSet<Equipment_Category> Equipment_Categories { get; set; } 

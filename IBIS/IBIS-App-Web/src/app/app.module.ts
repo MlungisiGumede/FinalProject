@@ -99,7 +99,8 @@ import { ViewSupplierOrderComponent } from './view-supplier-order/view-supplier-
     ViewImageComponent,
     AddSupplierOrderComponent,
     ViewCustomerOrderComponent,
-    ViewSupplierOrderComponent
+    ViewSupplierOrderComponent,
+    
   
   ],
   imports: [

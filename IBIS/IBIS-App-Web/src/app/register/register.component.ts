@@ -36,6 +36,7 @@ BackToLogin(){
 }
 
   onRegister(){
+    console.log("not supposed to happen")
     this.register.Register(this.registerForm.value).subscribe(
        (res)=>{
 
