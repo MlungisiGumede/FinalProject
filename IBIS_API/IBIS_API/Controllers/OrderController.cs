@@ -10,7 +10,7 @@ namespace IBIS_API.Controllers
     [ApiController]
     public class OrderController : ControllerBase
     {
-
+        // https://stackoverflow.com/questions/64919574/change-name-of-generated-join-table-many-to-many-ef-core-5
         private readonly DataContextcs _context;
 
         public OrderController(DataContextcs context)
@@ -20,20 +20,20 @@ namespace IBIS_API.Controllers
 
         [HttpGet]
         [Route("getSupplierOrderline")]
-        public async Task<ActionResult<IEnumerable<Inventory>>> GetSupplierOrderline(int ID)
+        public async Task<ActionResult<IEnumerable<Inventory>>> GetSupplierOrderline()
         {
             var dbSupplierOrderLines = _context.SupplierOrderLines.ToList();
-            var supplierOrderLines = new List<SupplierOrderLine>();
-            foreach (var element in dbSupplierOrderLines)
-            {
-                if (ID == element.Supplier_Order_ID)
-                {
-                    //_context.Inventories.FindAsync(x => x.)
-                    // var inventory = _context.Inventories.First(x => x.Inventory_ID == element.Inventory_ID);
-                    supplierOrderLines.Add(element);
-                }
-            }
-            return Ok(supplierOrderLines);
+            //var supplierOrderLines = new List<SupplierOrderLine>();
+            //foreach (var element in dbSupplierOrderLines)
+            //{
+            //    if (ID == element.Supplier_Order_ID)
+            //    {
+            //        //_context.Inventories.FindAsync(x => x.)
+            //        // var inventory = _context.Inventories.First(x => x.Inventory_ID == element.Inventory_ID);
+            //        supplierOrderLines.Add(element);
+            //    }
+            //}
+            return Ok(dbSupplierOrderLines);
         }
         [HttpGet]
         [Route("getCustomerOrders")]
@@ -58,22 +58,23 @@ namespace IBIS_API.Controllers
             return Ok();
         }
 
-        [HttpPost]
+        [HttpGet]
         [Route("getCustomerOrderline")]
-        public async Task<ActionResult<IEnumerable<CustomerOrderLine>>> GetCustomerOrderline(CustomerOrder customerOrder)
+        public async Task<ActionResult<IEnumerable<CustomerOrderLine>>> GetCustomerOrderline()
         {
             var customerOrderLine = _context.CustomerOrdersLine.ToList();
-            var orderLineList = new List<CustomerOrderLine>();
-            foreach (var element in customerOrderLine)
-            {
-                if (customerOrder.CustomerOrder_ID == element.Customer_Order_ID)
-                {
-                    //_context.Inventories.FindAsync(x => x.)
-                    //var product = _context.Products.First(x => x.Product_ID == element.Product_ID);
-                    orderLineList.Add(element);
-                }
-            }
-            return Ok(orderLineList);
+            //var orderLineList = new List<CustomerOrderLine>();
+            //foreach (var element in customerOrderLine)
+            //{
+            //    //if (customerOrder.CustomerOrder_ID == element.Customer_Order_ID)
+            //    //{
+            //    //    element.
+            //    //    //_context.Inventories.FindAsync(x => x.)
+            //    //    //var product = _context.Products.First(x => x.Product_ID == element.Product_ID);
+            //    //    orderLineList.Add(element);
+            //    //}
+            //}
+            return Ok(customerOrderLine);
         }
         [HttpPost]
         [Route("PostSupplierOrder")]
@@ -144,17 +145,17 @@ namespace IBIS_API.Controllers
             // nah do the whole attaching thing...
             var dbCustomerOrderlines = _context.CustomerOrdersLine.ToList();
             var ordArray = ord.ToArray();
-            var id = ordArray[0].Customer_Order_ID;
-            foreach (var line in dbCustomerOrderlines)
-            {
-                // if you can find the id else you then add it...
+            //var id = ordArray[0].Customer_Order_ID;
+            //foreach (var line in dbCustomerOrderlines)
+            //{
+            //    // if you can find the id else you then add it...
 
-                if (line.Customer_Order_ID == id)
-                {
-                    _context.CustomerOrdersLine.Remove(line);
-                }
+            //    if (line.Customer_Order_ID == id)
+            //    {
+            //        _context.CustomerOrdersLine.Remove(line);
+            //    }
 
-            }
+            //}
             
             foreach (var line in ord)
             {
@@ -181,10 +182,10 @@ namespace IBIS_API.Controllers
             {
                 // if you can find the id else you then add it...
 
-                if (line.Customer_Order_ID == ord.SupplierOrder.SupplierOrder_ID)
-                {
-                    _context.CustomerOrdersLine.Remove(line);
-                }
+                //if (line.Customer_Order_ID == ord.SupplierOrder.SupplierOrder_ID)
+                //{
+                //    _context.CustomerOrdersLine.Remove(line);
+                //}
 
             }
             List<SupplierOrderLine> supplierOrderLines = ord.SupplierOrderLines;
@@ -216,10 +217,10 @@ namespace IBIS_API.Controllers
             foreach (var line in CustomerOrderalines)
             {
                 
-                if (line.Customer_Order_ID == ord.CustomerOrder_ID)
-                {
-                    _context.CustomerOrdersLine.Remove(line);
-                }
+                //if (line.Customer_Order_ID == ord.CustomerOrder_ID)
+                //{
+                //    _context.CustomerOrdersLine.Remove(line);
+                //}
             }
             await _context.SaveChangesAsync();
             return NoContent();

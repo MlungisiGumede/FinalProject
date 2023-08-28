@@ -32,6 +32,10 @@ export class OrdersComponent implements OnInit {
   title:any = "Supplier Orders"
   customers:any
   suppliers:any
+  customersOrderLine:any
+  supplierOrderLine:any
+  products:any
+  inventories:any
   // supplierOrders:any
   // customerOrders:any
   isCustomerOrder:boolean=false
@@ -113,46 +117,59 @@ export class OrdersComponent implements OnInit {
     
 
   ngOnInit(): void {
-    //this.getOrders()
-  //  this.orderservice.getCustomerOrders().then(response => {
-  //   console.log(response)
-  //    this.customerOrders = response
-  //  })
-  //  this.orderservice.getSupplierOrders().then((response) => {
-  //   console.log(response)
-  //   this.supplierOrders = response
-  // })
-  let orders:any
-  //this.supplierOrders = [...this.supplierOrders]
-  //this.customerOrders = [...this.customerOrders]
-  this.orderservice.getOrders().subscribe((result:any) =>{
-    console.log(result[0])
-    console.log(result[1])
-    console.log(result[2])
-    console.log(result[3])
-    if(result[0]){
-      this.customerOrders = result[0]
-      
-    }if(result[1]){
-      this.supplierOrders = result[1]
-    }
-    //this.data = this.supplierOrders
-    if(result[2]){
-      this.customers = result[2]
-    }if(result[3]){
-      this.suppliers = result[3]
-    }
    
+ this.ReadOrders()
+this.orderservice.addedOrder.subscribe((result:any)=>{
+  this.ReadOrders()
+})
   }
+  async ReadOrders(){
+  let val = new Promise((resolve:any)=>{ this.orderservice.getOrders().subscribe((result:any) =>{
+      console.log(result[0])
+      console.log(result[1])
+      console.log(result[2])
+      console.log(result[3])
+      this.customerOrders = []
+      this.supplierOrders = []
+      this.customers = []
+      this.suppliers = []
+      this.customersOrderLine = []
+      this.supplierOrderLine = []
+      this.products = []
+      this.inventories = []
+      if(result[0]){
+        this.customerOrders = result[0]
+        
+      }if(result[1]){
+        this.supplierOrders = result[1]
+      }
+      //this.data = this.supplierOrders
+      if(result[2]){
+        this.customers = result[2]
+      }if(result[3]){
+        this.suppliers = result[3]
+      } if(result[4]){
+        this.customersOrderLine = result[4]
+      }  if(result[5]){
+        this.supplierOrderLine = result[5]
+      }if(result[6]){
+        this.products = result[6]
+      }if(result[7]){
+        this.inventories = result[7]
+      }
+      resolve("true")
+    },(err:any)=>{
+      resolve("false")
+    }
+      
     
-   
-   
-    )
- //this.customerOrders = orders[0]
-  //this.supplierOrders = orders[1]
- // this.data = this.supplierOrders
-  
- // this.data = [...this.data]
+     
+      )
+
+  })
+  await val
+this.CheckOrderStatus()
+  return val
   }
   getCustomerName(id:any){
     let customer = this.customers.find((customer:any) => customer.customer_ID == id)
@@ -180,7 +197,18 @@ export class OrdersComponent implements OnInit {
    //return new Date(date)
     }
    
+   CalculateTotal(id:any){
+    let total = 0
+if(this.isCustomerOrder){
+  this.customersOrderLine.forEach((element:any) => {
    
+    if(element.customerOrder_ID == id){
+      total = total + (element.quantity*element.price)
+  }
+})
+}
+return total
+   }
   
   ToCustomer(){
  if(!this.isCustomerOrder){
@@ -224,7 +252,10 @@ CheckOrderStatus(){
   }else{
      this.data = this.supplierOrders
   }
+  
   this.data = [...this.data]
+  console.log(this.data)
+  if(this.data.length==0){}
   console.log(this.data)
   this.cdr.detectChanges()
 }
@@ -239,6 +270,7 @@ CheckOrderStatus(){
     
     this.orderservice.DeleteCustomerOrder(element.customerOrder_ID).subscribe((Response:any) => {
       console.log(Response);
+      this.ReadOrders()
   })
     
       //this.data = Response;
@@ -260,27 +292,48 @@ CheckOrderStatus(){
   }
   View(element:any){
     console.log(element)
+    this.ReadOrders()
+    if(this.customersOrderLine && this.products){
     if(this.isCustomerOrder){
-      this.productservice.getProductList().subscribe((res:any)=>{
-        
-        this.orderservice.getCustomerOrderLine(element).subscribe(response => {
-      console.log(this.customerOrders)
-      this.matDialog.open(ViewCustomerOrderComponent, {
-        data:{'orderLines':response,'products':res,'customerOrder':element}
+      if(this.isCustomerOrder){
+        let customerOrderline:any = []
+        this.customersOrderLine.forEach((orderLine:any) => {
+         
+          if(element.customerOrder_ID == orderLine.customerOrder_ID){
+           customerOrderline.push(orderLine)
+        }
       })
-        })
-      })
+      let name = this.getCustomerName(element.customer_ID)
+     const dialogRef = this.matDialog.open(ViewCustomerOrderComponent, {
+        data:{'orderLines':customerOrderline,'products':this.products,'customerOrder':element
+      ,'name':name}
+      
+    })
+    dialogRef.afterClosed().subscribe(result => {
+      if(result == "success"){
+        this.ReadOrders()
+      }else if(result == "error"){
+        alert("error")
+      }
+    })
+  }
+}else{
+    //let supplierOrder = this.supplierOrders[rowIndex]
+    this.matDialog.open(ViewSupplierOrderComponent, {
+      data:element
+    })
+    
+  }
+}
+  }
+
+    
       //let customerOrder = this.customerOrders[rowIndex]
       
-    }else{
-      //let supplierOrder = this.supplierOrders[rowIndex]
-      this.matDialog.open(ViewSupplierOrderComponent, {
-        data:element
-      })
-    }
+    
    
    
-  }
+  
  
   Delete(){
 
@@ -290,10 +343,7 @@ CheckOrderStatus(){
     let array:any = []
 this.orderservice.UpdateOrderStatus(item).subscribe(Response => {
   this.orderservice.getOrders().subscribe((result:any) =>{
-    console.log(result[0])
-    console.log(result[1])
-    console.log(result[2])
-    console.log(result[3])
+ 
     if(result[0]){
       this.customerOrders = result[0]
       

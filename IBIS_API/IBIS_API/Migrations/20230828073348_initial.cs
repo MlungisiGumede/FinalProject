@@ -80,22 +80,6 @@ namespace IBIS_API.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "CustomerOrdersLine",
-                columns: table => new
-                {
-                    CustomerOrderLine_ID = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Customer_Order_ID = table.Column<int>(type: "int", nullable: true),
-                    Product_ID = table.Column<int>(type: "int", nullable: true),
-                    Quantity = table.Column<double>(type: "float", nullable: false),
-                    Price = table.Column<double>(type: "float", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_CustomerOrdersLine", x => x.CustomerOrderLine_ID);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Customers",
                 columns: table => new
                 {
@@ -378,6 +362,56 @@ namespace IBIS_API.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "CustomerOrderProduct",
+                columns: table => new
+                {
+                    CustomerOrder_ID = table.Column<int>(type: "int", nullable: false),
+                    Product_ID = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CustomerOrderProduct", x => new { x.CustomerOrder_ID, x.Product_ID });
+                    table.ForeignKey(
+                        name: "FK_CustomerOrderProduct_CustomerOrders_CustomerOrder_ID",
+                        column: x => x.CustomerOrder_ID,
+                        principalTable: "CustomerOrders",
+                        principalColumn: "CustomerOrder_ID",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_CustomerOrderProduct_Products_Product_ID",
+                        column: x => x.Product_ID,
+                        principalTable: "Products",
+                        principalColumn: "Product_ID",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "CustomerOrdersLine",
+                columns: table => new
+                {
+                    CustomerOrder_ID = table.Column<int>(type: "int", nullable: false),
+                    Product_ID = table.Column<int>(type: "int", nullable: false),
+                    Quantity = table.Column<double>(type: "float", nullable: false),
+                    Price = table.Column<double>(type: "float", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CustomerOrdersLine", x => new { x.CustomerOrder_ID, x.Product_ID });
+                    table.ForeignKey(
+                        name: "FK_CustomerOrdersLine_CustomerOrders_CustomerOrder_ID",
+                        column: x => x.CustomerOrder_ID,
+                        principalTable: "CustomerOrders",
+                        principalColumn: "CustomerOrder_ID",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_CustomerOrdersLine_Products_Product_ID",
+                        column: x => x.Product_ID,
+                        principalTable: "Products",
+                        principalColumn: "Product_ID",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -416,6 +450,16 @@ namespace IBIS_API.Migrations
                 column: "NormalizedUserName",
                 unique: true,
                 filter: "[NormalizedUserName] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CustomerOrderProduct_Product_ID",
+                table: "CustomerOrderProduct",
+                column: "Product_ID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CustomerOrdersLine_Product_ID",
+                table: "CustomerOrdersLine",
+                column: "Product_ID");
         }
 
         /// <inheritdoc />
@@ -440,7 +484,7 @@ namespace IBIS_API.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "CustomerOrders");
+                name: "CustomerOrderProduct");
 
             migrationBuilder.DropTable(
                 name: "CustomerOrdersLine");
@@ -456,9 +500,6 @@ namespace IBIS_API.Migrations
 
             migrationBuilder.DropTable(
                 name: "OrderStatusList");
-
-            migrationBuilder.DropTable(
-                name: "Products");
 
             migrationBuilder.DropTable(
                 name: "Recipes");
@@ -483,6 +524,12 @@ namespace IBIS_API.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "CustomerOrders");
+
+            migrationBuilder.DropTable(
+                name: "Products");
         }
     }
 }

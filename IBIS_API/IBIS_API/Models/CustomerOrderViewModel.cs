@@ -5,6 +5,6 @@ namespace IBIS_API.Models {
     {
         [Key]
         public CustomerOrder? CustomerOrder { get; set; }
-        public List<CustomerOrderLine>? CustomerOrderLines { get; set; }
+        public List<CustomerOrderLineViewModel>? CustomerOrderLines { get; set; }
     }
 }

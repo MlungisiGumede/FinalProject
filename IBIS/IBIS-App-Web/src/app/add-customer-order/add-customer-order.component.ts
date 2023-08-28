@@ -336,23 +336,19 @@ export class AddCustomerOrderComponent implements OnInit {
       let customerOrder:CustomerOrder = new CustomerOrder()
       customerOrder.customer_ID = this.data.customer_ID
       let date = new Date(Date.now())
-      let total = this.CalculateSubTotal()
-      var datePipe = new DatePipe('en-US');
-      let dateString = datePipe.transform(date, 'yyyy/MM/dd')?.toString();
       customerOrder.date_Created = date.toString()
-      Date.prototype.toJSON
       customerOrderViewModel.customerOrder = customerOrder
       let orderLines = (this.form.get('records') as FormArray).value
-      orderLines.forEach((element:CustomerOrderLine) => {
-        element.customer_Order_ID = this.data.customer_ID
-      });
+      
       customerOrderViewModel.customerOrderLines = orderLines
-    total = this.orderService.CreateCustomerOrder(customerOrder,orderLines,total)
-     if(total!=null){
-       this.dialogRef.close(total)
-     }else if(total==null){
-       this.dialogRef.close("error")
-     }
+  this.orderService.CreateCustomerOrder(customerOrderViewModel).subscribe((res:any)=>{
+   //let total = this.CalculateSubTotal()
+   this.orderService.addedOrder.next(res)
+   this.dialogRef.close("success")
+  }),(error:any) => {
+    this.dialogRef.close("error")
+  }
+    
       
       console.log(customerOrderViewModel)
 

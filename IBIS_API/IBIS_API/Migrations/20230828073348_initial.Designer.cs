@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace IBIS_API.Migrations
 {
     [DbContext(typeof(DataContextcs))]
-    [Migration("20230827220637_initial")]
+    [Migration("20230828073348_initial")]
     partial class initial
     {
         /// <inheritdoc />
@@ -24,6 +24,21 @@ namespace IBIS_API.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("CustomerOrderProduct", b =>
+                {
+                    b.Property<int>("CustomerOrder_ID")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Product_ID")
+                        .HasColumnType("int");
+
+                    b.HasKey("CustomerOrder_ID", "Product_ID");
+
+                    b.HasIndex("Product_ID");
+
+                    b.ToTable("CustomerOrderProduct");
+                });
 
             modelBuilder.Entity("IBIS_API.Models.Address", b =>
                 {
@@ -161,25 +176,23 @@ namespace IBIS_API.Migrations
 
             modelBuilder.Entity("IBIS_API.Models.CustomerOrderLine", b =>
                 {
-                    b.Property<int>("CustomerOrderLine_ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                    b.Property<int>("CustomerOrder_ID")
+                        .HasColumnType("int")
+                        .HasColumnOrder(0);
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CustomerOrderLine_ID"));
-
-                    b.Property<int?>("Customer_Order_ID")
-                        .HasColumnType("int");
+                    b.Property<int>("Product_ID")
+                        .HasColumnType("int")
+                        .HasColumnOrder(1);
 
                     b.Property<double>("Price")
                         .HasColumnType("float");
 
-                    b.Property<int?>("Product_ID")
-                        .HasColumnType("int");
-
                     b.Property<double>("Quantity")
                         .HasColumnType("float");
 
-                    b.HasKey("CustomerOrderLine_ID");
+                    b.HasKey("CustomerOrder_ID", "Product_ID");
+
+                    b.HasIndex("Product_ID");
 
                     b.ToTable("CustomerOrdersLine");
                 });
@@ -565,6 +578,40 @@ namespace IBIS_API.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens", (string)null);
+                });
+
+            modelBuilder.Entity("CustomerOrderProduct", b =>
+                {
+                    b.HasOne("IBIS_API.Models.CustomerOrder", null)
+                        .WithMany()
+                        .HasForeignKey("CustomerOrder_ID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("IBIS_API.Models.Product", null)
+                        .WithMany()
+                        .HasForeignKey("Product_ID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("IBIS_API.Models.CustomerOrderLine", b =>
+                {
+                    b.HasOne("IBIS_API.Models.CustomerOrder", "CustomerOrder")
+                        .WithMany()
+                        .HasForeignKey("CustomerOrder_ID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("IBIS_API.Models.Product", "Product")
+                        .WithMany()
+                        .HasForeignKey("Product_ID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("CustomerOrder");
+
+                    b.Navigation("Product");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

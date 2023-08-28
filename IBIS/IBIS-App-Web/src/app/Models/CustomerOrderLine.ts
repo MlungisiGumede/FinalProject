@@ -3,5 +3,5 @@ export class CustomerOrderLine{
     product_ID: any;
     quantity: any;
     price: any;
-    customer_Order_ID:any
+    customerOrder_ID:any
 }

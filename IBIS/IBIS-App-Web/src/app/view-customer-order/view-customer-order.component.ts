@@ -195,7 +195,7 @@ dropDown:any= [{
      this.customerOrder = data
       // getSuppliers
      
-    
+    this.title = data.name
       
      }
     
@@ -365,15 +365,18 @@ dropDown:any= [{
   Edit(){
     let customerOrderViewModel:CustomerOrderViewModel = new CustomerOrderViewModel()
       let customerOrder:CustomerOrder = new CustomerOrder()
-      customerOrder.customer_ID = this.data.customerOrder.customerOrder_ID
-      //customerOrder.date_Created = Date.now().toString()
+      customerOrder.customerOrder_ID = this.data.customerOrder.customerOrder_ID
+      customerOrder.customer_ID = this.data.customerOrder.customer_ID
+      customerOrder.orderStatus_ID = this.data.customerOrder.orderStatus_ID
+      customerOrder.date_Created = Date.now().toString()
       customerOrderViewModel.customerOrder = customerOrder
       let orderLines = (this.form.get('records') as FormArray).value
       orderLines.forEach((element:CustomerOrderLine) => {
-        element.customer_Order_ID = this.data.customerOrder.customerOrder_ID
+        element.customerOrder_ID = this.data.customerOrder.customerOrder_ID
+        console.log(element.customerOrder_ID)
       });
       customerOrderViewModel.customerOrderLines = orderLines
-      this.orderService.UpdateCustomerOrder(this.data.customerOrder,orderLines).subscribe(() => {
+      this.orderService.UpdateCustomerOrder(customerOrderViewModel).subscribe(() => {
         this.dialogRef.close("success")
       }), (error:any) => {
         this.dialogRef.close("error")

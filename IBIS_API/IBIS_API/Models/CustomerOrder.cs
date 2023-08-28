@@ -14,6 +14,8 @@ namespace IBIS_API.Models {
         public String? Date_Created { get; set; }
 
         public int? OrderStatus_ID { get; set; }
+
+        public virtual ICollection<Product>? Product { get; set; }
         //public List<CustomerOrderLine> CustomerOrderLines { get; set; }
     }
 }

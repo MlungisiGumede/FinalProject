@@ -1,6 +1,6 @@
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, catchError, forkJoin, retry, tap, throwError,switchMap } from 'rxjs';
+import { Observable, catchError, forkJoin, retry, tap, throwError,switchMap, Subject } from 'rxjs';
 import { Orders } from '../Models/Orders';
 import { Product } from '../Models/Product';
 import { Inventory } from '../Models/Inventory';
@@ -21,7 +21,8 @@ export class OrdersService {
   inventoryApiUrl = 'https://localhost:7226/api/Item';
   customersApiUrl = 'https://localhost:7226/api/Customers';
   suppliersApiUrl = 'https://localhost:7226/api/Suppliers';
-
+  manytoManyAPIUrl = 'https://localhost:7226/api/ManyToMany';
+  public addedOrder = new Subject<string>();
   constructor(private httpClient: HttpClient) { }
 
 
@@ -63,9 +64,9 @@ export class OrdersService {
              catchError(this.handleError)
            )
        }
-       getCustomerOrderList(): Observable<CustomerOrder[]> {
+       getCustomerOrderList(): Observable<any[]> {
          return this.httpClient
-           .get<CustomerOrder[]>(this.apiUrl + '/getCustomerOrder')
+           .get<any[]>(this.apiUrl + '/getCustomerOrders')
            .pipe(
              retry(2),
              catchError(this.handleError)
@@ -107,28 +108,23 @@ export class OrdersService {
           this.httpClient.get(this.apiUrl + '/getCustomerOrders').pipe(tap(res => console.log(res))),
           this.httpClient.get(this.apiUrl + '/getSupplierOrders').pipe(tap(res => console.log(res))),
           this.httpClient.get(this.customersApiUrl + '/getAll').pipe(tap(res => console.log(res))),
-          this.httpClient.get(this.suppliersApiUrl + '/getAll').pipe(tap(res => console.log(res)))
+          this.httpClient.get(this.suppliersApiUrl + '/getAll').pipe(tap(res => console.log(res))),
+          this.httpClient.get(this.apiUrl + '/getCustomerOrderLine').pipe(tap(res => console.log(res))),
+          this.httpClient.get(this.apiUrl + '/getSupplierOrderLine').pipe(tap(res => console.log(res))),
+          this.httpClient.get(this.productApiUrl + '/getAll').pipe(tap(res => console.log(res))),
+          this.httpClient.get(this.inventoryApiUrl + '/getAll').pipe(tap(res => console.log(res))),
+
+           
         ])
       }
-      CreateCustomerOrder(ord: CustomerOrder, ordLines: CustomerOrderLine[],total:any) {
-        console.log(ord)
-        let returnVal = false
-        this.httpClient.post(this.apiUrl + '/PostCustomerOrder', ord).subscribe(
-          (res) => {
-            console.log(res)
-           ordLines.forEach((element:CustomerOrderLine) => {
-             element.customer_Order_ID = res
-           })
-            this.httpClient.post(this.apiUrl + '/PostCustomerOrderLine',ordLines).subscribe( ()=>{
-                    returnVal = true
-                    total = null
-            }
-                 
-            )
+      CreateCustomerOrder(customerOrderViewModel: CustomerOrderViewModel){ 
+        
+        return this.httpClient.post(this.manytoManyAPIUrl + '/PostCustomerOrder', customerOrderViewModel)
+          
           }
-        )
-        return total
-        }
+        
+      
+        
         ;
 
           
@@ -140,18 +136,13 @@ export class OrdersService {
       CreateSupplierOrder(ord: SupplierOrderViewModel){
         return this.httpClient.post(this.apiUrl + "/PostSupplierOrder", ord, this.httpOptions)
       }
-      UpdateCustomerOrder( data: CustomerOrder,element:CustomerOrderLine[]): any {
-        // return this.httpClient
-        //   .put<CustomerOrder>(this.apiUrl +  "/PutCustomerOrder", data, this.httpOptions)
-        //   .pipe(
-        //     retry(2),
-        //     catchError(this.handleError)
-        //   )
-       return forkJoin([
-            this.httpClient.put(this.apiUrl + '/PutCustomerOrder',data).pipe(tap(res => console.log(res))),
-            this.httpClient.put(this.apiUrl + '/PutCustomerOrderLine',element).pipe(tap(res => console.log(res))),
-          
-          ])
+      UpdateCustomerOrder( customerOrderViewModel: CustomerOrderViewModel): any {
+        return this.httpClient
+          .put(this.manytoManyAPIUrl + '/PutCustomerOrder', customerOrderViewModel)
+          .pipe(
+            retry(2),
+            catchError(this.handleError)
+          )
       }
       UpdateSupplierOrder( data: any): Observable<SupplierOrder> {
         return this.httpClient
@@ -185,7 +176,7 @@ export class OrdersService {
         //   this.httpClient.delete(this.apiUrl + '/DeleteCustomerOrder' + id).pipe(tap(res => console.log(res))),
         //   this.httpClient.delete(this.apiUrl + '/DeleteCustomerOrderLine' + id).pipe(tap(res => console.log(res))),
         // ])
-        return this.httpClient.delete(this.apiUrl + '/' + id).pipe(tap(res => console.log(res)))
+        return this.httpClient.delete(this.manytoManyAPIUrl + '/' + id).pipe(tap(res => console.log(res)))
      }
 
 
