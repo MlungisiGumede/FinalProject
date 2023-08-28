@@ -12,6 +12,7 @@ import { ChangeDetectorRef } from '@angular/core';
 import { CustomerOrderViewModel } from '../Models/CustomerOrderViewModel';
 import { CustomerOrderLine } from '../Models/CustomerOrderLine';
 import { CustomerOrder } from '../Models/CustomerOrder';
+import { DatePipe } from '@angular/common';
 //import { SupplierOrder } from '../Models/SupplierOrder';
 //import { CustomerOrder } from '../Models/CustomerOrder';
 
@@ -334,15 +335,24 @@ export class AddCustomerOrderComponent implements OnInit {
       let customerOrderViewModel:CustomerOrderViewModel = new CustomerOrderViewModel()
       let customerOrder:CustomerOrder = new CustomerOrder()
       customerOrder.customer_ID = this.data.customer_ID
-      customerOrder.date_Created = Date.now().toString()
+      let date = new Date(Date.now())
+      let total = this.CalculateSubTotal()
+      var datePipe = new DatePipe('en-US');
+      let dateString = datePipe.transform(date, 'yyyy/MM/dd')?.toString();
+      customerOrder.date_Created = date.toString()
+      Date.prototype.toJSON
       customerOrderViewModel.customerOrder = customerOrder
       let orderLines = (this.form.get('records') as FormArray).value
       orderLines.forEach((element:CustomerOrderLine) => {
         element.customer_Order_ID = this.data.customer_ID
       });
       customerOrderViewModel.customerOrderLines = orderLines
-      this.orderService.CreateCustomerOrder(customerOrder,orderLines)
-     
+    total = this.orderService.CreateCustomerOrder(customerOrder,orderLines,total)
+     if(total!=null){
+       this.dialogRef.close(total)
+     }else if(total==null){
+       this.dialogRef.close("error")
+     }
       
       console.log(customerOrderViewModel)
 

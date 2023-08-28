@@ -17,6 +17,10 @@ import { SupplierOrderViewModel } from '../Models/SupplierOrderViewModel';
 
 export class OrdersService {
   apiUrl = 'https://localhost:7226/api/Order';
+  productApiUrl = 'https://localhost:7226/api/Products';
+  inventoryApiUrl = 'https://localhost:7226/api/Item';
+  customersApiUrl = 'https://localhost:7226/api/Customers';
+  suppliersApiUrl = 'https://localhost:7226/api/Suppliers';
 
   constructor(private httpClient: HttpClient) { }
 
@@ -47,7 +51,9 @@ export class OrdersService {
         return this.httpClient.post(this.apiUrl, ord, this.httpOptions)
       }
   
-    
+    UpdateOrderStatus(item:CustomerOrder){
+      return this.httpClient.put(this.apiUrl + '/PutCustomerOrder', item, this.httpOptions)
+    }
     
        getOrderList(): Observable<Orders> {
          return this.httpClient
@@ -100,26 +106,28 @@ export class OrdersService {
         return forkJoin([
           this.httpClient.get(this.apiUrl + '/getCustomerOrders').pipe(tap(res => console.log(res))),
           this.httpClient.get(this.apiUrl + '/getSupplierOrders').pipe(tap(res => console.log(res))),
-        
+          this.httpClient.get(this.customersApiUrl + '/getAll').pipe(tap(res => console.log(res))),
+          this.httpClient.get(this.suppliersApiUrl + '/getAll').pipe(tap(res => console.log(res)))
         ])
       }
-      CreateCustomerOrder(ord: CustomerOrder, ordLines: CustomerOrderLine[]) {
+      CreateCustomerOrder(ord: CustomerOrder, ordLines: CustomerOrderLine[],total:any) {
         console.log(ord)
+        let returnVal = false
         this.httpClient.post(this.apiUrl + '/PostCustomerOrder', ord).subscribe(
           (res) => {
             console.log(res)
            ordLines.forEach((element:CustomerOrderLine) => {
              element.customer_Order_ID = res
            })
-            this.httpClient.post(this.apiUrl + '/PostCustomerOrderLine',ordLines).subscribe()
+            this.httpClient.post(this.apiUrl + '/PostCustomerOrderLine',ordLines).subscribe( ()=>{
+                    returnVal = true
+                    total = null
+            }
+                 
+            )
           }
         )
-        // return forkJoin([
-        //   this.httpClient.post(this.apiUrl + '/PostCustomerOrder', ord.customerOrder).pipe(tap(res => console.log(res))),
-        //   this.httpClient.post(this.apiUrl + '/PostCustomerOrderLine',ord.customerOrderLines).pipe(tap(res => console.log(res))),
-        
-        //  ])
-       
+        return total
         }
         ;
 
@@ -139,11 +147,11 @@ export class OrdersService {
         //     retry(2),
         //     catchError(this.handleError)
         //   )
-         forkJoin([
+       return forkJoin([
             this.httpClient.put(this.apiUrl + '/PutCustomerOrder',data).pipe(tap(res => console.log(res))),
             this.httpClient.put(this.apiUrl + '/PutCustomerOrderLine',element).pipe(tap(res => console.log(res))),
           
-          ]).subscribe()
+          ])
       }
       UpdateSupplierOrder( data: any): Observable<SupplierOrder> {
         return this.httpClient

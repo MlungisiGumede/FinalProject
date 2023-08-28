@@ -26,7 +26,7 @@
       </ion-grid>
         <ion-item-divider></ion-item-divider>
         <ion-grid>
-        <ion-row *ngFor="let item of data;let rowIndex;">
+        <ion-row *ngFor="let item of data;let rowIndex = index;">
         <div  *ngIf="isCustomerOrder">
          
           <ion-col>
@@ -34,7 +34,7 @@
           </ion-col>
 
           <ion-col>
-            <ion-label>{{item.customer_ID}}</ion-label>
+            <ion-label>{{getCustomerName(item.customer_ID)}}</ion-label>
           </ion-col>
 
           <ion-col>
@@ -54,32 +54,51 @@
        <ion-col>
           <div [ngSwitch]="selectedStatus">
            
+
             <div *ngSwitchCase="1">
+              
+              
+              
+              <mat-icon class="light-Btn" (click)="delete(item)">delete</mat-icon>
+              <mat-icon class="light-Btn"  (click)="View(item)">edit</mat-icon>
+              <ion-button class="red-Btn" id="1" (click)="UpdateOrderStatus(item,3)">Cancel</ion-button>
+              <mat-icon class="light-Btn" (click)="UpdateOrderStatus(item,2)">check</mat-icon>
+
+             
+              </div>
+
+
+            <div *ngSwitchCase="2">
+              <mat-icon class="light-Btn" (click)="delete(item)">delete</mat-icon>
+              <mat-icon class="red-Btn" (click)="View(item)">edit</mat-icon>
+              <ion-button class="red-Btn" id="1" (click)="UpdateOrderStatus(item,3)">Cancel</ion-button>
+            <ion-button class="light-Btn" id="1" (click)="UpdateOrderStatus(item,1)">In progress</ion-button>
+           
             
-            <ion-button class="red-Btn" id="1" (click)="View(rowIndex)">In progress</ion-button>
-            <mat-icon class="light-Btn" (click)="delete(rowIndex)">delete</mat-icon>
-              <mat-icon class="red-Btn" (click)="View(rowIndex)">edit</mat-icon>
+           
+             
+             
              
             </div>
-            <div *ngSwitchCase="2">
+            <div *ngSwitchCase="3">
               
-              <ion-button class="red-Btn" (click)="View(rowIndex)">In Progress</ion-button>
-              <ion-button class="light-Btn" (click)="delete(rowIndex)">View Reason</ion-button>
-              <mat-icon  (click)="View(rowIndex)">edit</mat-icon>
+              <mat-icon class="light-Btn" (click)="delete(item)">delete</mat-icon>
+              <mat-icon class="light-Btn" (click)="View(item)">edit</mat-icon>
+              <mat-icon class="red-Btn" (click)="UpdateOrderStatus(item,2)">check</mat-icon>
+              <ion-button class="light-Btn" (click)="UpdateOrderStatus(item,1)">In Progress</ion-button>
+             
+              
+              
+              
+              <!-- <mat-icon  (click)="View(rowIndex)">edit</mat-icon> -->
               
               </div>
               
-              <div *ngSwitchCase="3">
-              
-                <mat-icon class="red-Btn" (click)="View(rowIndex)">check</mat-icon>
-                <mat-icon class="light-Btn" (click)="delete(rowIndex)">delete</mat-icon>
-                <mat-icon  (click)="View(rowIndex)">edit</mat-icon>
-                
-                </div>
+            
                 <div *ngSwitchCase="4">
                   
-                  <mat-icon (click)="View(rowIndex)">edit</mat-icon>
-                  <mat-icon class="light-Btn" (click)="delete(rowIndex)">delete</mat-icon>
+                  <mat-icon  class="light-Btn" (click)="View(item)">edit</mat-icon>
+                  <mat-icon class="light-Btn" (click)="delete(item)">delete</mat-icon>
                   
                   </div>
                   </div>

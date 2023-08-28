@@ -148,8 +148,8 @@ namespace IBIS_API.Migrations
                     b.Property<string>("Date_Created")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("OrderStatus_ID")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int?>("OrderStatus_ID")
+                        .HasColumnType("int");
 
                     b.HasKey("CustomerOrder_ID");
 

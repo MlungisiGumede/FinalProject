@@ -29,7 +29,7 @@ namespace IBIS_API.Controllers
                 if (ID == element.Supplier_Order_ID)
                 {
                     //_context.Inventories.FindAsync(x => x.)
-                   // var inventory = _context.Inventories.First(x => x.Inventory_ID == element.Inventory_ID);
+                    // var inventory = _context.Inventories.First(x => x.Inventory_ID == element.Inventory_ID);
                     supplierOrderLines.Add(element);
                 }
             }
@@ -83,7 +83,7 @@ namespace IBIS_API.Controllers
             List<SupplierOrderLine> supplierOrderLines = supplierOrderViewModel.SupplierOrderLines;
             foreach (var line in supplierOrderLines)
             {
-               _context.SupplierOrderLines.Add(line);
+                _context.SupplierOrderLines.Add(line);
             }
             await _context.SaveChangesAsync();
 
@@ -93,6 +93,7 @@ namespace IBIS_API.Controllers
         [Route("PostCustomerOrder")]
         public async Task<ActionResult> PostCustomerOrder(CustomerOrder? ord)
         {
+            ord.OrderStatus_ID = 1;
             _context.CustomerOrders.Add(ord);
             await _context.SaveChangesAsync();
             //ord.CustomerOrder_ID;
@@ -105,7 +106,7 @@ namespace IBIS_API.Controllers
         [Route("PostCustomerOrderLine")]
         public async Task<ActionResult> PostCustomerOrderLine(List<CustomerOrderLine> ord)
         {
-           
+
             List<CustomerOrderLine> customerOrderLines = ord;
             foreach (var line in customerOrderLines)
             {
@@ -117,6 +118,9 @@ namespace IBIS_API.Controllers
 
             return Ok();
         }
+       
+
+
         [HttpPut]
         [Route("PutCustomerOrder")]
         public async Task<ActionResult> PutCustomerOrder(CustomerOrder ord)
