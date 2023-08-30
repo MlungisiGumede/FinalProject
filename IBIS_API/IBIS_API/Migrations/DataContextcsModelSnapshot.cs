@@ -202,26 +202,14 @@ namespace IBIS_API.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Inventory_ID"));
 
-                    b.Property<string>("Inventory_Items")
+                    b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Invoice")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ItemName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Products")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("Quantity")
-                        .HasColumnType("int");
 
                     b.Property<string>("Sku")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("SupplierID")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int?>("Supplier_ID")
+                        .HasColumnType("int");
 
                     b.HasKey("Inventory_ID");
 
@@ -364,8 +352,8 @@ namespace IBIS_API.Migrations
                     b.Property<string>("Date_Created")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("OrderStatus_ID")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int?>("OrderStatus_ID")
+                        .HasColumnType("int");
 
                     b.Property<int?>("Supplier_ID")
                         .HasColumnType("int");
@@ -377,14 +365,13 @@ namespace IBIS_API.Migrations
 
             modelBuilder.Entity("IBIS_API.Models.SupplierOrderLine", b =>
                 {
-                    b.Property<int?>("SupplierOrderLine_ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                    b.Property<int>("SupplierOrder_ID")
+                        .HasColumnType("int")
+                        .HasColumnOrder(0);
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int?>("SupplierOrderLine_ID"));
-
-                    b.Property<int?>("Inventory_ID")
-                        .HasColumnType("int");
+                    b.Property<int>("Inventory_ID")
+                        .HasColumnType("int")
+                        .HasColumnOrder(1);
 
                     b.Property<double?>("Price")
                         .HasColumnType("float");
@@ -392,10 +379,9 @@ namespace IBIS_API.Migrations
                     b.Property<double?>("Quantity")
                         .HasColumnType("float");
 
-                    b.Property<int?>("Supplier_Order_ID")
-                        .HasColumnType("int");
+                    b.HasKey("SupplierOrder_ID", "Inventory_ID");
 
-                    b.HasKey("SupplierOrderLine_ID");
+                    b.HasIndex("Inventory_ID");
 
                     b.ToTable("SupplierOrderLines");
                 });
@@ -609,6 +595,25 @@ namespace IBIS_API.Migrations
                     b.Navigation("CustomerOrder");
 
                     b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("IBIS_API.Models.SupplierOrderLine", b =>
+                {
+                    b.HasOne("IBIS_API.Models.Inventory", "Inventory")
+                        .WithMany()
+                        .HasForeignKey("Inventory_ID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("IBIS_API.Models.SupplierOrder", "SupplierOrder")
+                        .WithMany()
+                        .HasForeignKey("SupplierOrder_ID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Inventory");
+
+                    b.Navigation("SupplierOrder");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

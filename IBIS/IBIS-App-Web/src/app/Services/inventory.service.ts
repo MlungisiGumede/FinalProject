@@ -41,9 +41,9 @@ export class InventoryService {
   
     
     
-       getInventoryList(): Observable<Inventory> {
+       getInventoryList(): Observable<Inventory[]> {
          return this.httpClient
-         .get<Inventory>(this.apiUrl + '/getAll')
+         .get<Inventory[]>(this.apiUrl + '/getAll')
            .pipe(
              retry(2),
              catchError(this.handleError)
@@ -57,6 +57,9 @@ export class InventoryService {
              retry(2),
              catchError(this.handleError)
            )
+       }
+       public getInventoriesPerSupplier(id:any){
+        return this.httpClient.post(this.apiUrl + '/getInventoriesPerSupplier',id)
        }
       
        updateInventory(id: any, data: any): Observable<Inventory> {

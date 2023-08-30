@@ -315,22 +315,6 @@ dropDown:any= [{
       'records': this.formBuilder.array([])
     
       })
-    // this.productService.getProductList().subscribe((res:any)=>{
-    //   this.dropDown = [...res]
-    //   this.products = [...res]
-    //   console.log(this.dropDown)
-    //   console.log(this.data)
-    //   this.orderService.getCustomerOrderLine(this.data).subscribe(response => {
-    //        console.log(response);
-    //       let control =  this.form.get('records') as FormArray
-    //       response.forEach((element:any) => {
-    //         let productIndex = this.products.findIndex((item:any) => item.product_ID == element.product_ID)
-    //         let product_Name = this.products[productIndex].name
-    //         console.log(element)
-    //         control.push(this.initiateProductForm(element,product_Name))
-    //         console.log((this.form.get('records') as FormArray).value)
-    //       });
-         // console.log((this.form.get('records') as FormArray).value)
        this.dropDown = [...this.data.products]
        this.products = [...this.data.products]
       let control =  this.form.get('records') as FormArray

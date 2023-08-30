@@ -7,6 +7,10 @@ import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 import { Ng2SearchPipe } from 'ng2-search-filter/src/ng2-filter.pipe';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
+import { AddInventoryItemComponent } from '../add-inventory-item/add-inventory-item.component';
+import { SupplierService } from '../Services/supplier.service';
+import { Supplier } from '../Models/Supplier';
 //import pdfMake from "pdfmake/build/pdfmake";
 //import * as pdfMake from 'pdfmake/build/pdfmake';
 //import * as pdfFonts from "pdfmake/build/vfs_fonts";  
@@ -30,9 +34,12 @@ export class InventoryComponent implements OnInit {
   viewinventoryform!: FormGroup;
   inventory: any;
   inID: any;
+  suppliers:Supplier[] = []
 
-  constructor(public router: Router, private inv : InventoryService,private toastController: ToastController,private fb : FormBuilder) {
+  constructor(public router: Router, private inv : InventoryService,private toastController: ToastController,private fb : FormBuilder
+    ,public matDialog: MatDialog,public supplierService:SupplierService) {
     //this.inventory = new Inventory();
+
    }
 
 
@@ -42,7 +49,10 @@ export class InventoryComponent implements OnInit {
 
  
 
-    
+    this.supplierService.getSupplierList().subscribe(response => {
+      console.log(response);
+      this.suppliers = response
+    })
 
 
 
@@ -52,21 +62,18 @@ export class InventoryComponent implements OnInit {
   getInventory(){
     this.inv.getInventoryList().subscribe(response => {
       console.log(response);
-      this.data = response;
-      //console.log(this.data[0].inventory_ID);
-      
-      //this.inID = this.data[0].inventory_ID;
-    
+      if(response){
+        this.data = [...response]
 
-
-      //let inventory = JSON.stringify(response.inventory_ID);
-      
-     // console.log('this is:',JSON.stringify(response['inventory_ID']))
-    // console.log('finally',response);
+      }
+   
      
     })
     
 
+  }
+  GetSupplierName(id:any){
+return this.suppliers.find(supplier => supplier.supplier_ID == id)?.name
   }
 
 
@@ -85,7 +92,17 @@ this.presentToast('top')
 
   addInventoryItem(){
 
-    this.router.navigate(['/add-inventory-item']);
+    //this.router.navigate(['/add-inventory-item']);
+    this.supplierService.getSupplierList().subscribe(response => {
+      const dialogRef = this.matDialog.open(AddInventoryItemComponent,{
+        data:response
+      });
+      dialogRef.afterClosed().subscribe(result => {
+        if(result){
+          this.getInventory();
+        }
+      })
+    })
 
   }
 

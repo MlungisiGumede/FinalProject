@@ -103,12 +103,8 @@ namespace IBIS_API.Migrations
                     Inventory_ID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Sku = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ItemName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    SupplierID = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Quantity = table.Column<int>(type: "int", nullable: true),
-                    Invoice = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Products = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Inventory_Items = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Supplier_ID = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -187,27 +183,11 @@ namespace IBIS_API.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Supplier_ID = table.Column<int>(type: "int", nullable: true),
                     Date_Created = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    OrderStatus_ID = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    OrderStatus_ID = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Supplier_Orders", x => x.SupplierOrder_ID);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "SupplierOrderLines",
-                columns: table => new
-                {
-                    SupplierOrderLine_ID = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Inventory_ID = table.Column<int>(type: "int", nullable: true),
-                    Supplier_Order_ID = table.Column<int>(type: "int", nullable: true),
-                    Quantity = table.Column<double>(type: "float", nullable: true),
-                    Price = table.Column<double>(type: "float", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_SupplierOrderLines", x => x.SupplierOrderLine_ID);
                 });
 
             migrationBuilder.CreateTable(
@@ -412,6 +392,32 @@ namespace IBIS_API.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "SupplierOrderLines",
+                columns: table => new
+                {
+                    SupplierOrder_ID = table.Column<int>(type: "int", nullable: false),
+                    Inventory_ID = table.Column<int>(type: "int", nullable: false),
+                    Quantity = table.Column<double>(type: "float", nullable: true),
+                    Price = table.Column<double>(type: "float", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SupplierOrderLines", x => new { x.SupplierOrder_ID, x.Inventory_ID });
+                    table.ForeignKey(
+                        name: "FK_SupplierOrderLines_Inventories_Inventory_ID",
+                        column: x => x.Inventory_ID,
+                        principalTable: "Inventories",
+                        principalColumn: "Inventory_ID",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_SupplierOrderLines_Supplier_Orders_SupplierOrder_ID",
+                        column: x => x.SupplierOrder_ID,
+                        principalTable: "Supplier_Orders",
+                        principalColumn: "SupplierOrder_ID",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -460,6 +466,11 @@ namespace IBIS_API.Migrations
                 name: "IX_CustomerOrdersLine_Product_ID",
                 table: "CustomerOrdersLine",
                 column: "Product_ID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SupplierOrderLines_Inventory_ID",
+                table: "SupplierOrderLines",
+                column: "Inventory_ID");
         }
 
         /// <inheritdoc />
@@ -493,9 +504,6 @@ namespace IBIS_API.Migrations
                 name: "Customers");
 
             migrationBuilder.DropTable(
-                name: "Inventories");
-
-            migrationBuilder.DropTable(
                 name: "Orders");
 
             migrationBuilder.DropTable(
@@ -503,9 +511,6 @@ namespace IBIS_API.Migrations
 
             migrationBuilder.DropTable(
                 name: "Recipes");
-
-            migrationBuilder.DropTable(
-                name: "Supplier_Orders");
 
             migrationBuilder.DropTable(
                 name: "SupplierOrderLines");
@@ -530,6 +535,12 @@ namespace IBIS_API.Migrations
 
             migrationBuilder.DropTable(
                 name: "Products");
+
+            migrationBuilder.DropTable(
+                name: "Inventories");
+
+            migrationBuilder.DropTable(
+                name: "Supplier_Orders");
         }
     }
 }

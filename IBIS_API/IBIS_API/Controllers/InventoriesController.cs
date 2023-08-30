@@ -34,7 +34,7 @@ namespace IBIS_API.Controllers
         }
 
 
-        
+
         [HttpGet("{id}")]
         public async Task<ActionResult<Inventory>> GetInventory(int id)
         {
@@ -47,8 +47,10 @@ namespace IBIS_API.Controllers
 
             return inv;
         }
+  
 
-       
+
+
         [HttpPut("{id}")]
         public async Task<IActionResult> PutInventory(int id, Inventory inv)
         {

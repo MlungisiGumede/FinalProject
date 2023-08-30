@@ -7,6 +7,7 @@ import { IonicModule, ToastController } from '@ionic/angular';
 import { MatDialog } from '@angular/material/dialog';
 import { AddSupplierComponent } from '../add-supplier/add-supplier.component';
 import { AddSupplierOrderComponent } from '../add-supplier-order/add-supplier-order.component';
+import { InventoryService } from '../Services/inventory.service';
 
 var pdfMake = require('pdfmake/build/pdfmake');
 var pdfFonts = require('pdfmake/build/vfs_fonts');
@@ -28,7 +29,7 @@ export class SuppliersComponent implements OnInit {
   
 
   constructor(private supply: SupplierService,public router: Router,private route: ActivatedRoute,private logged: LoginService,private toastController: ToastController
-    ,private matDialog: MatDialog) {
+    ,private matDialog: MatDialog,public inventoryService: InventoryService) {
       
     
 
@@ -41,9 +42,12 @@ export class SuppliersComponent implements OnInit {
 
   }
 SupplierOrder(item:any){
-const dialog = this.matDialog.open(AddSupplierOrderComponent, {
-  data:item.name
-})
+  this.inventoryService.getInventoriesPerSupplier(item).subscribe((res:any)=>{
+    const dialog = this.matDialog.open(AddSupplierOrderComponent, {
+      data:{'inventories':res,'name':item.name,'order':item}
+    })
+  })
+
 }
 
 

@@ -52,8 +52,11 @@ export class OrdersService {
         return this.httpClient.post(this.apiUrl, ord, this.httpOptions)
       }
   
-    UpdateOrderStatus(item:CustomerOrder){
-      return this.httpClient.put(this.apiUrl + '/PutCustomerOrder', item, this.httpOptions)
+    UpdateCustomerOrderStatus(item:CustomerOrder){
+      return this.httpClient.put(this.manytoManyAPIUrl + '/putCustomerOrderStatus', item, this.httpOptions)
+    }
+    UpdateSupplierOrderStatus(item:SupplierOrder){
+      return this.httpClient.put(this.manytoManyAPIUrl + '/putSupplierOrderStatus', item, this.httpOptions)
     }
     
        getOrderList(): Observable<Orders> {
@@ -122,6 +125,7 @@ export class OrdersService {
         return this.httpClient.post(this.manytoManyAPIUrl + '/PostCustomerOrder', customerOrderViewModel)
           
           }
+          
         
       
         
@@ -134,7 +138,7 @@ export class OrdersService {
        
       
       CreateSupplierOrder(ord: SupplierOrderViewModel){
-        return this.httpClient.post(this.apiUrl + "/PostSupplierOrder", ord, this.httpOptions)
+        return this.httpClient.post(this.manytoManyAPIUrl + "/PostSupplierOrder", ord, this.httpOptions)
       }
       UpdateCustomerOrder( customerOrderViewModel: CustomerOrderViewModel): any {
         return this.httpClient
@@ -146,7 +150,7 @@ export class OrdersService {
       }
       UpdateSupplierOrder( data: any): Observable<SupplierOrder> {
         return this.httpClient
-          .put<SupplierOrder>(this.apiUrl + '/' , data, this.httpOptions)
+          .put<SupplierOrder>(this.manytoManyAPIUrl + '/PutSupplierOrder' , data, this.httpOptions)
           .pipe(
             retry(2),
             catchError(this.handleError)

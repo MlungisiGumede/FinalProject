@@ -100,6 +100,8 @@ import { ViewSupplierOrderComponent } from './view-supplier-order/view-supplier-
     AddSupplierOrderComponent,
     ViewCustomerOrderComponent,
     ViewSupplierOrderComponent,
+    AddSupplierComponent,
+    AddInventoryItemComponent
     
   
   ],
@@ -170,7 +172,8 @@ import { ViewSupplierOrderComponent } from './view-supplier-order/view-supplier-
 
   ],
   entryComponents: [AddCustomerComponent,ViewCustomerComponent,AddCustomerOrderComponent,
-  ViewImageComponent,AddSupplierComponent,ViewCustomerOrderComponent,ViewSupplierOrderComponent],
+  ViewImageComponent,AddSupplierComponent,ViewCustomerOrderComponent,ViewSupplierOrderComponent,
+  AddSupplierOrderComponent,AddInventoryItemComponent,ViewInventoryItemComponent,ViewSupplierComponent],
   providers: [{provide:HTTP_INTERCEPTORS,useClass:AuthenticationService,multi:true}
   ,AuthGuardService],
   bootstrap: [AppComponent]

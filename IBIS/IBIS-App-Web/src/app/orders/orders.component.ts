@@ -175,6 +175,12 @@ this.CheckOrderStatus()
     let customer = this.customers.find((customer:any) => customer.customer_ID == id)
     return customer.customer_FirstName + " " + customer.customer_Surname
   }
+  getSupplierName(id:any){
+    console.log(id)
+    console.log(this.suppliers)
+    let supplier = this.suppliers.find((supplier:any) => supplier.supplier_ID == id)
+    return supplier.name
+  }
   ToSupplier(){
     // edit records to standardize... then whatever is true is sent to API...
       console.log("supplier")
@@ -206,6 +212,13 @@ if(this.isCustomerOrder){
       total = total + (element.quantity*element.price)
   }
 })
+}else{
+  this.supplierOrderLine.forEach((element:any) => {
+   
+    if(element.supplierOrder_ID == id){
+      total = total + (element.quantity*element.price)
+  }
+}) 
 }
 return total
    }
@@ -318,14 +331,32 @@ CheckOrderStatus(){
     })
   }
 }else{
-    //let supplierOrder = this.supplierOrders[rowIndex]
-    this.matDialog.open(ViewSupplierOrderComponent, {
-      data:element
+   let supplierOrderline:any = []
+        this.supplierOrderLine.forEach((orderLine:any) => {
+         
+          if(element.supplierOrder_ID == orderLine.supplierOrder_ID){
+           supplierOrderline.push(orderLine)
+        }
+      })
+      let name = this.getSupplierName(element.supplier_ID)
+     const dialogRef = this.matDialog.open(ViewSupplierOrderComponent, {
+        data:{'orderLines':supplierOrderline,'inventories':this.inventories,'order':element
+      ,'name':name}
+      
+    })    
+    dialogRef.afterClosed().subscribe(result => {
+      if(result == "success"){
+        this.ReadOrders()
+      }else if(result == "error"){
+        alert("error")
+      }
     })
-    
   }
 }
+    
   }
+
+  
 
     
       //let customerOrder = this.customerOrders[rowIndex]
@@ -341,7 +372,9 @@ CheckOrderStatus(){
   UpdateOrderStatus(item:any,id:any){
     item.orderStatus_ID = id
     let array:any = []
-this.orderservice.UpdateOrderStatus(item).subscribe(Response => {
+    if(this.isCustomerOrder){
+this.orderservice.UpdateCustomerOrderStatus(item).subscribe(Response => {
+
   this.orderservice.getOrders().subscribe((result:any) =>{
  
     if(result[0]){
@@ -361,7 +394,31 @@ this.orderservice.UpdateOrderStatus(item).subscribe(Response => {
 
   console.log(Response)
 })
-  }
+  }else    if(!this.isCustomerOrder){
+    item.orderStatus_ID = id
+    this.orderservice.UpdateSupplierOrderStatus(item).subscribe(Response => {
+    
+      this.orderservice.getOrders().subscribe((result:any) =>{
+     
+        if(result[0]){
+          this.customerOrders = result[0]
+          
+        }if(result[1]){
+          this.supplierOrders = result[1]
+        }
+        //this.data = this.supplierOrders
+        if(result[2]){
+          this.customers = result[2]
+        }if(result[3]){
+          this.suppliers = result[3]
+        }
+      })
+      this.CheckOrderStatus()
+    
+      console.log(Response)
+    })
+      }
+    }
 
 
 

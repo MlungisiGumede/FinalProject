@@ -81,11 +81,11 @@ namespace IBIS_API.Controllers
         public async Task<ActionResult> PostSupplierOrder(SupplierOrderViewModel supplierOrderViewModel)
         {
             _context.Supplier_Orders.Add(supplierOrderViewModel.SupplierOrder);
-            List<SupplierOrderLine> supplierOrderLines = supplierOrderViewModel.SupplierOrderLines;
-            foreach (var line in supplierOrderLines)
-            {
-                _context.SupplierOrderLines.Add(line);
-            }
+            //List<SupplierOrderLine> supplierOrderLines = supplierOrderViewModel.SupplierOrderLines;
+            //foreach (var line in supplierOrderLines)
+            //{
+            //    _context.SupplierOrderLines.Add(line);
+            //}
             await _context.SaveChangesAsync();
 
             return Ok();
@@ -122,21 +122,7 @@ namespace IBIS_API.Controllers
        
 
 
-        [HttpPut]
-        [Route("PutCustomerOrder")]
-        public async Task<ActionResult> PutCustomerOrder(CustomerOrder ord)
-        {
-            // dont send primary key of order lines through...
-            _context.Entry(ord).State = EntityState.Modified; // nah do the whole attaching thing...
-           
-            await _context.SaveChangesAsync();
-           
-
-
-
-
-            return NoContent();
-        }
+       
         [HttpPut]
         [Route("PutCustomerOrderLine")]
         public async Task<ActionResult> PutCustomerOrderLine(List<CustomerOrderLine> ord)
@@ -188,11 +174,11 @@ namespace IBIS_API.Controllers
                 //}
 
             }
-            List<SupplierOrderLine> supplierOrderLines = ord.SupplierOrderLines;
-            foreach (var line in supplierOrderLines)
-            {
-                _context.SupplierOrderLines.Add(line);
-            }
+            //List<SupplierOrderLine> supplierOrderLines = ord.SupplierOrderLines;
+            //foreach (var line in supplierOrderLines)
+            //{
+            //    _context.SupplierOrderLines.Add(line);
+            //}
             //_context.AddRange(customerOrderLines);
             await _context.SaveChangesAsync();
 
@@ -265,10 +251,10 @@ namespace IBIS_API.Controllers
             var supplierOrderlines = _context.SupplierOrderLines.ToList();
             foreach (var line in supplierOrderlines)
             {
-                if (line.Supplier_Order_ID == ord.SupplierOrder_ID )
-                {
-                    _context.SupplierOrderLines.Remove(line);
-                }
+                //if (line.Supplier_Order_ID == ord.SupplierOrder_ID )
+                //{
+                //    _context.SupplierOrderLines.Remove(line);
+                //}
             }
             await _context.SaveChangesAsync();
             return NoContent();

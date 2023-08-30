@@ -1,32 +1,29 @@
 <body>
-    <div class="container">
-     <div class="title">View Inventory</div>
-     <div class="content">
-       <form action="#">
-         <div class="user-details">
-           <div class="input-box">
-             <span class="details">item name</span>
-             <input  type="text" placeholder="name" [(ngModel)]="data.itemName" [ngModelOptions]="{standalone: true}">
-           </div>
-           <div class="input-box">
-             <span class="details">SKU</span>
-             <input   type="text" placeholder="Category" [(ngModel)]="data.sku" [ngModelOptions]="{standalone: true}">
-           </div>
-           <div class="input-box">
-             <span class="details">items</span>
-             <input  type="text" placeholder="Items" [(ngModel)]="data.inventory_Items" [ngModelOptions]="{standalone: true}">
-           </div>
-           <div class="input-box">
-            <span class="details">Quantity</span>
-            <input  type="text" placeholder="Quantity" [(ngModel)]="data.quantity" [ngModelOptions]="{standalone: true}">
-          </div>
+  <div class="container">
+   <div class="title">Add Inventory Item</div>
+   <div class="content">
+     <form action="#">
+       <div class="user-details">
+         <div class="input-box">
+           <span class="details">SKU</span>
+           <input  type="text" placeholder="SKU" formControlName="SKU">
          </div>
-         <div class="buttondiv">
-         <div class="button">
-           <input type="submit" value="update" (click)="update()">
+         <div class="input-box">
+           <span class="details">Inventory Name</span>
+           <input   type="text" placeholder="Name" formControlName="name">
          </div>
+         <mat-select formControlName="supplier_ID" >
+          <mat-option *ngFor="let supplier of suppliers" [value]="supplier.supplier_ID">
+            {{supplier.name}}
+          </mat-option>
+        </mat-select>
+       <div class="buttondiv">
+       <div class="button">
+         <input type="submit" value="Add Item" (click)="update()" [routerLink]="['/Inventory']" >
         </div>
-       </form>
-     </div>
-    </div>
-    </body>
+      </div>
+       </div>
+     </form>
+   </div>
+  </div>
+  </body>

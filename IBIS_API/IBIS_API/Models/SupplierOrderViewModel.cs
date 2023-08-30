@@ -6,6 +6,6 @@ namespace IBIS_API.Models
     {
         [Key]
         public SupplierOrder SupplierOrder { get; set; }
-        public List<SupplierOrderLine> SupplierOrderLines { get; set; }
+        public List<SupplierOrderLineViewModel>? SupplierOrderLines { get; set; }
     }
 }

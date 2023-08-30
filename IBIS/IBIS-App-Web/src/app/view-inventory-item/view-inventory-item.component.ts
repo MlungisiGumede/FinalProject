@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { InventoryService } from '../Services/inventory.service';
 import { ToastController } from '@ionic/angular';
@@ -13,37 +13,26 @@ export class ViewInventoryItemComponent implements OnInit {
 
   id:any;
   data:any;
+  suppliers:any
 
-  viewinventoryform!: FormGroup;
+  form!: FormGroup;
 
   constructor(private route : ActivatedRoute, private fb : FormBuilder,private inv: InventoryService,private toastController: ToastController) { }
 
   ngOnInit(): void {
 
     this.id = this.route.snapshot.params['id']
-    this.viewinventoryform = this.fb.group({
+    
 
   
-    SKU : ['', Validators.required],
-    Name: ['', Validators.required],
-      quantity : ['', Validators.required],
-      InventoryId :  ['', Validators.required]
-    })
+      this.form = new FormGroup({
+        sKU: new FormControl("",Validators.required),
+        name: new FormControl("",Validators.required),
+        supplier_ID: new FormControl("",Validators.required),
+      
   
-    this.id = this.route.snapshot.params['id']
-
-    this.inv.getinv(this.id).subscribe((res)=>{
-    
-    this.data = res
-    res = this.viewinventoryform.value
-    
-    console.log('inv:', this.data)
-    });
-  
-  
-  
-  
-  }
+      })
+    }
 
 
   update(){

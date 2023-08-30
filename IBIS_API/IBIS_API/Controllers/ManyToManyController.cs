@@ -70,6 +70,96 @@ public async Task<ActionResult> PostCustomerOrder(CustomerOrderViewModel? ord)
     return Ok();
 }
 
+        [HttpPost]
+        [Route("PostSupplierOrder")]
+        public async Task<ActionResult> PostSupplierOrder(SupplierOrderViewModel? ord)
+        {
+            var order = ord.SupplierOrder;
+            order.OrderStatus_ID = 1;
+            var orderLine = ord.SupplierOrderLines;
+            _context.Supplier_Orders.Add(order);
+
+
+            foreach (var line in orderLine)
+            {
+                var inventory = _context.Inventories.Find(line.Inventory_ID);
+                var addLine = new SupplierOrderLine
+                {
+                    SupplierOrder = ord.SupplierOrder,
+                    Inventory = inventory
+                ,
+                    Quantity = line.Quantity,
+                    Price = line.Price
+                };
+
+                _context.SupplierOrderLines.Add(addLine);
+            }
+            //_context.Database.ExecuteSqlRaw("Set IDENTITY_INSERT dbo.CustomerOrdersLine ON");
+            await _context.SaveChangesAsync();
+
+
+
+            return Ok();
+        }
+
+        [HttpPut]
+        [Route("putCustomerOrderStatus")]
+        public async Task<ActionResult> PutCustomerOrderStatus(CustomerOrder ord)
+        {
+            // dont send primary key of order lines through...
+            _context.Entry(ord).State = EntityState.Modified; // nah do the whole attaching thing...
+
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
+        [HttpPut]
+        [Route("putSupplierOrderStatus")]
+        public async Task<ActionResult> PutSupplierOrderStatus(SupplierOrder ord)
+        {
+            // dont send primary key of order lines through...
+            _context.Entry(ord).State = EntityState.Modified; // nah do the whole attaching thing...
+
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
+
+
+
+        [HttpPut]
+        [Route("PutSupplierOrder")]
+        public async Task<ActionResult> PutSupplierOrder(SupplierOrderViewModel? ord)
+        {
+            // dont send primary key of order lines through...
+            _context.Entry(ord.SupplierOrder).State = EntityState.Modified; // nah do the whole attaching thing...
+            var orderLines = _context.SupplierOrderLines.Where(c => c.SupplierOrder_ID == ord.SupplierOrder.SupplierOrder_ID).Select(c => c).ToList();
+            _context.SupplierOrderLines.RemoveRange(orderLines);
+            var orderLine = ord.SupplierOrderLines;
+            foreach (var line in orderLine)
+            {
+                var inventory = _context.Inventories.Find(line.Inventory_ID);
+                var addLine = new SupplierOrderLine
+                {
+                    SupplierOrder = ord.SupplierOrder,
+                    Inventory = inventory
+                ,
+                    Quantity = line.Quantity,
+                    Price = line.Price
+                };
+
+                _context.SupplierOrderLines.Add(addLine);
+            }
+            //await _context.SaveChangesAsync();
+
+            await _context.SaveChangesAsync();
+
+
+
+            return NoContent();
+
+        }
+
 
 
         [HttpPut]
@@ -117,7 +207,19 @@ public async Task<ActionResult> PostCustomerOrder(CustomerOrderViewModel? ord)
             await _context.SaveChangesAsync();
             return NoContent();
         }
-       
+
+        //[HttpDelete("{id}")]
+        //public async Task<IActionResult> DeleteSupplierOrder(int id)
+        //{
+        //    var order = await _context.CustomerOrders.FindAsync(id);
+        //    _context.Remove(order);
+
+        //    var orderLines = _context.CustomerOrdersLine.Where(c => c.CustomerOrder_ID == id).Select(c => c).ToList();
+        //    _context.CustomerOrdersLine.RemoveRange(orderLines);
+        //    await _context.SaveChangesAsync();
+        //    return NoContent();
+        //}
+
 
     }
 }
