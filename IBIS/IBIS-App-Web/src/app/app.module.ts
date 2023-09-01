@@ -60,6 +60,7 @@ import { AddSupplierOrderComponent } from './add-supplier-order/add-supplier-ord
 import { ViewCustomerOrderComponent } from './view-customer-order/view-customer-order.component';
 import { ViewSupplierOrderComponent } from './view-supplier-order/view-supplier-order.component';
 
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -107,6 +108,7 @@ import { ViewSupplierOrderComponent } from './view-supplier-order/view-supplier-
   ],
   imports: [
     BrowserModule,
+    ReactiveFormsModule,
     CanvasJSAngularChartsModule,
     Ng2SearchPipeModule,
     MatDialogModule,

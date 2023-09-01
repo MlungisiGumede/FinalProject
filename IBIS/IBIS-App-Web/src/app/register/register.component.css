@@ -153,3 +153,17 @@ form .user-details .input-box{
     flex-direction: column;
   }
 }
+
+
+.invalid-feedback{
+  color: red;
+}
+
+.button-container {
+  display: flex;
+}
+
+.ion-but{
+  background-color: black;
+  
+}
