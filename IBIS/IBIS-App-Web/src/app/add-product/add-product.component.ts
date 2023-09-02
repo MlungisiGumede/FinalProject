@@ -3,6 +3,7 @@ import { Product } from '../Models/Product';
 import { ProductService } from '../Services/product.service';
 import { Router } from '@angular/router';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { MatDialogRef } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-add-product',
@@ -23,7 +24,8 @@ categories: string[] = ['Meat', 'Vegetables', 'Sides'];
   };
 
 
-  constructor(private prodService: ProductService,public router:Router){
+  constructor(private prodService: ProductService,public router:Router,
+    public dialogRef: MatDialogRef<AddProductComponent>) {
     this.data = new Product();
   } 
 
@@ -36,6 +38,7 @@ categories: string[] = ['Meat', 'Vegetables', 'Sides'];
       quantity: new FormControl("",Validators.required),
       expiry: new FormControl("",Validators.required)
     })
+    
   }
 
   CreateProduct(){
@@ -43,7 +46,10 @@ categories: string[] = ['Meat', 'Vegetables', 'Sides'];
     product = this.form.value
     this.prodService.createProduct(product).subscribe(res=>{
     console.log("success", res);
-    })  
+    this.dialogRef.close(true)
+    }),(err:any)=>{
+      this.dialogRef.close(false)
+    }  
   }
 
   updateSubcategories() {

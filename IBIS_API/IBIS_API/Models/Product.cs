@@ -12,8 +12,8 @@ namespace IBIS_API.Models
 	public string? Name { get; set; }
         public string? Category { get; set; }
         public string? Subcategory { get; set; }
-        public int? Price { get; set; }
-        public int? Quantity { get; set; }
+        public double? Price { get; set; }
+        public double? Quantity { get; set; } = 0;
         public string? Expiry { get; set; }
 
         public virtual ICollection<CustomerOrder>? CustomerOrder { get; set;}

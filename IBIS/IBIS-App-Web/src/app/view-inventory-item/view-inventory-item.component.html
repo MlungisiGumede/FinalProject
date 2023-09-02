@@ -1,25 +1,25 @@
 <body>
   <div class="container">
-   <div class="title">Add Inventory Item</div>
+   <div class="title">View Inventory Item</div>
    <div class="content">
      <form action="#">
-       <div class="user-details">
+       <div class="user-details" [formGroup]="form">
          <div class="input-box">
            <span class="details">SKU</span>
-           <input  type="text" placeholder="SKU" formControlName="SKU">
+           <input  type="text" placeholder="SKU" formControlName="sKU">
          </div>
          <div class="input-box">
            <span class="details">Inventory Name</span>
            <input   type="text" placeholder="Name" formControlName="name">
          </div>
-         <mat-select formControlName="supplier_ID" >
+         <mat-select formControlName="supplier_ID"   >
           <mat-option *ngFor="let supplier of suppliers" [value]="supplier.supplier_ID">
             {{supplier.name}}
           </mat-option>
         </mat-select>
        <div class="buttondiv">
        <div class="button">
-         <input type="submit" value="Add Item" (click)="update()" [routerLink]="['/Inventory']" >
+         <input type="submit" value="Update" (click)="update()" [routerLink]="['/Inventory']" >
         </div>
       </div>
        </div>

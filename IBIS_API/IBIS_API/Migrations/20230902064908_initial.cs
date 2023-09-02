@@ -149,8 +149,8 @@ namespace IBIS_API.Migrations
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Category = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Subcategory = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Price = table.Column<int>(type: "int", nullable: true),
-                    Quantity = table.Column<int>(type: "int", nullable: true),
+                    Price = table.Column<double>(type: "float", nullable: true),
+                    Quantity = table.Column<double>(type: "float", nullable: true),
                     Expiry = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>

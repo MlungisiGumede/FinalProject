@@ -208,17 +208,7 @@ public async Task<ActionResult> PostCustomerOrder(CustomerOrderViewModel? ord)
             return NoContent();
         }
 
-        //[HttpDelete("{id}")]
-        //public async Task<IActionResult> DeleteSupplierOrder(int id)
-        //{
-        //    var order = await _context.CustomerOrders.FindAsync(id);
-        //    _context.Remove(order);
-
-        //    var orderLines = _context.CustomerOrdersLine.Where(c => c.CustomerOrder_ID == id).Select(c => c).ToList();
-        //    _context.CustomerOrdersLine.RemoveRange(orderLines);
-        //    await _context.SaveChangesAsync();
-        //    return NoContent();
-        //}
+     
 
 
     }

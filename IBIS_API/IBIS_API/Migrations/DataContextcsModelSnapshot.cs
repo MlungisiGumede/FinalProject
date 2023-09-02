@@ -274,11 +274,11 @@ namespace IBIS_API.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("Price")
-                        .HasColumnType("int");
+                    b.Property<double?>("Price")
+                        .HasColumnType("float");
 
-                    b.Property<int?>("Quantity")
-                        .HasColumnType("int");
+                    b.Property<double?>("Quantity")
+                        .HasColumnType("float");
 
                     b.Property<string>("Subcategory")
                         .HasColumnType("nvarchar(max)");

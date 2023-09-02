@@ -11,6 +11,9 @@ import { MatDialog } from '@angular/material/dialog';
 import { AddInventoryItemComponent } from '../add-inventory-item/add-inventory-item.component';
 import { SupplierService } from '../Services/supplier.service';
 import { Supplier } from '../Models/Supplier';
+import { Observable, of } from 'rxjs';
+import { ViewInventoryItemComponent } from '../view-inventory-item/view-inventory-item.component';
+import { MatSnackBar } from '@angular/material/snack-bar';
 //import pdfMake from "pdfmake/build/pdfmake";
 //import * as pdfMake from 'pdfmake/build/pdfmake';
 //import * as pdfFonts from "pdfmake/build/vfs_fonts";  
@@ -27,7 +30,7 @@ pdfMake.vfs = pdfFonts.pdfMake.vfs;
   styleUrls: ['./inventory.component.css']
 })
 export class InventoryComponent implements OnInit {
-  data:any
+  data:Observable<any> = new Observable();
   invent: Inventory[] = [];
   idtodelete :any;
   filterTerm!: string;
@@ -37,13 +40,37 @@ export class InventoryComponent implements OnInit {
   suppliers:Supplier[] = []
 
   constructor(public router: Router, private inv : InventoryService,private toastController: ToastController,private fb : FormBuilder
-    ,public matDialog: MatDialog,public supplierService:SupplierService) {
+    ,public matDialog: MatDialog,public supplierService:SupplierService,
+    private _snackbar: MatSnackBar) {
     //this.inventory = new Inventory();
 
    }
 
 
-  
+  ViewInventory(item:any){
+    if(this.suppliers){
+      const dialogRef = this.matDialog.open(ViewInventoryItemComponent, {
+        data:{'suppliers':this.suppliers,'item':item}
+      })
+      dialogRef.afterClosed().subscribe(result => {
+        if(result){
+          this.ShowSnackBar('Inventory successfully updated','success')
+          this.getInventory();
+        }
+      }), (error:any) => {
+        this.ShowSnackBar('Inventory could not be updated','error')
+      }
+    }
+    
+   
+  }
+  ShowSnackBar(message: string, panel: string) {
+    this._snackbar.open(message, "close", {
+      duration: 5000,
+      panelClass: [panel]
+      
+    });
+  }
 
   ngOnInit() {
 
@@ -63,7 +90,7 @@ export class InventoryComponent implements OnInit {
     this.inv.getInventoryList().subscribe(response => {
       console.log(response);
       if(response){
-        this.data = [...response]
+        this.data = of(response)
 
       }
    
@@ -81,11 +108,12 @@ return this.suppliers.find(supplier => supplier.supplier_ID == id)?.name
     this.idtodelete = id;
 
 this.inv.delete(this.idtodelete).subscribe(Response => {
-  console.log(Response);
-  this.data = Response;
+ this.ShowSnackBar("Inventory successfully deleted", "success");
 this.getInventory();
-})
-this.presentToast('top')
+}), (error:any) => {
+  this.ShowSnackBar("failed to delete inventory", "error");
+}
+
   }
 
 
@@ -99,9 +127,12 @@ this.presentToast('top')
       });
       dialogRef.afterClosed().subscribe(result => {
         if(result){
+          this.ShowSnackBar('Inventory successfully added','success')
           this.getInventory();
         }
-      })
+      }), (error:any) => {
+        this.ShowSnackBar('Inventory could not be added','error')
+      }
     })
 
   }
@@ -156,7 +187,7 @@ this.presentToast('top')
 
     this.inv.getInventoryList().subscribe(response => {
       console.log(response);
-      this.data = response;
+     // this.data = response;
       //this.inventory = response.Inventory_ID
     })
 
@@ -360,11 +391,11 @@ this.presentToast('top')
           table: {
             headerRows: 1,
             widths: ['*', 'auto', 'auto', 'auto'],
-            body: [
-              ['Inventory_ID', 'Inventory_Items', 'Quantity', 'Amount'],
-              ...this.data.map((p: { inventory_ID: any; inventory_Items: any; quantity: any; }) => ([p.inventory_ID, p.inventory_Items, p.quantity, (p.quantity).toFixed(2)])),
-              [{text: 'Total inventory', colSpan: 3}, {}, {}, this.data.reduce((sum: number, p: { quantity: number;  })=> sum + (p.quantity), 0).toFixed(2)]
-            ]
+            // body: [
+            //   ['Inventory_ID', 'Inventory_Items', 'Quantity', 'Amount'],
+            //   ...this.data.map((p: { inventory_ID: any; inventory_Items: any; quantity: any; }) => ([p.inventory_ID, p.inventory_Items, p.quantity, (p.quantity).toFixed(2)])),
+            //   [{text: 'Total inventory', colSpan: 3}, {}, {}, this.data.reduce((sum: number, p: { quantity: number;  })=> sum + (p.quantity), 0).toFixed(2)]
+            // ]
           }
         },
         {

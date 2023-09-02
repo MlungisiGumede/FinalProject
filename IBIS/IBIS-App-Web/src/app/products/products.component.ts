@@ -10,6 +10,12 @@ import { ChartDataset, ChartType, ChartOptions } from 'chart.js';
 import { Chart } from 'chart.js';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
+import { MatDialog } from '@angular/material/dialog';
+import { AddProductComponent } from '../add-product/add-product.component';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { ViewProductComponent } from '../view-product/view-product.component';
+import { ChangeDetectionStrategy, ChangeDetectorRef} from '@angular/core';
+import { Observable, of } from 'rxjs';
 
 var pdfMake = require('pdfmake/build/pdfmake');
 var pdfFonts = require('pdfmake/build/vfs_fonts');
@@ -21,10 +27,11 @@ declare var myChart: any;
 @Component({
   selector: 'app-products',
   templateUrl: './products.component.html',
-  styleUrls: ['./products.component.css']
+  styleUrls: ['./products.component.css'],
+ // changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProductsComponent implements OnInit {
-  data:any
+  data:Observable<any> = new Observable();
   data2: Product[] = [];
   products: Product[] = [];
   idtodelete :any;
@@ -34,9 +41,13 @@ export class ProductsComponent implements OnInit {
   itemQuantities: any;
   filterTerm!: string;
 
+
   combinedData: { Name: string, Quantity: number , Price: number}[] = [];
 
-  constructor(private productService: ProductService,public router: Router,private toastController: ToastController) { 
+  constructor(private productService: ProductService,public router: Router,private toastController: ToastController
+    ,private matDialog:MatDialog,private _snackbar: MatSnackBar) {
+      
+    
     productService = {} as ProductService;
   }
 
@@ -54,11 +65,21 @@ export class ProductsComponent implements OnInit {
 
   }
 
-  getProducts(){
-    this.productService.getProductList().subscribe(response => {
-      console.log(response);
-      this.data = response;
+  async getProducts(){
+    let val = new Promise((resolve, reject) => {
+      this.productService.getProductList().subscribe(response => {
+        console.log(response);
+        this.data = of(response)
+        console.log(this.data)
+        resolve(true)
+      }), (error:any) => {
+        resolve(false)
+      }
     })
+    await val
+
+    
+    
   }
 
   async delete(id: number){
@@ -66,15 +87,46 @@ export class ProductsComponent implements OnInit {
 
     this.productService.delete(this.idtodelete).subscribe(Response => {
       console.log(Response);
-      this.data = Response;
-      this.presentToast('top')
+      
+        this.ShowSnackBar("Product successfully removed", "success");
+       
       this.getProducts();
-    })
+    }), (error:any) => {
+      this.ShowSnackBar("failed to remove product", "error");
+    }
   }
-
+ViewProduct(item:any){
+  const dialogRef = this.matDialog.open(ViewProductComponent,{
+    data:item
+  })
+  dialogRef.afterClosed().subscribe(result => {
+    if(result){
+      this.ShowSnackBar("Product successfully updated", "success");
+      this.getProducts();
+    }else if(result == false){
+      this.ShowSnackBar("failed to update product", "error");
+    }
+  })
+}
 
   addproduct(){
-    this.router.navigate(['/add-product']);
+const dialogRef = this.matDialog.open(AddProductComponent);
+    //this.router.navigate(['/add-product']);
+    dialogRef.afterClosed().subscribe(result => {
+      if(result){
+        this.ShowSnackBar("Product successfully added", "success");
+        this.getProducts();
+      }else if(result == false){
+        this.ShowSnackBar("failed to add product", "error");
+      }
+    })
+  }
+  ShowSnackBar(message: string, panel: string) {
+    this._snackbar.open(message, "close", {
+      duration: 5000,
+      panelClass: [panel]
+      
+    });
   }
 
   viewWriteoffs(){
@@ -185,12 +237,12 @@ export class ProductsComponent implements OnInit {
           table: {
             headerRows: 1,
             widths: ['*', 'auto', 'auto', 'auto'],
-            body: [
-              ['Product', 'Price', 'Quantity', 'Amount'],
-              ...this.data.map((p: { product_Name: any; price: any; quantity: any; }) => ([p.product_Name, p.price, p.quantity, (p.price*p.quantity).toFixed(2)])),
-              [{text: 'Total Amount', colSpan: 3}, {}, {}, this.data.reduce((sum: number, p: { quantity: number; price: number; })=> sum + (p.quantity * p.price), 0).toFixed(2)],
-              [{text: 'Total Quantity:', colSpan: 3}, {}, {}, this.data.reduce((sum: number, p: { quantity: number; })=> sum + (p.quantity), 0).toFixed(2)]
-            ]
+            // body: [
+            //   ['Product', 'Price', 'Quantity', 'Amount'],
+            //   ...this.data.map((p: { product_Name: any; price: any; quantity: any; }) => ([p.product_Name, p.price, p.quantity, (p.price*p.quantity).toFixed(2)])),
+            //   [{text: 'Total Amount', colSpan: 3}, {}, {}, this.data.reduce((sum: number, p: { quantity: number; price: number; })=> sum + (p.quantity * p.price), 0).toFixed(2)],
+            //   [{text: 'Total Quantity:', colSpan: 3}, {}, {}, this.data.reduce((sum: number, p: { quantity: number; })=> sum + (p.quantity), 0).toFixed(2)]
+            // ]
           }
         },
         {

@@ -1,7 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit,Inject } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { SupplierService } from '../Services/supplier.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { Supplier } from '../Models/Supplier';
 
 @Component({
   selector: 'app-view-supplier',
@@ -13,29 +15,23 @@ export class ViewSupplierComponent implements OnInit {
   
   id:any;
   data:any;
- viewsupplierform!: FormGroup
+ form!: FormGroup
 
-  constructor(private route: ActivatedRoute,private supplys : SupplierService, private fb:FormBuilder) { }
+  constructor(private route: ActivatedRoute,private supplys : SupplierService, private fb:FormBuilder,
+    @Inject(MAT_DIALOG_DATA) public item: Supplier,private matDialogRef:MatDialogRef<ViewSupplierComponent>) { }
 
   ngOnInit(): void {
-    this.viewsupplierform = this.fb.group({
+    this.form = this.fb.group({
 
-      companyName : ['', Validators.required],
-      city : ['', Validators.required],
-      addressline : ['', Validators.required],
-      region : ['', Validators.required],
-      phone : ['', Validators.required]
+      name : [this.item.name, Validators.required],
+      address : [this.item.address, Validators.required],
+      email : [this.item.email, Validators.required],
+      supplier_ID : [this.item.supplier_ID, ],
+      phone : [this.item.phone, Validators.required]
     })
     
-    this.id = this.route.snapshot.params['id']
+    this.id = this.item.supplier_ID
 
-this.supplys.getSup(this.id).subscribe((res)=>{
-
-this.data = res
-res = this.viewsupplierform.value
-
-console.log('supplier:', this.data)
-});
   
 }
 
@@ -46,9 +42,13 @@ async update(){
 
   //this.id = this.route.snapshot.params['id']
 
-    this.supplys.updateSupplier(this.id,this.data).subscribe(response => {
+    this.supplys.updateSupplier(this.id,this.form.value).subscribe(response => {
       console.log("successfully updated",response);
-      
+      this.supplys.getSupplierList().subscribe(response => {
+        this.matDialogRef.close(true);
+      }), (error:any) => {
+        this.matDialogRef.close(false);
+      }
       //this.router.navigate(['student-list']);
      
       
