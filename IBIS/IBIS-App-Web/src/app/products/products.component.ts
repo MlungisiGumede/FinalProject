@@ -188,6 +188,36 @@ const dialogRef = this.matDialog.open(AddProductComponent);
     });
   }  
  
+  FormBody(data:any, columns:any) { // https://stackoverflow.com/questions/26658535/building-table-dynamically-with-pdfmake
+    var body = [];
+  console.log(data)
+  console.log(columns)
+      body.push(columns);
+      //this.reportData.map()
+  console.log(data.values())
+       data.forEach((row:any) => {
+         let dataRow:any = [];
+  
+          columns.forEach( (column:any) => {
+            console.log(column)
+            console.log(row)
+            console.log(row[column])
+              dataRow.push(row[column]);
+      
+           })
+           body.push(dataRow)
+          }
+         
+       )
+  
+         
+      // 
+      
+      console.log(body)
+      console.log(body)
+      return body;
+  }
+
   generPDF() {
     let docDefinition = {
       content: [
@@ -209,43 +239,16 @@ const dialogRef = this.matDialog.open(AddProductComponent);
           text: 'Details',
           style: 'sectionHeader'
         },
+      
         {
-          columns: [
-            [
-              {
-                text: 'products',
-                bold:true
-              },
-              { text: 'New Report' },
-              { text: 'Information '},
-              { text: 'See information below' }
-            ],
-            [
-              {
-                text: `Date: ${new Date().toLocaleString()}`,
-                alignment: 'right'
-              },
-              { 
-                text: `Bill No : ${((Math.random() *1000).toFixed(0))}`,
-                alignment: 'right'
-              }
-            ]
-          ]
-        },
-        {
-          text: 'report Details',
+          text: 'Report Details',
           style: 'sectionHeader'
         },
         {
           table: {
             headerRows: 1,
-            widths: ['*', 'auto', 'auto', 'auto'],
-            body: [
-              ['Product', 'Price', 'Quantity', 'Amount'],
-              ...this.reportData.map((p: { product_Name: any; price: any; quantity: any; }) => ([p.product_Name, p.price, p.quantity, (p.price*p.quantity).toFixed(2)])),
-              [{text: 'Total Amount', colSpan: 3}, {}, {}, this.reportData.reduce((sum: number, p: { quantity: number; price: number; })=> sum + (p.quantity * p.price), 0).toFixed(2)],
-              [{text: 'Total Quantity:', colSpan: 3}, {}, {}, this.reportData.reduce((sum: number, p: { quantity: number; })=> sum + (p.quantity), 0).toFixed(2)]
-            ]
+            // widths: ['*', 'auto', 'auto', 'auto'],
+            body: this.FormBody(this.reportData, ['product_ID','name','category','subcategory','price','quantity','expiry'])
           }
         },
         {
@@ -256,16 +259,8 @@ const dialogRef = this.matDialog.open(AddProductComponent);
             text: 'this.invoice.additionalDetails',
             margin: [0, 0 ,0, 15]          
         },
-        {
-          columns: [
-            [{ qr: `${'this.invoice.customerName'}`, fit: '50' }],
-            [{ text: 'Signature', alignment: 'right', italics: true}],
-          ]
-        },
-        {
-          text: 'Terms and Conditions',
-          style: 'sectionHeader'
-        },
+      
+       
         {
             ul: [
               'Order can be return in max 10 days.',

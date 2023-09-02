@@ -5,5 +5,6 @@ export class WriteOff{
     quantity?: any;
     reason?: string;
     image?: string;
+    product_ID:any
     //base64?: string;
   }

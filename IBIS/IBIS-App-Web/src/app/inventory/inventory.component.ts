@@ -338,108 +338,117 @@ this.getInventory();
 
 
 
+FormBody(data:any, columns:any) { // https://stackoverflow.com/questions/26658535/building-table-dynamically-with-pdfmake
+  var body = [];
+  
+  let displayedColumns = ['inventory_ID','SKU','Name','Supplier Name']
+console.log(data)
+console.log(columns)
+    body.push(displayedColumns);
+    //this.reportData.map()
+
+     data.forEach((row:any) => {
+       let dataRow:any = [];
+
+        columns.forEach( (column:any) => {
+          console.log(column)
+          console.log(row)
+          console.log(row[column])
+      if(column == "supplier_ID"){
+        row[column] = this.GetSupplierName(row[column])
+         }
+         dataRow.push(row[column])
+        })
+      body.push(dataRow);
+     } 
+     )
+
+       
+    // 
+    
+    console.log(body)
+    console.log(body)
+    return body;
+}
+
+
+
 
 
   generPDF() {
-    let docDefinition = {
-      content: [
-        {
-          text: 'Reports',
-          fontSize: 16,
-          alignment: 'center',
-          color: '#047886'
-        },
-        {
-          text: 'New Report',
-          fontSize: 20,
-          bold: true,
-          alignment: 'center',
-          decoration: 'underline',
-          color: 'skyblue'
-        },
-        {
-          text: 'Details',
-          style: 'sectionHeader'
-        },
-        {
-          columns: [
-            [
+   
+    
+          let docDefinition = {
+            content: [
               {
-                text: 'this.invoice.customerName',
-                bold:true
+                text: 'Inventory Report',
+                fontSize: 16,
+                alignment: 'center',
+                color: '#047886'
               },
-              { text: 'this.invoice.address' },
-              { text: 'this.invoice.email '},
-              { text: 'this.invoice.contactNo' }
-            ],
-            [
               {
-                text: `Date: ${new Date().toLocaleString()}`,
-                alignment: 'right'
+                text: 'New Report',
+                fontSize: 20,
+                bold: true,
+                alignment: 'center',
+                decoration: 'underline',
+                color: 'skyblue'
               },
-              { 
-                text: `Bill No : ${((Math.random() *1000).toFixed(0))}`,
-                alignment: 'right'
+              {
+                text: 'Details',
+                style: 'sectionHeader'
+              },
+            
+              {
+                text: 'Report Details',
+                style: 'sectionHeader'
+              },
+              {
+                table: {
+                  headerRows: 1,
+                  // widths: ['*', 'auto', 'auto', 'auto'],
+                  body: this.FormBody(this.reportData, ['inventory_ID','sku','name','supplier_ID'])
+                }
+              },
+              {
+                text: 'Additional Details',
+                style: 'sectionHeader'
+              },
+              {
+                  text: 'this.invoice.additionalDetails',
+                  margin: [0, 0 ,0, 15]          
+              },
+            
+             
+              {
+                  ul: [
+                    'Order can be return in max 10 days.',
+                    'Warrenty of the product will be subject to the manufacturer terms and conditions.',
+                    'This is system generated invoice.',
+                  ],
               }
-            ]
-          ]
-        },
-        {
-          text: 'report Details',
-          style: 'sectionHeader'
-        },
-        {
-          table: {
-            headerRows: 1,
-            widths: ['*', 'auto', 'auto', 'auto'],
-            body: [
-              ['Inventory_ID', 'Inventory_Items', 'Quantity', 'Amount'],
-              ...this.reportData.map((p: { inventory_ID: any; inventory_Items: any; quantity: any; }) => ([p.inventory_ID, p.inventory_Items, p.quantity, (p.quantity).toFixed(2)])),
-              [{text: 'Total inventory', colSpan: 3}, {}, {}, this.reportData.reduce((sum: number, p: { quantity: number;  })=> sum + (p.quantity), 0).toFixed(2)]
-            ]
-          }
-        },
-        {
-          text: 'Additional Details',
-          style: 'sectionHeader'
-        },
-        {
-            text: 'this.invoice.additionalDetails',
-            margin: [0, 0 ,0, 15]          
-        },
-        {
-          columns: [
-            [{ qr: `${'this.invoice.customerName'}`, fit: '50' }],
-            [{ text: 'Signature', alignment: 'right', italics: true}],
-          ]
-        },
-        {
-          text: 'Terms and Conditions',
-          style: 'sectionHeader'
-        },
-        {
-            ul: [
-              'Order can be return in max 10 days.',
-              'Warrenty of the product will be subject to the manufacturer terms and conditions.',
-              'This is system generated invoice.',
             ],
+            styles: {
+              sectionHeader: {
+                bold: true,
+                decoration: 'underline',
+                fontSize: 14,
+                margin: [0, 15,0, 15]          
+              }
+            }
+          };
+      
+         
+            pdfMake.createPdf(docDefinition).download();
+            pdfMake.createPdf(docDefinition).print();      
+         
+            pdfMake.createPdf(docDefinition).open();      
+         
+      
         }
-      ],
-      styles: {
-        sectionHeader: {
-          bold: true,
-          decoration: 'underline',
-          fontSize: 14,
-          margin: [0, 15,0, 15]          
-        }
-      }
-    };
 
    
-      pdfMake.createPdf(docDefinition).download();
-      //pdfMake.createPdf(docDefinition).print();      
-   
-      pdfMake.createPdf(docDefinition).open();      
+        
    
 
   }
@@ -465,4 +474,4 @@ this.getInventory();
 
 
 
-}
+
