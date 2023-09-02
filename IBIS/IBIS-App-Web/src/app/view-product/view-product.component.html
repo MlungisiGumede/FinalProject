@@ -3,30 +3,26 @@
    <div class="title">View Product</div>
    <div class="content">
      <form action="#">
-       <div class="user-details">
+       <div class="user-details" [formGroup]=form>
          <div class="input-box">
            <span class="details">Product Name</span>
-           <input  type="text" placeholder="name" [(ngModel)]="data.product_Name" [ngModelOptions]="{standalone: true}">
+           <input  type="text" placeholder="name" formControlName="name" >
          </div>
          <div class="input-box">
            <span class="details">category</span>
-           <input   type="text" placeholder="Category" [(ngModel)]="data.category" [ngModelOptions]="{standalone: true}">
+           <input   type="text" placeholder="Category" formControlName="category">
          </div>
          <div class="input-box">
            <span class="details">sub-category</span>
-           <input  type="text" placeholder="sub-category" [(ngModel)]="data.subcategory" [ngModelOptions]="{standalone: true}">
+           <input  type="text" placeholder="sub-category" formControlName="subCategory" >
          </div>
          <div class="input-box">
            <span class="details">Expiry</span>
-           <input  type="text" placeholder="Expiry" [(ngModel)]="data.expiry" [ngModelOptions]="{standalone: true}">
+           <input  type="text" placeholder="Expiry"  formControlName="expiry" >
          </div>
-         <div class="input-box">
-          <span class="details">Quantity</span>
-          <input  type="text" placeholder="Quantity" [(ngModel)]="data.quantity" [ngModelOptions]="{standalone: true}">
-        </div>
         <div class="input-box">
           <span class="details">Price</span>
-          <input  type="text" placeholder="Price" [(ngModel)]="data.price" [ngModelOptions]="{standalone: true}">
+          <input  type="text" placeholder="Price"  formControlName="price" >
         </div>
        </div>
        <div class="buttondiv">

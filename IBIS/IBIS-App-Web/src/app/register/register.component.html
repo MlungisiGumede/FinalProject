@@ -1,26 +1,48 @@
-<title>Registration Form</title>
-
+<div class="help-circle">
+  <ion-button>
+    <ion-icon name="help-circle"></ion-icon>
+  </ion-button>
+</div>
 <body>
-<div class="container">
- <div class="title">Register</div>
+<div class="container" >
+ <div class="title"  readonly>Register</div>
  <div class="content">
-   <form  [formGroup]="registerForm" action="#">
+   <form  [formGroup]="registerForm" (ngSubmit)="onRegister()">
      <div class="user-details">
        <div class="input-box">
          <span class="details">Full Name</span>
-         <input formControlName="fullName"type="text" placeholder="Enter your name" required>
-       </div>
+         <input class="form-control" id="fullName" type="text" 
+         [ngClass]="{ 'is-invalid': submitted && f['fullName'].errors }" formControlName="fullName" type="text" placeholder="Enter your name">
+         <div *ngIf=" submitted && f['fullName'].errors" class="invalid-feedback">
+          <div *ngIf="f['fullName'].errors['required']">firstName is required</div>
+        </div>
+      </div>
        <div class="input-box">
          <span class="details">Username</span>
-         <input formControlName="username" type="text" placeholder="Enter your username" required>
+         <input formControlName="username" type="text" placeholder="Enter your username" class="form-control"
+          [ngClass]="{ 'is-invalid': submitted && f['username'].errors }">
+          <div *ngIf="submitted && f['username'].errors" class="invalid-feedback">
+            <div *ngIf="f['username'].errors['required']">username is required</div>
+            <div *ngIf="f['username'].errors['minlength']">username must be at least 6 characters</div>
        </div>
+      </div>
        <div class="input-box">
         <span class="details">Password</span>
-        <input formControlName="password" type="text" placeholder="Enter your password" required>
+        <input formControlName="password" type="text" placeholder="Enter your password" class="form-control"
+        [ngClass]="{ 'is-invalid': submitted && f['password'].errors }">
+        <div *ngIf="submitted && f['password'].errors" class="invalid-feedback">
+          <div *ngIf="f['password'].errors['required']">Password is required</div>
+          <div *ngIf="f['password'].errors['minlength']">Password must be at least 6 characters</div>
+     </div>
       </div>
        <div class="input-box">
          <span class="details">Email</span>
-         <input formControlName="email" type="text" placeholder="Enter your email" required>
+         <input formControlName="email" type="text" placeholder="Enter your email" class="form-control"
+         [ngClass]="{ 'is-invalid': submitted && f['email'].errors }">
+         <div *ngIf="submitted && f['email'].errors" class="invalid-feedback">
+          <div *ngIf="f['email'].errors['required']">Email is required</div>
+          <div *ngIf="f['email'].errors['email']">Please enter a valid email address</div>
+     </div>
        </div>
       <!-- <div class="input-box">
           <span class="details">Phone Number</span>
@@ -33,9 +55,16 @@
        </div> 
      </div> -->
      </div>
+     <div class="button-container">
+     <ion-button color="primary" type="submit" class="ion-but">Register</ion-button>
+     <ion-button (click)="BackToLogin()">Back</ion-button>
+    </div>
    </form>
  </div>
- <button (click)="onRegister()" [disabled]="!registerForm.valid" mat-flat-button color="primary" class="but" >Register</button>
- <button (click)="BackToLogin()" style="float: right;" mat-flat-button color="primary" class="but" >Back</button>
 </div>
 </body>
+
+
+
+
+

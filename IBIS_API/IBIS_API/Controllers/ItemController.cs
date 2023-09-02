@@ -11,6 +11,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using Microsoft.EntityFrameworkCore;
+using Humanizer;
 
 namespace IBIS_API.Controllers
 {
@@ -56,6 +57,7 @@ namespace IBIS_API.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> Putinv(int id, Inventory sup)
         {
+           
             if (id != sup.Inventory_ID)
             {
                 return BadRequest();
@@ -85,12 +87,34 @@ namespace IBIS_API.Controllers
         // POST: api/Addresses
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Inventory>> PostInv(Inventory sup)
+        public async Task<ActionResult<Inventory>> PostInv(Inventory inventory)
         {
-            _context.Inventories.Add(sup);
-            await _context.SaveChangesAsync();
+            var inventoryItem = _context.Inventories.Where(c => c.Sku == inventory.Sku).FirstOrDefault();
+            if (inventoryItem == null)
+            {
+                _context.Inventories.Add(inventory);
+                await _context.SaveChangesAsync();
+            }
+            else
+            {
 
-            return CreatedAtAction("GetInv", new { id = sup.Inventory_ID }, sup);
+            }
+          ;
+
+            return CreatedAtAction("GetInv", new { id = inventory.Inventory_ID }, inventory);
+        }
+
+        [HttpPost]
+        [Route("getInventoriesPerSupplier")]
+        public async Task<ActionResult<Inventory>> GetInventoriesPerSupplier(Supplier sup)
+        {
+            var inventories = _context.Inventories.Where(c => c.Supplier_ID == sup.Supplier_ID).ToList();
+            if (!inventories.Any())
+            {
+                return NotFound();
+            }
+            return Ok(inventories);
+           
         }
 
         // DELETE: api/Addresses/5

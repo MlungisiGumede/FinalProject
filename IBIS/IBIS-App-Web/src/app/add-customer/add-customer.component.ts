@@ -32,9 +32,9 @@ constructor(public matDialogRef: MatDialogRef<AddCustomerComponent>
     console.log("hi")
     this.customerService.CreateCustomer(this.form.value).subscribe(res=>{
       console.log("success", res);
-      this.matDialogRef.close({data:'success'})
+      this.matDialogRef.close(true)
       }),(err:any)=>{
-        this.matDialogRef.close({data:'error'})
+        this.matDialogRef.close(false)
       }
       
       }

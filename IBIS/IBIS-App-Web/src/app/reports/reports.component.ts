@@ -7,6 +7,7 @@ import { InventoryService } from '../Services/inventory.service';
 import { SupplierService } from '../Services/supplier.service';
 import { OrdersService } from '../Services/orders.service';
 import { WriteOffService } from '../Services/write-off.service';
+import { Chart } from 'chart.js';
 var pdfMake = require('pdfmake/build/pdfmake');
 var pdfFonts = require('pdfmake/build/vfs_fonts');
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
@@ -36,13 +37,27 @@ export class ReportsComponent implements OnInit {
   dataOrder:any
   dataWriteOff:any
   filterTerm!: string;
+  chart:any
+  customerOrders:any
+  supplierOrders:any
+  customerOrderLine:any
+  supplierOrderLine:any
   
   combinedData: { Name: string, Quantity: number, Price: number }[] = [];
   constructor(private productService: ProductService, private route: ActivatedRoute,
-     private inv : InventoryService,private supply: SupplierService,private orderservice : OrdersService, private writeOffService : WriteOffService) { }
+     private inv : InventoryService,private supply: SupplierService,private orderservice : OrdersService, private writeOffService : WriteOffService
+     ,public orderService:OrdersService) { }
 
   ngOnInit() {
-
+    this.orderService.getOrders().subscribe(response => {
+      console.log(response)
+     this.customerOrders = response[0]
+     this.supplierOrders = response[1]
+     this.customerOrderLine = response[4]
+     this.supplierOrderLine = response[5]
+     console.log(this.customerOrders)
+     console.log(this.supplierOrders)
+    })
 
     this.getInventory();
     this.getProducts();
@@ -58,6 +73,52 @@ export class ReportsComponent implements OnInit {
       const itemQuantities: number[] = this.combinedData.map(item => item.Quantity);
       const itemPrices: number[] = this.combinedData.map(item =>item.Price )
       console.log('yes we received the data from the product component', this.combinedData)
+      
+    });
+  }
+
+  CreateCustomerOrdersChart(){
+ //this.supplierOrders filter the list...
+ let doneOrders = this.customerOrders.filter((item:any) => item.orderStatus_ID == 2)
+ let doneOrdersLength = this.customerOrders.filter((item:any) => item.orderStatus_ID == 2).length
+ let cancelledOrders = this.customerOrders.filter((item:any) => item.orderStatus_ID == 3)
+ let cancelledOrdersLength = this.customerOrders.filter((item:any) => item.orderStatus_ID == 3).length
+ let inProgressOrders = this.customerOrders.filter((item:any) => item.orderStatus_ID == 1)
+ let inProgressOrdersLength = this.customerOrders.filter((item:any) => item.orderStatus_ID == 1).length
+// then canculate the order line...
+let doneTotal = 0
+doneOrders.forEach((element:any) => {
+  // get orderLine then 
+  this.customerOrderLine.forEach((orderLine:any) => {
+    if(orderLine.order_ID == element.order_ID){
+  }
+})
+
+  doneTotal = doneTotal + (element.quantity * element.price)
+});
+ console.log(doneOrders)
+    this.chart = new Chart("MyChart", {
+      type: 'bar', //this denotes tha type of chart
+
+      data: {// values on X-Axis
+        labels: ['In Progress', 'Cancelled', 'Done' ], 
+	       datasets: [
+          {
+            label: "Number of Orders",
+            data: [inProgressOrdersLength,doneOrdersLength, cancelledOrdersLength],
+            backgroundColor: 'blue'
+          },
+          {
+            label: "Total (R)",
+            data: ['542', '542', '536', '327', '17',
+									 '0.00', '538', '541'],
+            backgroundColor: 'limegreen'
+          }  
+        ]
+      },
+      options: {
+        aspectRatio:2.5
+      }
       
     });
   }

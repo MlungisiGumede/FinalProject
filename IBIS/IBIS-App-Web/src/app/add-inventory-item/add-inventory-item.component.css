@@ -13,6 +13,21 @@ body{
   padding: 10px;
   background: grey;
 }
+mat-select-content{
+  
+
+}
+mat-select{
+  height: 40px;
+  width: 160px;
+  
+}
+/* mat-form-field{
+  height: 100px;
+  width: 300px;
+} */
+
+
 .container{
   max-width: 700px;
   width: 100%;

@@ -1,8 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit,Inject } from '@angular/core';
 import { InventoryService } from '../Services/inventory.service';
 import { Router } from '@angular/router';
 import { Inventory } from '../Models/Inventory';
 import { ToastController } from '@ionic/angular';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-add-inventory-item',
@@ -11,23 +13,35 @@ import { ToastController } from '@ionic/angular';
 })
 export class AddInventoryItemComponent implements OnInit {
   
-  data:any;
+  //data:any;
   inv!: Inventory;
+  form!:any
+  suppliers:any
 
-  constructor(private invService: InventoryService,public router:Router,private toastController: ToastController) {
+  constructor(private invService: InventoryService,public router:Router,private toastController: ToastController
+    ,public matDialogRef:MatDialogRef<AddInventoryItemComponent>
+    ,@Inject(MAT_DIALOG_DATA) public data:any) { 
 
     this.data = new Inventory();
+   this.suppliers = data
    }
 
   ngOnInit(): void {
+    this.form = new FormGroup({
+      sku: new FormControl("",Validators.required),
+      name: new FormControl("",Validators.required),
+      supplier_ID: new FormControl("",Validators.required),
+    })
   }
 
 
   createInventory(){
     this.presentToast('top')
-    this.invService.createInventory(this.data).subscribe(res=>{
+    console.log(this.form.value)
+    this.invService.createInventory(this.form.value).subscribe(res=>{
     console.log("success", res);
     this.presentToast('top')
+    this.matDialogRef.close(true)
     this.router.navigate(['/Inventory']);
     })
     

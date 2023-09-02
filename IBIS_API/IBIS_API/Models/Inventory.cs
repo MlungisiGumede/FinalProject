@@ -8,13 +8,13 @@ namespace IBIS_API.Models
         [Key]
         public int Inventory_ID { get; set; }
         public string? Sku { get; set; }
-        public string? ItemName { get; set; }
-        public string? SupplierID { get; set; }
-        public int? Quantity { get; set; }
-        public string? Invoice { get; set; }
+        public string? Name { get; set; }
+        public int? Supplier_ID { get; set; }
+       // public int? Quantity { get; set; }
+       // public string? Invoice { get; set; }
         // public virtual Inventory_Item? Inventory_Item_ID {get; set;}
-        public string? Products { get; set; }    
-	public string? Inventory_Items { get; set; }
+       // public string? Products { get; set; }    
+	//public string? Inventory_Items { get; set; }
     //public virtual Stock_On_Hand? Stock_On_Hand_ID { get; set; }
     //public virtual Product? Product_ID { get; set; }
 

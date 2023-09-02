@@ -10,6 +10,8 @@ import { InventoryService } from '../Services/inventory.service';
 import { OrdersService } from '../Services/orders.service';
 import { ChangeDetectorRef } from '@angular/core';
 import { CustomerOrderLine } from '../Models/CustomerOrderLine';
+import { CustomerOrder } from '../Models/CustomerOrder';
+import { CustomerOrderViewModel } from '../Models/CustomerOrderViewModel';
 //import { SupplierOrder } from '../Models/SupplierOrder';
 //import { CustomerOrder } from '../Models/CustomerOrder';
 
@@ -30,12 +32,15 @@ export class ViewCustomerOrderComponent implements OnInit {
   tableForm:FormGroup
   submitArray:any
   title:any
+  response:any = []
+  arrived = false
   //supplierOrder:SupplierOrder = new SupplierOrder
   //customerOrder:CustomerOrder = new CustomerOrder
   edited = false
   rowIndexTemplate:any
   globalArray:any
   selectedValue:any
+  customerOrder:any
   customerOrderLine = [{
     Customer_Order_ID: '1',
     product_ID: '1',
@@ -187,14 +192,14 @@ dropDown:any= [{
     
       this.columnsSchema = this.CustomercolumnsSchema
       this.displayedColumns = this.CustomercolumnsSchema.map((col) => col.key);
-    
+     this.customerOrder = data
       // getSuppliers
+     
+    this.title = data.name
       
-      this.title = data.customer_FirstName + " "+ data.customer_Surname
-      // this.productService.getProductList().subscribe((res:any)=>{
-      //   //this.products = res
-      // })
-    }
+     }
+    
+    
    
    
     // this.displayedColumns.forEach((col) => {
@@ -310,12 +315,61 @@ dropDown:any= [{
       'records': this.formBuilder.array([])
     
       })
-      let control =  (this.form.get('records') as FormArray)
-      this.customerOrderLine.forEach((element:any) => {
-        let productIndex = this.products.findIndex((item:any) => item.product_ID == element.product_ID)
-        let product_Name = this.products[productIndex].name
-        control.push(this.initiateProductForm(element,product_Name))
+       this.dropDown = [...this.data.products]
+       this.products = [...this.data.products]
+      let control =  this.form.get('records') as FormArray
+             this.data.orderLines.forEach((element:any) => {
+            let productIndex = this.products.findIndex((item:any) => item.product_ID == element.product_ID)
+            let product_Name = this.products[productIndex].name
+            console.log(element)
+            control.push(this.initiateProductForm(element,product_Name))
+            console.log((this.form.get('records') as FormArray).value)
+          });
+       let val = (this.form.get('records') as FormArray).value.forEach((element:any) => {
+            
+            let index = this.dropDown.findIndex((item:any) => item.product_ID == element.product_ID)
+            console.log(index)
+            console.log(this.dropDown[index])
+          this.dropDown.splice(index,1)
+          console.log(this.dropDown)
+          })
+          console.log(control.value)
+          this.dataSource = new MatTableDataSource((this.form.get('records') as FormArray).value);
+           console.log(this.dataSource.data)
+           this,
+         // let prodct_Name = this.products[index].Name
+          //console.log(prodct_Name)
+          this.dataSource._updateChangeSubscription()
+          //control.push(this.initiateProductForm(element,product_Name))
+        }
+     
+        
+    
+  
+  Edit(){
+    let customerOrderViewModel:CustomerOrderViewModel = new CustomerOrderViewModel()
+      let customerOrder:CustomerOrder = new CustomerOrder()
+      customerOrder.customerOrder_ID = this.data.customerOrder.customerOrder_ID
+      customerOrder.customer_ID = this.data.customerOrder.customer_ID
+      customerOrder.orderStatus_ID = this.data.customerOrder.orderStatus_ID
+      customerOrder.date_Created = Date.now().toString()
+      customerOrderViewModel.customerOrder = customerOrder
+      let orderLines = (this.form.get('records') as FormArray).value
+      orderLines.forEach((element:CustomerOrderLine) => {
+        element.customerOrder_ID = this.data.customerOrder.customerOrder_ID
+        console.log(element.customerOrder_ID)
       });
+      customerOrderViewModel.customerOrderLines = orderLines
+      this.orderService.UpdateCustomerOrder(customerOrderViewModel).subscribe(() => {
+        this.dialogRef.close("success")
+      }), (error:any) => {
+        this.dialogRef.close("error")
+      }
+      
+  }
+    
+  
+      
 
      
      
@@ -324,24 +378,8 @@ dropDown:any= [{
       //console.log(prodct_Name)
       
     
-      (this.form.get('records') as FormArray).controls.forEach((element:any) => {
-        console.log(element.value)
-        let value = element.value
-        let index = this.dropDown.findIndex((item:any) => item.product_ID == value.product_ID)
-        console.log(index)
-        console.log(this.dropDown[index])
-      this.dropDown.splice(index,1)
-      console.log(this.dropDown)
-      })
-      console.log(control.value)
-      this.dataSource = new MatTableDataSource((this.form.get('records') as FormArray).value);
-       console.log(this.dataSource.data)
-       
-     // let prodct_Name = this.products[index].Name
-      //console.log(prodct_Name)
-      this.dataSource._updateChangeSubscription()
       
-      }
+      
     
     
     OnDone(rowIndex:any){

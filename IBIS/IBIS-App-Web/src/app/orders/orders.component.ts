@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
 import { Orders } from '../Models/Orders';
 import { Router } from '@angular/router';
@@ -9,74 +9,291 @@ import { SupplierOrder } from '../Models/SupplierOrder';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { ViewSupplierOrderComponent } from '../view-supplier-order/view-supplier-order.component';
 import { ViewCustomerOrderComponent } from '../view-customer-order/view-customer-order.component';
+import { Observable, forkJoin, of } from 'rxjs';
+import { ProductService } from '../Services/product.service';
+import { DatePipe } from '@angular/common';
 var pdfMake = require('pdfmake/build/pdfmake');
 var pdfFonts = require('pdfmake/build/vfs_fonts');
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 @Component({
   selector: 'app-orders',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './orders.component.html',
   styleUrls: ['./orders.component.css']
 })
 export class OrdersComponent implements OnInit {
 
-  data:any
+  data!:any
   ord: Orders[] = [];
   idtodelete :any;
   filterTerm!: string;
-   CustomerOrders:CustomerOrder[]=[
-    {
-      customerOrder_ID: '1',
-      customer_ID: '1',
-      Date_Created: '1'
-    },
-    {
-      customerOrder_ID: '2',
-      customer_ID: '2',
-      Date_Created: '2'
-    }
+  selectedStatus:any = 4
+  title:any = "Supplier Orders"
+  customers:any
+  suppliers:any
+  customersOrderLine:any
+  supplierOrderLine:any
+  products:any
+  inventories:any
+  // supplierOrders:any
+  // customerOrders:any
+  isCustomerOrder:boolean=false
+   customerOrders:CustomerOrder[]=[
+    // {
+    //   customerOrder_ID: '1',
+    //   customer_ID: '1',
+    //   date_Created: '1',
+    //   orderStatus_ID: '1'
+    // },
+    // {
+    //   customerOrder_ID: '3',
+    //   customer_ID: '3',
+    //   date_Created: '3',
+    //   orderStatus_ID: '3'
+    // },    {
+    //   customerOrder_ID: '4',
+    //   customer_ID: '4',
+    //   date_Created: '4',
+    //   orderStatus_ID: '4'
+    // },    {
+    //   customerOrder_ID: '2',
+    //   customer_ID: '2',
+    //   date_Created: '2',
+    //   orderStatus_ID: '2'
+    // }
    ];
    supplierOrders:SupplierOrder[]=[
-    {
-      supplierOrder_ID: '1',
-      supplier_ID: '1',
-      Date_Created: '1'
-    },{
-      supplierOrder_ID: '2',
-      supplier_ID: '2',
-      Date_Created: '2'
-    }
-   ];
+    // {
+    //   supplierOrder_ID: '1',
+    //   supplier_ID: '1',
+    //   Date_Created: '1',
+    //   orderStatus_ID: '1'
+    // },{
+    //   supplierOrder_ID: '2',
+    //   supplier_ID: '2',
+    //   Date_Created: '2',
+    //   orderStatus_ID: '2'
+    // },
+    // {
+    //   supplierOrder_ID: '3',
+    //   supplier_ID: '2',
+    //   Date_Created: '2',
+    //   orderStatus_ID: '3'
+    // },{
+    //   supplierOrder_ID: '4',
+    //   supplier_ID: '2',
+    //   Date_Created: '2',
+    //   orderStatus_ID: '4'
+    // }
+  ]
+   statusResults:any = [
+      {
+        status_ID: 1,
+        Name: 'In Progress'
+      },
+      {
+        status_ID: 2,
+        Name: 'Done'
+      },
+      {
+        status_ID: 3,
+        Name: 'Cancelled'
+      },
+      {
+        status_ID: 4,
+        Name: 'All'
+      }
+    ] // read from the database or nah...
+   ;
    
 
   constructor(public router: Router, private orderservice : OrdersService,
-    private matDialog: MatDialog) { 
-      this.data = this.supplierOrders
+    private matDialog: MatDialog,public cdr:ChangeDetectorRef,
+    private productservice: ProductService) {
+      
     }
+      // this.data = this.supplierOrders
+    
 
   ngOnInit(): void {
-    //this.getOrders()
-  
-  }
-
-  getOrders(){
-    // this.orderservice.getOrderList().subscribe(response => {
-    //   console.log(response);
-    //   this.data = response;
-    // })
    
-
+ this.ReadOrders()
+this.orderservice.addedOrder.subscribe((result:any)=>{
+  this.ReadOrders()
+})
   }
+  async ReadOrders(){
+  let val = new Promise((resolve:any)=>{ this.orderservice.getOrders().subscribe((result:any) =>{
+      console.log(result[0])
+      console.log(result[1])
+      console.log(result[2])
+      console.log(result[3])
+      this.customerOrders = []
+      this.supplierOrders = []
+      this.customers = []
+      this.suppliers = []
+      this.customersOrderLine = []
+      this.supplierOrderLine = []
+      this.products = []
+      this.inventories = []
+      if(result[0]){
+        this.customerOrders = result[0]
+        
+      }if(result[1]){
+        this.supplierOrders = result[1]
+      }
+      //this.data = this.supplierOrders
+      if(result[2]){
+        this.customers = result[2]
+      }if(result[3]){
+        this.suppliers = result[3]
+      } if(result[4]){
+        this.customersOrderLine = result[4]
+      }  if(result[5]){
+        this.supplierOrderLine = result[5]
+      }if(result[6]){
+        this.products = result[6]
+      }if(result[7]){
+        this.inventories = result[7]
+      }
+      resolve("true")
+    },(err:any)=>{
+      resolve("false")
+    }
+      
+    
+     
+      )
+
+  })
+  await val
+this.CheckOrderStatus()
+  return val
+  }
+  getCustomerName(id:any){
+    let customer = this.customers.find((customer:any) => customer.customer_ID == id)
+    return customer.customer_FirstName + " " + customer.customer_Surname
+  }
+  getSupplierName(id:any){
+    console.log(id)
+    console.log(this.suppliers)
+    let supplier = this.suppliers.find((supplier:any) => supplier.supplier_ID == id)
+    return supplier.name
+  }
+  ToSupplier(){
+    // edit records to standardize... then whatever is true is sent to API...
+      console.log("supplier")
+      if(this.isCustomerOrder){
+        this.isCustomerOrder = false
+      this.isCustomerOrder = false
+      this.data = [...this.supplierOrders]
+      this.selectedStatus = 4
+      this.title = "Supplier Orders"
+      }
+     // wadadadadad
+      //this.cdr.detectChanges()
+    }
+    ConvertDate(date:any){
+   //return 
+   console.log(date)
+   let inDate = new Date(date)
+   let datePipe = new DatePipe('en-US');
+   return datePipe.transform(date, 'yyyy/MM/dd');
+   //return new Date(date)
+    }
+   
+   CalculateTotal(id:any){
+    let total = 0
+if(this.isCustomerOrder){
+  this.customersOrderLine.forEach((element:any) => {
+   
+    if(element.customerOrder_ID == id){
+      total = total + (element.quantity*element.price)
+  }
+})
+}else{
+  this.supplierOrderLine.forEach((element:any) => {
+   
+    if(element.supplierOrder_ID == id){
+      total = total + (element.quantity*element.price)
+  }
+}) 
+}
+return total
+   }
+  
+  ToCustomer(){
+ if(!this.isCustomerOrder){
+console.log("customer")
+    this.isCustomerOrder = true
+    this.data = [...this.customerOrders]
+    this.selectedStatus = 4
+    
+    this.title = "Customer Orders"
+    //this.cdr.detectChanges()
+ }
+  }
+  
+
+CheckOrderStatus(){
+  console.log(this.selectedStatus)
+  if((this.selectedStatus  == 1 || this.selectedStatus == 2 || this.selectedStatus == 3) && this.isCustomerOrder){
+     this.data = []
+     console.log("ts method hitting")
+     this.isCustomerOrder = true
+    this.customerOrders.forEach(element => {
+      if(element.orderStatus_ID == this.selectedStatus){
+        console.log(element)
+      this.data.push(element)
+    }
+  })
+  console.log(this.data)
+  }else if((this.selectedStatus == 1 || this.selectedStatus == 2 || this.selectedStatus == 3) && !this.isCustomerOrder){
+    this.data = []
+    console.log("ts method htting")
+    this.supplierOrders.forEach(element => {
+      
+      if(element.orderStatus_ID == this.selectedStatus){
+        console.log(element)
+        this.data.push(element)
+      
+    }
+  })
+}else if(this.isCustomerOrder){
+    this.data = this.customerOrders
+  }else{
+     this.data = this.supplierOrders
+  }
+  
+  this.data = [...this.data]
+  console.log(this.data)
+  if(this.data.length==0){}
+  console.log(this.data)
+  this.cdr.detectChanges()
+}
 
 
-  async delete(id: number){
-    this.idtodelete = id;
+ 
 
-    this.orderservice.delete(this.idtodelete).subscribe(Response => {
+
+  async delete(element: any){
+    
+  if(this.customerOrders){
+    
+    this.orderservice.DeleteCustomerOrder(element.customerOrder_ID).subscribe((Response:any) => {
       console.log(Response);
+      this.ReadOrders()
+  })
+    
       //this.data = Response;
-      this.getOrders();
-    })
+      //this.getOrders();
+    }else{
+      // let supplierOrder = this.supplierOrders[rowIndex]
+      // this.orderservice.delete(supplierOrder.supplierOrder_ID).subscribe(Response => {
+      //   console.log(Response)
+      // });
+    }
   }
 
 
@@ -86,16 +303,122 @@ export class OrdersComponent implements OnInit {
     this.router.navigate(['/add-order']);
 
   }
-  ViewSupplierOrder(element:any){
-    this.matDialog.open(ViewSupplierOrderComponent, {
-      data:element
+  View(element:any){
+    console.log(element)
+    this.ReadOrders()
+    if(this.customersOrderLine && this.products){
+    if(this.isCustomerOrder){
+      if(this.isCustomerOrder){
+        let customerOrderline:any = []
+        this.customersOrderLine.forEach((orderLine:any) => {
+         
+          if(element.customerOrder_ID == orderLine.customerOrder_ID){
+           customerOrderline.push(orderLine)
+        }
+      })
+      let name = this.getCustomerName(element.customer_ID)
+     const dialogRef = this.matDialog.open(ViewCustomerOrderComponent, {
+        data:{'orderLines':customerOrderline,'products':this.products,'customerOrder':element
+      ,'name':name}
+      
+    })
+    dialogRef.afterClosed().subscribe(result => {
+      if(result == "success"){
+        this.ReadOrders()
+      }else if(result == "error"){
+        alert("error")
+      }
     })
   }
-  ViewCustomerOrder(element:any){
-    this.matDialog.open(ViewCustomerOrderComponent, {
-      data:element
+}else{
+   let supplierOrderline:any = []
+        this.supplierOrderLine.forEach((orderLine:any) => {
+         
+          if(element.supplierOrder_ID == orderLine.supplierOrder_ID){
+           supplierOrderline.push(orderLine)
+        }
+      })
+      let name = this.getSupplierName(element.supplier_ID)
+     const dialogRef = this.matDialog.open(ViewSupplierOrderComponent, {
+        data:{'orderLines':supplierOrderline,'inventories':this.inventories,'order':element
+      ,'name':name}
+      
+    })    
+    dialogRef.afterClosed().subscribe(result => {
+      if(result == "success"){
+        this.ReadOrders()
+      }else if(result == "error"){
+        alert("error")
+      }
     })
   }
+}
+    
+  }
+
+  
+
+    
+      //let customerOrder = this.customerOrders[rowIndex]
+      
+    
+   
+   
+  
+ 
+  Delete(){
+
+  }
+  UpdateOrderStatus(item:any,id:any){
+    item.orderStatus_ID = id
+    let array:any = []
+    if(this.isCustomerOrder){
+this.orderservice.UpdateCustomerOrderStatus(item).subscribe(Response => {
+
+  this.orderservice.getOrders().subscribe((result:any) =>{
+ 
+    if(result[0]){
+      this.customerOrders = result[0]
+      
+    }if(result[1]){
+      this.supplierOrders = result[1]
+    }
+    //this.data = this.supplierOrders
+    if(result[2]){
+      this.customers = result[2]
+    }if(result[3]){
+      this.suppliers = result[3]
+    }
+  })
+  this.CheckOrderStatus()
+
+  console.log(Response)
+})
+  }else    if(!this.isCustomerOrder){
+    item.orderStatus_ID = id
+    this.orderservice.UpdateSupplierOrderStatus(item).subscribe(Response => {
+    
+      this.orderservice.getOrders().subscribe((result:any) =>{
+     
+        if(result[0]){
+          this.customerOrders = result[0]
+          
+        }if(result[1]){
+          this.supplierOrders = result[1]
+        }
+        //this.data = this.supplierOrders
+        if(result[2]){
+          this.customers = result[2]
+        }if(result[3]){
+          this.suppliers = result[3]
+        }
+      })
+      this.CheckOrderStatus()
+    
+      console.log(Response)
+    })
+      }
+    }
 
 
 
@@ -154,11 +477,11 @@ export class OrdersComponent implements OnInit {
           table: {
             headerRows: 1,
             widths: ['*', 'auto', 'auto', 'auto'],
-            body: [
-              ['Inventory_ID', 'Inventory_Items', 'Quantity', 'Amount'],
-              ...this.data[1].map((p: { order_ID: any; supplierName: any; quantity: any; }) => ([p.order_ID, p.supplierName, p.quantity, (p.quantity).toFixed(2)])),
-              [{text: 'Total inventory', colSpan: 3}, {}, {}, this.data.reduce((sum: number, p: { quantity: number;  })=> sum + (p.quantity), 0).toFixed(2)]
-            ]
+            // body: [
+            //   ['Inventory_ID', 'Inventory_Items', 'Quantity', 'Amount'],
+            //   ...this.data[1].map((p: { order_ID: any; supplierName: any; quantity: any; }) => ([p.order_ID, p.supplierName, p.quantity, (p.quantity).toFixed(2)])),
+            //   [{text: 'Total inventory', colSpan: 3}, {}, {}, this.data.reduce((sum: number, p: { quantity: number;  })=> sum + (p.quantity), 0).toFixed(2)]
+            // ]
           }
         },
         {

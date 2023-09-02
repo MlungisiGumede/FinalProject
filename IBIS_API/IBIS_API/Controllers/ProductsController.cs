@@ -29,7 +29,7 @@ namespace IBIS_API.Controllers
             [HttpGet]
             [Route("getAll")]
        // [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        public async Task<ActionResult<IEnumerable<Product>>> GetSuppliers()
+        public async Task<ActionResult<IEnumerable<Product>>> GetProducts()
             {
                 return await _context.Products.ToListAsync();
             }
@@ -52,14 +52,11 @@ namespace IBIS_API.Controllers
 
             // PUT: api/Addresses/5
             // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-            [HttpPut("{id}")]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        public async Task<IActionResult> PutProduct(int id, Product prod)
+            [HttpPut]
+        [Route("putProduct")]
+        public async Task<IActionResult> PutProduct(Product prod)
             {
-                if (id != prod.Product_ID)
-                {
-                    return BadRequest();
-                }
+              
 
                 _context.Entry(prod).State = EntityState.Modified;
 
@@ -67,9 +64,9 @@ namespace IBIS_API.Controllers
                 {
                     await _context.SaveChangesAsync();
                 }
-                catch (DbUpdateConcurrencyException)
+                catch (DbUpdateConcurrencyException )
                 {
-                    if (!ProductExists(id))
+                    if (!ProductExists(prod.Product_ID))
                     {
                         return NotFound();
                     }
@@ -77,6 +74,7 @@ namespace IBIS_API.Controllers
                     {
                         throw;
                     }
+               // return BadRequest(); return something maybe.... so that the thing closes with an error...?
                 }
 
                 return NoContent();
@@ -85,7 +83,7 @@ namespace IBIS_API.Controllers
             // POST: api/Addresses
             // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
             [HttpPost]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+       // [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<ActionResult<Product>> PostProduct(Product prod)
             {
                 _context.Products.Add(prod);
