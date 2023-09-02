@@ -33,6 +33,7 @@ declare var myChart: any;
 export class ProductsComponent implements OnInit {
   data:Observable<any> = new Observable();
   data2: Product[] = [];
+  reportData:any
   products: Product[] = [];
   idtodelete :any;
   search= "";
@@ -40,6 +41,7 @@ export class ProductsComponent implements OnInit {
   itemNames: any;
   itemQuantities: any;
   filterTerm!: string;
+  
 
 
   combinedData: { Name: string, Quantity: number , Price: number}[] = [];
@@ -70,6 +72,7 @@ export class ProductsComponent implements OnInit {
       this.productService.getProductList().subscribe(response => {
         console.log(response);
         this.data = of(response)
+        this.reportData = response
         console.log(this.data)
         resolve(true)
       }), (error:any) => {
@@ -237,12 +240,12 @@ const dialogRef = this.matDialog.open(AddProductComponent);
           table: {
             headerRows: 1,
             widths: ['*', 'auto', 'auto', 'auto'],
-            // body: [
-            //   ['Product', 'Price', 'Quantity', 'Amount'],
-            //   ...this.data.map((p: { product_Name: any; price: any; quantity: any; }) => ([p.product_Name, p.price, p.quantity, (p.price*p.quantity).toFixed(2)])),
-            //   [{text: 'Total Amount', colSpan: 3}, {}, {}, this.data.reduce((sum: number, p: { quantity: number; price: number; })=> sum + (p.quantity * p.price), 0).toFixed(2)],
-            //   [{text: 'Total Quantity:', colSpan: 3}, {}, {}, this.data.reduce((sum: number, p: { quantity: number; })=> sum + (p.quantity), 0).toFixed(2)]
-            // ]
+            body: [
+              ['Product', 'Price', 'Quantity', 'Amount'],
+              ...this.reportData.map((p: { product_Name: any; price: any; quantity: any; }) => ([p.product_Name, p.price, p.quantity, (p.price*p.quantity).toFixed(2)])),
+              [{text: 'Total Amount', colSpan: 3}, {}, {}, this.reportData.reduce((sum: number, p: { quantity: number; price: number; })=> sum + (p.quantity * p.price), 0).toFixed(2)],
+              [{text: 'Total Quantity:', colSpan: 3}, {}, {}, this.reportData.reduce((sum: number, p: { quantity: number; })=> sum + (p.quantity), 0).toFixed(2)]
+            ]
           }
         },
         {

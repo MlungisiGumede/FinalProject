@@ -27,6 +27,7 @@ export class ViewWriteOffsComponent implements OnInit {
   writeOffs: any;
   idtodelete :any;
   filterTerm!: string;
+  reportData:any
   
   constructor(private writeOffService: WriteOffService,public router: Router,private domSanitizer:DomSanitizer
     ,private ActivatedRoute: ActivatedRoute,public matDialog: MatDialog) {

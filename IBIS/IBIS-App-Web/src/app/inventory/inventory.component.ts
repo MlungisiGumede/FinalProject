@@ -38,6 +38,7 @@ export class InventoryComponent implements OnInit {
   inventory: any;
   inID: any;
   suppliers:Supplier[] = []
+  reportData:any
 
   constructor(public router: Router, private inv : InventoryService,private toastController: ToastController,private fb : FormBuilder
     ,public matDialog: MatDialog,public supplierService:SupplierService,
@@ -91,7 +92,7 @@ export class InventoryComponent implements OnInit {
       console.log(response);
       if(response){
         this.data = of(response)
-
+          this.reportData = response
       }
    
      
@@ -391,11 +392,11 @@ this.getInventory();
           table: {
             headerRows: 1,
             widths: ['*', 'auto', 'auto', 'auto'],
-            // body: [
-            //   ['Inventory_ID', 'Inventory_Items', 'Quantity', 'Amount'],
-            //   ...this.data.map((p: { inventory_ID: any; inventory_Items: any; quantity: any; }) => ([p.inventory_ID, p.inventory_Items, p.quantity, (p.quantity).toFixed(2)])),
-            //   [{text: 'Total inventory', colSpan: 3}, {}, {}, this.data.reduce((sum: number, p: { quantity: number;  })=> sum + (p.quantity), 0).toFixed(2)]
-            // ]
+            body: [
+              ['Inventory_ID', 'Inventory_Items', 'Quantity', 'Amount'],
+              ...this.reportData.map((p: { inventory_ID: any; inventory_Items: any; quantity: any; }) => ([p.inventory_ID, p.inventory_Items, p.quantity, (p.quantity).toFixed(2)])),
+              [{text: 'Total inventory', colSpan: 3}, {}, {}, this.reportData.reduce((sum: number, p: { quantity: number;  })=> sum + (p.quantity), 0).toFixed(2)]
+            ]
           }
         },
         {
