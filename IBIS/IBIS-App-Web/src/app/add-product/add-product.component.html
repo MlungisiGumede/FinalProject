@@ -1,45 +1,48 @@
 <body>
-  <div class="container">
-   <div class="title">Add Product</div>
-   <div class="content">
-     <form action="#">
-       <div class="user-details" [formGroup]="form">
-         <div class="input-box" [formGroup]="form">
-           <span class="details">Product Name</span>
-           <input  type="text" placeholder="name" formControlName="name">
+    <div class="container">
+     <div class="title">Add Product</div>
+     <div class="content">
+       <form action="#">
+         <div class="user-details">
+           <div class="input-box">
+             <span class="details">Product Name</span>
+             <input  type="text" placeholder="name" [(ngModel)]="data.product_Name" [ngModelOptions]="{standalone: true}">
+           </div>
+
+           <div class="input-box">
+            <span class="details">Price</span>
+            <input  type="number" placeholder="Price" [(ngModel)]="data.price" [ngModelOptions]="{standalone: true}">
+          </div>
+
+           <div class="input-box">
+             <span class="category">Category</span>
+             <select [(ngModel)]="data.category" [ngModelOptions]="{standalone: true}" (change)="updateSubcategories()">
+             <option value="" disabled selected>Select a category</option>
+              <option *ngFor="let category of categories" [value]="category">{{ category }}</option>
+            </select>
+           </div>
+           <div class="input-box">
+            <span class="subcategory">Sub-category</span>
+            <select [(ngModel)]="data.subcategory" [ngModelOptions]="{standalone: true}">
+              <option value="" disabled selected>Select a subcategory</option>
+              <option *ngFor="let subcategory of subcategories[data.category]" [value]="subcategory">{{ subcategory }}</option>
+            </select>
+           </div>
+           
+           <div class="input-box">
+            <span class="details">Quantity</span>
+            <input  type="number" placeholder="Quantity" [(ngModel)]="data.quantity" [ngModelOptions]="{standalone: true}">
+          </div>
+          <div class="input-box">
+            <span class="details">Expiry</span>
+              <input  type="date" placeholder="expiry" [(ngModel)]="data.expiry" [ngModelOptions]="{standalone: true}">
+          </div>
          </div>
-         <div class="input-box">
-           <span class="details">category</span>
-           <input   type="text" placeholder="Category" formControlName="category">
-         </div>
-         <div class="input-box">
-           <span class="details">sub-category</span>
-           <input  type="text" placeholder="sub-category" formControlName="subCategory">
-         </div>
-         <div class="input-box">
-           <span class="details">Price</span>
-           <input  type="number" min="0" placeholder="price" formControlName="price">
-         </div>
-         <div class="input-box">
-          <span class="details">Quantity</span>
-          <input  type="text" placeholder="Quantity" formControlName="quantity">
+         
+         <div class="button">
+            <input type="submit" value="submit" (click)="createProduct()">
         </div>
-        <div class="input-box">
-        <span class="details">Expiry Date</span>
-       <input type="date" formControlName="expiry" id="">
+       </form>
+     </div>
     </div>
-      <!-- copied of internet -->
-       <div class="buttondiv">
-       <!-- <div class="button">
-         <input type="submit" value="update" (click)="update()" >
-       </div> -->
-       <div class="button">
-          <input type="submit" value="submit" (click)="CreateProduct()" [disabled]="!form.valid">
-        </div>
-      </div>
-    </div>
-     </form>
-   
-  </div>
-  </div>
-  </body>
+</body>

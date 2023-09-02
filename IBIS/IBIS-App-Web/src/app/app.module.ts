@@ -60,7 +60,6 @@ import { AddSupplierOrderComponent } from './add-supplier-order/add-supplier-ord
 import { ViewCustomerOrderComponent } from './view-customer-order/view-customer-order.component';
 import { ViewSupplierOrderComponent } from './view-supplier-order/view-supplier-order.component';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
-import { HelpFunctionComponent } from './help-function/help-function.component'; 
 
 
 @NgModule({
@@ -105,7 +104,7 @@ import { HelpFunctionComponent } from './help-function/help-function.component';
     ViewSupplierOrderComponent,
     AddSupplierComponent,
     AddInventoryItemComponent,
-    HelpFunctionComponent
+
     
   
   ],
@@ -147,9 +146,8 @@ import { HelpFunctionComponent } from './help-function/help-function.component';
       {path: 'home', component:HomeComponent, canActivate : [AuthGuardService]},
       {path: 'product-report', component: ProductReportComponent},
       {path: 'customer', component: CustomersComponent,canActivate : [AuthGuardService]},
-    {path: 'otp', component: OtpComponent, canActivate : [AuthGuardService]},
-      {path: 'otp/:username', component: OtpComponent,canActivate : [AuthGuardService]},
-      {path:'view-write-off/:id',component:ViewWriteOffsComponent,canActivate : [AuthGuardService]},
+      {path: 'otp', component: OtpComponent, canActivate : [AuthGuardService]},
+      {path: 'otp/:username', component: OtpComponent,canActivate : [AuthGuardService]}
 
 
 

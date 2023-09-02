@@ -2,8 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Product } from '../Models/Product';
 import { ProductService } from '../Services/product.service';
 import { Router } from '@angular/router';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { MatDialogRef } from '@angular/material/dialog';
+import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-add-product',
@@ -24,32 +23,18 @@ categories: string[] = ['Meat', 'Vegetables', 'Sides'];
   };
 
 
-  constructor(private prodService: ProductService,public router:Router,
-    public dialogRef: MatDialogRef<AddProductComponent>) {
+  constructor(private prodService: ProductService,public router:Router){
     this.data = new Product();
   } 
 
   ngOnInit(): void {
-    this.form = new FormGroup({
-     name: new FormControl("",Validators.required), // fill with the API calls...
-      category: new FormControl("",Validators.required),
-      subCategory: new FormControl("",Validators.required),
-      price: new FormControl("",Validators.required),
-      quantity: new FormControl("",Validators.required),
-      expiry: new FormControl("",Validators.required)
-    })
-    
+
   }
 
-  CreateProduct(){
-    let product:Product = new Product()
-    product = this.form.value
-    this.prodService.createProduct(product).subscribe(res=>{
+  createProduct(){
+    this.prodService.createProduct(this.data).subscribe(res=>{
     console.log("success", res);
-    this.dialogRef.close(true)
-    }),(err:any)=>{
-      this.dialogRef.close(false)
-    }  
+    })  
   }
 
   updateSubcategories() {
