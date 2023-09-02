@@ -38,6 +38,7 @@ export class InventoryComponent implements OnInit {
   inventory: any;
   inID: any;
   suppliers:Supplier[] = []
+  report: any;
 
   constructor(public router: Router, private inv : InventoryService,private toastController: ToastController,private fb : FormBuilder
     ,public matDialog: MatDialog,public supplierService:SupplierService,
@@ -91,6 +92,7 @@ export class InventoryComponent implements OnInit {
       console.log(response);
       if(response){
         this.data = of(response)
+        this.report =response
 
       }
    
@@ -150,164 +152,8 @@ this.getInventory();
     });
   }
 
-  generatePDF() {  
-    let docDefinition = {  
-      content: [  
-        {  
-          text: 'Products Report',  
-          fontSize: 16,  
-          alignment: 'center',  
-          color: '#047886'  
-        },  
-        {  
-          text: '2023',  
-          fontSize: 20,  
-          bold: true,  
-          alignment: 'center',  
-          decoration: 'underline',  
-          color: 'skyblue'  
-        },
-      ]
-
-    };  
+ 
    
-    pdfMake.createPdf(docDefinition).open();  
-  }  
-
-
-
-
-
-
-
-  genPDF() {
-
-    
-
-
-    this.inv.getInventoryList().subscribe(response => {
-      console.log(response);
-     // this.data = response;
-      //this.inventory = response.Inventory_ID
-    })
-
-
-
-
-
-    let docDefinition = {
-      content: [
-        {
-          text: 'Inventory Report',
-          fontSize: 16,
-          alignment: 'center',
-          color: '#FFD700'
-        },
-        {
-          text: 'IN-Stock',
-          fontSize: 20,
-          bold: true,
-          alignment: 'center',
-          decoration: 'underline',
-          color: 'skyblue'
-        },
-        {
-          text: 'Inventory',
-          style: 'sectionHeader'
-        },
-        {
-          columns: [
-            [
-              {
-                text: this.inID,
-                bold:true
-              },
-              { text: ''},
-              { text: this.inventory},
-              { text: this.inventory}
-            ],
-            [
-              {
-                text: `Date: ${new Date().toLocaleString()}`,
-                alignment: 'right'
-              },
-              { 
-                text: `Bill No : ${((Math.random() *1000).toFixed(0))}`,
-                alignment: 'right'
-              }
-            ]
-          ]
-        },
-        {
-          text: 'Order Details',
-          style: 'sectionHeader'
-        },
-        {
-         
-            table: {
-              headerRows: 1,
-              width: ['*', 'auto', 'auto', 'auto'],
-              body: [
-                [{text:'Service: '}],
-                [{text:'Dealership: ', bold: true,}],
-                [{text:'Team: ', bold: true,}],
-                [{text:'Service Type: ', bold: true,}],
-              ]
-            }
-          
-        },
-        {
-          text: 'Additional Details',
-          style: 'sectionHeader'
-        },
-        {
-            text: 'this.invoice.additionalDetails',
-            margin: [0, 0 ,0, 15]          
-        },
-        {
-          columns: [
-            [{ qr: '`${this.invoice.customerName}`', fit: '50' }],
-            [{ text: 'Signature', alignment: 'right', italics: true}],
-          ]
-        },
-        {
-          text: 'Terms and Conditions',
-          style: 'sectionHeader'
-        },
-        {
-            ul: [
-              'Order can be return in max 10 days.',
-              'Warrenty of the product will be subject to the manufacturer terms and conditions.',
-              'This is system generated invoice.',
-            ],
-        }
-      ],
-      styles: {
-        sectionHeader: {
-          bold: true,
-          decoration: 'underline',
-          fontSize: 14,
-          margin: [0, 15,0, 15]          
-        }
-      }
-    };
-
-    
-      pdfMake.createPdf(docDefinition).download();
-   
-      //pdfMake.createPdf(docDefinition).print();      
-   
-      pdfMake.createPdf(docDefinition).open();      
-    }
-
-  
-
-
-
-
-
-
-
 
   async presentToast(position: 'top' | 'middle' | 'bottom') {
     const toast = await this.toastController.create({
@@ -319,25 +165,6 @@ this.getInventory();
 
     await toast.present();
   }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
   generPDF() {
     let docDefinition = {
@@ -391,11 +218,11 @@ this.getInventory();
           table: {
             headerRows: 1,
             widths: ['*', 'auto', 'auto', 'auto'],
-            // body: [
-            //   ['Inventory_ID', 'Inventory_Items', 'Quantity', 'Amount'],
-            //   ...this.data.map((p: { inventory_ID: any; inventory_Items: any; quantity: any; }) => ([p.inventory_ID, p.inventory_Items, p.quantity, (p.quantity).toFixed(2)])),
-            //   [{text: 'Total inventory', colSpan: 3}, {}, {}, this.data.reduce((sum: number, p: { quantity: number;  })=> sum + (p.quantity), 0).toFixed(2)]
-            // ]
+            body: [
+              ['Inventory_ID', 'Inventory_Items', 'Quantity', 'Amount'],
+              ...this.report.map((p: { inventory_ID: any; inventory_Items: any; quantity: any; }) => ([p.inventory_ID, p.inventory_Items, p.quantity, (p.quantity).toFixed(2)])),
+              [{text: 'Total inventory', colSpan: 3}, {}, {}, this.report.reduce((sum: number, p: { quantity: number;  })=> sum + (p.quantity), 0).toFixed(2)]
+            ]
           }
         },
         {
