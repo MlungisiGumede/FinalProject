@@ -79,7 +79,58 @@ color: lightblue;
   /* .ng-invalid:not(form)  {
     border-left: 5px solid #a94442; 
   } */ */
+<<<<<<< Updated upstream
 
+  .backToLogin {
+    color:crimson;
+    border-radius: 2px;
+  }
+  .light-Btn{
+    --background: #FFD700;
+    --border-radius: 10em;
+    display: inline-block;
+  }
+
+  .green-Btn{
+    --background: #5CB85C;
+    --border-radius: 10em;
+  }
+
+  .error-message {
+    color: red;
+    font-size: 12px;
+    margin-top: 5px;
+=======
+  body{
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    background-color: grey;
+    
+>>>>>>> Stashed changes
+  }
+
+  .otp-page {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh; /* Ensures full viewport height */
+
+    
+  }
+  
+  /* Style for the OTP form */
+  .otp-form {
+    text-align: center;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f5f5f5;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  }
   .backToLogin {
     color:crimson;
     border-radius: 2px;
@@ -101,24 +152,6 @@ color: lightblue;
     margin-top: 5px;
   }
 
-  .otp-page {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh; /* Ensures full viewport height */
-  }
-  
-  /* Style for the OTP form */
-  .otp-form {
-    text-align: center;
-    padding: 20px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    background-color: #f5f5f5;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-  }
-  
   /* Adjust the width of the OTP form */
   @media (min-width: 400px) {
     .otp-form {
