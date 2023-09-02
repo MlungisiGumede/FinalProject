@@ -22,21 +22,6 @@ namespace IBIS_API.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("CustomerOrderProduct", b =>
-                {
-                    b.Property<int>("CustomerOrder_ID")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Product_ID")
-                        .HasColumnType("int");
-
-                    b.HasKey("CustomerOrder_ID", "Product_ID");
-
-                    b.HasIndex("Product_ID");
-
-                    b.ToTable("CustomerOrderProduct");
-                });
-
             modelBuilder.Entity("IBIS_API.Models.Address", b =>
                 {
                     b.Property<int>("addressId")
@@ -149,51 +134,6 @@ namespace IBIS_API.Migrations
                     b.ToTable("Customers");
                 });
 
-            modelBuilder.Entity("IBIS_API.Models.CustomerOrder", b =>
-                {
-                    b.Property<int?>("CustomerOrder_ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int?>("CustomerOrder_ID"));
-
-                    b.Property<int?>("Customer_ID")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Date_Created")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("OrderStatus_ID")
-                        .HasColumnType("int");
-
-                    b.HasKey("CustomerOrder_ID");
-
-                    b.ToTable("CustomerOrders");
-                });
-
-            modelBuilder.Entity("IBIS_API.Models.CustomerOrderLine", b =>
-                {
-                    b.Property<int>("CustomerOrder_ID")
-                        .HasColumnType("int")
-                        .HasColumnOrder(0);
-
-                    b.Property<int>("Product_ID")
-                        .HasColumnType("int")
-                        .HasColumnOrder(1);
-
-                    b.Property<double>("Price")
-                        .HasColumnType("float");
-
-                    b.Property<double>("Quantity")
-                        .HasColumnType("float");
-
-                    b.HasKey("CustomerOrder_ID", "Product_ID");
-
-                    b.HasIndex("Product_ID");
-
-                    b.ToTable("CustomerOrdersLine");
-                });
-
             modelBuilder.Entity("IBIS_API.Models.Inventory", b =>
                 {
                     b.Property<int>("Inventory_ID")
@@ -202,14 +142,26 @@ namespace IBIS_API.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Inventory_ID"));
 
-                    b.Property<string>("Name")
+                    b.Property<string>("Inventory_Items")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Invoice")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ItemName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Products")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("Quantity")
+                        .HasColumnType("int");
 
                     b.Property<string>("Sku")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("Supplier_ID")
-                        .HasColumnType("int");
+                    b.Property<string>("SupplierID")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Inventory_ID");
 
@@ -241,22 +193,6 @@ namespace IBIS_API.Migrations
                     b.ToTable("Orders");
                 });
 
-            modelBuilder.Entity("IBIS_API.Models.OrderStatus", b =>
-                {
-                    b.Property<int?>("OrderStatus_ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int?>("OrderStatus_ID"));
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("OrderStatus_ID");
-
-                    b.ToTable("OrderStatusList");
-                });
-
             modelBuilder.Entity("IBIS_API.Models.Product", b =>
                 {
                     b.Property<int>("Product_ID")
@@ -271,16 +207,31 @@ namespace IBIS_API.Migrations
                     b.Property<string>("Expiry")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Name")
+                    b.Property<string>("Image")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<double?>("Price")
-                        .HasColumnType("float");
+                    b.Property<int?>("Price")
+                        .HasColumnType("int");
 
-                    b.Property<double?>("Quantity")
-                        .HasColumnType("float");
+                    b.Property<string>("Product_Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("Quantity")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Quantity_Written_Off")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Reason")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Subcategory")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("Write_Off_Id")
+                        .HasColumnType("int");
+
+                    b.Property<string>("item_name")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Product_ID");
@@ -341,51 +292,6 @@ namespace IBIS_API.Migrations
                     b.ToTable("Suppliers");
                 });
 
-            modelBuilder.Entity("IBIS_API.Models.SupplierOrder", b =>
-                {
-                    b.Property<int?>("SupplierOrder_ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int?>("SupplierOrder_ID"));
-
-                    b.Property<string>("Date_Created")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("OrderStatus_ID")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("Supplier_ID")
-                        .HasColumnType("int");
-
-                    b.HasKey("SupplierOrder_ID");
-
-                    b.ToTable("Supplier_Orders");
-                });
-
-            modelBuilder.Entity("IBIS_API.Models.SupplierOrderLine", b =>
-                {
-                    b.Property<int>("SupplierOrder_ID")
-                        .HasColumnType("int")
-                        .HasColumnOrder(0);
-
-                    b.Property<int>("Inventory_ID")
-                        .HasColumnType("int")
-                        .HasColumnOrder(1);
-
-                    b.Property<double?>("Price")
-                        .HasColumnType("float");
-
-                    b.Property<double?>("Quantity")
-                        .HasColumnType("float");
-
-                    b.HasKey("SupplierOrder_ID", "Inventory_ID");
-
-                    b.HasIndex("Inventory_ID");
-
-                    b.ToTable("SupplierOrderLines");
-                });
-
             modelBuilder.Entity("IBIS_API.Models.User_Account", b =>
                 {
                     b.Property<string>("Username")
@@ -418,9 +324,6 @@ namespace IBIS_API.Migrations
 
                     b.Property<string>("Image")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("Product_ID")
-                        .HasColumnType("int");
 
                     b.Property<string>("Quantity")
                         .HasColumnType("nvarchar(max)");
@@ -564,59 +467,6 @@ namespace IBIS_API.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens", (string)null);
-                });
-
-            modelBuilder.Entity("CustomerOrderProduct", b =>
-                {
-                    b.HasOne("IBIS_API.Models.CustomerOrder", null)
-                        .WithMany()
-                        .HasForeignKey("CustomerOrder_ID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("IBIS_API.Models.Product", null)
-                        .WithMany()
-                        .HasForeignKey("Product_ID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("IBIS_API.Models.CustomerOrderLine", b =>
-                {
-                    b.HasOne("IBIS_API.Models.CustomerOrder", "CustomerOrder")
-                        .WithMany()
-                        .HasForeignKey("CustomerOrder_ID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("IBIS_API.Models.Product", "Product")
-                        .WithMany()
-                        .HasForeignKey("Product_ID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("CustomerOrder");
-
-                    b.Navigation("Product");
-                });
-
-            modelBuilder.Entity("IBIS_API.Models.SupplierOrderLine", b =>
-                {
-                    b.HasOne("IBIS_API.Models.Inventory", "Inventory")
-                        .WithMany()
-                        .HasForeignKey("Inventory_ID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("IBIS_API.Models.SupplierOrder", "SupplierOrder")
-                        .WithMany()
-                        .HasForeignKey("SupplierOrder_ID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Inventory");
-
-                    b.Navigation("SupplierOrder");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

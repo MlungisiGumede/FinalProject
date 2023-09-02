@@ -68,16 +68,14 @@ else {
      let req =  this.httpClient.get(`${this.apiUrl}CheckAuthentication`,{observe: 'response'}).pipe(
         map((res) =>{
          
-          //return resolve("success")
           resolve("success")
           bool=true
         }),
         catchError((err) =>{
           { // just check numbers of errors for client side and server side...
-            //return reject("Client side error: Couldn't connect to server (API)") // check actual codes and maybe do this differently
-             reject("Client side error: Couldn't connect to server (API)")
+            reject("Client side error: Couldn't connect to server (API)") // check actual codes and maybe do this differently
             bool=false
-           // 
+         
             
            }
             

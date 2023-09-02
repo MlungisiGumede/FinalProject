@@ -9,10 +9,6 @@ import { ProductService } from '../Services/product.service';
 import { InventoryService } from '../Services/inventory.service';
 import { OrdersService } from '../Services/orders.service';
 import { ChangeDetectorRef } from '@angular/core';
-import { CustomerOrderViewModel } from '../Models/CustomerOrderViewModel';
-import { CustomerOrderLine } from '../Models/CustomerOrderLine';
-import { CustomerOrder } from '../Models/CustomerOrder';
-import { DatePipe } from '@angular/common';
 //import { SupplierOrder } from '../Models/SupplierOrder';
 //import { CustomerOrder } from '../Models/CustomerOrder';
 
@@ -47,17 +43,17 @@ export class AddCustomerOrderComponent implements OnInit {
     //     label: "Product ID"
     // },
     {
-        key: "product_ID",
-        type: "product_ID", // maybe just enter in... maybe select...
+        key: "Product_ID",
+        type: "Product_ID", // maybe just enter in... maybe select...
         label: "Product"
     },
     {
-        key: "quantity",
+        key: "Quantity",
         type: "number",
         label: "Quantity"
     },
     {
-     key:"price",
+     key:"Price",
      type:"number",
      label:"Price per unit (kg)"
 
@@ -95,7 +91,7 @@ export class AddCustomerOrderComponent implements OnInit {
         type: "number",
         label: "Quantity"
     },   
-    {key:"price",
+    {key:"Price",
      type:"number",
      label:"Price per unit (kg)"
 
@@ -122,8 +118,6 @@ export class AddCustomerOrderComponent implements OnInit {
  // dataSource: any;
  orderDef:any
   columnsSchema:any
-  products:any
-  dropDown:any
  
   orders:any = []
   customerColumns = [] // columns schema then map...
@@ -133,38 +127,38 @@ export class AddCustomerOrderComponent implements OnInit {
     { id: 2, title: 'title 2' },
   ]
   
-//   products:any = [{
-//     product_ID: '1',
-//     name: 'Beef',
-//   },{
-//     product_ID: '2',
-//     name: 'Chicken',
-//   },
-//   {
-//     product_ID: '3',
-//     name: 'Cheese',
-//   },
-//   {
-//     product_ID: '4',
-//     name: 'Meat',
-//   }
-// ]
+  products:any = [{
+    Product_ID: '1',
+    Name: 'Beef',
+  },{
+    Product_ID: '2',
+    Name: 'Chicken',
+  },
+  {
+    Product_ID: '3',
+    Name: 'Cheese',
+  },
+  {
+    Product_ID: '4',
+    Name: 'Meat',
+  }
+]
 
-// dropDown:any= [{
-//   product_ID: '1',
-//   name: 'Beef',
-// },{
-//   product_ID: '2',
-//   name: 'Chicken',
-// },  {
-//   product_ID: '3',
-//   name: 'Cheese',
-// },
-// {
-//   product_ID: '4',
-//   name: 'Meat',
-// }
-//] // populate from API call not from products
+dropDown:any= [{
+  Product_ID: '1',
+  Name: 'Beef',
+},{
+  Product_ID: '2',
+  Name: 'Chicken',
+},  {
+  Product_ID: '3',
+  Name: 'Cheese',
+},
+{
+  Product_ID: '4',
+  Name: 'Meat',
+}
+] // populate from API call not from products
 
 
 
@@ -219,8 +213,8 @@ export class AddCustomerOrderComponent implements OnInit {
         const control =  this.form.get('records') as FormArray;
      
         this.rowIndexTemplate = rowIndex
-        let product_ID =(this.form.get('records') as FormArray).controls[rowIndex].get('product_ID')?.value
-        let productIndex = this.products.findIndex((item:any) => item.product_ID == product_ID)
+        let Product_ID =(this.form.get('records') as FormArray).controls[rowIndex].get('Product_ID')?.value
+        let productIndex = this.products.findIndex((item:any) => item.Product_ID == Product_ID)
         this.dropDown.push(this.products[productIndex])
        
        
@@ -229,10 +223,10 @@ export class AddCustomerOrderComponent implements OnInit {
 
       initiateProductForm(): FormGroup {
         return this.formBuilder.group({
-          product_ID: new FormControl("", Validators.required),
-          name: new FormControl(""),
-        quantity: new FormControl("", Validators.required),
-        price: new FormControl("",Validators.required),
+          Product_ID: new FormControl("", Validators.required),
+          Product_Name: new FormControl(""),
+        Quantity: new FormControl("", Validators.required),
+        Price: new FormControl("",Validators.required),
         isDone: new FormControl(false),
         isDelete: new FormControl("")
         });
@@ -240,15 +234,15 @@ export class AddCustomerOrderComponent implements OnInit {
    
       DeleteRow(rowIndex: number) {
         //.edited = false
-       console.log(rowIndex)
+       
         if(this.dataSource.data.length==0){
           this.edited = false
         }
         if((this.form.get('records') as FormArray).controls[rowIndex].get('isDone')?.value == false){
           this.edited = false
         }else{
-          let product_ID =(this.form.get('records') as FormArray).controls[rowIndex].get('product_ID')?.value
-          let productIndex = this.products.findIndex((item:any) => item.product_ID == product_ID)
+          let Product_ID =(this.form.get('records') as FormArray).controls[rowIndex].get('Product_ID')?.value
+          let productIndex = this.products.findIndex((item:any) => item.Product_ID == Product_ID)
          
           this.dropDown.push(this.products[productIndex])
         
@@ -265,20 +259,20 @@ export class AddCustomerOrderComponent implements OnInit {
       }
       CalculateTotal(rowIndex:any){
         let formArr = this.form.get('records') as FormArray
-        let quantity = formArr.controls[rowIndex].get('quantity')?.value
-        let price = formArr.controls[rowIndex].get('price')?.value
+        let quantity = formArr.controls[rowIndex].get('Quantity')?.value
+        let price = formArr.controls[rowIndex].get('Price')?.value
         if(quantity && price){
           return quantity*price
         }
        return 
       }
       CalculateSubTotal(){
-        //console.log("sub total")
+        console.log("sub total")
         let total = 0
         let formArr = this.form.get('records') as FormArray
        for(let i = 0; i < formArr.length; i++){
-         let quantity = formArr.controls[i].get('quantity')?.value
-         let price = formArr.controls[i].get('price')?.value
+         let quantity = formArr.controls[i].get('Quantity')?.value
+         let price = formArr.controls[i].get('Price')?.value
          if(quantity && price){
            total += quantity*price
          }
@@ -292,18 +286,6 @@ export class AddCustomerOrderComponent implements OnInit {
     
       })
       
-      this.productService.getProductList().subscribe((res:any)=>{
-        let products = res
-        let dropDown = res
-        this.dropDown = [...dropDown]
-        this.products = [...products]
-        //console.log(this.products)
-        console.log(this.dropDown)
-      console.log(this.products)
-      })
-      
-    
-      
       }
     
     
@@ -313,45 +295,22 @@ export class AddCustomerOrderComponent implements OnInit {
       let formArr = this.form.get('records') as FormArray
       
       let element = formArr.controls[rowIndex].value
-      let product_ID =(this.form.get('records') as FormArray).controls[rowIndex].get('product_ID')?.value
-      let productIndex = this.products.findIndex((item:any) => item.product_ID == product_ID)
+      let Product_ID =(this.form.get('records') as FormArray).controls[rowIndex].get('Product_ID')?.value
+      let productIndex = this.products.findIndex((item:any) => item.Product_ID == Product_ID)
       // setting based on product index and not on product ID.
-      formArr.controls[rowIndex].get("name")?.setValue(this.products[productIndex].name)
+      formArr.controls[rowIndex].get("Product_Name")?.setValue(this.products[productIndex].Name)
      
       let val = formArr.controls[rowIndex].get('isDone')?.setValue(true)
       
-      let index = this.dropDown.findIndex((item:any) => item.product_ID == element.product_ID)
+      let index = this.dropDown.findIndex((item:any) => item.Product_ID == element.Product_ID)
       this.dropDown.splice(index,1)
      
       this.dataSource = new MatTableDataSource((this.form.get('records') as FormArray).value);
-     console.log(this.dropDown)
-     console.log(this.products)
+     
      
      // let prodct_Name = this.products[index].Name
      
       this.dataSource._updateChangeSubscription()
-    }
-    Submit(){
-      let customerOrderViewModel:CustomerOrderViewModel = new CustomerOrderViewModel()
-      let customerOrder:CustomerOrder = new CustomerOrder()
-      customerOrder.customer_ID = this.data.customer_ID
-      let date = new Date(Date.now())
-      customerOrder.date_Created = date.toString()
-      customerOrderViewModel.customerOrder = customerOrder
-      let orderLines = (this.form.get('records') as FormArray).value
-      
-      customerOrderViewModel.customerOrderLines = orderLines
-  this.orderService.CreateCustomerOrder(customerOrderViewModel).subscribe((res:any)=>{
-   //let total = this.CalculateSubTotal()
-   this.orderService.addedOrder.next(res)
-   this.dialogRef.close("success")
-  }),(error:any) => {
-    this.dialogRef.close("error")
-  }
-    
-      
-      console.log(customerOrderViewModel)
-
     }
  
  

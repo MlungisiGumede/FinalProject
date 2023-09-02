@@ -33,9 +33,9 @@ form:any
   EditCustomer(){
     this.customerService.UpdateCustomer(this.form.value).subscribe(res=>{
       console.log("success", res);
-      this.matDialogRef.close(true)
+      this.matDialogRef.close('success')
       }),(err:any)=>{
-        this.matDialogRef.close(false)
+        this.matDialogRef.close('error')
       }
   }
 

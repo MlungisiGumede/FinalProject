@@ -40,7 +40,7 @@ images: LocalFile[]=[];
   pic: any;
   datawr:any;
   image:any
-  fileName:any = "required"
+  fileName:any
   uploadFile:any
 
   
@@ -110,7 +110,6 @@ let writeOff = new WriteOff();
 writeOff.image = this.uploadFile
 writeOff.quantity = this.form.controls['quantity'].value
 writeOff.reason = this.form.controls['reason'].value
-writeOff.product_ID = this.id
 
   this.writeoffservice.createWriteOff(writeOff).subscribe(res=>{
     console.log("success", res);

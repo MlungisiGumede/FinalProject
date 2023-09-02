@@ -4,22 +4,22 @@
  <div class="title">View Supplier</div>
  <div class="content">
    <form action="#">
-     <div class="user-details"  [formGroup]=form>
+     <div class="user-details">
        <div class="input-box">
          <span class="details">Supplier Name</span>
-         <input type="text" placeholder="Name" formControlName="name">
+         <input type="text" placeholder={{data.companyName}} [(ngModel)]="data.companyName" [ngModelOptions]="{standalone: true}">
+       </div>
+       <div class="input-box">
+         <span class="details">Contact Name</span>
+         <input type="text" placeholder={{data.addressline}} [(ngModel)]="data.addressline" [ngModelOptions]="{standalone: true}">
        </div>
        <div class="input-box">
          <span class="details">Address</span>
-         <input type="text" placeholder="Address" formControlName="address" >
-       </div>
-       <div class="input-box">
-         <span class="details">Email</span>
-         <input type="text" placeholder="Email" formControlName="email">
+         <input type="text" placeholder={{data.city}} [(ngModel)]="data.city" [ngModelOptions]="{standalone: true}">
        </div>
        <div class="input-box">
          <span class="details">Phone number</span>
-         <input type="text" placeholder="Phone" formControlName="phone">
+         <input type="text" placeholder={{data.phone}} [(ngModel)]="data.phone" [ngModelOptions]="{standalone: true}">
        </div>
      </div>
      <div class="button">

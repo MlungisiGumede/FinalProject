@@ -7,8 +7,7 @@ namespace IBIS_API.Models
 	{
         [Key]
         public int Inventory_Item_ID { get; set; }	
-	//Inventory_Item? Inventory_ID { get; set; }
-	public String? Name { get; set; }	
+	//Inventory_Item? Inventory_ID { get; set; }	
 	public string? Category { get; set; }
 	public int Quantity { get; set; }
 

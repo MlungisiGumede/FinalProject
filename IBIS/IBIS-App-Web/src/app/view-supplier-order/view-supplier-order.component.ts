@@ -5,9 +5,6 @@ import { MatTableDataSource } from '@angular/material/table';
 import { InventoryService } from '../Services/inventory.service';
 import { AddSupplierComponent } from '../add-supplier/add-supplier.component';
 import { SupplierOrderLine } from '../Models/SupplierOrderLine';
-import { SupplierOrderViewModel } from '../Models/SupplierOrderViewModel';
-import { SupplierOrder } from '../Models/SupplierOrder';
-import { OrdersService } from '../Services/orders.service';
 
 @Component({
   selector: 'app-view-supplier-order',
@@ -31,7 +28,6 @@ export class ViewSupplierOrderComponent implements OnInit {
   rowIndexTemplate:any
   globalArray:any
   selectedValue:any
-  supplierOrder:any
 //@ViewChild(MatTable) myTable: MatTable<any>;
   // CustomercolumnsSchema = [
   //   // {
@@ -115,21 +111,21 @@ export class ViewSupplierOrderComponent implements OnInit {
  // dataSource: any;
  orderDef:any
   columnsSchema:any
-  supplierOrderLines:SupplierOrderLine[] = []
-  // {
-  //     supplierOrderLine_ID: '1',
-  //     supplier_Order_ID: '1',
-  //     inventory_ID: '1',
-  //     quantity: '1',
-  //     price: '10'
-  //   }, {
-  //     supplierOrderLine_ID: '2',
-  //     supplier_Order_ID: '2',
-  //     inventory_ID: '2',
-  //     quantity: '2',
-  //     price: '10'
-  //   }
-  // ]
+  supplierOrderLines:SupplierOrderLine[] = [
+  {
+      supplierOrderLine_ID: '1',
+      supplier_Order_ID: '1',
+      inventory_ID: '1',
+      quantity: '1',
+      price: '10'
+    }, {
+      supplierOrderLine_ID: '2',
+      supplier_Order_ID: '2',
+      inventory_ID: '2',
+      quantity: '2',
+      price: '10'
+    }
+  ]
  
   orders:any = []
   customerColumns = [] // columns schema then map...
@@ -179,22 +175,28 @@ dropDown:any= [{
   constructor(public dialogRef: MatDialogRef<ViewSupplierOrderComponent>,
   @Inject(MAT_DIALOG_DATA) public data: any,private formBuilder:FormBuilder,
   private inventoryService:InventoryService,
-  public cdr:ChangeDetectorRef,private orderService:OrdersService) {
+  public cdr:ChangeDetectorRef) {
     this.tableForm = this.formBuilder.group({
       arrayForm: this.formBuilder.array(this.results.map(r => this.formBuilder.group(r)))
     });
     
       this.columnsSchema = this.SuppliercolumnsSchema
       this.displayedColumns = this.SuppliercolumnsSchema.map((col) => col.key);
-      this.supplierOrder = data
+      console.log(this.dropDown)
+      console.log(this.inventories)
+      console.log(typeof(this.dropDown))
       // getSuppliers
-     
-    this.title = data.name
-     
+      console.log(data)
+      this.title = data.name
+      // this.productService.getProductList().subscribe((res:any)=>{
+      //   //this.products = res
+      // })
     }
    
    
-    
+    // this.displayedColumns.forEach((col) => {
+    //   this.form.addControl(col, new FormControl('', Validators.required))
+    // })
     
    ;
   
@@ -243,7 +245,7 @@ console.log(this.dropDown)
       initiateInventoryForm(element:SupplierOrderLine,inventory_Name:any): FormGroup {
         return this.formBuilder.group({
             inventory_ID:new FormControl(element.inventory_ID, Validators.required),
-            name: new FormControl(inventory_Name, ),
+            Name: new FormControl(inventory_Name, ),
             Quantity: new FormControl(element.quantity, Validators.required),
             Price: new FormControl(element.price,Validators.required),
             isDone: new FormControl(true),   // closest form group id then set it in form...
@@ -255,7 +257,7 @@ console.log(this.dropDown)
       initiateEmptyInventoryForm(): FormGroup {
         return this.formBuilder.group({
             inventory_ID:new FormControl("", Validators.required),
-            name: new FormControl("", ),
+            Name: new FormControl("", ),
             Quantity: new FormControl("", Validators.required),
             Price: new FormControl("",Validators.required),
             isDone: new FormControl(false),   // closest form group id then set it in form...
@@ -274,12 +276,10 @@ console.log(this.dropDown)
           this.edited = false
         }else{
           let inventory_ID =(this.form.get('records') as FormArray).controls[rowIndex].get('inventory_ID')?.value
-          console.log(inventory_ID)
           let inventoryIndex = this.inventories.findIndex((item:any) => item.inventory_ID == inventory_ID)
-         console.log(inventoryIndex)
-         console.log(this.inventories)
-        this.dropDown.push(this.inventories[inventoryIndex])
-        console.log(this.dropDown)
+         
+          this.dropDown.push(this.inventories[inventoryIndex])
+        
         }
         const control =  this.form.get('records') as FormArray;
 
@@ -288,9 +288,9 @@ console.log(this.dropDown)
         console.log(this.dataSource.data)
         console.log(control.value)
         this.dataSource._updateChangeSubscription()
-        //this.cdr.detectChanges()
+        this.cdr.detectChanges()
         console.log(control.value)
-       // this.myTable.renderRows()
+        this.myTable.renderRows()
       }
       CalculateTotal(rowIndex:any){
         let formArr = this.form.get('records') as FormArray
@@ -307,37 +307,17 @@ console.log(this.dropDown)
       'records': this.formBuilder.array([])
     
       })
-          this.dropDown = [...this.data.inventories]
-         this.inventories = [...this.data.inventories]
       console.log(this.supplierOrderLines)
       const control =  this.form.get('records') as FormArray; 
-      this.data.orderLines.forEach((element:any) => {
+      this.supplierOrderLines.forEach((element:any) => {
         let inventoryIndex = this.inventories.findIndex((item:any) => item.inventory_ID == element.inventory_ID)
         console.log(inventoryIndex)
-        let inventory_Name = this.inventories[inventoryIndex].name
+        let inventory_Name = this.inventories[inventoryIndex].Name
         console.log(inventory_Name)
         console.log(element)
-        control.push(this.initiateInventoryForm(element,inventory_Name));
-    
-     
-        let val = (this.form.get('records') as FormArray).value.forEach((element:any) => {
-             
-             let index = this.dropDown.findIndex((item:any) => item.inventory_ID == element.inventory_ID)
-             console.log(index)
-             console.log(this.dropDown[index])
-           this.dropDown.splice(index,1)
-           console.log(this.dropDown)
-           })
-           console.log(control.value)
-           this.dataSource = new MatTableDataSource((this.form.get('records') as FormArray).value);
-            console.log(this.dataSource.data)
-            this,
-          // let prodct_Name = this.products[index].Name
-           //console.log(prodct_Name)
-           this.dataSource._updateChangeSubscription()
        
       
-       
+       control.push(this.initiateInventoryForm(element,inventory_Name));
        
       });
       (this.form.get('records') as FormArray).controls.forEach((element:any) => {
@@ -381,8 +361,8 @@ console.log(this.dropDown)
       let inventory_ID =(this.form.get('records') as FormArray).controls[rowIndex].get('inventory_ID')?.value
       let inventoryIndex= this.inventories.findIndex((item:any) => item.inventory_ID == inventory_ID)
       // setting based on product index and not on product ID.
-      formArr.controls[rowIndex].get("name")?.setValue(this.inventories[inventoryIndex].name)
-      console.log(formArr.controls[rowIndex].get("name")?.value)
+      formArr.controls[rowIndex].get("Name")?.setValue(this.inventories[inventoryIndex].Name)
+      console.log(formArr.controls[rowIndex].get("Name")?.value)
       let val = formArr.controls[rowIndex].get('isDone')?.setValue(true)
       
       let index = this.dropDown.findIndex((item:any) => item.inventory_ID == element.inventory_ID)
@@ -394,28 +374,6 @@ console.log(this.dropDown)
      // let prodct_Name = this.products[index].Name
       //console.log(prodct_Name)
       this.dataSource._updateChangeSubscription()
-    }
-
-    Edit(){
-      let supplierOrderViewModel:SupplierOrderViewModel = new SupplierOrderViewModel()
-        let supplierOrder:SupplierOrder = new SupplierOrder()
-        supplierOrder.supplierOrder_ID = this.data.order.supplierOrder_ID
-        supplierOrder.supplier_ID = this.data.order.supplier_ID
-        supplierOrder.orderStatus_ID = this.data.order.orderStatus_ID
-        supplierOrder.date_Created = this.data.order.date_Created
-        supplierOrderViewModel.supplierOrder = supplierOrder
-        let orderLines = (this.form.get('records') as FormArray).value
-        orderLines.forEach((element:SupplierOrderLine) => {
-          element.supplierOrder_ID = this.data.order.supplierOrder_ID
-         
-        });
-        supplierOrderViewModel.supplierOrderLines = orderLines
-        this.orderService.UpdateSupplierOrder(supplierOrderViewModel).subscribe(() => {
-          this.dialogRef.close("success")
-        }), (error:any) => {
-          this.dialogRef.close("error")
-        }
-        
     }
  
  

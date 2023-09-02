@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { LoginService } from '../Services/login.service';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 
 
@@ -11,20 +11,18 @@ import { Router } from '@angular/router';
 })
 export class RegisterComponent implements OnInit {
 
-  //registerForm! : FormGroup
-  submitted = false;
+  registerForm! : FormGroup
 
   constructor(private register: LoginService, private fb: FormBuilder,private router:Router) { }
-  registerForm!: FormGroup ;
 
   ngOnInit(): void {
 
 this.registerForm = this.fb.group({
 
-  username : ['',[ Validators.required,Validators.minLength(6)]],
-  password : ['', [Validators.required,Validators.minLength(6)]],
+  username : ['', Validators.required],
+  password : ['', Validators.required],
   fullName : ['', Validators.required],
-  email: ['',[Validators.required,Validators.email]]
+  email: ['',Validators.email]
   // surname : ['', Validators.required],
   // address : ['', Validators.required],
   // Cellphone_Number : ['', Validators.required]
@@ -32,36 +30,15 @@ this.registerForm = this.fb.group({
 
 
   }
-
-async BackToLogin(){
+BackToLogin(){
   console.log("BackToLogin")
   this.router.navigate(['/Login'])
 }
 
-onSubmit(){
-
-  this.submitted = true;
-    if (this.registerForm.invalid) {
-      return;
-    }
-    console.warn(this.registerForm.value);
-
-}
-
   onRegister(){
-    this.submitted = true;
-
-    if (this.registerForm.invalid) {
-      console.log('register form is:', this.registerForm.value)
-      return;
-    }
-    
-    //console.warn(this.registerForm.value);
-
     this.register.Register(this.registerForm.value).subscribe(
        (res)=>{
-        console.log(res)
-        alert("User successfully registered")
+
         //alert(res.message)
        
       this.router.navigate(['/Login'])
@@ -69,24 +46,7 @@ onSubmit(){
       (err) =>{
         alert("Couldnt Register please try again")
       }
-    )
-  
-  
-  
-  }
-
-  
-
-
-    get f() { return this.registerForm.controls; }
-
-
-    onReset() {
-      this.submitted = false;
-      this.registerForm.reset();
-  }
-
-
+    )}
   }
 
   

@@ -1,6 +1,6 @@
 export class Product{
     product_ID: any;
-    name?: string;
+    product_Name?: string;
     category?: string;
     subcategory?: string;
     price?: number;

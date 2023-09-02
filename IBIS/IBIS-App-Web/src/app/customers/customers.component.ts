@@ -10,18 +10,16 @@ import { AddCustomerComponent } from '../add-customer/add-customer.component';
 import { ViewCustomerComponent } from '../view-customer/view-customer.component';
 import { ChangeDetectorRef } from '@angular/core';
 import { AddCustomerOrderComponent } from '../add-customer-order/add-customer-order.component';
-import { Observable, of } from 'rxjs';
-import { MatSnackBar } from '@angular/material/snack-bar';
 @Component({
   selector: 'app-customers',
   templateUrl: './customers.component.html',
   styleUrls: ['./customers.component.css']
 })
 export class CustomersComponent implements OnInit {
-data:Observable<any> = new Observable();
+data:any
 filterTerm!:string;
   constructor(public matDialog:MatDialog,private customerSerivce : CustomerService ,public toastController: ToastController
-    ,public cdr:ChangeDetectorRef,private _snackbar: MatSnackBar) { }
+    ,public cdr:ChangeDetectorRef) { }
 
   ngOnInit() {
 //localStorage.removeItem("Token")
@@ -38,8 +36,8 @@ filterTerm!:string;
   getCustomers(){
     this.customerSerivce.getCustomerList().subscribe(response => {
       console.log(response);
-      this.data = of(response);
-      //this.cdr.detectChanges()
+      this.data = response;
+      this.cdr.detectChanges()
       //console.log(this.data[0].inventory_ID);
       
       //this.inID = this.data[0].inventory_ID;
@@ -70,10 +68,9 @@ this.customerSerivce.DeleteCustomer(id).subscribe(Response => {
   console.log(Response);
   this.data = Response;
 this.getCustomers();
-this.ShowSnackBar("Customer successfully deleted","success")
- 
+this.presentToast('top',"Customer successfully edited","success") 
 } ,err=>{
-  this.ShowSnackBar("Customer could not be deleted","error")
+ this.presentToast('top',"Error Customer could not be edited","error")
 })
   }
 
@@ -87,25 +84,16 @@ this.ShowSnackBar("Customer successfully deleted","success")
     dialogRef.afterClosed().subscribe((res:any) => {
       console.log(res)
       console.log(res.data)
-      if(res){
+      if(res.data == 'success'){
         console.log("hi")
-        this.ShowSnackBar("Customer successfully added", "success");
         this.getCustomers()
         
-         
-      }else if(res == false){
-        this.ShowSnackBar("Customer could not be added", "error");
-       
+        this.presentToast('top',"Customer successfully added","success") 
+      }else{
+       this.presentToast('top',"Error customer could not added","error")
       }
     })
 
-  }
-  ShowSnackBar(message: string, panel: string) {
-    this._snackbar.open(message, "close", {
-      duration: 5000,
-      panelClass: [panel]
-      
-    });
   }
 
   OnEdit(element:any){
@@ -116,15 +104,13 @@ this.ShowSnackBar("Customer successfully deleted","success")
     dialogRef.afterClosed().subscribe((res:any) => {
       console.log(res)
       console.log(res.data)
-      if(res){
-       
+      if(res == 'success'){
+        console.log("hi")
         this.getCustomers()
-        this.ShowSnackBar("Customer successfully edited", "success");
-         
-      }else if(res==false){
         
-        this.ShowSnackBar("Customer could not be edited", "error");
-       
+        this.presentToast('top',"Customer successfully updated","success") 
+      }else{
+       this.presentToast('top',"Error customer could not be edited","error")
       }
     })
   }

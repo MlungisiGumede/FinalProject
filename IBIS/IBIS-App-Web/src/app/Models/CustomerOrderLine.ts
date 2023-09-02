@@ -1,7 +1,8 @@
 export class CustomerOrderLine{
-    customerOrderLine_ID: any
+    customerOrderLine_ID: any;
+    customer_ID: any;
     product_ID: any;
     quantity: any;
     price: any;
-    customerOrder_ID:any
+    customer_Order_ID:any
 }

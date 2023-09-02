@@ -59,9 +59,6 @@ import { ViewImageComponent } from './view-image/view-image.component';
 import { AddSupplierOrderComponent } from './add-supplier-order/add-supplier-order.component';
 import { ViewCustomerOrderComponent } from './view-customer-order/view-customer-order.component';
 import { ViewSupplierOrderComponent } from './view-supplier-order/view-supplier-order.component';
-import {MatSnackBarModule} from '@angular/material/snack-bar';
-import { HelpFunctionComponent } from './help-function/help-function.component'; 
-
 
 @NgModule({
   declarations: [
@@ -102,20 +99,14 @@ import { HelpFunctionComponent } from './help-function/help-function.component';
     ViewImageComponent,
     AddSupplierOrderComponent,
     ViewCustomerOrderComponent,
-    ViewSupplierOrderComponent,
-    AddSupplierComponent,
-    AddInventoryItemComponent,
-    HelpFunctionComponent
-    
+    ViewSupplierOrderComponent
   
   ],
   imports: [
     BrowserModule,
-    ReactiveFormsModule,
     CanvasJSAngularChartsModule,
     Ng2SearchPipeModule,
     MatDialogModule,
-    MatSnackBarModule,
     RouterModule.forRoot([
       {path: '', redirectTo: '/Login', pathMatch: 'full'},
       {path: 'Login', component: LoginComponent, canActivate : [AuthGuardService] },
@@ -197,9 +188,7 @@ import { HelpFunctionComponent } from './help-function/help-function.component';
 
   ],
   entryComponents: [AddCustomerComponent,ViewCustomerComponent,AddCustomerOrderComponent,
-  ViewImageComponent,AddSupplierComponent,ViewCustomerOrderComponent,ViewSupplierOrderComponent,
-  AddSupplierOrderComponent,AddInventoryItemComponent,ViewInventoryItemComponent,ViewSupplierComponent,
-AddProductComponent],
+  ViewImageComponent,AddSupplierComponent,ViewCustomerOrderComponent,ViewSupplierOrderComponent],
   providers: [{provide:HTTP_INTERCEPTORS,useClass:AuthenticationService,multi:true}
   ,AuthGuardService],
   bootstrap: [AppComponent]

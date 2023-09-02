@@ -46,8 +46,8 @@
               {{CalculateTotal(rowIndex)}}
               
              </span>
-             <span *ngSwitchCase="'product_ID'">
-              {{element.name}}
+             <span *ngSwitchCase="'Product_ID'">
+              {{element.Product_Name}}
              
              </span>
           
@@ -60,11 +60,11 @@
         <div [ngSwitch]="col.type" *ngIf="!element.isDone">
          
           <!-- display2(element) -->
-          <mat-form-field *ngSwitchCase="'product_ID'"  >
+          <mat-form-field *ngSwitchCase="'Product_ID'"  >
             <mat-label>Select Product</mat-label>
-            <mat-select formControlName="product_ID" >
-              <mat-option *ngFor="let product of dropDown" [value]="product.product_ID">
-                {{product.name}}
+            <mat-select formControlName="Product_ID" >
+              <mat-option *ngFor="let product of dropDown" [value]="product.Product_ID">
+                {{product.Name}}
               </mat-option>
             </mat-select>
             
@@ -82,7 +82,10 @@
                  <input type="hidden">
                 
             </div>
-           
+            <div *ngSwitchCase="'Quantity'">
+              <input [type]="col.type" matInput [formControlName]="col.key" step="1" />
+             
+         </div>
   
            
           <mat-form-field *ngSwitchDefault>
@@ -98,5 +101,5 @@
     <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
     <tr mat-footer-row *matFooterRowDef="displayedColumns;sticky:true"></tr>
   </table>
-  <input *ngIf="dataSource.data.length > 0" style="width: 200px!important;" type="submit" (click)="Submit()" value="SUBMIT" [disabled]="!form.valid ||edited==true">
+  <input *ngIf="dataSource.data.length > 0" style="width: 200px!important;" type="submit" value="SUBMIT" [disabled]="!form.valid ||edited==true">
   </form>

@@ -46,9 +46,9 @@ export class SupplierService {
   
     
     
-       getSupplierList(): Observable<Supplier[]> {
+       getSupplierList(): Observable<Supplier> {
          return this.httpClient
-         .get<Supplier[]>(this.apiUrl + 'getAll')
+         .get<Supplier>(this.apiUrl + 'getAll')
            .pipe(
              retry(2),
              catchError(this.handleError)

@@ -7,10 +7,6 @@ import { IonicModule, ToastController } from '@ionic/angular';
 import { MatDialog } from '@angular/material/dialog';
 import { AddSupplierComponent } from '../add-supplier/add-supplier.component';
 import { AddSupplierOrderComponent } from '../add-supplier-order/add-supplier-order.component';
-import { InventoryService } from '../Services/inventory.service';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { Observable, of } from 'rxjs';
-import { ViewSupplierComponent } from '../view-supplier/view-supplier.component';
 
 var pdfMake = require('pdfmake/build/pdfmake');
 var pdfFonts = require('pdfmake/build/vfs_fonts');
@@ -23,7 +19,7 @@ pdfMake.vfs = pdfFonts.pdfMake.vfs;
 })
 export class SuppliersComponent implements OnInit {
 
-  data:Observable<any> = new Observable();
+  data: any;
   Suppliers : Supplier[]=[];
   bool= false;
   idtodelete :any;
@@ -32,8 +28,7 @@ export class SuppliersComponent implements OnInit {
   
 
   constructor(private supply: SupplierService,public router: Router,private route: ActivatedRoute,private logged: LoginService,private toastController: ToastController
-    ,private matDialog: MatDialog,public inventoryService: InventoryService,
-    private _snackbar: MatSnackBar) {
+    ,private matDialog: MatDialog) {
       
     
 
@@ -46,27 +41,9 @@ export class SuppliersComponent implements OnInit {
 
   }
 SupplierOrder(item:any){
-  this.inventoryService.getInventoriesPerSupplier(item).subscribe((res:any)=>{
-    const dialog = this.matDialog.open(AddSupplierOrderComponent, {
-      data:{'inventories':res,'name':item.name,'order':item}
-    })
-  })
-
-}
-View(item:any){
-const dialogRef = this.matDialog.open(ViewSupplierComponent, {
-  data:item
+const dialog = this.matDialog.open(AddSupplierOrderComponent, {
+  data:item.name
 })
-dialogRef.afterClosed().subscribe(result => {
-  if(result){
-   this.ShowSnackBar("Supplier successfully updated", "success");
-    this.getall();
-  }else if(result == false){
-    this.ShowSnackBar("Supplier could not be updated", "error");
-  }
-}), (error:any) => {
-  
-}
 }
 
 
@@ -75,34 +52,17 @@ dialogRef.afterClosed().subscribe(result => {
 
     this.supply.getSupplierList().subscribe(response => {
       console.log(response);
-      this.data = of(response);
+      this.data = response;
     })
 
-  }
-
-  ShowSnackBar(message: string, panel: string) {
-    this._snackbar.open(message, "close", {
-      duration: 5000,
-      panelClass: [panel]
-      
-    });
   }
 
 
 
   AddSupplier(){
   
-const dialogRef = this.matDialog.open(AddSupplierComponent);
-     dialogRef.afterClosed().subscribe(result => {
-       if(result){
-        this.ShowSnackBar("Supplier successfully added", "success");
-         this.getall();
-       }else if(result == false){
-         this.ShowSnackBar("Supplier could not be added", "error");
-       }
-     }), (error:any) => {
-       
-     }
+const dialog = this.matDialog.open(AddSupplierComponent);
+     
   
     }
 
@@ -110,13 +70,11 @@ const dialogRef = this.matDialog.open(AddSupplierComponent);
       this.idtodelete = id;
   
   this.supply.delete(this.idtodelete).subscribe(Response => {
-    
-   this.ShowSnackBar("Supplier successfully deleted", "success");
+    console.log(Response);
+    this.data = Response;
+    this.presentToast('top')
   this.getall();
-  }), (error:any) => {
-    
-    this.ShowSnackBar("failed to delete supplier", "error");
-  }
+  })
     }
 
 
@@ -198,11 +156,11 @@ const dialogRef = this.matDialog.open(AddSupplierComponent);
           table: {
             headerRows: 1,
             widths: ['*', 'auto', 'auto', 'auto'],
-            // body: [
-            //   ['Supplier', 'Supplier Name', 'Address', 'Phone'],
-            //   ...this.data.map((p: { supplier_ID: any; companyName: any; addressline: any; phone: any}) => ([p.supplier_ID, p.companyName, p.addressline, p.phone])),
+            body: [
+              ['Supplier', 'Supplier Name', 'Address', 'Phone'],
+              ...this.data.map((p: { supplier_ID: any; companyName: any; addressline: any; phone: any}) => ([p.supplier_ID, p.companyName, p.addressline, p.phone])),
               
-            // ]
+            ]
           }
         },
         {

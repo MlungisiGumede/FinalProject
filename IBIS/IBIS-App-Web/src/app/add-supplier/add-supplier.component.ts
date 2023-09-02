@@ -41,10 +41,9 @@ supplier.phone = this.form.controls['phone'].value
 supplier.email = this.form.controls['email'].value
 this.supply.createSupplier(supplier).subscribe(res=>{
 console.log("success", res);
-this.matDialogRef.close(true)
-}),(err:any)=>{
-  this.matDialogRef.close(false)
-}
+this.presentToast('top')
+this.router.navigate(["/Suppliers"])
+})
 
 }
 

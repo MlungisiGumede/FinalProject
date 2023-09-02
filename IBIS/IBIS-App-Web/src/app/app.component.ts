@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import { NavigationError, NavigationStart, Router } from '@angular/router';
 import { LoginService } from './Services/login.service';
-import { AuthenticationService } from './Services/authentication.service';
 
 
 
@@ -30,8 +29,7 @@ export class AppComponent implements OnInit {
   selectedValue:any
   url:any
 
-constructor(private loginService : LoginService, public router: Router,
-  private authenticationService: AuthenticationService) {
+constructor(private loginService : LoginService, public router: Router,){
 
 }
   ngOnInit(): void {
@@ -39,26 +37,28 @@ constructor(private loginService : LoginService, public router: Router,
     this.router.events.forEach((event) => {
       if (event instanceof NavigationStart) {
         console.log(event['url'])
-        
+        if (event['url'] == '/Login' || event['url'] == '/Register' || event['url'] == '/' || event['url'].startsWith('/otp') || event['url'] == '/otp') {
+          this.showNavigation = false;
+          // once authentication throws you back to log in this if statement is true
+        } else {
           // console.log("NU")
-          this.authenticationService.Authenticate().then((success) => {
-            this.showNavigation = true;
-          }, (error) => {
-            this.showNavigation = false;
-          })
-          //this.showNavigation = true;
+          this.showNavigation = true;
+        }
+          
+            // cant log in agai
+        
+       
+      }
       if(event instanceof NavigationError){
         this.showNavigation = false;
-    }
   }
 })
-} 
 
     
     
   // })
       
-  
+  }
   panelOpenState = false;
   title = 'IBIS-App';
   use: userprofile[] = [

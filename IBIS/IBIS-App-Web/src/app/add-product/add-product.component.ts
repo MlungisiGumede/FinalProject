@@ -14,7 +14,6 @@ export class AddProductComponent implements OnInit {
 
 data:any;
 prod!: Product;
-form!:FormGroup
 
 productForm!: FormGroup;
 
@@ -84,7 +83,7 @@ categories: string[] = ['Meat', 'Vegetables', 'Sides'];
   createProduct(){
 
     let newProd = new Product()
-    newProd.name = this.productForm.controls['productName'].value
+    newProd.product_Name = this.productForm.controls['productName'].value
     newProd.price = this.productForm.controls['price'].value
     newProd.category = this.productForm.controls['category'].value
     newProd.subcategory = this.productForm.controls['subcategory'].value

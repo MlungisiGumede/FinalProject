@@ -42,8 +42,8 @@
             <span *ngSwitchCase="'total'">
               {{CalculateTotal(rowIndex)}}
              </span>
-             <span *ngSwitchCase="'inventory_ID'">
-              {{element.name}}
+             <span *ngSwitchCase="'Inventory_ID'">
+              {{element.Name}}
              </span>
           
           <span *ngSwitchDefault>
@@ -55,11 +55,11 @@
          
           <!-- display2(element) -->
           
-            <mat-form-field *ngSwitchCase="'inventory_ID'" >
+            <mat-form-field *ngSwitchCase="'Inventory_ID'" >
                 <mat-label>Select Inventory Item</mat-label>
-                <mat-select formControlName="inventory_ID">
-                  <mat-option *ngFor="let inventory of dropDown" [value]="inventory.inventory_ID">
-                    {{inventory.name}}
+                <mat-select formControlName="Inventory_ID">
+                  <mat-option *ngFor="let inventory of dropDown" [value]="inventory.Inventory_ID">
+                    {{inventory.Name}}
                   </mat-option>
                 </mat-select>
               </mat-form-field>
@@ -89,6 +89,6 @@
     <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
     <tr mat-footer-row *matFooterRowDef="displayedColumns;sticky:true"></tr>
   </table>
-  <input (click)="Submit()" *ngIf="dataSource.data.length > 0" style="width: 200px!important;" type="submit" value="SUBMIT" [disabled]="!form.valid ||edited==true">
+  <input *ngIf="dataSource.data.length > 0" style="width: 200px!important;" type="submit" value="SUBMIT" [disabled]="!form.valid ||edited==true">
   </form>
 

@@ -11,7 +11,7 @@ body{
   justify-content: center;
   align-items: center;
   padding: 10px;
-  background: black;
+  background: linear-gradient(135deg, #71b7e6, #9b59b6);
 }
 .but{
 
@@ -152,24 +152,4 @@ form .user-details .input-box{
   .container .content .category{
     flex-direction: column;
   }
-}
-
-
-.invalid-feedback{
-  color: red;
-}
-
-.button-container {
-  display: flex;
-}
-
-.ion-but{
-  background-color: black;
-  
-}
-
-.help-circle{
-  left: 60%;
-
-  color: orange;
 }

@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
-using Newtonsoft.Json;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -26,7 +25,6 @@ builder.Services.AddCors(options => options.AddDefaultPolicy(
         include.AllowAnyOrigin();
     }));
 builder.Services.AddControllers();
-
 
 // Add services to the container.
 
@@ -71,7 +69,7 @@ builder.Services.AddAuthentication()
 //        include.AllowAnyMethod();
 //        include.AllowAnyOrigin();
 //    }));
-// with origins before 
+ // with origins before 
 
 builder.Services.Configure<FormOptions>(o =>
 {
@@ -79,7 +77,6 @@ builder.Services.Configure<FormOptions>(o =>
     o.MultipartBodyLengthLimit = int.MaxValue;
     o.MemoryBufferThreshold = int.MaxValue;
 });
-
 builder.Services.Configure<DataProtectionTokenProviderOptions>(options => options.TokenLifespan = TimeSpan.FromHours(3));
 var app = builder.Build();
 

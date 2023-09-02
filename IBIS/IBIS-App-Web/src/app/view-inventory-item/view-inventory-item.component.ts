@@ -1,10 +1,8 @@
-import { Component, OnInit,Inject } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { InventoryService } from '../Services/inventory.service';
 import { ToastController } from '@ionic/angular';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { Inventory } from '../Models/Inventory';
 
 @Component({
   selector: 'app-view-inventory-item',
@@ -15,44 +13,47 @@ export class ViewInventoryItemComponent implements OnInit {
 
   id:any;
   data:any;
-  suppliers:any
-  selectedValue:any
-  form!: FormGroup;
 
-  constructor(private route : ActivatedRoute, private fb : FormBuilder,private inv: InventoryService,private toastController: ToastController,
-    @Inject(MAT_DIALOG_DATA) public item: any,private matDialogRef:MatDialogRef<ViewInventoryItemComponent>) { }
+  viewinventoryform!: FormGroup;
+
+  constructor(private route : ActivatedRoute, private fb : FormBuilder,private inv: InventoryService,private toastController: ToastController) { }
 
   ngOnInit(): void {
 
-   // this.id = this.item.inventory_ID
-    
-this.suppliers = this.item.suppliers
-  console.log(this.item)
-      this.form = new FormGroup({
-        sKU: new FormControl(this.item.item.sku,Validators.required),
-        name: new FormControl(this.item.item.name,Validators.required),
-        supplier_ID: new FormControl(this.item.item.supplier_ID,Validators.required),
-        inventory_ID: new FormControl(this.item.item.inventory_ID),
+    this.id = this.route.snapshot.params['id']
+    this.viewinventoryform = this.fb.group({
+
   
-      })
-      //this.selectedValue = this.item.item.supplierID
-      this.id = this.item.item.inventory_ID
-      console.log(this.id)
-    }
+    SKU : ['', Validators.required],
+    Name: ['', Validators.required],
+      quantity : ['', Validators.required],
+      InventoryId :  ['', Validators.required]
+    })
+  
+    this.id = this.route.snapshot.params['id']
+
+    this.inv.getinv(this.id).subscribe((res)=>{
+    
+    this.data = res
+    res = this.viewinventoryform.value
+    
+    console.log('inv:', this.data)
+    });
+  
+  
+  
+  
+  }
 
 
   update(){
 
-    this.inv.updateInventory(this.id,this.form.value).subscribe(response => {
+    this.inv.updateInventory(this.id,this.data).subscribe(response => {
       console.log("successfully updated",response);
       this.presentToast('top')
-      this.matDialogRef.close(true)
 
-  }), (error:any) => {
-    this.matDialogRef.close(false)
-  };
+  });
 }
-
 
   submit(){
 
