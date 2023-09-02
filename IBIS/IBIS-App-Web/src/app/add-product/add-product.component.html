@@ -1,88 +1,48 @@
 <body>
-  <form [formGroup]="productForm" (ngSubmit)="submitProductForm()">
     <div class="container">
-      <ion-button color="danger" shape="round" fill="outline" class="cancelAdd" [routerLink]="['/Products']">X</ion-button>
      <div class="title">Add Product</div>
      <div class="content">
-      
-        <div class="user-details">
-          
-            <div class="input-box">
-              <span class="details">Product Name</span>
-              <ion-input type="text" placeholder="Name" formControlName="productName" class="priceBox"></ion-input>
-              <ion-note class="error-message" *ngIf="productForm.get('productName')?.hasError('required')">
-                A product name is required
-              </ion-note>
-            </div>
+       <form action="#">
+         <div class="user-details">
+           <div class="input-box">
+             <span class="details">Product Name</span>
+             <input  type="text" placeholder="name" [(ngModel)]="data.product_Name" [ngModelOptions]="{standalone: true}">
+           </div>
 
-            <div class="input-box">
-              <span class="details">Price</span>
-              <ion-input type="number" placeholder="Price" formControlName="price" class="priceBox"></ion-input>
-              <ion-note class="error-message" *ngIf="productForm.get('price')?.hasError('min')">
-                Price must be greater than or equal to 1.
-              </ion-note>
-            </div>
+           <div class="input-box">
+            <span class="details">Price</span>
+            <input  type="number" placeholder="Price" [(ngModel)]="data.price" [ngModelOptions]="{standalone: true}">
+          </div>
 
-          
-
-          <!-- <div> -->
-          
-            <ion-item class="drop-down-sub2">
-              <ion-label position="floating">Category</ion-label>
-              <ion-select interface="popover" formControlName="category" (ionChange)="onCategoryChange($event)">
-                <ion-select-option *ngFor="let category of categories" [value]="category">{{ category }}</ion-select-option>
-              </ion-select>
-            </ion-item>
-          
-          <!-- </div> -->
-          <!-- <div class="input-box">
-            <span class="category">Category</span>
-            <select formControlName="category" (change)="onCategoryChange($event)">
-              <option value="" disabled selected>Select a category</option>
+           <div class="input-box">
+             <span class="category">Category</span>
+             <select [(ngModel)]="data.category" [ngModelOptions]="{standalone: true}" (change)="updateSubcategories()">
+             <option value="" disabled selected>Select a category</option>
               <option *ngFor="let category of categories" [value]="category">{{ category }}</option>
             </select>
-          </div> -->
-          
-          <!-- <div class="input-box">
+           </div>
+           <div class="input-box">
             <span class="subcategory">Sub-category</span>
-            <select formControlName="subcategory">
+            <select [(ngModel)]="data.subcategory" [ngModelOptions]="{standalone: true}">
               <option value="" disabled selected>Select a subcategory</option>
-              <ng-container *ngIf="selectedCategory">
-                <option *ngFor="let subcategory of subcategories[selectedCategory]" [value]="subcategory">{{ subcategory }}</option>
-              </ng-container>
+              <option *ngFor="let subcategory of subcategories[data.category]" [value]="subcategory">{{ subcategory }}</option>
             </select>
-          </div> -->
-
-          
-              <ion-item class="drop-down-sub">
-                <ion-label position="floating">Sub-category</ion-label>
-                <ion-select interface="popover" formControlName="subcategory">
-                  <ion-select-option *ngFor="let subcategory of filteredSubcategories" [value]="subcategory">{{ subcategory }}</ion-select-option>
-                </ion-select>
-              </ion-item>
-            
+           </div>
            
-          <div class="input-box">
+           <div class="input-box">
             <span class="details">Quantity</span>
-            <ion-input type="number" placeholder="Quantity" formControlName="quantity" class="priceBox"></ion-input>
-            <ion-note class="error-message" *ngIf="productForm.get('quantity')?.hasError('min')">
-              Quantity has to be at least 1.
-            </ion-note>
+            <input  type="number" placeholder="Quantity" [(ngModel)]="data.quantity" [ngModelOptions]="{standalone: true}">
           </div>
-
           <div class="input-box">
             <span class="details">Expiry</span>
-              <ion-input type="date"  formControlName="expiryDate" class="priceBox" (ionChange)="validateExpiryDate()"></ion-input>
-              <ion-note class="error-message" *ngIf="productForm.get('expiryDate')?.hasError('minExpiryDate')">
-                Expiry date must at least be 10 days from now.
-              </ion-note>
+              <input  type="date" placeholder="expiry" [(ngModel)]="data.expiry" [ngModelOptions]="{standalone: true}">
           </div>
+         </div>
          
-        
-          <ion-button type="submit" class="submitButton" [disabled]="!productForm.valid">Submit<ion-ripple-effect></ion-ripple-effect></ion-button>
-
+         <div class="button">
+            <input type="submit" value="submit" (click)="createProduct()">
         </div>
+       </form>
      </div>
     </div>
-  </form>
-</body>
+    </body>
