@@ -12,6 +12,13 @@ export class AddProductComponent implements OnInit {
 
 data:any;
 prod!: Product;
+<<<<<<< HEAD
+=======
+
+productForm!: FormGroup;
+
+selectedCategory: string | null = null;
+>>>>>>> parent of 1c513418 (Merge branch 'main' of https://github.com/INF370Development/inf370-team6)
 
 categories: string[] = ['Meat', 'Vegetables', 'Sides'];
   subcategories: { [key: string]: string[] } = {
@@ -30,9 +37,30 @@ categories: string[] = ['Meat', 'Vegetables', 'Sides'];
   }
 
   createProduct(){
+<<<<<<< HEAD
     this.prodService.createProduct(this.data).subscribe(res=>{
     console.log("success", res);
     })  
+=======
+
+    let newProd = new Product()
+    newProd.product_Name = this.productForm.controls['productName'].value
+    newProd.price = this.productForm.controls['price'].value
+    newProd.category = this.productForm.controls['category'].value
+    newProd.subcategory = this.productForm.controls['subcategory'].value
+    newProd.quantity = this.productForm.controls['quantity'].value
+    newProd.expiry = this.productForm.controls['expiryDate'].value
+
+    this.prodService.createProduct(newProd).subscribe(res => {
+      console.log('success', res);
+      this.presentToast('top');
+      this.router.navigate(["/Products"]);
+    })
+
+    // this.prodService.createProduct(this.data).subscribe(res=>{
+    // console.log("success", res);
+    // })  
+>>>>>>> parent of 1c513418 (Merge branch 'main' of https://github.com/INF370Development/inf370-team6)
   }
 
   updateSubcategories() {
