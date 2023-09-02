@@ -2,8 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Product } from '../Models/Product';
 import { ProductService } from '../Services/product.service';
 import { Router } from '@angular/router';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { MatDialogRef } from '@angular/material/dialog';
+import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-add-product',
@@ -14,7 +13,10 @@ export class AddProductComponent implements OnInit {
 
 data:any;
 prod!: Product;
-form!:FormGroup
+
+productForm!: FormGroup;
+
+selectedCategory: string | null = null;
 
 categories: string[] = ['Meat', 'Vegetables', 'Sides'];
   subcategories: { [key: string]: string[] } = {
@@ -24,32 +26,33 @@ categories: string[] = ['Meat', 'Vegetables', 'Sides'];
   };
 
 
-  constructor(private prodService: ProductService,public router:Router,
-    public dialogRef: MatDialogRef<AddProductComponent>) {
+  constructor(private prodService: ProductService,public router:Router){
     this.data = new Product();
   } 
 
   ngOnInit(): void {
-    this.form = new FormGroup({
-     name: new FormControl("",Validators.required), // fill with the API calls...
-      category: new FormControl("",Validators.required),
-      subCategory: new FormControl("",Validators.required),
-      price: new FormControl("",Validators.required),
-      quantity: new FormControl("",Validators.required),
-      expiry: new FormControl("",Validators.required)
-    })
-    
+
   }
 
-  CreateProduct(){
-    let product:Product = new Product()
-    product = this.form.value
-    this.prodService.createProduct(product).subscribe(res=>{
-    console.log("success", res);
-    this.dialogRef.close(true)
-    }),(err:any)=>{
-      this.dialogRef.close(false)
-    }  
+  createProduct(){
+
+    let newProd = new Product()
+    newProd.name = this.productForm.controls['productName'].value
+    newProd.price = this.productForm.controls['price'].value
+    newProd.category = this.productForm.controls['category'].value
+    newProd.subcategory = this.productForm.controls['subcategory'].value
+    newProd.quantity = this.productForm.controls['quantity'].value
+    newProd.expiry = this.productForm.controls['expiryDate'].value
+
+    this.prodService.createProduct(newProd).subscribe(res => {
+      console.log('success', res);
+      //this.presentToast('top');
+      this.router.navigate(["/Products"]);
+    })
+
+    // this.prodService.createProduct(this.data).subscribe(res=>{
+    // console.log("success", res);
+    // })  
   }
 
   updateSubcategories() {

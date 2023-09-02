@@ -3,8 +3,8 @@
    <div class="title">Add Product</div>
    <div class="content">
      <form action="#">
-       <div class="user-details" [formGroup]="form">
-         <div class="input-box" [formGroup]="form">
+       <div class="user-details" [formGroup]="productForm">
+         <div class="input-box">
            <span class="details">Product Name</span>
            <input  type="text" placeholder="name" formControlName="name">
          </div>
@@ -34,12 +34,11 @@
          <input type="submit" value="update" (click)="update()" >
        </div> -->
        <div class="button">
-          <input type="submit" value="submit" (click)="CreateProduct()" [disabled]="!form.valid">
+          <input type="submit" value="submit" (click)="createProduct()" [disabled]="!productForm.valid">
         </div>
       </div>
     </div>
      </form>
-   
   </div>
   </div>
   </body>

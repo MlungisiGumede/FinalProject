@@ -60,7 +60,7 @@ import { AddSupplierOrderComponent } from './add-supplier-order/add-supplier-ord
 import { ViewCustomerOrderComponent } from './view-customer-order/view-customer-order.component';
 import { ViewSupplierOrderComponent } from './view-supplier-order/view-supplier-order.component';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
-import { HelpFunctionComponent } from './help-function/help-function.component'; 
+import { HelpFunctionComponent } from './help-function/help-function.component';
 
 
 @NgModule({
