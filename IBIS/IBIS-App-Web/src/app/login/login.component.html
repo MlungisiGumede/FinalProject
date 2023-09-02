@@ -9,11 +9,11 @@
      
       <form [formGroup]="loginForm" class="login-form">
         <h1>Login</h1>
-        <input formControlName="username" type="text" [(ngModel)]="name" name="name"  placeholder="Username" />
+        <input formControlName="username" type="text" [(ngModel)]="name" name="name"  placeholder="username" />
         <input formControlName="password" type="password" placeholder="password" />
         <button (click)="onlogin()">login</button>
         <p class="message">Not registered? <a [routerLink]="['/Register']">Create an account</a></p>
-        <p class="message">Forgot password? <a [routerLink]="['/newPassword']">Reset password</a></p>
+        <p class="message">Forgot password? <a [routerLink]="['/newPassword']">reset password</a></p>
       </form>
     </div>
   </div>

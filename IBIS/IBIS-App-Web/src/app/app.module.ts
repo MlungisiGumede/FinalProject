@@ -124,7 +124,6 @@ import { ViewSupplierOrderComponent } from './view-supplier-order/view-supplier-
       {path: 'write-off/:id', component: WriteOffComponent, canActivate : [AuthGuardService]},
       {path: 'order-from-supplier/:id', component: OrderFromSupplierComponent},
       {path: 'Recipes', component: RecipesComponent, canActivate : [AuthGuardService]},
-<<<<<<< Updated upstream
       {path: 'create-recipe', component: CreateRecipeComponent, canActivate : [AuthGuardService]},
       {path: 'view-recipe/:id', component: ViewRecipeComponent, canActivate : [AuthGuardService]},
       {path: 'create-supplier-order/:id', component: CreateSupplierOrderComponent, canActivate : [AuthGuardService]},
@@ -139,27 +138,9 @@ import { ViewSupplierOrderComponent } from './view-supplier-order/view-supplier-
       {path: 'home', component:HomeComponent, canActivate : [AuthGuardService]},
       {path: 'product-report', component: ProductReportComponent},
       {path: 'customer', component: CustomersComponent,canActivate : [AuthGuardService]},
-    {path: 'otp', component: OtpComponent, canActivate : [AuthGuardService]},
+    {path: 'otp', component: OtpComponent/*, canActivate : [AuthGuardService]*/},
       {path: 'otp/:username', component: OtpComponent,canActivate : [AuthGuardService]},
       {path:'view-write-off/:id',component:ViewWriteOffsComponent,canActivate : [AuthGuardService]},
-=======
-      {path: 'create-recipe', component: CreateRecipeComponent},
-      {path: 'view-recipe/:id', component: ViewRecipeComponent},
-      {path: 'create-supplier-order/:id', component: CreateSupplierOrderComponent},
-      {path: 'create-customer-order', component: CustomerOrderComponent},
-      {path: 'view-write-off', component: ViewWriteOffsComponent},
-      {path: 'Reports', component: ReportsComponent/*, canActivate : [AuthGuardService]*/},
-      {path: 'Inventory', component: InventoryComponent/*, canActivate : [AuthGuardService]*/},
-      {path: 'Orders', component: OrdersComponent/*, canActivate : [AuthGuardService]*/},
-      {path: 'Recipes', component: RecipesComponent/*, canActivate : [AuthGuardService]*/},
-      {path: 'Products', component: ProductsComponent/*, canActivate : [AuthGuardService]*/},
-      {path: 'Suppliers', component: SuppliersComponent/*, canActivate : [AuthGuardService]*/},
-      {path: 'home', component:HomeComponent/*, canActivate : [AuthGuardService]*/},
-      {path: 'product-report', component: ProductReportComponent},
-      {path: 'customer', component: CustomersComponent/*,canActivate : [AuthGuardService]*/},
-      {path: 'otp', component: OtpComponent/*, canActivate : [AuthGuardService]*/},
-      {path: 'otp/:username', component: OtpComponent/*,canActivate : [AuthGuardService]*/}
->>>>>>> Stashed changes
 
 
 

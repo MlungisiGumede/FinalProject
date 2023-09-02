@@ -52,7 +52,6 @@ export class ProductsComponent implements OnInit {
       { product_ID: 5, product_Name: 'Product E', quantity: 5, price: 30 }
     ];
 
-    
   }
 
   getProducts(){
