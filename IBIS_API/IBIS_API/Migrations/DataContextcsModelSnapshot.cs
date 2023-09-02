@@ -419,6 +419,9 @@ namespace IBIS_API.Migrations
                     b.Property<string>("Image")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("Product_ID")
+                        .HasColumnType("int");
+
                     b.Property<string>("Quantity")
                         .HasColumnType("nvarchar(max)");
 

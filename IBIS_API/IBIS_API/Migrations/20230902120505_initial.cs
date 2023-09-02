@@ -227,6 +227,7 @@ namespace IBIS_API.Migrations
                 {
                     Write_Off_Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    Product_ID = table.Column<int>(type: "int", nullable: true),
                     Quantity = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Reason = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Image = table.Column<string>(type: "nvarchar(max)", nullable: true)

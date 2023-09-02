@@ -9,7 +9,7 @@ namespace IBIS_API.Models
 
         public int Write_Off_Id { get; set; }
 
-       
+       public int? Product_ID { get; set; }
         public string? Quantity { get; set; }
         public string? Reason { get; set; }
         public string? Image { get; set; }

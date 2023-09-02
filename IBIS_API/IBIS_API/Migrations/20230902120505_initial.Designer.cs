@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace IBIS_API.Migrations
 {
     [DbContext(typeof(DataContextcs))]
-    [Migration("20230902064908_initial")]
+    [Migration("20230902120505_initial")]
     partial class initial
     {
         /// <inheritdoc />
@@ -421,6 +421,9 @@ namespace IBIS_API.Migrations
 
                     b.Property<string>("Image")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("Product_ID")
+                        .HasColumnType("int");
 
                     b.Property<string>("Quantity")
                         .HasColumnType("nvarchar(max)");

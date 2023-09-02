@@ -40,9 +40,9 @@ export class ProductService {
   
     
     
-       getProductList(): Observable<Product> {
+       getProductList(): Observable<Product[]> {
          return this.httpClient
-         .get<Product>(this.apiUrl + '/getAll')
+         .get<Product[]>(this.apiUrl + '/getAll')
            .pipe(
              retry(2),
              catchError(this.handleError)

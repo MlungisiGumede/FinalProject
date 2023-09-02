@@ -10,6 +10,7 @@ import { WriteOffService } from '../Services/write-off.service';
 import { DomSanitizer } from '@angular/platform-browser';
 import { MatDialog } from '@angular/material/dialog';
 import { ViewImageComponent } from '../view-image/view-image.component';
+import { Observable, of } from 'rxjs';
 
 var pdfMake = require('pdfmake/build/pdfmake');
 var pdfFonts = require('pdfmake/build/vfs_fonts');
@@ -22,15 +23,16 @@ pdfMake.vfs = pdfFonts.pdfMake.vfs;
 })
 export class ViewWriteOffsComponent implements OnInit {
 
-  data:any
-  products: Product[] = [];
+  data:Observable<any> = new Observable();
+  products: any[] = [];
   writeOffs: any;
   idtodelete :any;
   filterTerm!: string;
   reportData:any
   
   constructor(private writeOffService: WriteOffService,public router: Router,private domSanitizer:DomSanitizer
-    ,private ActivatedRoute: ActivatedRoute,public matDialog: MatDialog) {
+    ,private ActivatedRoute: ActivatedRoute,public matDialog: MatDialog,
+    private productService: ProductService) {
       
     
     writeOffService = {} as WriteOffService;
@@ -44,13 +46,20 @@ export class ViewWriteOffsComponent implements OnInit {
      // this.user.password = params['user'].password
     
   })
-    //this.getProducts()
+    this.getProducts()
+  }
+  getProducts(){
+    this.productService.getProductList().subscribe(response => {
+      console.log(response);
+      this.products = response;
+    })
   }
 
   async getWriteOffs(){
     this.writeOffService.getWriteOffList().subscribe(response => {
       console.log(response);
-      this.data = response;
+      this.data = of(response);
+      this.reportData = response;
     })
     
 
@@ -61,6 +70,9 @@ const dialog = this.matDialog.open(ViewImageComponent, {
   height: '500px',
   width: '500px',
 });
+  }
+  GetProductName(id:any){
+    return this.products.find(product => product.product_ID === id).name
   }
 
   ReadWriteOffs(){
@@ -101,7 +113,7 @@ const dialog = this.matDialog.open(ViewImageComponent, {
 
 this.writeOffService.delete(this.idtodelete).subscribe(Response => {
   console.log(Response);
-  this.data = Response;
+  //this.data = of(Response);
 this.getWriteOffs();
 })
   }
@@ -119,9 +131,48 @@ this.getWriteOffs();
 
   }
 
+  FormBody(data:any, columns:any) { // https://stackoverflow.com/questions/26658535/building-table-dynamically-with-pdfmake
+    var body:any = [];
+    let index = false
+  console.log(body)
+  let displayedColumns = ['Write Off ID', 'Product Name','Ímage', 'Quantity', 'Reason']
+      body.push(displayedColumns);
+      console.log(data)
+       data.forEach((row:any) => {
+        console.log(index)
+         let dataRow:any = [];
+  
+          columns.forEach( (column:any) => {
+            if(column == "product_ID"){
+              console.log(row[column])
+              row[column] = this.GetProductName(row[column])
+              console.log(row[column])
 
+            }if(column == "image"){
+              console.log("hitting")
+              console.log(row[column])
+              row[column] =  {'image': row[column],'width': '100'}
+            
+              
+            }
+            dataRow.push(row[column]);
+           })
+           
+           //index = true
+           body.push(dataRow)
+          }
+          
+         
+       )
+  
+      console.log(body)
+    
+      console.log(body)
+      return body;
+  }
 
   generPDF() {
+    //console.log(this.FormBody(this.reportData,['image']))
     let docDefinition = {
       content: [
         {
@@ -166,18 +217,19 @@ this.getWriteOffs();
           ]
         },
         {
-          text: 'report Details',
+          text: 'Report Details',
           style: 'sectionHeader'
         },
         {
           table: {
             headerRows: 1,
-            widths: ['*', 'auto', 'auto', 'auto'],
-            body: [
-              ['write off ID', 'item Name', 'quantity', 'reason'],
-              ...this.data.map((p: { write_Off_Id: any; item_name: any; quantity_Written_Off: any; reason: any}) => ([p.write_Off_Id, p.item_name, p.quantity_Written_Off, p.reason])),
+           // widths: ['*', 'auto', 'auto', 'auto'],
+            body: 
+              this.FormBody(this.reportData,['write_Off_Id','product_ID', 'image', 'quantity', 'reason']),
+            //console.log(this.FormBody(this.reportData,['image','write_Off_Id', 'product_ID', 'quantity', 'reason']))
               
-            ]
+            
+
           }
         },
         {
