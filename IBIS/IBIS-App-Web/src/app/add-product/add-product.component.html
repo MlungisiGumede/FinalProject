@@ -1,44 +1,88 @@
 <body>
-  <div class="container">
-   <div class="title">Add Product</div>
-   <div class="content">
-     <form action="#">
-       <div class="user-details" [formGroup]="productForm">
-         <div class="input-box">
-           <span class="details">Product Name</span>
-           <input  type="text" placeholder="name" formControlName="name">
-         </div>
-         <div class="input-box">
-           <span class="details">category</span>
-           <input   type="text" placeholder="Category" formControlName="category">
-         </div>
-         <div class="input-box">
-           <span class="details">sub-category</span>
-           <input  type="text" placeholder="sub-category" formControlName="subCategory">
-         </div>
-         <div class="input-box">
-           <span class="details">Price</span>
-           <input  type="number" min="0" placeholder="price" formControlName="price">
-         </div>
-         <div class="input-box">
-          <span class="details">Quantity</span>
-          <input  type="text" placeholder="Quantity" formControlName="quantity">
+  <form [formGroup]="productForm" (ngSubmit)="submitProductForm()">
+    <div class="container">
+      <ion-button color="danger" shape="round" fill="outline" class="cancelAdd" [routerLink]="['/Products']">X</ion-button>
+     <div class="title">Add Product</div>
+     <div class="content">
+      
+        <div class="user-details">
+          
+            <div class="input-box">
+              <span class="details">Product Name</span>
+              <ion-input type="text" placeholder="Name" formControlName="productName" class="priceBox"></ion-input>
+              <ion-note class="error-message" *ngIf="productForm.get('productName')?.hasError('required')">
+                A product name is required
+              </ion-note>
+            </div>
+
+            <div class="input-box">
+              <span class="details">Price</span>
+              <ion-input type="number" placeholder="Price" formControlName="price" class="priceBox"></ion-input>
+              <ion-note class="error-message" *ngIf="productForm.get('price')?.hasError('min')">
+                Price must be greater than or equal to 1.
+              </ion-note>
+            </div>
+
+          
+
+          <!-- <div> -->
+          
+            <ion-item class="drop-down-sub2">
+              <ion-label position="floating">Category</ion-label>
+              <ion-select interface="popover" formControlName="category" (ionChange)="onCategoryChange($event)">
+                <ion-select-option *ngFor="let category of categories" [value]="category">{{ category }}</ion-select-option>
+              </ion-select>
+            </ion-item>
+          
+          <!-- </div> -->
+          <!-- <div class="input-box">
+            <span class="category">Category</span>
+            <select formControlName="category" (change)="onCategoryChange($event)">
+              <option value="" disabled selected>Select a category</option>
+              <option *ngFor="let category of categories" [value]="category">{{ category }}</option>
+            </select>
+          </div> -->
+          
+          <!-- <div class="input-box">
+            <span class="subcategory">Sub-category</span>
+            <select formControlName="subcategory">
+              <option value="" disabled selected>Select a subcategory</option>
+              <ng-container *ngIf="selectedCategory">
+                <option *ngFor="let subcategory of subcategories[selectedCategory]" [value]="subcategory">{{ subcategory }}</option>
+              </ng-container>
+            </select>
+          </div> -->
+
+          
+              <ion-item class="drop-down-sub">
+                <ion-label position="floating">Sub-category</ion-label>
+                <ion-select interface="popover" formControlName="subcategory">
+                  <ion-select-option *ngFor="let subcategory of filteredSubcategories" [value]="subcategory">{{ subcategory }}</ion-select-option>
+                </ion-select>
+              </ion-item>
+            
+           
+          <div class="input-box">
+            <span class="details">Quantity</span>
+            <ion-input type="number" placeholder="Quantity" formControlName="quantity" class="priceBox"></ion-input>
+            <ion-note class="error-message" *ngIf="productForm.get('quantity')?.hasError('min')">
+              Quantity has to be at least 1.
+            </ion-note>
+          </div>
+
+          <div class="input-box">
+            <span class="details">Expiry</span>
+              <ion-input type="date"  formControlName="expiryDate" class="priceBox" (ionChange)="validateExpiryDate()"></ion-input>
+              <ion-note class="error-message" *ngIf="productForm.get('expiryDate')?.hasError('minExpiryDate')">
+                Expiry date must at least be 10 days from now.
+              </ion-note>
+          </div>
+         
+        
+          <ion-button type="submit" class="submitButton" [disabled]="!productForm.valid">Submit<ion-ripple-effect></ion-ripple-effect></ion-button>
+
         </div>
-        <div class="input-box">
-        <span class="details">Expiry Date</span>
-       <input type="date" formControlName="expiry" id="">
+     </div>
     </div>
-      <!-- copied of internet -->
-       <div class="buttondiv">
-       <!-- <div class="button">
-         <input type="submit" value="update" (click)="update()" >
-       </div> -->
-       <div class="button">
-          <input type="submit" value="submit" (click)="createProduct()" [disabled]="!productForm.valid">
-        </div>
-      </div>
-    </div>
-     </form>
-  </div>
-  </div>
-  </body>
+  </form>
+</body>
