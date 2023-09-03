@@ -222,17 +222,21 @@ const dialogRef = this.matDialog.open(AddProductComponent);
   FormBody(data:any, columns:any) { // https://stackoverflow.com/questions/26658535/building-table-dynamically-with-pdfmake
     var body = [];
   console.log(data)
+  let displayedColumns = ['Product ID','Name','Category Name','SubCategory Name','Price','Quantity','Expiry Date']
   console.log(columns)
-      body.push(columns);
+      body.push(displayedColumns);
       //this.reportData.map()
   console.log(data.values())
        data.forEach((row:any) => {
          let dataRow:any = [];
-  
+          
           columns.forEach( (column:any) => {
-            console.log(column)
-            console.log(row)
-            console.log(row[column])
+            if(column == "category_ID"){
+              row[column] = this.GetCategoryName(row[column])
+               }
+               if(column == "subCategory_ID"){
+                row[column] = this.GetSubCategoryName(row[column])
+                 }
               dataRow.push(row[column]);
       
            })
@@ -279,7 +283,7 @@ const dialogRef = this.matDialog.open(AddProductComponent);
           table: {
             headerRows: 1,
             // widths: ['*', 'auto', 'auto', 'auto'],
-            body: this.FormBody(this.reportData, ['product_ID','name','category','subcategory','price','quantity','expiry'])
+            body: this.FormBody(this.reportData, ['product_ID','name','category_ID','subCategory_ID','price','quantity','expiry'])
           }
         },
         {
