@@ -1,13 +1,13 @@
 <body>
-    <h2>Choose time to stay Logged in</h2>
-    <form [formGroup]="form" >
-    <div  style="display: flex;">
-    <div>
-        <h4 style="color: white;">Enter Hours </h4>
-        <input type="number" formControlName="time" max="24" >
+    <div class="container">
+        <form [formGroup]="form" class="timer-form">
+            <h2 class="timer">Configure amount of hours to be logged in</h2>
+            <h4>Enter Hours </h4>
+            <ion-input type="number" formControlName="time" max="24"></ion-input>
+            <ion-note class="error-message" *ngIf="form.get('time')?.hasError('required') && form.get('time')?.touched">
+                Please enter a digit.
+            </ion-note>
+            <ion-button style="color: black;" [disabled]="!form.valid" mat-raised-button color="primary" (click)="Submit()">Submit</ion-button>
+        </form>
     </div>
-   
-</div>
-<ion-button style="background-color: white;color: black;" [disabled]="!form.valid" mat-raised-button color="primary" (click)="Submit()">Submit</ion-button>
-</form>
 </body>
