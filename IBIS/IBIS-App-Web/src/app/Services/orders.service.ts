@@ -10,6 +10,7 @@ import { CustomerOrder } from '../Models/CustomerOrder';
 import { SupplierOrder } from '../Models/SupplierOrder';
 import { CustomerOrderViewModel } from '../Models/CustomerOrderViewModel';
 import { SupplierOrderViewModel } from '../Models/SupplierOrderViewModel';
+import { Category } from '../Models/Category';
 
 @Injectable({
   providedIn: 'root'
@@ -83,6 +84,7 @@ export class OrdersService {
            )
          
        }
+   
        getSupplierOrderList(): Observable<SupplierOrder[]> {
         return this.httpClient
           .get<SupplierOrder[]>(this.apiUrl + '/getSupplierOrder')

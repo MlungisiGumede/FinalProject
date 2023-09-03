@@ -65,6 +65,19 @@ namespace IBIS_API.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Categories",
+                columns: table => new
+                {
+                    Category_ID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Categories", x => x.Category_ID);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "CustomerOrders",
                 columns: table => new
                 {
@@ -147,8 +160,8 @@ namespace IBIS_API.Migrations
                     Product_ID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Category = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Subcategory = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Category_ID = table.Column<int>(type: "int", nullable: true),
+                    SubCategory_ID = table.Column<int>(type: "int", nullable: true),
                     Price = table.Column<double>(type: "float", nullable: true),
                     Quantity = table.Column<double>(type: "float", nullable: true),
                     Expiry = table.Column<string>(type: "nvarchar(max)", nullable: true)
@@ -173,6 +186,20 @@ namespace IBIS_API.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Recipes", x => x.Recipe_ID);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "SubCategories",
+                columns: table => new
+                {
+                    SubCategory_ID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Category_ID = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SubCategories", x => x.SubCategory_ID);
                 });
 
             migrationBuilder.CreateTable(
@@ -214,6 +241,7 @@ namespace IBIS_API.Migrations
                     Password = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     FullName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    time = table.Column<double>(type: "float", nullable: true),
                     Cellphone_Number = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
@@ -496,6 +524,9 @@ namespace IBIS_API.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "Categories");
+
+            migrationBuilder.DropTable(
                 name: "CustomerOrderProduct");
 
             migrationBuilder.DropTable(
@@ -512,6 +543,9 @@ namespace IBIS_API.Migrations
 
             migrationBuilder.DropTable(
                 name: "Recipes");
+
+            migrationBuilder.DropTable(
+                name: "SubCategories");
 
             migrationBuilder.DropTable(
                 name: "SupplierOrderLines");

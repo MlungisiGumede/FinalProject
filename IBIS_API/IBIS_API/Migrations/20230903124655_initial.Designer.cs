@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace IBIS_API.Migrations
 {
     [DbContext(typeof(DataContextcs))]
-    [Migration("20230902120505_initial")]
+    [Migration("20230903124655_initial")]
     partial class initial
     {
         /// <inheritdoc />
@@ -122,6 +122,23 @@ namespace IBIS_API.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
+                });
+
+            modelBuilder.Entity("IBIS_API.Models.Category", b =>
+                {
+                    b.Property<int>("Category_ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Category_ID"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Category_ID");
+
+                    b.ToTable("Categories");
                 });
 
             modelBuilder.Entity("IBIS_API.Models.Customer", b =>
@@ -268,8 +285,8 @@ namespace IBIS_API.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Product_ID"));
 
-                    b.Property<string>("Category")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int?>("Category_ID")
+                        .HasColumnType("int");
 
                     b.Property<string>("Expiry")
                         .HasColumnType("nvarchar(max)");
@@ -283,8 +300,8 @@ namespace IBIS_API.Migrations
                     b.Property<double?>("Quantity")
                         .HasColumnType("float");
 
-                    b.Property<string>("Subcategory")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int?>("SubCategory_ID")
+                        .HasColumnType("int");
 
                     b.HasKey("Product_ID");
 
@@ -317,6 +334,25 @@ namespace IBIS_API.Migrations
                     b.HasKey("Recipe_ID");
 
                     b.ToTable("Recipes");
+                });
+
+            modelBuilder.Entity("IBIS_API.Models.SubCategory", b =>
+                {
+                    b.Property<int?>("SubCategory_ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int?>("SubCategory_ID"));
+
+                    b.Property<int?>("Category_ID")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("SubCategory_ID");
+
+                    b.ToTable("SubCategories");
                 });
 
             modelBuilder.Entity("IBIS_API.Models.Supplier", b =>
@@ -405,6 +441,9 @@ namespace IBIS_API.Migrations
 
                     b.Property<string>("Password")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<double?>("time")
+                        .HasColumnType("float");
 
                     b.HasKey("Username");
 

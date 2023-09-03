@@ -42,7 +42,10 @@ namespace IBIS_API.Data
 
         public DbSet<SupplierOrder> Supplier_Orders { get; set; }
 
-        public DbSet<OrderStatus> OrderStatusList { get; }
+        public DbSet<OrderStatus> OrderStatusList { get; set; }
+
+        public DbSet<Category> Categories { get; set; }
+        public DbSet<SubCategory> SubCategories { get; set; }
 
         /*
         public DbSet<Equipment> Equipment { get; set; } 

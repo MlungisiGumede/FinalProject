@@ -99,6 +99,19 @@ namespace IBIS_API.Controllers
             }
 
             _context.Customers.Remove(cus);
+            var orders = _context.CustomerOrders.Where(c => c.Customer_ID == id).ToList();
+            var orderLines = _context.CustomerOrdersLine.ToList();
+            foreach (var order in  orders)
+            {
+                foreach(var orderLine in orderLines)
+                {
+                    if(order.CustomerOrder_ID == orderLine.CustomerOrder_ID)
+                    {
+                        _context.Remove(orderLine);
+                    }
+                }
+            }
+            _context.RemoveRange(orders);
             await _context.SaveChangesAsync();
 
             return NoContent();

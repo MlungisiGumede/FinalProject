@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Observable, catchError, retry, throwError } from 'rxjs';
 import { Product } from '../Models/Product';
+import { Category } from '../Models/Category';
+import { SubCategory } from '../Models/SubCategory';
 
 @Injectable({
   providedIn: 'root'
@@ -38,7 +40,28 @@ export class ProductService {
         return this.httpClient.post(this.apiUrl, prod, this.httpOptions)
       }
   
-    
+    AddCategory(category:any): Observable<Category>{
+      return this.httpClient.post<Category>(this.apiUrl + "/postCategory",category)
+    }
+    AddSubCategory(subCategory:any): Observable<Category>{
+      return this.httpClient.post<Category>(this.apiUrl + "/postSubCategory",subCategory)
+    }
+    getCategoriesList(): Observable<Category[]> {
+      return this.httpClient
+        .get<Category[]>(this.apiUrl + '/getCategories')
+        .pipe(
+          retry(2),
+          catchError(this.handleError)
+        )
+     }
+     getSubCategoriesList(): Observable<SubCategory[]> {
+      return this.httpClient
+        .get<SubCategory[]>(this.apiUrl + '/getSubCategories')
+        .pipe(
+          retry(2),
+          catchError(this.handleError)
+        )
+     }
     
        getProductList(): Observable<Product[]> {
          return this.httpClient

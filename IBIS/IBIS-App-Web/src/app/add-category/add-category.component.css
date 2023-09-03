@@ -10,16 +10,15 @@ body{
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 0px;
-  background: white;
+  padding: 10px;
+  background: grey;
 }
 .container{
   max-width: 700px;
   width: 100%;
   background-color: black;
-  border:yellow 10px;
-  padding-bottom:  5px;
-  padding-left: 25px;;
+  border: yellow 2px;
+  padding: 25px 30px;
   border-radius: 5px;
   box-shadow: 0 5px 10px rgba(0,0,0,0.15);
   justify-content: center;
@@ -29,13 +28,6 @@ body{
   font-weight: 500;
   position: relative;
   color: yellow;
-  padding-left: 25px;
-  margin-bottom: 20px;
-}
-.container .cancelAdd{
-  padding-left: 90%;
-  width: 40%;
-  height: 35%;
 }
 .container .title::before{
   content: "";
@@ -51,7 +43,7 @@ body{
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
-  margin: 12px 0 12px 0;
+  margin: 20px 0 12px 0;
   color: white;
 }
 form .user-details .input-box{
@@ -62,9 +54,8 @@ form .input-box span.details{
   display: block;
   font-weight: 500;
   margin-bottom: 5px;
-  margin-left: 25px;
 }
-/* .user-details .input-box input{
+.user-details .input-box input{
   height: 45px;
   width: 100%;
   outline: none;
@@ -74,78 +65,11 @@ form .input-box span.details{
   border: 1px solid yellow;
   border-bottom-width: 2px;
   transition: all 0.3s ease;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-} */
-
-.drop-down-sub{
-  background-color: white;
-  border-color: #9b59b6;
-  width: 4.8cm;
-  margin-right: 15%;
-  border-radius: 10px;
-  padding-bottom: 10px;
-  margin-bottom: 10px;
 }
-.drop-down-sub2{
-  background-color: white;
-  border-radius: 10px;
-  border-color: #9b59b6;
-  width: 4.8cm;
-  padding-bottom: 10px;
-  margin-bottom: 10px;
-  margin-left: 4%;
-}
-.priceBox{
-  background-color: white;
-  border-radius: 10px;
-  border-color: #9b59b6;
-  width: 60%;
-  color: black;
-  margin-left: 25px;
-
-}
-.user-details {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  margin: 12px 0 12px 0;
-  margin-top: 0%;
-  padding-top: 0%;
-  color: white;
-  padding-left: 25px;
-  font-size: 16px;
-  border-radius: 5px;
-  outline: none;
-} */
-
- .user-details .input-box {
-  width: calc(50% - 10px); 
-  border-radius: 5px;
- 
-}
-
 .user-details .input-box input:focus,
 .user-details .input-box input:valid{
   border-color: #9b59b6;
-  margin-bottom: 15px;
-  width: 70%;
-  height: 0.8cm;
-  border-radius: 5px;
 }
-.user-details .cancelAdd{
-  padding-left: 90%;
-  color: white;
-}
-
-.error-message {
-  color: red;
-  font-size: 12px;
-  margin-top: 5px;
-  margin-left: 25px;
-}
-
  form .gender-details .gender-title{
   font-size: 20px;
   font-weight: 500;
@@ -176,9 +100,9 @@ form .input-box span.details{
    background: #9b59b6;
    border-color: #d9d9d9;
  }
- /* form input[type="radio"]{
+ form input[type="radio"]{
    display: none;
- } */
+ }
  form .button{
    height: 45px;
    margin: 35px 0;
@@ -192,9 +116,19 @@ form .input-box span.details{
 color: grey;
 
  }
+.subcategory{
+  display: block;
+  font-weight: 500;
+  margin-bottom: 5px;
+  width: 300px;
+}
 
-
-
+.category{
+  display: block;
+  font-weight: 500;
+  margin-bottom: 5px;
+  width: 300px;
+}
  
 
  /* .buttondiv{
@@ -211,21 +145,9 @@ color: grey;
   justify-content: center;
  }
 
-form .submitButton {
-  height: 1cm;
-  width: 2.5cm;
-  display: block;
-  margin-right: 10px;
-  margin: 0 auto; /* Center horizontally */
-  text-align: center; /* Center the text horizontally */
-  display: flex;
-  justify-content: center; /* Center horizontally within the container */
-  align-items: center; 
-  color:yellow;
- }
- form .submitButton input{
+ form .button input{
    height: 100%;
-   width: 50%;
+   width: 80%;
    border-radius: 5px;
    border: none;
    color: black;
@@ -236,11 +158,10 @@ form .submitButton {
    transition: all 0.3s ease;
    background: yellow;
  }
- /* form .submitButton:hover{
+ form .button input:hover{
   /* transform: scale(0.99); */
-  /* background: linear-gradient(-135deg, #71b7e6, #9b59b6); */
-  /*} */
-  
+  background: linear-gradient(-135deg, #71b7e6, #9b59b6);
+  }
  @media(max-width: 584px){
  .container{
   max-width: 100%;
@@ -266,11 +187,3 @@ form .user-details .input-box{
     flex-direction: column;
   }
 }
-
-
-
-
-
-
-
-

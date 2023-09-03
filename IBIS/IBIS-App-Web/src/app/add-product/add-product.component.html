@@ -1,5 +1,5 @@
 <body>
-  <form [formGroup]="productForm" (ngSubmit)="submitProductForm()">
+  <form [formGroup]="form">
     <div class="container">
       <ion-button color="danger" shape="round" fill="outline" class="cancelAdd" [routerLink]="['/Products']">X</ion-button>
      <div class="title">Add Product</div>
@@ -9,8 +9,8 @@
           
             <div class="input-box">
               <span class="details">Product Name</span>
-              <ion-input type="text" placeholder="Name" formControlName="productName" class="priceBox"></ion-input>
-              <ion-note class="error-message" *ngIf="productForm.get('productName')?.hasError('required')">
+              <ion-input type="text" placeholder="Name" formControlName="name" class="priceBox"></ion-input>
+              <ion-note class="error-message" *ngIf="form.get('productName')?.hasError('required')">
                 A product name is required
               </ion-note>
             </div>
@@ -18,7 +18,7 @@
             <div class="input-box">
               <span class="details">Price</span>
               <ion-input type="number" placeholder="Price" formControlName="price" class="priceBox"></ion-input>
-              <ion-note class="error-message" *ngIf="productForm.get('price')?.hasError('min')">
+              <ion-note class="error-message" *ngIf="form.get('price')?.hasError('min')">
                 Price must be greater than or equal to 1.
               </ion-note>
             </div>
@@ -29,8 +29,8 @@
           
             <ion-item class="drop-down-sub2">
               <ion-label position="floating">Category</ion-label>
-              <ion-select interface="popover" formControlName="category" (ionChange)="onCategoryChange($event)">
-                <ion-select-option *ngFor="let category of categories" [value]="category">{{ category }}</ion-select-option>
+              <ion-select interface="popover" formControlName="category_ID" (ionChange)="onCategoryChange($event)">
+                <ion-select-option *ngFor="let category of categories" [value]="category.category_ID">{{ category.name }}</ion-select-option>
               </ion-select>
             </ion-item>
           
@@ -56,8 +56,8 @@
           
               <ion-item class="drop-down-sub">
                 <ion-label position="floating">Sub-category</ion-label>
-                <ion-select interface="popover" formControlName="subcategory">
-                  <ion-select-option *ngFor="let subcategory of filteredSubcategories" [value]="subcategory">{{ subcategory }}</ion-select-option>
+                <ion-select interface="popover" formControlName="subCategory_ID">
+                  <ion-select-option *ngFor="let subcategory of filteredSubcategories" [value]="subcategory.subCategory_ID">{{ subcategory.name }}</ion-select-option>
                 </ion-select>
               </ion-item>
             
@@ -65,21 +65,21 @@
           <div class="input-box">
             <span class="details">Quantity</span>
             <ion-input type="number" placeholder="Quantity" formControlName="quantity" class="priceBox"></ion-input>
-            <ion-note class="error-message" *ngIf="productForm.get('quantity')?.hasError('min')">
+            <ion-note class="error-message" *ngIf="form.get('quantity')?.hasError('min')">
               Quantity has to be at least 1.
             </ion-note>
           </div>
 
           <div class="input-box">
             <span class="details">Expiry</span>
-              <ion-input type="date"  formControlName="expiryDate" class="priceBox" (ionChange)="validateExpiryDate()"></ion-input>
-              <ion-note class="error-message" *ngIf="productForm.get('expiryDate')?.hasError('minExpiryDate')">
+              <ion-input type="date"  formControlName="expiry" class="priceBox" (ionChange)="validateExpiryDate()"></ion-input>
+              <ion-note class="error-message" *ngIf="form.get('expiryDate')?.hasError('minExpiryDate')">
                 Expiry date must at least be 10 days from now.
               </ion-note>
           </div>
          
         
-          <ion-button type="submit" class="submitButton" [disabled]="!productForm.valid">Submit<ion-ripple-effect></ion-ripple-effect></ion-button>
+          <ion-button type="submit" (click)="AddProduct()" class="submitButton" [disabled]="!form.valid">Submit<ion-ripple-effect></ion-ripple-effect></ion-button>
 
         </div>
      </div>

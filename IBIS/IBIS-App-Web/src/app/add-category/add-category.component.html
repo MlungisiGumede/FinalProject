@@ -1,0 +1,15 @@
+
+<div class="container">
+<div class="content">
+    <form action="#">
+      <div class="user-details" [formGroup]=form>
+        <div class="input-box">
+          <span class="details">Category Name</span>
+          <input type="text" placeholder="name" formControlName="name" >
+        </div>
+      </div>
+      <ion-button (click)="AddCategory()" [disabled]="!form.valid" style="background-color: white;color: black;">Submit</ion-button>
+    </form>
+      </div>
+    </div>
+

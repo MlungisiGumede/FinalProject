@@ -101,6 +101,8 @@ namespace IBIS_API.Controllers
             }
 
             _context.Inventories.Remove(inv);
+            var orderLines = _context.SupplierOrderLines.Where(c => c.Inventory_ID == inv.Inventory_ID).ToList();
+            _context.RemoveRange(orderLines);
             await _context.SaveChangesAsync();
 
             return NoContent();

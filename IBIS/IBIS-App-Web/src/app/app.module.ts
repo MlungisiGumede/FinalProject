@@ -63,6 +63,8 @@ import {MatSnackBarModule} from '@angular/material/snack-bar';
 import { HelpFunctionComponent } from './help-function/help-function.component';
 import { MatButtonModule } from '@angular/material/button';
 import { TimerComponent } from './timer/timer.component';
+import { AddSubCategoryComponent } from './add-sub-category/add-sub-category.component';
+import { AddCategoryComponent } from './add-category/add-category.component';
 
 
 @NgModule({
@@ -109,7 +111,9 @@ import { TimerComponent } from './timer/timer.component';
     AddInventoryItemComponent,
     HelpFunctionComponent,
     ReportsComponent,
-    TimerComponent
+    TimerComponent,
+    AddCategoryComponent,
+    AddSubCategoryComponent
    
     
   
@@ -187,7 +191,7 @@ import { TimerComponent } from './timer/timer.component';
   entryComponents: [AddCustomerComponent,ViewCustomerComponent,AddCustomerOrderComponent,
   ViewImageComponent,AddSupplierComponent,ViewCustomerOrderComponent,ViewSupplierOrderComponent,
   AddSupplierOrderComponent,AddInventoryItemComponent,ViewInventoryItemComponent,ViewSupplierComponent,
-AddProductComponent],
+AddProductComponent,AddSubCategoryComponent,AddCategoryComponent],
   providers: [{provide:HTTP_INTERCEPTORS,useClass:AuthenticationService,multi:true}
   ,AuthGuardService],
   bootstrap: [AppComponent]

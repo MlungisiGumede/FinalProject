@@ -10,8 +10,8 @@ namespace IBIS_API.Models
 
     public int Product_ID { get; set; }
 	public string? Name { get; set; }
-        public string? Category { get; set; }
-        public string? Subcategory { get; set; }
+        public int? Category_ID { get; set; }
+        public int? SubCategory_ID { get; set; }
         public double? Price { get; set; }
         public double? Quantity { get; set; } = 0;
         public string? Expiry { get; set; }

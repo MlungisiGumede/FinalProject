@@ -79,10 +79,46 @@ namespace IBIS_API.Controllers
 
                 return NoContent();
             }
+        [HttpPost]
+        [Route("postCategory")]
+        public async Task<ActionResult<Category>> PostCategory(Category category)
+        {
+            _context.Categories.Add(category);
+            await _context.SaveChangesAsync();
 
-            // POST: api/Addresses
-            // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-            [HttpPost]
+            return CreatedAtAction("GetProduct", new { id = category.Category_ID },category);
+        }
+        [HttpPost]
+        [Route("postSubCategory")]
+        public async Task<ActionResult<SubCategory>> PostSubCategory(SubCategory subCategory)
+        {
+            _context.SubCategories.Add(subCategory);
+            await _context.SaveChangesAsync();
+
+            return CreatedAtAction("GetProduct", new { id = subCategory.Category_ID }, subCategory);
+        }
+        [HttpGet]
+        [Route("getCategories")]
+        public async Task<ActionResult<IEnumerable<Category>>> GetCategories()
+        {
+
+            return await _context.Categories.ToListAsync();
+
+            
+   }
+        [HttpGet]
+        [Route("getSubCategories")]
+        public async Task<ActionResult<IEnumerable<SubCategory>>> GetSubCategories()
+        {
+
+            return await _context.SubCategories.ToListAsync();
+
+
+        }
+
+        // POST: api/Addresses
+        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [HttpPost]
        // [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<ActionResult<Product>> PostProduct(Product prod)
             {
@@ -102,6 +138,8 @@ namespace IBIS_API.Controllers
                 {
                     return NotFound();
                 }
+               var orderLines = _context.CustomerOrdersLine.Where(c => c.Product_ID == prod.Product_ID).ToList();
+            _context.RemoveRange(orderLines);
 
                 _context.Products.Remove(prod);
                 await _context.SaveChangesAsync();

@@ -14,43 +14,47 @@ export class AddProductComponent implements OnInit {
 
 data:any;
 prod!: Product;
-
-productForm!: FormGroup;
+categories:any
+subCategories:any
+form!: FormGroup;
 
 selectedCategory: string | null = null;
 
-categories: string[] = ['Meat', 'Vegetables', 'Sides'];
-  subcategories: { [key: string]: string[] } = {
-    'Meat': ['Pork', 'Beef', 'Lamb', 'Chicken', 'Fish'],
-    'Vegetables': ['Pumpkin', 'Lettuce', 'Potatoes', 'Butternut'],
-    'Sides': ['Chakalaka', 'Atchaar']
-  };
-  filteredSubcategories: string[] | undefined;
+// categories: string[] = ['Meat', 'Vegetables', 'Sides'];
+//   subcategories: { [key: string]: string[] } = {
+//     'Meat': ['Pork', 'Beef', 'Lamb', 'Chicken', 'Fish'],
+//     'Vegetables': ['Pumpkin', 'Lettuce', 'Potatoes', 'Butternut'],
+//     'Sides': ['Chakalaka', 'Atchaar']
+//   };
+  filteredSubcategories: any
 
 
   constructor(private prodService: ProductService, public router:Router,
      private fb: FormBuilder, private toastController: ToastController){
     this.data = new Product();
+    this.prodService.getCategoriesList().subscribe((res)=>{
+      console.log(res)
+      this.categories = res
+    })
+    this.prodService.getSubCategoriesList().subscribe((res)=>{
+      console.log(res)
+      this.subCategories = res
+    })
   } 
 
   ngOnInit(): void {
 
-    this.productForm = this.fb.group({
-      productName: ['', Validators.required],
+    this.form = this.fb.group({
+      name: ['', Validators.required],
       price: [null, [Validators.required, Validators.min(1)]],
-      expiryDate: [null, [Validators.required, this.minExpiryDateValidator.bind(this)]],
+      expiry: [null, [Validators.required, this.minExpiryDateValidator.bind(this)]],
       quantity: [null, [Validators.required, Validators.min(1)]],
-      subcategory: [null, Validators.required],
-      category: [null, Validators.required]
+      subCategory_ID: [null, Validators.required],
+      category_ID: [null, Validators.required]
     });
 
 
-    this.productForm.get('category')?.valueChanges.subscribe(() => {
-      // Update the 'subcategory' control value and validation when category changes
-      this.productForm.get('subcategory')?.setValue(null);
-      this.productForm.get('subcategory')?.setValidators(Validators.required);
-      this.productForm.get('subcategory')?.updateValueAndValidity();
-    });
+    ;
   }
 
   minExpiryDateValidator(control: any): { [key: string]: boolean } | null {
@@ -67,30 +71,27 @@ categories: string[] = ['Meat', 'Vegetables', 'Sides'];
   }
   
   validateExpiryDate() {
-    const expiryDateControl = this.productForm.get('expiryDate');
+    const expiryDateControl = this.form.get('expiryDate');
     if (expiryDateControl) {
       expiryDateControl.updateValueAndValidity();
     }
   }
 
-  submitProductForm(){
-    if(this.productForm.valid){
-      this.createProduct();
-      console.log('Form is valid, submitting...');
-    }
-  }
+ 
 
-  createProduct(){
+  AddProduct(){
 
-    let newProd = new Product()
-    newProd.name = this.productForm.controls['productName'].value
-    newProd.price = this.productForm.controls['price'].value
-    newProd.category = this.productForm.controls['category'].value
-    newProd.subcategory = this.productForm.controls['subcategory'].value
-    newProd.quantity = this.productForm.controls['quantity'].value
-    newProd.expiry = this.productForm.controls['expiryDate'].value
+    // let newProd = new Product()
+    // newProd.name = this.form.controls['productName'].value
+    // newProd.price = this.form.controls['price'].value
+    // newProd.category_ID = this.form.controls['category'].value
+    // newProd.subCategory_ID = this.form.controls['subcategory'].value
+    // newProd.quantity = this.form.controls['quantity'].value
+    // newProd.expiry = this.form.controls['expiryDate'].value
+    console.log(this.form)
+console.log(this.form.value)
 
-    this.prodService.createProduct(newProd).subscribe(res => {
+    this.prodService.createProduct(this.form.value).subscribe(res => {
       console.log('success', res);
       this.presentToast('top');
       this.router.navigate(["/Products"]);
@@ -102,12 +103,19 @@ categories: string[] = ['Meat', 'Vegetables', 'Sides'];
   }
 
   onCategoryChange(event: any) {
+    this.form.get('subCategory_ID')?.setValue(null);
     const selectedCategory = event.target.value;
     this.selectedCategory = selectedCategory;
-    this.filteredSubcategories = this.selectedCategory
-    ? this.subcategories[this.selectedCategory] || []
-    : [];
-    console.log('Selected Category:',  this.filteredSubcategories, this.subcategories);
+    this.filteredSubcategories = []
+    console.log(this.subCategories)
+    this.subCategories.forEach((element:any) => {
+      console.log(element)
+      if(element.category_ID == selectedCategory){
+        this.filteredSubcategories.push(element)
+      }
+    });
+    //this.filteredSubcategories = this.selectedCategory
+    console.log(this.filteredSubcategories)
   }
 
   async presentToast(position: 'top' | 'middle' | 'bottom') {

@@ -16,6 +16,8 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { ViewProductComponent } from '../view-product/view-product.component';
 import { ChangeDetectionStrategy, ChangeDetectorRef} from '@angular/core';
 import { Observable, of } from 'rxjs';
+import { AddCategoryComponent } from '../add-category/add-category.component';
+import { AddSubCategoryComponent } from '../add-sub-category/add-sub-category.component';
 
 var pdfMake = require('pdfmake/build/pdfmake');
 var pdfFonts = require('pdfmake/build/vfs_fonts');
@@ -41,6 +43,8 @@ export class ProductsComponent implements OnInit {
   itemNames: any;
   itemQuantities: any;
   filterTerm!: string;
+  categories:any
+  subCategories:any
   
 
 
@@ -55,6 +59,14 @@ export class ProductsComponent implements OnInit {
 
   ngOnInit() {
     this.getProducts()
+    this.productService.getCategoriesList().subscribe((res)=>{
+      console.log(res)
+      this.categories = res
+    })
+    this.productService.getSubCategoriesList().subscribe((res)=>{
+      console.log(res)
+      this.subCategories = res
+    })
 
     
     // this.data2 = [
@@ -84,6 +96,22 @@ export class ProductsComponent implements OnInit {
     
     
   }
+  AddCategory(){
+const dialogRef = this.matDialog.open(AddCategoryComponent,{
+  //width: '250px',
+  //height: '200px'
+});
+  }
+  AddSubCategory(){
+
+    const dialogRef = this.matDialog.open(AddSubCategoryComponent);
+  }
+  GetCategoryName(id:any){
+    return this.categories.find((item:any) => item.category_ID == id).name
+  }
+  GetSubCategoryName(id:any){
+    return this.subCategories.find((item:any) => item.subCategory_ID == id).name
+  }
 
   async delete(id: number){
     this.idtodelete = id;
@@ -99,10 +127,13 @@ export class ProductsComponent implements OnInit {
     }
   }
 ViewProduct(item:any){
-  const dialogRef = this.matDialog.open(ViewProductComponent,{
-    data:item
+  let dialogRef:any = []
+  if(this.categories && this.subCategories){
+  dialogRef = this.matDialog.open(ViewProductComponent,{
+    data:{'product':item,'categories':this.categories,'subCategories':this.subCategories}
   })
-  dialogRef.afterClosed().subscribe(result => {
+}
+  dialogRef.afterClosed().subscribe((result:any) => {
     if(result){
       this.ShowSnackBar("Product successfully updated", "success");
       this.getProducts();
