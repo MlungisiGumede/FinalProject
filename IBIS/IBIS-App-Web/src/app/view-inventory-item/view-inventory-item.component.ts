@@ -5,6 +5,7 @@ import { InventoryService } from '../Services/inventory.service';
 import { ToastController } from '@ionic/angular';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Inventory } from '../Models/Inventory';
+import { catchError, map, throwError } from 'rxjs';
 
 @Component({
   selector: 'app-view-inventory-item',
@@ -43,7 +44,20 @@ this.suppliers = this.item.suppliers
 
   update(){
 
-    this.inv.updateInventory(this.id,this.form.value).subscribe(response => {
+    this.inv.updateInventory(this.id,this.form.value).pipe(map(
+      (res)=>{
+
+
+
+
+    }),
+    catchError((err) =>{
+      console.log(err)
+      this.matDialogRef.close(false);
+     
+      return throwError(err)
+    }))
+.subscribe(response => {
       console.log("successfully updated",response);
       this.presentToast('top')
       this.matDialogRef.close(true)

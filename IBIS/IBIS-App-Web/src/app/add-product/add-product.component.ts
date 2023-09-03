@@ -1,9 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit,Inject } from '@angular/core';
 import { Product } from '../Models/Product';
 import { ProductService } from '../Services/product.service';
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ToastController } from '@ionic/angular';
+import { catchError, map, throwError } from 'rxjs';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-add-product',
@@ -12,7 +14,7 @@ import { ToastController } from '@ionic/angular';
 })
 export class AddProductComponent implements OnInit {
 
-data:any;
+//data:any;
 prod!: Product;
 categories:any
 subCategories:any
@@ -30,16 +32,13 @@ selectedCategory: string | null = null;
 
 
   constructor(private prodService: ProductService, public router:Router,
-     private fb: FormBuilder, private toastController: ToastController){
-    this.data = new Product();
-    this.prodService.getCategoriesList().subscribe((res)=>{
-      console.log(res)
-      this.categories = res
-    })
-    this.prodService.getSubCategoriesList().subscribe((res)=>{
-      console.log(res)
-      this.subCategories = res
-    })
+     private fb: FormBuilder, private toastController: ToastController,
+     private dialogRef:MatDialogRef<AddProductComponent>,@Inject(MAT_DIALOG_DATA) public data: any){
+    //this.data = new Product();
+   this.categories = this.data.categories
+   console.log(this.categories)
+   this.subCategories = this.data.subCategories
+   console.log(this.subCategories)
   } 
 
   ngOnInit(): void {
@@ -91,10 +90,24 @@ selectedCategory: string | null = null;
     console.log(this.form)
 console.log(this.form.value)
 
-    this.prodService.createProduct(this.form.value).subscribe(res => {
+    this.prodService.createProduct(this.form.value).pipe(map(
+      (res)=>{
+
+
+
+
+    }),
+    catchError((err) =>{
+      console.log(err)
+      this.dialogRef.close(false);
+     
+      return throwError(err)
+    })).
+subscribe(res => {
       console.log('success', res);
       this.presentToast('top');
       this.router.navigate(["/Products"]);
+      this.dialogRef.close(true);
     })
 
     // this.prodService.createProduct(this.data).subscribe(res=>{

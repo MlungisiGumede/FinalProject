@@ -6,6 +6,7 @@ import { ToastController } from '@ionic/angular';
 import { MatDialogRef } from '@angular/material/dialog';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { AddSupplierOrderComponent } from '../add-supplier-order/add-supplier-order.component';
+import { catchError, map, throwError } from 'rxjs';
 
 @Component({
   selector: 'app-add-supplier',
@@ -39,7 +40,20 @@ supplier.name = this.form.controls['name'].value
 supplier.address = this.form.controls['address'].value
 supplier.phone = this.form.controls['phone'].value
 supplier.email = this.form.controls['email'].value
-this.supply.createSupplier(supplier).subscribe(res=>{
+this.supply.createSupplier(supplier).pipe(map(
+  (res)=>{
+
+
+
+
+}),
+catchError((err) =>{
+  console.log(err)
+  this.matDialogRef.close(false);
+ 
+  return throwError(err)
+})).
+subscribe(res=>{
 console.log("success", res);
 this.matDialogRef.close(true)
 }),(err:any)=>{

@@ -5,6 +5,7 @@ import { Inventory } from '../Models/Inventory';
 import { ToastController } from '@ionic/angular';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { catchError, map, throwError } from 'rxjs';
 
 @Component({
   selector: 'app-add-inventory-item',
@@ -38,7 +39,20 @@ export class AddInventoryItemComponent implements OnInit {
   createInventory(){
     this.presentToast('top')
     console.log(this.form.value)
-    this.invService.createInventory(this.form.value).subscribe(res=>{
+    this.invService.createInventory(this.form.value).pipe(map(
+      (res)=>{
+
+
+
+
+    }),
+    catchError((err) =>{
+      console.log(err)
+      this.matDialogRef.close(false);
+     
+      return throwError(err)
+    })).
+subscribe(res=>{
     console.log("success", res);
     this.presentToast('top')
     this.matDialogRef.close(true)

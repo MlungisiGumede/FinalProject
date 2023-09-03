@@ -15,7 +15,7 @@ import { AddProductComponent } from '../add-product/add-product.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ViewProductComponent } from '../view-product/view-product.component';
 import { ChangeDetectionStrategy, ChangeDetectorRef} from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Observable, catchError, map, of, throwError } from 'rxjs';
 import { AddCategoryComponent } from '../add-category/add-category.component';
 import { AddSubCategoryComponent } from '../add-sub-category/add-sub-category.component';
 
@@ -116,14 +116,24 @@ const dialogRef = this.matDialog.open(AddCategoryComponent,{
   async delete(id: number){
     this.idtodelete = id;
 
-    this.productService.delete(this.idtodelete).subscribe(Response => {
-      console.log(Response);
+    this.productService.delete(this.idtodelete).pipe(map(
+      (res)=>{
+
+    }),
+    catchError((err) =>{
+      console.log(err)
+      this.ShowSnackBar("failed to remove product", "error");
+      return throwError(err)
+    })).subscribe(() => {
+      
       
         this.ShowSnackBar("Product successfully removed", "success");
        
       this.getProducts();
-    }), (error:any) => {
-      this.ShowSnackBar("failed to remove product", "error");
+    }), () => {
+      //console.log(error);
+      console.log("hit")
+      
     }
   }
 ViewProduct(item:any){
@@ -144,9 +154,15 @@ ViewProduct(item:any){
 }
 
   addproduct(){
-const dialogRef = this.matDialog.open(AddProductComponent);
+    let dialogRef:any = []
+    if(this.categories && this.subCategories){
+      dialogRef = this.matDialog.open(AddProductComponent,{
+        data:{'categories':this.categories,'subCategories':this.subCategories}
+      });
+    }
+
     //this.router.navigate(['/add-product']);
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe((result:any) => {
       if(result){
         this.ShowSnackBar("Product successfully added", "success");
         this.getProducts();

@@ -4,6 +4,7 @@ import { SupplierService } from '../Services/supplier.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Supplier } from '../Models/Supplier';
+import { catchError, map, throwError } from 'rxjs';
 
 @Component({
   selector: 'app-view-supplier',
@@ -42,7 +43,20 @@ async update(){
 
   //this.id = this.route.snapshot.params['id']
 
-    this.supplys.updateSupplier(this.id,this.form.value).subscribe(response => {
+    this.supplys.updateSupplier(this.id,this.form.value).pipe(map(
+      (res)=>{
+
+
+
+
+    }),
+    catchError((err) =>{
+      console.log(err)
+      this.matDialogRef.close(false);
+     
+      return throwError(err)
+    })).
+subscribe(response => {
       console.log("successfully updated",response);
       this.supplys.getSupplierList().subscribe(response => {
         this.matDialogRef.close(true);

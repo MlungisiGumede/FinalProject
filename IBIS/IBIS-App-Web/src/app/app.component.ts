@@ -44,7 +44,12 @@ constructor(private loginService : LoginService, public router: Router,
           this.authenticationService.Authenticate().then((success) => {
             this.showNavigation = true;
           }, (error) => {
-            this.showNavigation = false;
+            if(error.status == 401){
+              this.showNavigation = false;
+            }else{
+              this.showNavigation = true;
+            }
+           
           })
           //this.showNavigation = true;
       if(event instanceof NavigationError){

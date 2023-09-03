@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot } from '@angular/router';
+import { ActivatedRouteSnapshot, CanActivate, ResolveStart, Router, RouterStateSnapshot } from '@angular/router';
 import { AuthenticationService } from './authentication.service';
 import { LoginService } from './login.service';
 import { Observable } from 'rxjs';
@@ -30,7 +30,7 @@ return new Promise((resolve, reject) => {
      // just reject in promise method...
    }
       
-   )}   else if(path?.startsWith("otp")){
+   )}   else if(path?.startsWith("otp") || path?.startsWith("timer")){
     console.log(this._router.url) // when from Login then /Login when from url then just /    ...
     if(this._router.url=="/"){ // navigate fron elsewhere...
       this.authenticationService.Authenticate().then((success) => {
@@ -52,9 +52,17 @@ return new Promise((resolve, reject) => {
      
      resolve(true)
      }, (error) => {
-      
-      this._router.navigate(['/Login'])
-      resolve(false)
+      console.log(error)
+      if(error.status==401){
+        resolve(false)
+        this._router.navigate(['/Login'])
+      }else{
+        resolve(true)
+      }
+      // taken out to demo errors
+      //this._router.navigate(['/Login'])
+      //resolve(false)
+       // this needs to be there but if it fils
      }
     
         

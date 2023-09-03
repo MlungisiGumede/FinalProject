@@ -10,7 +10,7 @@ import { AddCustomerComponent } from '../add-customer/add-customer.component';
 import { ViewCustomerComponent } from '../view-customer/view-customer.component';
 import { ChangeDetectorRef } from '@angular/core';
 import { AddCustomerOrderComponent } from '../add-customer-order/add-customer-order.component';
-import { Observable, of } from 'rxjs';
+import { Observable, catchError, map, of, throwError } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
 @Component({
   selector: 'app-customers',
@@ -66,9 +66,18 @@ filterTerm!:string;
   async DeleteCustomer(id: any){
      
 
-this.customerSerivce.DeleteCustomer(id).subscribe(Response => {
+this.customerSerivce.DeleteCustomer(id).pipe(map(
+  (res)=>{
+
+
+}),
+catchError((err) =>{
+  console.log(err)
+  this.ShowSnackBar("failed to remove product", "error");
+  return throwError(err)
+})).subscribe(Response => {
   console.log(Response);
-  this.data = Response;
+  
 this.getCustomers();
 this.ShowSnackBar("Customer successfully deleted","success")
  

@@ -75,7 +75,7 @@ else {
         catchError((err) =>{
           { // just check numbers of errors for client side and server side...
             //return reject("Client side error: Couldn't connect to server (API)") // check actual codes and maybe do this differently
-             reject("Client side error: Couldn't connect to server (API)")
+             reject(err)
             bool=false
            // 
             

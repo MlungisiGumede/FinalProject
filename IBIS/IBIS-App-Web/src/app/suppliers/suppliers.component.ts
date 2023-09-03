@@ -9,7 +9,7 @@ import { AddSupplierComponent } from '../add-supplier/add-supplier.component';
 import { AddSupplierOrderComponent } from '../add-supplier-order/add-supplier-order.component';
 import { InventoryService } from '../Services/inventory.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Observable, of } from 'rxjs';
+import { Observable, catchError, map, of, throwError } from 'rxjs';
 import { ViewSupplierComponent } from '../view-supplier/view-supplier.component';
 
 var pdfMake = require('pdfmake/build/pdfmake');
@@ -109,7 +109,16 @@ const dialogRef = this.matDialog.open(AddSupplierComponent);
     async delete(id: number){
       this.idtodelete = id;
   
-  this.supply.delete(this.idtodelete).subscribe(Response => {
+  this.supply.delete(this.idtodelete).pipe(map(
+    (res)=>{
+
+
+  }),
+  catchError((err) =>{
+    console.log(err)
+    this.ShowSnackBar("failed to remove supplier", "error");
+    return throwError(err)
+  })).subscribe(Response => {
     
    this.ShowSnackBar("Supplier successfully deleted", "success");
   this.getall();

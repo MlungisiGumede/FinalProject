@@ -3,6 +3,7 @@ import { CustomerService } from '../Services/customer.service';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Customer } from '../Models/Customer';
+import { catchError, map, pipe, throwError } from 'rxjs';
 
 @Component({
   selector: 'app-view-customer',
@@ -31,7 +32,20 @@ form:any
 
   }
   EditCustomer(){
-    this.customerService.UpdateCustomer(this.form.value).subscribe(res=>{
+    this.customerService.UpdateCustomer(this.form.value).pipe(map(
+      (res)=>{
+
+
+
+
+    }),
+    catchError((err) =>{
+      console.log(err)
+      this.matDialogRef.close(false);
+     
+      return throwError(err)
+    })).
+subscribe(res=>{
       console.log("success", res);
       this.matDialogRef.close(true)
       }),(err:any)=>{

@@ -11,7 +11,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { AddInventoryItemComponent } from '../add-inventory-item/add-inventory-item.component';
 import { SupplierService } from '../Services/supplier.service';
 import { Supplier } from '../Models/Supplier';
-import { Observable, of } from 'rxjs';
+import { Observable, catchError, map, of, throwError } from 'rxjs';
 import { ViewInventoryItemComponent } from '../view-inventory-item/view-inventory-item.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
 //import pdfMake from "pdfmake/build/pdfmake";
@@ -57,6 +57,8 @@ export class InventoryComponent implements OnInit {
         if(result){
           this.ShowSnackBar('Inventory successfully updated','success')
           this.getInventory();
+        }else{
+          this.ShowSnackBar('Inventory could not be updated','error')
         }
       }), (error:any) => {
         this.ShowSnackBar('Inventory could not be updated','error')
@@ -108,7 +110,17 @@ return this.suppliers.find(supplier => supplier.supplier_ID == id)?.name
   async delete(id: number){
     this.idtodelete = id;
 
-this.inv.delete(this.idtodelete).subscribe(Response => {
+this.inv.delete(this.idtodelete).pipe(map(
+  (res)=>{
+
+
+}),
+catchError((err) =>{
+  console.log(err)
+  this.ShowSnackBar("failed to delete inventory", "error");
+  return throwError(err)
+})).
+subscribe(Response => {
  this.ShowSnackBar("Inventory successfully deleted", "success");
 this.getInventory();
 }), (error:any) => {
@@ -122,21 +134,23 @@ this.getInventory();
   addInventoryItem(){
 
     //this.router.navigate(['/add-inventory-item']);
-    this.supplierService.getSupplierList().subscribe(response => {
+    
       const dialogRef = this.matDialog.open(AddInventoryItemComponent,{
-        data:response
-      });
+        data:this.suppliers
+      })
       dialogRef.afterClosed().subscribe(result => {
         if(result){
           this.ShowSnackBar('Inventory successfully added','success')
           this.getInventory();
+        }else{
+          this.ShowSnackBar('Inventory could not be added','error')
         }
       }), (error:any) => {
         this.ShowSnackBar('Inventory could not be added','error')
       }
-    })
+    }
 
-  }
+  
 
   public openPDF(): void {
     let DATA: any = document.getElementById('htmlData');

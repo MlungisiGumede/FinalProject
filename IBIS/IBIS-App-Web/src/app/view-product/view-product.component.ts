@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { ProductService } from '../Services/product.service';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Product } from '../Models/Product';
+import { catchError, map, throwError } from 'rxjs';
 
 @Component({
   selector: 'app-view-product',
@@ -97,12 +98,23 @@ onCategoryChange(value: any) {
 
   update(){
 
-    this.prod.updateProduct(this.form.value).subscribe(response => {
+    this.prod.updateProduct(this.form.value).pipe(map(
+      (res)=>{
+
+
+    }),
+    catchError((err) =>{
+      console.log(err)
+      this.dialogRef.close(false);
+     
+      return throwError(err)
+    })).
+subscribe(response => {
       console.log("successfully updated",response);
       this.dialogRef.close(true);
   }), (error:any) => {
     console.log(error);
-    this.dialogRef.close(false);
+    
   };
 }
 

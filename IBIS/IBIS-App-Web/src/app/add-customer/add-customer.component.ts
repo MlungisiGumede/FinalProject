@@ -2,6 +2,7 @@ import { Component, OnInit,Inject } from '@angular/core';
 import { CustomerService } from '../Services/customer.service';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { catchError, map, throwError } from 'rxjs';
 
 @Component({
   selector: 'app-add-customer',
@@ -30,7 +31,20 @@ constructor(public matDialogRef: MatDialogRef<AddCustomerComponent>
 
   CreateCustomer(){
     console.log("hi")
-    this.customerService.CreateCustomer(this.form.value).subscribe(res=>{
+    this.customerService.CreateCustomer(this.form.value).pipe(map(
+      (res)=>{
+
+
+
+
+    }),
+    catchError((err) =>{
+      console.log(err)
+      this.matDialogRef.close(false);
+     
+      return throwError(err)
+    })).
+subscribe(res=>{
       console.log("success", res);
       this.matDialogRef.close(true)
       }),(err:any)=>{
