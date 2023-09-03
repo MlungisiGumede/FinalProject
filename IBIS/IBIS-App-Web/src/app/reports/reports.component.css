@@ -19,6 +19,22 @@
   .active, .collapsible:hover {
     background-color: #1561ac;
   }
+  /* canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+} */
+.wrapper {
+  position: relative;
+  /* width: 400px;
+  height: 300px; */
+}
+
+.wrapper canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
   
   .contents{
       width: 90%;

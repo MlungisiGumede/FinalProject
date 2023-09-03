@@ -67,6 +67,13 @@ export class OrdersService {
              catchError(this.handleError)
            )
        }
+       ConvertSupplierOrdersToExcel(){
+        return this.httpClient.get(this.manytoManyAPIUrl + '/convertSupplierOrders')
+
+       }
+       ConvertCustomerOrdersToExcel(){
+        return this.httpClient.get(this.manytoManyAPIUrl + '/convertCustomerOrders')
+       }
        getCustomerOrderList(): Observable<any[]> {
          return this.httpClient
            .get<any[]>(this.apiUrl + '/getCustomerOrders')

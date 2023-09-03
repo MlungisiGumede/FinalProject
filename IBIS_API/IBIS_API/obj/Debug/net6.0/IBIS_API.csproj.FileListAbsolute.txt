@@ -549,3 +549,10 @@ C:\Users\27768\Documents\GitHub\inf370-team6\IBIS_API\IBIS_API\bin\Debug\net6.0\
 C:\Users\27768\Documents\GitHub\inf370-team6\IBIS_API\IBIS_API\bin\Debug\net6.0\Microsoft.AspNetCore.Identity.EntityFrameworkCore.dll
 C:\Users\27768\Documents\GitHub\inf370-team6\IBIS_API\IBIS_API\bin\Debug\net6.0\Microsoft.Extensions.Identity.Core.dll
 C:\Users\27768\Documents\GitHub\inf370-team6\IBIS_API\IBIS_API\bin\Debug\net6.0\Microsoft.Extensions.Identity.Stores.dll
+C:\Users\27768\Documents\GitHub\inf370-team6\IBIS_API\IBIS_API\bin\Debug\net6.0\ClosedXML.dll
+C:\Users\27768\Documents\GitHub\inf370-team6\IBIS_API\IBIS_API\bin\Debug\net6.0\DocumentFormat.OpenXml.dll
+C:\Users\27768\Documents\GitHub\inf370-team6\IBIS_API\IBIS_API\bin\Debug\net6.0\ExcelNumberFormat.dll
+C:\Users\27768\Documents\GitHub\inf370-team6\IBIS_API\IBIS_API\bin\Debug\net6.0\Irony.dll
+C:\Users\27768\Documents\GitHub\inf370-team6\IBIS_API\IBIS_API\bin\Debug\net6.0\SixLabors.Fonts.dll
+C:\Users\27768\Documents\GitHub\inf370-team6\IBIS_API\IBIS_API\bin\Debug\net6.0\System.IO.Packaging.dll
+C:\Users\27768\Documents\GitHub\inf370-team6\IBIS_API\IBIS_API\bin\Debug\net6.0\XLParser.dll

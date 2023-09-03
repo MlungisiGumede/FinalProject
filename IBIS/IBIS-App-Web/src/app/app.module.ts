@@ -61,6 +61,7 @@ import { ViewCustomerOrderComponent } from './view-customer-order/view-customer-
 import { ViewSupplierOrderComponent } from './view-supplier-order/view-supplier-order.component';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 import { HelpFunctionComponent } from './help-function/help-function.component';
+import { MatButtonModule } from '@angular/material/button';
 
 
 @NgModule({
@@ -105,7 +106,8 @@ import { HelpFunctionComponent } from './help-function/help-function.component';
     ViewSupplierOrderComponent,
     AddSupplierComponent,
     AddInventoryItemComponent,
-    HelpFunctionComponent
+    HelpFunctionComponent,
+    ReportsComponent
     
   
   ],
@@ -116,6 +118,7 @@ import { HelpFunctionComponent } from './help-function/help-function.component';
     Ng2SearchPipeModule,
     MatDialogModule,
     MatSnackBarModule,
+    MatButtonModule,
     RouterModule.forRoot([
       {path: '', redirectTo: '/Login', pathMatch: 'full'},
       {path: 'Login', component: LoginComponent, canActivate : [AuthGuardService] },

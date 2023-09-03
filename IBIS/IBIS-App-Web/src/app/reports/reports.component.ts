@@ -44,6 +44,7 @@ export class ReportsComponent implements OnInit {
   supplierOrderLine:any
   isCustomerOrder:any = false
   supplierOrdersChart:any
+  chart:any
   
   combinedData: { Name: string, Quantity: number, Price: number }[] = [];
   constructor(private productService: ProductService, private route: ActivatedRoute,
@@ -80,6 +81,16 @@ export class ReportsComponent implements OnInit {
       
     });
   }
+  ExportToExcel(){
+    if(this.isCustomerOrder){
+      this.orderService.ConvertCustomerOrdersToExcel().subscribe(response =>{
+        
+      })
+    }else{
+      this.orderService.ConvertSupplierOrdersToExcel().subscribe(response =>{
+      })
+    }
+  }
 CreateSupplierOrdersChart(){
   this.isCustomerOrder = false
   let doneOrders = this.supplierOrders.filter((item:any) => item.orderStatus_ID == 2)
@@ -95,18 +106,15 @@ let cancelledTotal = this.CalculateSupplierOrdersTotal(cancelledOrders)
 let inProgressTotal = this.CalculateSupplierOrdersTotal(inProgressOrders)
 console.log(inProgressOrdersLength)
  console.log(doneOrders)
- let customerOrderschart = Chart.getChart("customerOrdersChart")
- let supplierOrderschart = Chart.getChart("supplierOrdersChart")
- if(customerOrderschart){
-   customerOrderschart.destroy()
- }if(supplierOrderschart){
-   supplierOrderschart.destroy()
+ let myChart = Chart.getChart("myChart")
+ if(myChart){
+   myChart.destroy()
  }
-    this.supplierOrdersChart = new Chart("supplierOrdersChart", {
+    this.chart = new Chart("myChart", {
       type: 'bar', //this denotes tha type of chart
 
       data: {// values on X-Axis
-        labels: ['In Progress', 'Cancelled', 'Done' ], 
+        labels: ['In Progress', 'Done','Cancelled' ], 
 	       datasets: [
           {
             label: "Average cost per order (R)",
@@ -121,7 +129,13 @@ console.log(inProgressOrdersLength)
         ]
       },
       options: {
-        aspectRatio:2.5
+        aspectRatio:2.5,
+        plugins: {
+          title: {
+              display: true,
+              text: 'Supplier Orders Chart'
+          }
+      }
       }
       
     });
@@ -144,19 +158,17 @@ let cancelledTotal = this.CalculateCustomerOrdersTotal(cancelledOrders)
 let inProgressTotal = this.CalculateCustomerOrdersTotal(inProgressOrders)
 console.log(inProgressOrdersLength)
  console.log(doneOrders)
- let customerOrderschart = Chart.getChart("customerOrdersChart")
- let supplierOrderschart = Chart.getChart("supplierOrdersChart")
- if(customerOrderschart){
-   customerOrderschart.destroy()
- }if(supplierOrderschart){
-   supplierOrderschart.destroy()
+ let myChart = Chart.getChart("myChart")
+
+ if(myChart){
+   myChart.destroy()
  }
  
-    this.customerOrdersChart = new Chart("customerOrdersChart", {
+    this.chart = new Chart("myChart", {
       type: 'bar', //this denotes tha type of chart
-
+      // title: 'Customer Orders Chart',
       data: {// values on X-Axis
-        labels: ['In Progress', 'Cancelled', 'Done' ], 
+        labels: ['In Progress', 'Done', 'Cancelled' ], 
 	       datasets: [
           {
             label: "Average cost per order (R)",
@@ -171,8 +183,15 @@ console.log(inProgressOrdersLength)
         ]
       },
       options: {
-        aspectRatio:2.5
+        aspectRatio:2.5,
+        plugins: {
+          title: {
+              display: true,
+              text: 'Customer Orders Chart'
+          }
       }
+      },
+   
       
     });
     console.log(this.customerOrdersChart)
