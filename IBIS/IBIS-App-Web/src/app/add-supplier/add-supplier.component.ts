@@ -34,7 +34,7 @@ this.data = new Supplier();
   }
 
 
-createSupplier(){
+AddSupplier(){
 let supplier = new Supplier()
 supplier.name = this.form.controls['name'].value
 supplier.address = this.form.controls['address'].value
@@ -64,7 +64,7 @@ this.matDialogRef.close(true)
 
 submitSuppForm(){
   if(this.form.valid){
-    this.createSupplier();
+   
     console.log('Form is valid, submitting...');
   }
 }
