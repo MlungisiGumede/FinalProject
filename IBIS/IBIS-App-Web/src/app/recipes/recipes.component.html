@@ -47,4 +47,13 @@
       </ion-grid>
       <ion-button class="light-Btn" (click)="addRecipe()">Add</ion-button>
       <ion-button class="red-Btn">Generate Report</ion-button>
+      <div>
+        <ion-button (click)="generateImage()">Generate Image</ion-button>
+        <img *ngIf="imageUrl" [src]="imageUrl" alt="Generated Image">
+      </div>
   </div>
+
+  
+ 
+
+
