@@ -62,6 +62,13 @@ this.matDialogRef.close(true)
 
 }
 
+submitSuppForm(){
+  if(this.form.valid){
+    this.createSupplier();
+    console.log('Form is valid, submitting...');
+  }
+}
+
 async presentToast(position: 'top' | 'middle' | 'bottom') {
   const toast = await this.toastController.create({
     message: 'Supplier successfully created',

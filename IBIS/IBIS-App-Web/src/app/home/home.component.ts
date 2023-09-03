@@ -53,7 +53,7 @@ console.log('the name',JSON.stringify(this.data[0].product_Name));
 
   chartOptions = {
 	  title: {
-		  text: "Monthly Product Supply"
+		  text: "Monthly Orders Placed"
 	  },
 	  theme: "light2",
 	  animationEnabled: true,
@@ -64,7 +64,7 @@ console.log('the name',JSON.stringify(this.data[0].product_Name));
 	  },
 	  data: [{
 		type: "column", //change type to bar, line, area, pie, etc
-		yValueFormatString: "$#,##0K",
+		yValueFormatString: "R#,##0K",
 		color: "#01b8aa",
 		dataPoints: [
 			{ label: "Jan", y: 72 },
@@ -89,7 +89,7 @@ console.log('the name',JSON.stringify(this.data[0].product_Name));
 	  theme: "dark2",
 	  exportEnabled: true,
 	  title: {
-		text: "Weekly Orders"
+		text: "weekly products Ordered"
 	  },
 	  subtitles: [{
 		text: "Median hours/week"
@@ -115,7 +115,7 @@ console.log('the name',JSON.stringify(this.data[0].product_Name));
  
   chartOptions2 = {
     title: {
-      text: "Supplier Inventory Orders",
+      text: "Supplier Orders",
       fontFamily: "Trebuchet MS, Helvetica, sans-serif"
     },
     axisY: {
