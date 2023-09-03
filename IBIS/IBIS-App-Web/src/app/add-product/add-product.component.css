@@ -11,12 +11,12 @@ body{
   justify-content: center;
   align-items: center;
   padding: 0px;
-  background: white;
+  background: grey;
 }
 .container{
   max-width: 700px;
   width: 100%;
-  background-color: black;
+  background-color: yellow;
   border:yellow 10px;
   padding-bottom:  5px;
   padding-left: 25px;;
@@ -28,7 +28,7 @@ body{
   font-size: 25px;
   font-weight: 500;
   position: relative;
-  color: yellow;
+  color: black;
   padding-left: 25px;
   margin-bottom: 20px;
 }
@@ -50,6 +50,8 @@ body{
 .content form .user-details{
   display: flex;
   flex-wrap: wrap;
+  border-radius: 2px;
+  border-color: black;
   justify-content: space-between;
   margin: 12px 0 12px 0;
   color: white;
@@ -117,7 +119,7 @@ form .input-box span.details{
   padding-left: 25px;
   font-size: 16px;
   border-radius: 5px;
-  outline: none;
+  outline:black;
 } */
 
  .user-details .input-box {

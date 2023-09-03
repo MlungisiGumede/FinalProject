@@ -13,10 +13,7 @@ body{
   padding: 10px;
   background: grey;
 }
-mat-select-content{
-  
 
-}
 mat-select{
   height: 40px;
   width: 160px;
@@ -141,7 +138,7 @@ color: black;
 
  form .button input{
    height: 100%;
-   width: 80%;
+   width: 110%;
    border-radius: 5px;
    border: none;
    color: black;
