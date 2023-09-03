@@ -62,6 +62,7 @@ import { ViewSupplierOrderComponent } from './view-supplier-order/view-supplier-
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 import { HelpFunctionComponent } from './help-function/help-function.component';
 import { MatButtonModule } from '@angular/material/button';
+import { TimerComponent } from './timer/timer.component';
 
 
 @NgModule({
@@ -107,7 +108,9 @@ import { MatButtonModule } from '@angular/material/button';
     AddSupplierComponent,
     AddInventoryItemComponent,
     HelpFunctionComponent,
-    ReportsComponent
+    ReportsComponent,
+    TimerComponent
+   
     
   
   ],
@@ -153,7 +156,8 @@ import { MatButtonModule } from '@angular/material/button';
     {path: 'otp', component: OtpComponent, canActivate : [AuthGuardService]},
       {path: 'otp/:username', component: OtpComponent,canActivate : [AuthGuardService]},
       {path:'view-write-off/:id',component:ViewWriteOffsComponent,canActivate : [AuthGuardService]},
-
+      {path: 'timer', component: TimerComponent },
+      {path: 'timer/:username', component: TimerComponent }
 
 
       

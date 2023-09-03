@@ -4,5 +4,6 @@ namespace IBIS_API.Models
 {
     public class AppUser: IdentityUser
     {
+       
     }
 }

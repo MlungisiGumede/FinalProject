@@ -49,6 +49,10 @@ export class LoginService  {
       console.log(user)
       return this.httpClient.post<any>(`${this.apiUrl}Authenticate`,user)
     }
+    public AuthenticateManager(user:any):Observable<any>{
+      console.log(user)
+      return this.httpClient.post<any>(`${this.apiUrl}AuthenticateAdmin`,user)
+    }
     public GetAuthentication(){
       return this.httpClient.get<any>(`${this.apiUrl}GetAuthentication`)
     }

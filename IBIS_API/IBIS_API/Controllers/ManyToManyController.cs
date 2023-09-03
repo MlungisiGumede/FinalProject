@@ -203,7 +203,7 @@ public async Task<ActionResult> PostCustomerOrder(CustomerOrderViewModel? ord)
             dt.Columns.AddRange(new DataColumn[6] { new DataColumn("Order ID"),
                                                      new DataColumn("Supplier Name"),
                                                      new DataColumn("Date Created"),
-                                                     new DataColumn("Inventory"),
+                                                     new DataColumn("Inventory Name"),
                                                      new DataColumn("Price"),
                                                      new DataColumn("Quantity"),
                                                      });
