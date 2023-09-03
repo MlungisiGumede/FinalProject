@@ -79,14 +79,13 @@ export class OtpComponent implements OnInit {
     if(otp==this.otp){
       console.log(this.user)
       this.loginservice.Authenticate(this.user).subscribe((res)=>{
-        console.log(res)
-        localStorage.setItem('Token', JSON.stringify(res))
-        this.router.navigate(['/home'])
-      })
-      //localStorage.setItem('OTP', this.otp)
-      console.log(localStorage.getItem('Token'))
+       
+          localStorage.setItem('Token', JSON.stringify(res))
+          this.router.navigate(['/home'])
+       
      
-    }
+    })
+  }
     else{
       this.presentToast('top',"The OTP is Invalid",this.otp)
     }
@@ -94,6 +93,16 @@ export class OtpComponent implements OnInit {
      
    
 
+  }
+  SubmitAndSetTimer(){
+    console.log(localStorage.getItem('Token'))
+    let otp = this.otpForm.controls['otp'].value
+    if(otp==this.otp){
+      this.router.navigate(['/timer',this.username]);
+    }else{
+      
+    }
+    
   }
   async presentToast(position: 'top' | 'middle' | 'bottom',message:any,operation:any) {
     const toast = await this.toastController.create({

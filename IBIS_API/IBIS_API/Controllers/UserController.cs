@@ -18,6 +18,7 @@ using Microsoft.AspNetCore.Cors;
 using System.Net.Mail;
 using System.Net;
 using System.Reflection.Emit;
+using System;
 
 namespace IBIS_API.Controllers
 {
@@ -76,7 +77,43 @@ namespace IBIS_API.Controllers
                 signingCredentials: credentials,
                 expires: DateTime.UtcNow.AddHours(3)
             );
+            //DateTime.UtcNow.
 
+            return Created("", new
+            {
+                token = new JwtSecurityTokenHandler().WriteToken(token),
+                user = user.UserName
+            });
+        }
+
+
+        [HttpGet]
+        private ActionResult GenerateAdminJWTToken(AppUser user,double time)
+        {
+            var expiresAt = DateTime.Now.Add(TimeSpan.FromMinutes(time));
+            var tokenExpiredAtClaim = new Claim("ActivtationTokenExpiredAt", expiresAt.ToUniversalTime().Ticks.ToString());
+            // Create JWT Token
+            var claims = new[]
+            {
+                new Claim(JwtRegisteredClaimNames.Sub, user.Email),
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                new Claim(JwtRegisteredClaimNames.UniqueName, user.UserName)
+            };
+
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Tokens:Key"]));
+            var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+
+            var token = new JwtSecurityToken(
+                _configuration["Tokens:Issuer"],
+                _configuration["Tokens:Audience"],
+                claims,
+                signingCredentials: credentials,
+               expires: DateTime.Now.AddHours(time)
+                //tokenLifeSPan = 
+               // expires: DateTime.UtcNow.AddMinutes(time)
+            );
+            //DateTime.UtcNow.
+            var tokenLook = new JwtSecurityTokenHandler().WriteToken(token);
             return Created("", new
             {
                 token = new JwtSecurityTokenHandler().WriteToken(token),
@@ -170,17 +207,42 @@ namespace IBIS_API.Controllers
         public async Task<ActionResult> Authenticate(User_Account uvm)
         {
             var user = await _userManager.FindByNameAsync(uvm.Username);
-            try
-            {
-                //var principal = await _claimsPrincipalFactory.CreateAsync(user);
-                //await HttpContext.SignInAsync(IdentityConstants.ApplicationScheme, principal);
-                return GenerateJWTToken(user);
-            }
-            catch (Exception)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, "Internal Server Error. Please contact support.");
-            }
+          
+                try
+                {
+                    //var principal = await _claimsPrincipalFactory.CreateAsync(user);
+                    //await HttpContext.SignInAsync(IdentityConstants.ApplicationScheme, principal);
+                    return GenerateJWTToken(user);
+                }
+                catch (Exception)
+                {
+                    return StatusCode(StatusCodes.Status500InternalServerError, "Internal Server Error. Please contact support.");
+                }
+            
+          
+          
         }
+        [HttpPost]
+        [Route("AuthenticateAdmin")]
+        public async Task<ActionResult> AuthenticateAdmin(User_Account uvm)
+        {
+            double time = (double)uvm.time;
+            var user = await _userManager.FindByNameAsync(uvm.Username);
+            
+                try
+                {
+                    //var principal = await _claimsPrincipalFactory.CreateAsync(user);
+                    //await HttpContext.SignInAsync(IdentityConstants.ApplicationScheme, principal);
+                    return GenerateAdminJWTToken(user,time);
+                }
+                catch (Exception)
+                {
+                    return StatusCode(StatusCodes.Status500InternalServerError, "Internal Server Error. Please contact support.");
+                }
+            }
+        
+
+        
 
         [HttpPost]
         [Route("Login")]

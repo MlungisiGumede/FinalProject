@@ -1,0 +1,13 @@
+<body>
+    <h2>Choose time to stay Logged in</h2>
+    <form [formGroup]="form" >
+    <div  style="display: flex;">
+    <div>
+        <h4>Enter Hours </h4>
+        <input type="number" formControlName="time" max="24" >
+    </div>
+   
+</div>
+<ion-button style="background-color: white;color: black;" [disabled]="!form.valid" mat-raised-button color="primary" (click)="Submit()">Submit</ion-button>
+</form>
+</body>

@@ -7,4 +7,5 @@ export class User {
     Address: string | undefined; 
     CellPhone_Number: string | undefined; 
     User_Account_Type_Id: number | undefined;
+    time:any
   }

@@ -60,7 +60,8 @@ builder.Services.AddAuthentication()
                     {
                         ValidIssuer = builder.Configuration["Tokens:Issuer"],
                         ValidAudience = builder.Configuration["Tokens:Audience"],
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Tokens:Key"]))
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Tokens:Key"])),
+                        ClockSkew = TimeSpan.Zero
                     };
                 });
 
@@ -80,7 +81,7 @@ builder.Services.Configure<FormOptions>(o =>
     o.MemoryBufferThreshold = int.MaxValue;
 });
 
-builder.Services.Configure<DataProtectionTokenProviderOptions>(options => options.TokenLifespan = TimeSpan.FromHours(3));
+//builder.Services.Configure<DataProtectionTokenProviderOptions>(options => options.TokenLifespan = TimeSpan.FromSeconds(30));
 var app = builder.Build();
 
 app.UseCors();
