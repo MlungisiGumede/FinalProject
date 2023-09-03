@@ -143,12 +143,24 @@ public async Task<ActionResult> PostCustomerOrder(CustomerOrderViewModel? ord)
                        
                         //var date = DateTime.Parse(order.Date_Created);
                         var split = order.Date_Created.Split(' ');
-                        var year = split[3];
-                        var month = split[1];
-                        var day = split[2];
-                        var date = day + "/" + month + "/" + year;
-                        var dateFormat = DateTime.Parse(date);
-                        var shortDate = dateFormat.ToString("yyyy-MM-dd");
+                        var date = new DateTime();
+                        if(split.Length > 1)
+                        {
+                            var year = split[3];
+                            var month = split[1];
+                            var day = split[2];
+                            var dateString = day + "/" + month + "/" + year;
+                            date = DateTime.Parse(dateString);
+                        }
+                        else
+                        {
+                            DateTime start = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+                             date = start.AddMilliseconds(long.Parse(order.Date_Created)).ToLocalTime();
+                        }
+                        
+                        ;
+                        
+                        var shortDate = date.ToString("yyyy-MM-dd");
                         dt.Rows.Add(order.CustomerOrder_ID, customer.Customer_FirstName + " " + customer.Customer_Surname,shortDate, product.Name,orderLine.Price,orderLine.Quantity);
                     }
                    
@@ -218,16 +230,28 @@ public async Task<ActionResult> PostCustomerOrder(CustomerOrderViewModel? ord)
                     {
                         var inventory = _context.Inventories.Where(c => c.Inventory_ID == orderLine.Inventory_ID).First(); // referential thingy...
                         var supplier = _context.Suppliers.Where(c => c.Supplier_ID == order.Supplier_ID).First();
+                        var orderStatus = _context.OrderStatusList.Where(c => c.OrderStatus_ID == order.OrderStatus_ID).First();
                         // find order and find product
-
-                        //var date = DateTime.Parse(order.Date_Created);
                         var split = order.Date_Created.Split(' ');
-                        var year = split[3];
-                        var month = split[1];
-                        var day = split[2];
-                        var date = day + "/" + month + "/" + year;
-                        var dateFormat = DateTime.Parse(date);
-                        var shortDate = dateFormat.ToString("yyyy-MM-dd");
+                        var date = new DateTime();
+                        if (split.Length > 1)
+                        {
+                            var year = split[3];
+                            var month = split[1];
+                            var day = split[2];
+                            var dateString = day + "/" + month + "/" + year;
+                            date = DateTime.Parse(dateString);
+                        }
+                        else
+                        {
+                            DateTime start = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+                            date = start.AddMilliseconds(long.Parse(order.Date_Created)).ToLocalTime();
+                        }
+
+                        ;
+
+                        var shortDate = date.ToString("yyyy-MM-dd");
+                       
                         dt.Rows.Add(order.SupplierOrder_ID, supplier.Name, shortDate, inventory.Name, orderLine.Price, orderLine.Quantity);
                     }
 
