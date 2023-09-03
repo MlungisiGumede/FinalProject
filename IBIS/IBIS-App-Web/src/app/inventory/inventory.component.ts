@@ -165,6 +165,60 @@ this.getInventory();
     await toast.present();
   }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+FormBody(data:any, columns:any) { // https://stackoverflow.com/questions/26658535/building-table-dynamically-with-pdfmake
+  var body = [];
+  
+  let displayedColumns = ['inventory ID','SKU','Name','Supplier Name']
+console.log(data)
+console.log(columns)
+    body.push(displayedColumns);
+    //this.reportData.map()
+
+     data.forEach((row:any) => {
+       let dataRow:any = [];
+
+        columns.forEach( (column:any) => {
+          console.log(column)
+          console.log(row)
+          console.log(row[column])
+      if(column == "supplier_ID"){
+        row[column] = this.GetSupplierName(row[column])
+         }
+         dataRow.push(row[column])
+        })
+      body.push(dataRow);
+     } 
+     )
+
+       
+    // 
+    
+    console.log(body)
+    console.log(body)
+    return body;
+}
+
+
+
+
+
   generPDF() {
    
     
@@ -196,8 +250,8 @@ this.getInventory();
               {
                 table: {
                   headerRows: 1,
-                  // widths: ['*', 'auto', 'auto', 'auto'],
-                  //body: this.FormBody(this.reportData, ['inventory_ID','sku','name','supplier_ID'])
+                   widths: ['*', 'auto', 'auto', 'auto'],
+                  body: this.FormBody(this.reportData, ['inventory_ID','sku','name','supplier_ID'])
                 }
               },
               {

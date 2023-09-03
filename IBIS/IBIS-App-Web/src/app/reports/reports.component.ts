@@ -7,7 +7,7 @@ import { InventoryService } from '../Services/inventory.service';
 import { SupplierService } from '../Services/supplier.service';
 import { OrdersService } from '../Services/orders.service';
 import { WriteOffService } from '../Services/write-off.service';
-import { Chart } from 'chart.js';
+import { Chart,registerables } from 'chart.js';
 var pdfMake = require('pdfmake/build/pdfmake');
 var pdfFonts = require('pdfmake/build/vfs_fonts');
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
@@ -37,16 +37,20 @@ export class ReportsComponent implements OnInit {
   dataOrder:any
   dataWriteOff:any
   filterTerm!: string;
-  chart:any
+  customerOrdersChart:any
   customerOrders:any
   supplierOrders:any
   customerOrderLine:any
   supplierOrderLine:any
+  isCustomerOrder:any = false
+  supplierOrdersChart:any
   
   combinedData: { Name: string, Quantity: number, Price: number }[] = [];
   constructor(private productService: ProductService, private route: ActivatedRoute,
      private inv : InventoryService,private supply: SupplierService,private orderservice : OrdersService, private writeOffService : WriteOffService
-     ,public orderService:OrdersService) { }
+     ,public orderService:OrdersService) {
+      Chart.register(...registerables);
+      }
 
   ngOnInit() {
     this.orderService.getOrders().subscribe(response => {
@@ -76,42 +80,42 @@ export class ReportsComponent implements OnInit {
       
     });
   }
-
-  CreateCustomerOrdersChart(){
- //this.supplierOrders filter the list...
- let doneOrders = this.customerOrders.filter((item:any) => item.orderStatus_ID == 2)
- let doneOrdersLength = this.customerOrders.filter((item:any) => item.orderStatus_ID == 2).length
- let cancelledOrders = this.customerOrders.filter((item:any) => item.orderStatus_ID == 3)
- let cancelledOrdersLength = this.customerOrders.filter((item:any) => item.orderStatus_ID == 3).length
- let inProgressOrders = this.customerOrders.filter((item:any) => item.orderStatus_ID == 1)
- let inProgressOrdersLength = this.customerOrders.filter((item:any) => item.orderStatus_ID == 1).length
+CreateSupplierOrdersChart(){
+  this.isCustomerOrder = false
+  let doneOrders = this.supplierOrders.filter((item:any) => item.orderStatus_ID == 2)
+ let doneOrdersLength = this.supplierOrders.filter((item:any) => item.orderStatus_ID == 2).length
+ let cancelledOrders = this.supplierOrders.filter((item:any) => item.orderStatus_ID == 3)
+ let cancelledOrdersLength = this.supplierOrders.filter((item:any) => item.orderStatus_ID == 3).length
+ let inProgressOrders = this.supplierOrders.filter((item:any) => item.orderStatus_ID == 1)
+ let inProgressOrdersLength = this.supplierOrders.filter((item:any) => item.orderStatus_ID == 1).length
 // then canculate the order line...
-let doneTotal = 0
-doneOrders.forEach((element:any) => {
-  // get orderLine then 
-  this.customerOrderLine.forEach((orderLine:any) => {
-    if(orderLine.order_ID == element.order_ID){
-  }
-})
-
-  doneTotal = doneTotal + (element.quantity * element.price)
-});
+console.log(inProgressOrders)
+let doneTotal = this.CalculateSupplierOrdersTotal(doneOrders)
+let cancelledTotal = this.CalculateSupplierOrdersTotal(cancelledOrders)
+let inProgressTotal = this.CalculateSupplierOrdersTotal(inProgressOrders)
+console.log(inProgressOrdersLength)
  console.log(doneOrders)
-    this.chart = new Chart("MyChart", {
+ let customerOrderschart = Chart.getChart("customerOrdersChart")
+ let supplierOrderschart = Chart.getChart("supplierOrdersChart")
+ if(customerOrderschart){
+   customerOrderschart.destroy()
+ }if(supplierOrderschart){
+   supplierOrderschart.destroy()
+ }
+    this.supplierOrdersChart = new Chart("supplierOrdersChart", {
       type: 'bar', //this denotes tha type of chart
 
       data: {// values on X-Axis
         labels: ['In Progress', 'Cancelled', 'Done' ], 
 	       datasets: [
           {
-            label: "Number of Orders",
-            data: [inProgressOrdersLength,doneOrdersLength, cancelledOrdersLength],
+            label: "Average cost per order (R)",
+            data: [inProgressTotal/inProgressOrdersLength,doneTotal/doneOrdersLength, cancelledTotal/cancelledOrdersLength],
             backgroundColor: 'blue'
           },
           {
             label: "Total (R)",
-            data: ['542', '542', '536', '327', '17',
-									 '0.00', '538', '541'],
+            data: [inProgressTotal, doneTotal, cancelledTotal],
             backgroundColor: 'limegreen'
           }  
         ]
@@ -121,6 +125,57 @@ doneOrders.forEach((element:any) => {
       }
       
     });
+    console.log(this.supplierOrdersChart)
+  
+}
+  CreateCustomerOrdersChart(){
+    this.isCustomerOrder = true
+ //this.supplierOrders filter the list...
+ let doneOrders = this.customerOrders.filter((item:any) => item.orderStatus_ID == 2)
+ let doneOrdersLength = this.customerOrders.filter((item:any) => item.orderStatus_ID == 2).length
+ let cancelledOrders = this.customerOrders.filter((item:any) => item.orderStatus_ID == 3)
+ let cancelledOrdersLength = this.customerOrders.filter((item:any) => item.orderStatus_ID == 3).length
+ let inProgressOrders = this.customerOrders.filter((item:any) => item.orderStatus_ID == 1)
+ let inProgressOrdersLength = this.customerOrders.filter((item:any) => item.orderStatus_ID == 1).length
+// then canculate the order line...
+console.log(inProgressOrders)
+let doneTotal = this.CalculateCustomerOrdersTotal(doneOrders)
+let cancelledTotal = this.CalculateCustomerOrdersTotal(cancelledOrders)
+let inProgressTotal = this.CalculateCustomerOrdersTotal(inProgressOrders)
+console.log(inProgressOrdersLength)
+ console.log(doneOrders)
+ let customerOrderschart = Chart.getChart("customerOrdersChart")
+ let supplierOrderschart = Chart.getChart("supplierOrdersChart")
+ if(customerOrderschart){
+   customerOrderschart.destroy()
+ }if(supplierOrderschart){
+   supplierOrderschart.destroy()
+ }
+ 
+    this.customerOrdersChart = new Chart("customerOrdersChart", {
+      type: 'bar', //this denotes tha type of chart
+
+      data: {// values on X-Axis
+        labels: ['In Progress', 'Cancelled', 'Done' ], 
+	       datasets: [
+          {
+            label: "Average cost per order (R)",
+            data: [inProgressTotal/inProgressOrdersLength,doneTotal/doneOrdersLength, cancelledTotal/cancelledOrdersLength],
+            backgroundColor: 'blue'
+          },
+          {
+            label: "Total (R)",
+            data: [inProgressTotal, doneTotal, cancelledTotal],
+            backgroundColor: 'limegreen'
+          }  
+        ]
+      },
+      options: {
+        aspectRatio:2.5
+      }
+      
+    });
+    console.log(this.customerOrdersChart)
   }
 
 
@@ -128,7 +183,40 @@ doneOrders.forEach((element:any) => {
 
     invoice = new Invoice(); 
     
-    
+    CalculateCustomerOrdersTotal(orders:any){
+      let total = 0
+      console.log(this.customerOrderLine)
+      orders.forEach((element:any) => {
+        console.log(element)
+        // get orderLine then 
+        this.customerOrderLine.forEach((orderLine:any) => {
+          console.log(orderLine)
+          if(orderLine.customerOrder_ID == element.customerOrder_ID){
+            total = total + (orderLine.quantity * orderLine.price)
+        }
+      })
+      
+        
+      });
+      return total
+    }
+    CalculateSupplierOrdersTotal(orders:any){
+      let total = 0
+      console.log(this.customerOrderLine)
+      orders.forEach((element:any) => {
+        console.log(element)
+        // get orderLine then 
+        this.supplierOrderLine.forEach((orderLine:any) => {
+          console.log(orderLine)
+          if(orderLine.supplierOrder_ID == element.supplierOrder_ID){
+            total = total + (orderLine.quantity * orderLine.price)
+        }
+      })
+      
+        
+      });
+      return total
+    }
     generatePDF() {}
 
       // this.productService.getProductList().subscribe(

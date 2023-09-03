@@ -3,14 +3,18 @@
       <ion-title><h1>Reports</h1></ion-title>
       <ion-searchbar class="isb" placeholder="Search Report..." showCancelButton="focus" [(ngModel)]="filterTerm" animated></ion-searchbar><br/>
        
-        <ion-button class="light-Btn" (click)="generateInventoryReport()">Inventory Report</ion-button>
+        <!-- <ion-button class="light-Btn" (click)="generateInventoryReport()">Inventory Report</ion-button>
         <ion-button class="light-Btn" (click)="generateProductReport()">Products Report</ion-button>
         <ion-button class="light-Btn" (click)="generateOrdersReport()">Orders Report</ion-button>
         <ion-button class="light-Btn" (click)="generateSupplierReport()">Suppliers Report</ion-button>
-        <ion-button class="light-Btn" (click)="generateWriteOffsReport()">Write Off Report</ion-button>
+        <ion-button class="light-Btn" (click)="generateWriteOffsReport()">Write Off Report</ion-button> -->
         <ion-button class="light-Btn" (click)="CreateCustomerOrdersChart()">Generate Customer Orders Report</ion-button>
+        <ion-button class="light-Btn" (click)="CreateSupplierOrdersChart()">Generate Supplier Orders Report</ion-button>
+        <div  class="chart-container">
+          <canvas  id="customerOrdersChart" >{{ customerOrdersChart }}</canvas>
+          <canvas  id="supplierOrdersChart" >{{ supplierOrdersChart }}</canvas>
+    </div>
+    <button>Export to Excel</button>
     </div>
 
-    <div class="chart-container">
-      <canvas  id="MyChart" >{{ chart }}</canvas>
-</div>
+   
