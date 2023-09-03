@@ -54,7 +54,7 @@ selectedCategory: string | null = null;
     });
 
 
-    ;
+    
   }
 
   minExpiryDateValidator(control: any): { [key: string]: boolean } | null {

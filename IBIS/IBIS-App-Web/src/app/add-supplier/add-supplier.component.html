@@ -1,28 +1,49 @@
 <body>
     <div class="container">
+      <ion-button color="danger" shape="round" fill="outline" class="cancelAdd" [routerLink]="['/Suppliers']">X</ion-button>
      <div class="title">Add Supplier</div>
      <div class="content">
-       <form action="#">
-         <div class="user-details" [formGroup]="form">
+       <form [formGroup]="supform" (ngSubmit)="submitSuppForm">
+         <div class="user-details" >
            <div class="input-box">
              <span class="details"> Name</span>
-             <input type="text" placeholder="name" formControlName="name"  >
+             <ion-input type="text" placeholder="Name" formControlName="name" class="priceBox"></ion-input>
+              <ion-note class="error-message" *ngIf="supform.get('name')?.hasError('required')">
+                A supplier name is required
+              </ion-note>
            </div>
            <div class="input-box">
              <span class="details">Email</span>
-             <input type="text" placeholder="email" formControlName="email" >
+             <ion-input type="email" placeholder="Email address" formControlName="email" class="priceBox"></ion-input>
+              <ion-note class="error-message" *ngIf="supform.get('email')?.hasError('email')">
+                Enter a valid email address
+              </ion-note>
            </div>
            <div class="input-box">
              <span class="details">Address</span>
-             <input type="text" placeholder="address"formControlName="address">
+             <ion-input type="text" placeholder="Address" formControlName="address" class="priceBox"></ion-input>
+              <ion-note class="error-message" *ngIf="supform.get('address')?.hasError('required')">
+                Address required
+              </ion-note>
            </div>
-           <div class="input-box">
-             <span class="details">Phone number</span>
-             <input type="text" placeholder="phone number" formControlName="phone">
-           </div>
+           
+          <div class="input-box">
+            <span class="details">Phone number</span>
+            <ion-input type="tel" placeholder="Phone number" formControlName="phone" class="priceBox"></ion-input>
+            <ion-note class="error-message" *ngIf="supform.get('phone')?.hasError('minlength')">
+              Phone number must have at least 10 digits
+            </ion-note>
+            <ion-note class="error-message" *ngIf="supform.get('phone')?.hasError('maxlength')">
+              Phone number cannot have more than 10 digits
+            </ion-note>
+            <ion-note class="error-message" *ngIf="supform.get('phone')?.hasError('pattern')">
+              Enter a valid phone number (only digits allowed)
+            </ion-note>
+          </div>
+          
          </div>
          <div class="button">
-           <input type="submit" value="Submit"  (click)="createSupplier()"> 
+           <ion-button type="submit" class="submitButton" [disabled]="!supform.valid">Submit<ion-ripple-effect></ion-ripple-effect></ion-button>
          </div>
        </form>
      </div>
