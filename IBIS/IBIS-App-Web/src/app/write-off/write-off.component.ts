@@ -42,13 +42,15 @@ images: LocalFile[]=[];
   image:any
   fileName:any = "required"
   uploadFile:any
+  categories:any
+  subCategories:any
 
   
 
-  constructor(private route : ActivatedRoute,private prod: ProductService,private fb : FormBuilder, private loadingCtrl: LoadingController,private writeoffservice: WriteOffService
-    ,private router: Router) {
+  constructor(private route : ActivatedRoute,private productService: ProductService,private fb : FormBuilder, private loadingCtrl: LoadingController,private writeoffservice: WriteOffService
+    ,private router: Router,) {
       this.form= this.fb.group({
-        product_ID : ['', Validators.required],
+       // product_ID : ['', Validators.required],
           reason : ['', Validators.required],
          image: ['', Validators.required],
           quantity : ['', Validators.required],
@@ -68,8 +70,13 @@ images: LocalFile[]=[];
    
 
     this.id = this.route.snapshot.params['id']
-
-    this.prod.getprod(this.id).subscribe((res)=>{
+this.productService.getCategoriesList().subscribe((res)=>{
+  this.categories = res
+})
+this.productService.getSubCategoriesList().subscribe((res)=>{
+  this.subCategories = res
+})
+    this.productService.getprod(this.id).subscribe((res)=>{
 // subscribe maybe be problem
       this.data = res
       //res = this.viewproductform.value
@@ -82,12 +89,20 @@ images: LocalFile[]=[];
 
 //this.loadFiles();
   }
+  GetCategoryName(id:any){
+    return this.categories.find((item:any) => item.category_ID == id).name
+  }
+  GetSubCategoryName(id:any){
+    return this.subCategories.find((item:any) => item.subCategory_ID == id).name
+  }
   SetFileName(event:any){
 this.fileName = event.target.files[0].name // see if need to check if file exists once you get file from event
 console.log(this.fileName)
 console.log(this.form.value)
+//let image:any = this.form.get('image')?.setValue(this.fileName)
   }
   FileChoice(e:any){
+    console.log(this.form.value)
     let file = e.target.files[0];
     console.log(file)
     let reader = new FileReader();
@@ -96,6 +111,8 @@ console.log(this.form.value)
      //me.modelvalue = reader.result;
      console.log(reader.result);
      this.uploadFile = reader.result
+     
+     // let val = (this.form.get('records') as FormArray).controls[rowIndex].get('isDone')?.setValue(false)
    };
    reader.onerror = function (error) {
      console.log('Error: ', error);
@@ -114,7 +131,7 @@ writeOff.product_ID = this.id
 
   this.writeoffservice.createWriteOff(writeOff).subscribe(res=>{
     console.log("success", res);
-    this.router.navigate(['/view-write-offs',this.id]);
+    this.router.navigate(['/view-write-offs']);
     }) 
 }
   // putting this 

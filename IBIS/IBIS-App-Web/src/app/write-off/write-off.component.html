@@ -14,9 +14,9 @@
     </tr>
    <tr  class="row">
          <td>{{data.product_ID}}</td>
-    <td>{{data.product_Name}}</td>
-    <td>{{data.category}}</td>
-    <td>{{data.subcategory}}</td>
+    <td>{{data.name}}</td>
+    <td>{{GetCategoryName(data.category_ID)}}</td>
+    <td>{{GetSubCategoryName(data.subCategory_ID)}}</td>
     <td>{{data.price}}</td>
     <td>{{data.quantity}}</td>
     <td>{{data.expiry}}</td>
@@ -51,6 +51,6 @@
 
 
 
-      <ion-button  [routerLink]="['/view-write-off']" (click)="createWriteOff()">Submit write Off</ion-button>
+      <ion-button  [disabled]="!form.valid" (click)="createWriteOff()">Submit write Off</ion-button>
    
     </div>

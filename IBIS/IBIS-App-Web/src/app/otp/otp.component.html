@@ -2,8 +2,9 @@
     <div class="otp-page">
         <form [formGroup]="otpForm" class="otp-form">
             <ion-button fill="clear" (click)="BackToLogin()">Back to Login</ion-button>
-            <h2>A one-time-pin (OTP) has been sent to you.</h2>
-            <h3>Enter the OTP in the field below.</h3>
+            <h2 >{{title}}</h2>
+            <!-- <h3 *ngIf="sent">{{Enter the OTP in the field below.}}</h3>
+            <h2 *ngIf="!sent">{{Click to send One Time Pin}}</h2> -->
             <ion-input formControlName="otp" type="text" placeholder="XXXX" clearInput autocorrect="off" debounce="500"></ion-input>
             <ion-note class="error-message" *ngIf="otpForm.get('otp')?.hasError('invalidOTP') && otpForm.get('otp')?.touched">
                 Please enter a valid 6-digit OTP.

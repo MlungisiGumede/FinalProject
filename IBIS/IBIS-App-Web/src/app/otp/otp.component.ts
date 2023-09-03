@@ -6,6 +6,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { LoginService } from '../Services/login.service';
 import { ReactiveFormsModule } from '@angular/forms';
 import { AuthenticationService } from '../Services/authentication.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-otp',
@@ -19,10 +20,14 @@ export class OtpComponent implements OnInit {
   otp :any;
   otpForm!: FormGroup;
   username:any
+  sent = false
+  title1 = "A one-time-pin (OTP) has been sent to you."
+  title2 = "Click to send One Time Pin"
+  title:any = this.title2
   user:User = new User()
   
   constructor(private loginservice: LoginService,private fb: FormBuilder, private router: Router,private toastController: ToastController
-    ,private ActivatedRoute: ActivatedRoute) { }
+    ,private ActivatedRoute: ActivatedRoute,private _snackbar: MatSnackBar) { }
 
   ngOnInit(): void {
 
@@ -64,12 +69,13 @@ export class OtpComponent implements OnInit {
         //this.presentToast('top')
         //alert(res.message)
         this.otp = res
+        this.title = this.title1
         //console.log(res['otpNumber'])
         //this.otp = res['otpNumber']
         //localStorage.setItem('OTP', res)
   })
 ,(err:any)=>{
-  console.log("there is error")
+  this.ShowSnackBar('Failed to send OTP: try again', 'error')
 }
   }
   
@@ -87,12 +93,21 @@ export class OtpComponent implements OnInit {
     })
   }
     else{
-      this.presentToast('top',"The OTP is Invalid",this.otp)
+      this.ShowSnackBar('OTP entered is incorrect', 'error')
     }
+
+    
     
      
    
 
+  }
+  ShowSnackBar(message: string, panel: string) {
+    this._snackbar.open(message, "close", {
+      duration: 5000,
+      panelClass: [panel]
+      
+    });
   }
   SubmitAndSetTimer(){
     console.log(localStorage.getItem('Token'))

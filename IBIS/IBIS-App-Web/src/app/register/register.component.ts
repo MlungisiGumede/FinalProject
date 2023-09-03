@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { LoginService } from '../Services/login.service';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 
 @Component({
@@ -14,7 +15,7 @@ export class RegisterComponent implements OnInit {
   //registerForm! : FormGroup
   submitted = false;
 
-  constructor(private register: LoginService, private fb: FormBuilder,private router:Router) { }
+  constructor(private register: LoginService, private fb: FormBuilder,private router:Router, private _snackbar: MatSnackBar) { }
   registerForm!: FormGroup ;
 
   ngOnInit(): void {
@@ -61,18 +62,27 @@ onSubmit(){
     this.register.Register(this.registerForm.value).subscribe(
        (res)=>{
         console.log(res)
-        alert("User successfully registered")
+        this.ShowSnackBar("User successfully registered", "success")
         //alert(res.message)
        
       this.router.navigate(['/Login'])
        },
       (err) =>{
-        alert("Couldnt Register please try again")
+        //console.log(err)
+        this.ShowSnackBar("Couldnt Register please try again", "error")
       }
     )
   
   
   
+  }
+
+  ShowSnackBar(message: string, panel: string) {
+    this._snackbar.open(message, "close", {
+      duration: 5000,
+      panelClass: [panel]
+      
+    });
   }
 
   

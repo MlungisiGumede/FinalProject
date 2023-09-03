@@ -279,7 +279,7 @@ CheckOrderStatus(){
 
   async delete(element: any){
     
-  if(this.customerOrders){
+  if(this.isCustomerOrder){
     
     this.orderservice.DeleteCustomerOrder(element.customerOrder_ID).subscribe((Response:any) => {
       console.log(Response);
@@ -289,6 +289,10 @@ CheckOrderStatus(){
       //this.data = Response;
       //this.getOrders();
     }else{
+      this.orderservice.DeleteSupplierOrder(element.supplierOrder_ID).subscribe((Response:any) => {
+        console.log(Response);
+        this.ReadOrders()
+      })
       // let supplierOrder = this.supplierOrders[rowIndex]
       // this.orderservice.delete(supplierOrder.supplierOrder_ID).subscribe(Response => {
       //   console.log(Response)

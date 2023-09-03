@@ -189,8 +189,15 @@ export class OrdersService {
         //   this.httpClient.delete(this.apiUrl + '/DeleteCustomerOrder' + id).pipe(tap(res => console.log(res))),
         //   this.httpClient.delete(this.apiUrl + '/DeleteCustomerOrderLine' + id).pipe(tap(res => console.log(res))),
         // ])
-        return this.httpClient.delete(this.manytoManyAPIUrl + '/' + id).pipe(tap(res => console.log(res)))
+        return this.httpClient.delete(this.manytoManyAPIUrl + '/deleteCustomerOrder/' + id).pipe(tap(res => console.log(res)))
      }
+     DeleteSupplierOrder(id:number):Observable<any>{
+      // return forkJoin([
+      //   this.httpClient.delete(this.apiUrl + '/DeleteCustomerOrder' + id).pipe(tap(res => console.log(res))),
+      //   this.httpClient.delete(this.apiUrl + '/DeleteCustomerOrderLine' + id).pipe(tap(res => console.log(res))),
+      // ])
+      return this.httpClient.delete(this.manytoManyAPIUrl + '/deleteSupplierOrder/' + id).pipe(tap(res => console.log(res)))
+   }
 
 
 

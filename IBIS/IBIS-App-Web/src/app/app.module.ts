@@ -159,7 +159,7 @@ import { AddCategoryComponent } from './add-category/add-category.component';
       {path: 'customer', component: CustomersComponent,canActivate : [AuthGuardService]},
     {path: 'otp', component: OtpComponent, canActivate : [AuthGuardService]},
       {path: 'otp/:username', component: OtpComponent,canActivate : [AuthGuardService]},
-      {path:'view-write-off/:id',component:ViewWriteOffsComponent,canActivate : [AuthGuardService]},
+      //{path:'view-write-off/:id',component:ViewWriteOffsComponent,canActivate : [AuthGuardService]},
       {path: 'timer', component: TimerComponent },
       {path: 'timer/:username', component: TimerComponent }
 

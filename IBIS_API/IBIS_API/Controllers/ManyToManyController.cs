@@ -371,7 +371,9 @@ public async Task<ActionResult> PostCustomerOrder(CustomerOrderViewModel? ord)
         }
         // [HttpDelete("{id}")]
 
-        [HttpDelete("{id}")]
+
+        [HttpDelete]
+        [Route("deleteCustomerOrder/{id:int}")]
         public async Task<IActionResult> DeleteCustomerOrder(int id)
         {
             var order = await _context.CustomerOrders.FindAsync(id);
@@ -383,7 +385,20 @@ public async Task<ActionResult> PostCustomerOrder(CustomerOrderViewModel? ord)
             return NoContent();
         }
 
-     
+        [HttpDelete]
+        [Route("deleteSupplierOrder/{id:int}")]
+        public async Task<IActionResult> DeleteSupplierOrder(int id)
+        {
+            var order = await _context.Supplier_Orders.FindAsync(id);
+            _context.Remove(order);
+
+            var orderLines = _context.SupplierOrderLines.Where(c => c.SupplierOrder_ID == id).Select(c => c).ToList();
+            _context.SupplierOrderLines.RemoveRange(orderLines);
+            await _context.SaveChangesAsync();
+            return NoContent();
+        }
+
+
 
 
     }

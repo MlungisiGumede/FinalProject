@@ -4,6 +4,7 @@ import { User } from '../Models/User';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Route, Router } from '@angular/router';
 import { ToastController } from '@ionic/angular';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-login',
@@ -16,7 +17,8 @@ export class LoginComponent implements OnInit {
   name ="";
   loginForm!: FormGroup;
   
-  constructor(private loginservice: LoginService,private fb: FormBuilder, private router: Router,private toastController: ToastController) {
+  constructor(private loginservice: LoginService,private fb: FormBuilder, private router: Router,private toastController: ToastController,
+    private _snackbar: MatSnackBar) {
 
 
     loginservice = {} as LoginService;
@@ -48,26 +50,32 @@ console.log(val)
     this.loginservice.login(user).subscribe({
       next: ()=>{
         console.log(this.name)
+        this.ShowSnackBar('Successfully Logged in', 'success')
         this.router.navigate(['/otp',username]);
       },
       error:(err) =>{
         
         //alert(err?.error.message)
         console.log(err)
-        this.presentUnsuccessfulToast('top')
-        this.loginForm.reset();
+        this.ShowSnackBar('Login failed', 'error')
+        //this.loginForm.reset();
       }
     })
   
 
 
-  if(this.loginForm.invalid){
-    this.presentUnsuccessfulToast('top')
+ 
+  
     
   }
-  this.loginForm.reset();
-    
+  ShowSnackBar(message: string, panel: string) {
+    this._snackbar.open(message, "close", {
+      duration: 5000,
+      panelClass: [panel]
+      
+    });
   }
+
 
 
   getUsers(){
