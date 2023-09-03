@@ -15,7 +15,7 @@ import { AddSupplierOrderComponent } from '../add-supplier-order/add-supplier-or
 export class AddSupplierComponent implements OnInit {
   data: any;
   sup!: Supplier;
-  form!:FormGroup
+  supform!:FormGroup
   constructor(private supply: SupplierService,public router:Router,private toastController: ToastController
     ,public matDialogRef:MatDialogRef<AddSupplierOrderComponent>) { 
 
@@ -24,7 +24,7 @@ this.data = new Supplier();
   }
 
   ngOnInit(): void {
-  this.form = new FormGroup({
+  this.supform = new FormGroup({
     name: new FormControl('', Validators.required),
     address: new FormControl('', Validators.required),
     phone: new FormControl('', [Validators.minLength(10),Validators.maxLength(10),Validators.pattern("^[0-9]*$")]),
@@ -35,10 +35,10 @@ this.data = new Supplier();
 
 createSupplier(){
 let supplier = new Supplier()
-supplier.name = this.form.controls['name'].value
-supplier.address = this.form.controls['address'].value
-supplier.phone = this.form.controls['phone'].value
-supplier.email = this.form.controls['email'].value
+supplier.name = this.supform.controls['name'].value
+supplier.address = this.supform.controls['address'].value
+supplier.phone = this.supform.controls['phone'].value
+supplier.email = this.supform.controls['email'].value
 this.supply.createSupplier(supplier).subscribe(res=>{
 console.log("success", res);
 this.matDialogRef.close(true)
@@ -46,6 +46,13 @@ this.matDialogRef.close(true)
   this.matDialogRef.close(false)
 }
 
+}
+
+submitSuppForm(){
+  if(this.supform.valid){
+    this.createSupplier();
+    console.log('Form is valid, submitting...');
+  }
 }
 
 async presentToast(position: 'top' | 'middle' | 'bottom') {
