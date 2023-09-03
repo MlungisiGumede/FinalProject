@@ -13,7 +13,7 @@ export class RecipesComponent implements OnInit {
   recipe: Recipe[] = [];
   idtodelete :any;
   filterTerm!: string;
-
+  isModalOpen = false;
 
   constructor(private recService: RecipeService,public router: Router,private toastController: ToastController) {
     recService = {} as RecipeService;
@@ -30,6 +30,9 @@ export class RecipesComponent implements OnInit {
     })
     
 
+  }
+  setOpen(isOpen: boolean) {
+    this.isModalOpen = isOpen;
   }
 
 
