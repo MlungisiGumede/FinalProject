@@ -57,7 +57,7 @@ export class InventoryComponent implements OnInit {
         if(result){
           this.ShowSnackBar('Inventory successfully updated','success')
           this.getInventory();
-        }else{
+        }else if(result==false){
           this.ShowSnackBar('Inventory could not be updated','error')
         }
       }), (error:any) => {
@@ -142,7 +142,7 @@ this.getInventory();
         if(result){
           this.ShowSnackBar('Inventory successfully added','success')
           this.getInventory();
-        }else{
+        }else if(result==false){
           this.ShowSnackBar('Inventory could not be added','error')
         }
       }), (error:any) => {

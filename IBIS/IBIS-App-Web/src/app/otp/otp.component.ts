@@ -30,7 +30,8 @@ export class OtpComponent implements OnInit {
     ,private ActivatedRoute: ActivatedRoute,private _snackbar: MatSnackBar) { }
 
   ngOnInit(): void {
-
+console.log(this.ActivatedRoute.root)
+console.log(this.router.url)
     this.otpForm = this.fb.group({
 
       otp : ['', [Validators.required, this.otpValidator.bind(this)]]

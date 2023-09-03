@@ -230,7 +230,7 @@ public async Task<ActionResult> PostCustomerOrder(CustomerOrderViewModel? ord)
                     {
                         var inventory = _context.Inventories.Where(c => c.Inventory_ID == orderLine.Inventory_ID).First(); // referential thingy...
                         var supplier = _context.Suppliers.Where(c => c.Supplier_ID == order.Supplier_ID).First();
-                        var orderStatus = _context.OrderStatusList.Where(c => c.OrderStatus_ID == order.OrderStatus_ID).First();
+                        //var orderStatus = _context.OrderStatusList.Where(c => c.OrderStatus_ID == order.OrderStatus_ID).First();
                         // find order and find product
                         var split = order.Date_Created.Split(' ');
                         var date = new DateTime();
