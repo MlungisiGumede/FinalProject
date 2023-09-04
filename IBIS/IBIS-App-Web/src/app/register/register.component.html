@@ -1,8 +1,25 @@
-<div class="help-circle">
-  <ion-button>
-    <ion-icon name="help-circle"></ion-icon>
-  </ion-button>
-</div>
+<ion-button (click)="setOpen(true)">
+  <ion-icon name="help-circle"></ion-icon>
+  <ion-content class="ion-padding">
+    <ion-modal [isOpen]="isModalOpen">
+      <ng-template>
+        <ion-header>
+          <ion-toolbar>
+            <ion-title>Modal</ion-title>
+            <ion-buttons slot="end">
+              <ion-button (click)="setOpen(false)">Close</ion-button>
+            </ion-buttons>
+          </ion-toolbar>
+        </ion-header>
+        <p>To register as a new user, follow these steps: Visit the registration
+           page and enter a unique username, your full legal name, a valid email address, 
+           and a strong password. Verify your email by clicking the link sent to your inbox. 
+           Congratulations, you're now a registered user and can log in using your username and password. 
+           If you need assistance, contact our support team.</p>
+      </ng-template>
+    </ion-modal>
+  </ion-content>
+</ion-button>
 <body>
 <div class="container" >
  <div class="title"  readonly>Register</div>

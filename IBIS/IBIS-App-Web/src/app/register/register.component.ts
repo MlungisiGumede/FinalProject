@@ -14,6 +14,7 @@ export class RegisterComponent implements OnInit {
 
   //registerForm! : FormGroup
   submitted = false;
+  isModalOpen = false;
 
   constructor(private register: LoginService, private fb: FormBuilder,private router:Router, private _snackbar: MatSnackBar) { }
   registerForm!: FormGroup ;
@@ -32,6 +33,9 @@ this.registerForm = this.fb.group({
 })
 
 
+  }
+  setOpen(isOpen: boolean) {
+    this.isModalOpen = isOpen;
   }
 
 async BackToLogin(){
