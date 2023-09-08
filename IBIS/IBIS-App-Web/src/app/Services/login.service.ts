@@ -10,7 +10,7 @@ import { User } from '../Models/User';
 export class LoginService  {
 
   private loginstate: BehaviorSubject<boolean>;
-
+   public user:any = new BehaviorSubject<any>(null)
 
 
 //const headers
@@ -20,6 +20,9 @@ export class LoginService  {
 
   constructor(private httpClient: HttpClient) { 
     this.loginstate = new BehaviorSubject<boolean>(false);
+  }
+  public SetNewPassWord(user:User){
+    return this.httpClient.post<User>(`${this.apiUrl}setNewPassWord`,user)
   }
 
   

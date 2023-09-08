@@ -51,7 +51,9 @@ console.log(val)
       next: ()=>{
         console.log(this.name)
         this.ShowSnackBar('Successfully Logged in', 'success')
-        this.router.navigate(['/otp',username]);
+        this.loginservice.user.next(user);
+        
+        this.router.navigate(['/otp'])
       },
       error:(err) =>{
         

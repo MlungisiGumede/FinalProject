@@ -7,6 +7,8 @@ import { LoginService } from '../Services/login.service';
 import { ReactiveFormsModule } from '@angular/forms';
 import { AuthenticationService } from '../Services/authentication.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { AuthGuardService } from '../Services/auth-guard.service';
+import { throwToolbarMixedModesError } from '@angular/material/toolbar';
 
 @Component({
   selector: 'app-otp',
@@ -25,9 +27,16 @@ export class OtpComponent implements OnInit {
   title2 = "Click to send One Time Pin"
   title:any = this.title2
   user:User = new User()
+  previousUrl:any
   
   constructor(private loginservice: LoginService,private fb: FormBuilder, private router: Router,private toastController: ToastController
-    ,private ActivatedRoute: ActivatedRoute,private _snackbar: MatSnackBar) { }
+    ,private ActivatedRoute: ActivatedRoute,private _snackbar: MatSnackBar,private authGuardservice:AuthGuardService) { 
+      this.authGuardservice.previousUrl.subscribe(previousUrl=>{
+        this.previousUrl = previousUrl
+        console.log(this.previousUrl)
+
+    })
+  }
 
   ngOnInit(): void {
 console.log(this.ActivatedRoute.root)
@@ -62,9 +71,9 @@ console.log(this.router.url)
   this.router.navigate(['/Login'])
   }
   SendOTP(){
-   
+    this.GetUser()
     console.log("OTP method")
-    this.loginservice.SendOTP(this.username).subscribe((res)=>{
+    this.loginservice.SendOTP(this.user.username).subscribe((res)=>{
      
         console.log(res)
         //this.presentToast('top')
@@ -84,7 +93,9 @@ console.log(this.router.url)
     console.log(this.otpForm.value)
     let otp = this.otpForm.controls['otp'].value
     if(otp==this.otp){
+      
       console.log(this.user)
+      if(this.previousUrl == "/Login"){
       this.loginservice.Authenticate(this.user).subscribe((res)=>{
        
           localStorage.setItem('Token', JSON.stringify(res))
@@ -92,17 +103,28 @@ console.log(this.router.url)
        
      
     })
+      }else{
+        this.loginservice.SetNewPassWord(this.user).subscribe((res)=>{
+          this.router.navigate(['/Login'])
+        }), (error:any) => {
+          this.ShowSnackBar("failed to update password", "error");
+        }
+      }
   }
     else{
       this.ShowSnackBar('OTP entered is incorrect', 'error')
     }
-
-    
-    
-     
-   
-
   }
+async GetUser(){
+  let value = new Promise((resolve,reject)=>{
+  this.loginservice.user.subscribe((res:any)=>{
+    console.log(res)
+    this.user = res
+  })
+  
+  })
+  await value
+}
   ShowSnackBar(message: string, panel: string) {
     this._snackbar.open(message, "close", {
       duration: 5000,

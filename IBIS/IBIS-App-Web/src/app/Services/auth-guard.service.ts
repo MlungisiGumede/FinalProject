@@ -2,17 +2,20 @@ import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivate, ResolveStart, Router, RouterStateSnapshot } from '@angular/router';
 import { AuthenticationService } from './authentication.service';
 import { LoginService } from './login.service';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthGuardService implements CanActivate {
+  public previousUrl:BehaviorSubject<string> = new BehaviorSubject<string>('');
 
   constructor(private _router:Router,private loginService:LoginService,private authenticationService:AuthenticationService) { }
 
    canActivate(route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Promise<boolean> {
+      this.previousUrl = new BehaviorSubject(this._router.url)
+
 console.log(route.routeConfig?.path)
 return new Promise((resolve, reject) => {
   let path = route.routeConfig?.path;

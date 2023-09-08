@@ -120,6 +120,21 @@ namespace IBIS_API.Controllers
                 user = user.UserName
             });
         }
+        [HttpPost]
+        [Route("setNewPassword")]
+        // [ValidateAntiForgeryToken]
+        public async Task<ActionResult> SetNewPassword(User_Account uvm)
+        {
+            //UserManager<IdentityUser> userManager = new UserManager<IdentityUser>(new UserStore<IdentityUser>());
+            // var result = _userManager.ChangePassword(_User.Id, userNewPassword, userView.Password);
+            // _userManager.ChangePasswordAsync()
+            var user = await _userManager.FindByNameAsync(uvm.Username);
+            //string resetToken = await _userManager.GeneratePasswordResetTokenAsync(user);
+            //IdentityResult passwordChangeResult = await _userManager.ResetPasswordAsync(user, resetToken, uvm.Password);
+            user.PasswordHash = _userManager.PasswordHasher.HashPassword(user, uvm.Password);
+            var result = await _userManager.UpdateAsync(user);
+            return Ok();
+        }
 
         [HttpGet]
         [Route("CheckAuthentication")]
