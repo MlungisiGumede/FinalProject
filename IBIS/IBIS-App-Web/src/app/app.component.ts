@@ -3,6 +3,7 @@ import {MatToolbarModule} from '@angular/material/toolbar';
 import { NavigationError, NavigationStart, Router } from '@angular/router';
 import { LoginService } from './Services/login.service';
 import { AuthenticationService } from './Services/authentication.service';
+import { AuthGuardService } from './Services/auth-guard.service';
 
 
 
@@ -26,37 +27,45 @@ export interface userprofile {
 export class AppComponent implements OnInit {
   logged=false;
   search : String ="";
-  showNavigation:any
+  public showNavigation:any
   selectedValue:any
   url:any
+  showLogOut:any
 
 constructor(private loginService : LoginService, public router: Router,
-  private authenticationService: AuthenticationService) {
+  private authenticationService: AuthenticationService,
+  private authGuardService:AuthGuardService) {
 
 }
   ngOnInit(): void {
-
-    this.router.events.forEach((event) => {
-      if (event instanceof NavigationStart) {
-        console.log(event['url'])
-        
-          // console.log("NU")
-          this.authenticationService.Authenticate().then((success) => {
-            this.showNavigation = true;
-          }, (error) => {
-            if(error.status == 401){
-              this.showNavigation = false;
-            }else{
-              this.showNavigation = true;
-            }
+  this.authGuardService.showNavigation.subscribe((showNavigation) => {
+    this.showNavigation = showNavigation
+  })
+  this.authGuardService.showLogOut.subscribe((showLogOut) => {
+    console.log(showLogOut)
+    this.showLogOut = showLogOut
+  })
+//     this.router.events.forEach((event) => {
+//       if (event instanceof NavigationStart) {
+//         console.log(event['url'])
+          
+//           // console.log("NU")
+//           this.authenticationService.Authenticate().then((success) => {
+//             this.showNavigation = true;
+//           }, (error) => {
+//             if(error.status == 401){
+//               this.showNavigation = false;
+//             }else{
+//               this.showNavigation = true;
+//             }
            
-          })
-          //this.showNavigation = true;
-      if(event instanceof NavigationError){
-        this.showNavigation = false;
-    }
-  }
-})
+//           })
+//           //this.showNavigation = true;
+//       if(event instanceof NavigationError){
+//         this.showNavigation = false;
+//     }
+//   }
+// })
 } 
 
     

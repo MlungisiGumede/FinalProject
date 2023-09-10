@@ -64,17 +64,22 @@ else {
     }
     async Authenticate():Promise<any>{
       let bool = false
+      // if(!localStorage.getItem("Role")){
+      //   localStorage.removeItem("Token")
+      // }
       let val = new Promise((resolve,reject) =>{
      let req =  this.httpClient.get(`${this.apiUrl}CheckAuthentication`,{observe: 'response'}).pipe(
         map((res) =>{
          
           //return resolve("success")
-          resolve("success")
+          resolve(res)
           bool=true
         }),
         catchError((err) =>{
           { // just check numbers of errors for client side and server side...
             //return reject("Client side error: Couldn't connect to server (API)") // check actual codes and maybe do this differently
+            console.log("error is here")
+            console.log(err)
              reject(err)
             bool=false
            // 
@@ -86,8 +91,8 @@ else {
       ).subscribe()
       })
 await val;
-
-return val;
+//console.log("after await")
+//return val;
 }
   
     constructor(private router: Router,private httpClient: HttpClient) {

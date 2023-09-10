@@ -42,7 +42,7 @@ builder.Services.AddIdentity<AppUser, IdentityRole>(options =>
     //options.User.re
 })
 .AddEntityFrameworkStores<DataContextcs>()
-.AddDefaultTokenProviders();
+.AddDefaultTokenProviders().AddRoles<IdentityRole>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddControllersWithViews()
@@ -56,8 +56,11 @@ builder.Services.AddAuthentication()
                 .AddCookie()
                 .AddJwtBearer(options =>
                 {
+                    options.SaveToken = true;
                     options.TokenValidationParameters = new TokenValidationParameters()
                     {
+                        ValidateIssuer = true,
+                        ValidateAudience = true, // https://www.c-sharpcorner.com/article/jwt-json-web-token-authentication-in-asp-net-core/
                         ValidIssuer = builder.Configuration["Tokens:Issuer"],
                         ValidAudience = builder.Configuration["Tokens:Audience"],
                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Tokens:Key"])),

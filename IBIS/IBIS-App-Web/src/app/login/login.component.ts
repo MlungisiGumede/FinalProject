@@ -48,12 +48,25 @@ console.log(val)
   //user.password = this.loginForm.controls['password'].value
   
     this.loginservice.login(user).subscribe({
-      next: ()=>{
+      next: (res)=>{
         console.log(this.name)
+        console.log(res)
+        if(res.roleName == "guest"){
+          this.loginservice.Authenticate(user).subscribe( (res=>{
+            console.log(res.token)
+            // did it the other way to access the user from Json object or why did he put user with the token...
+            localStorage.setItem('Token',JSON.stringify(res))
+            this.router.navigate(['/customer-view'])
+          })
+            
+          )
+        }else{
+          this.router.navigate(['/otp'])
+        }
         this.ShowSnackBar('Successfully Logged in', 'success')
         this.loginservice.user.next(user);
         
-        this.router.navigate(['/otp'])
+       
       },
       error:(err) =>{
         

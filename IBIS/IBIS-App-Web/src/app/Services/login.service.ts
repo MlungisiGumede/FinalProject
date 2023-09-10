@@ -24,7 +24,9 @@ export class LoginService  {
   public SetNewPassWord(user:User){
     return this.httpClient.post<User>(`${this.apiUrl}setNewPassWord`,user)
   }
-
+public GetUserRole(){
+  return this.httpClient.get<any>(`${this.apiUrl}getUserRole`)
+}
   
 
   httpOptions = {

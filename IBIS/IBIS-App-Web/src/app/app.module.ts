@@ -65,6 +65,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { TimerComponent } from './timer/timer.component';
 import { AddSubCategoryComponent } from './add-sub-category/add-sub-category.component';
 import { AddCategoryComponent } from './add-category/add-category.component';
+import { CustomerViewComponent } from './customer-view/customer-view.component';
 
 
 @NgModule({
@@ -160,8 +161,9 @@ import { AddCategoryComponent } from './add-category/add-category.component';
     {path: 'otp', component: OtpComponent, canActivate : [AuthGuardService]},
       {path: 'otp/:username', component: OtpComponent,canActivate : [AuthGuardService]},
       //{path:'view-write-off/:id',component:ViewWriteOffsComponent,canActivate : [AuthGuardService]},
-      {path: 'timer', component: TimerComponent },
-      {path: 'timer/:username', component: TimerComponent }
+      {path: 'timer', component: TimerComponent,canActivate : [AuthGuardService]},
+      //{path: 'timer/:username', component: TimerComponent },
+      {path: 'customer-view', component: CustomerViewComponent,canActivate : [AuthGuardService]},
 
 
       
