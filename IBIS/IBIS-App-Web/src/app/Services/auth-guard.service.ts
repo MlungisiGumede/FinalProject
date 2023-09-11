@@ -15,18 +15,19 @@ export class AuthGuardService implements CanActivate {
   LogInRequest:any
   path:any
   role:any
-  constructor(private _router:Router,private loginService:LoginService,private authenticationService:AuthenticationService) { }
+  constructor(private _router:Router,private loginService:LoginService,private authenticationService:AuthenticationService) {
+  }
 
    canActivate(route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Promise<boolean> {
       this.previousUrl = new BehaviorSubject(this._router.url)
-
+     
 console.log(route.routeConfig?.path)
 return new Promise((resolve, reject) => {
 
   let path = route.routeConfig?.path;
   this.path = route.routeConfig?.path;
-  this.ShowNavigation()
+  //this.ShowNavigation()
   // disabled routes method
  // could get user role here...
   this.authenticationService.Authenticate().then((success) => {
@@ -34,37 +35,52 @@ return new Promise((resolve, reject) => {
     console.log(success)
     this.GetUserRole().then((role) => {
       console.log(role)
-      if(this.DisableRoutes(role)){ // disabled routes based on role
+      if(this.IsDisabledRoute(role)){ // disabled routes based on role
         console.log("disabled")
         resolve(false) // disabled before others...
-      }
-      if(this.LoginRequest(role,true)){ // navigated to log user in based on role
+      }// put the below method in the disable method?
+      else if(this.LoginRequest(role,true)){ // navigated to log user in based on role
         console.log("log in request")
         resolve(false) // logged in and authenticated so disable
         
+      // }else if(!this.ValidRequest()){ // pass in the role
+      //   //this._router.navigate(['/home'])
+      //   console.log("wrong")
+      //   resolve(false)
       }
-    })
-    console.log("reaching resolve")
-    resolve(true) // because login disabled and other roles routes disabled
+      else{
+        this.ShowNavigation()
+        resolve(true)
+      }
+    }
+    )
   }).catch((error:any) => {
-    console.log(error)
-    console.log("error is here")
     if(error.status==401){ 
       
       if(this.ValidRequest()){ // through code to OTP or Timer
+        this.ShowNavigation() // cant access route without code...?..? so not needed to check user role...
+        console.log("nope")
         resolve(true)
         
       }
-            resolve(false) // take this out later maybe
+    else if(this.LoginRequest(this.role,false)){
+      console.log("infinite")
+      resolve(true)
+    }else{
+      this._router.navigate(['/Login'])
+      resolve(false)
+    }
+             // take this out later maybe
           
     }
-           
-            resolve(false)
+   
   })
       
        
         }
 )}
+
+
         
   ShowNavigation(){
     if(this.path=="Login" || this.path=="" || this.path=="otp" || this.path=="timer" || this.path=="customer-view"){
@@ -73,6 +89,7 @@ return new Promise((resolve, reject) => {
       console.log("hi")
     }else{
       this.showNavigation.next(true)
+      this.showLogOut.next(true)
     }if(this.path == "customer-view"){
       this.showLogOut.next(true)
    
@@ -82,15 +99,19 @@ return new Promise((resolve, reject) => {
 }
 
    
-   DisableRoutes(role:any){
+   IsDisabledRoute(role:any){
     let disabled = false
+    console.log(this.path)
     if(role == "guest"){
-    if(this.path=="/view-customer" || this.path=="/Login" || this.path==""){
+    if(this.path=="customer-view" || this.path=="Login" || this.path==""){
     }else{
       disabled = true
     }
   }else{
-    if(this.path=="/view-customer"){
+    console.log(this.path)
+    if(this.path=="customer-view" || this.path=="otp" || this.path=="timer"){ // didnt disable otp when logged in...
+      console.log("hit")
+      this._router.navigate(['/home'])
       disabled =  true
     }
   }
@@ -117,29 +138,31 @@ return new Promise((resolve, reject) => {
         
         return true
        }else{ // going through this logic...
-        console.log("shouldnt be here")
-        this._router.navigate(['/home'])
-      
-       logInRequest = false
-        
+        console.log("Logged in manager")
+        this._router.navigate(['/home'])  
       }
+    }else{
+      
+      //this._router.navigate(['/Login'])
     }
   }
   return logInRequest
 }  
 ValidRequest(){
-  let value = true
+  let value = false
   if(this.path?.startsWith("otp") || this.path?.startsWith("timer")){
     if(this._router.url=="/"){
       this._router.navigate(['/Login'])
       value = false
     }
     console.log(this.path)
-    if(this._router.url=="/Login" || this._router.url=="/"){
+    if(this._router.url=="/Login" || this._router.url=="/otp"){
       console.log("in here")
       value = true
     }
    
+  }if(!value){
+    //this._router.navigate(['/Login'])
   }
   return value
 }

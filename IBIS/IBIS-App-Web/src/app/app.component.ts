@@ -41,6 +41,7 @@ constructor(private loginService : LoginService, public router: Router,
   this.authGuardService.showNavigation.subscribe((showNavigation) => {
     this.showNavigation = showNavigation
   })
+  
   this.authGuardService.showLogOut.subscribe((showLogOut) => {
     console.log(showLogOut)
     this.showLogOut = showLogOut
@@ -126,7 +127,10 @@ constructor(private loginService : LoginService, public router: Router,
   IsLogOut(){
   if(this.selectedValue == 'user-2'){
     localStorage.removeItem('Token')
-    localStorage.removeItem('OTP')
+    //localStorage.removeItem('OTP')
+    this.showNavigation = false
+    this.showLogOut = false
+    //this.authGuardService.ShowNavigation()
     this.router.navigate(['/Login'])
   }
   }

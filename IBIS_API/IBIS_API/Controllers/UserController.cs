@@ -24,7 +24,7 @@ using System.Configuration;
 
 namespace IBIS_API.Controllers
 {
-   
+
 
 
     [Route("api/[controller]")]
@@ -48,12 +48,12 @@ namespace IBIS_API.Controllers
         private RoleManager<IdentityRole> _roleManager;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public UserController(DataContextcs context,UserManager<AppUser> userManager, IUserClaimsPrincipalFactory<AppUser> claimsPrincipalFactory, IConfiguration configuration,
+        public UserController(DataContextcs context, UserManager<AppUser> userManager, IUserClaimsPrincipalFactory<AppUser> claimsPrincipalFactory, IConfiguration configuration,
             RoleManager<IdentityRole> roleManager, IHttpContextAccessor httpContextAccessor)
         {
             _context = context;
             _userManager = userManager;
-            _claimsPrincipalFactory = claimsPrincipalFactory; 
+            _claimsPrincipalFactory = claimsPrincipalFactory;
             _configuration = configuration;
             _roleManager = roleManager;
             _httpContextAccessor = httpContextAccessor;
@@ -61,8 +61,8 @@ namespace IBIS_API.Controllers
 
         }
 
-         [HttpGet]
-        private ActionResult GenerateJWTToken(AppUser user,string role)
+        [HttpGet]
+        private ActionResult GenerateJWTToken(AppUser user, string role)
         {
             // Create JWT Token
             var claims = new[]
@@ -90,7 +90,7 @@ namespace IBIS_API.Controllers
             {
                 token = new JwtSecurityTokenHandler().WriteToken(token),
                 user = user.UserName,
-                
+
             });
         }
         [HttpPost]
@@ -107,12 +107,12 @@ namespace IBIS_API.Controllers
 
 
         [HttpGet]
-        private ActionResult GenerateAdminJWTToken(AppUser user,double time)
+        private ActionResult GenerateAdminJWTToken(AppUser user, double time)
         {
             var expiresAt = DateTime.Now.Add(TimeSpan.FromMinutes(time));
             var tokenExpiredAtClaim = new Claim("ActivtationTokenExpiredAt", expiresAt.ToUniversalTime().Ticks.ToString());
             // Create JWT Token
-            var claims = new []
+            var claims = new[]
             {
                 new Claim(JwtRegisteredClaimNames.Sub, user.Email),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
@@ -130,8 +130,8 @@ namespace IBIS_API.Controllers
                 claims,
                 signingCredentials: credentials,
                expires: DateTime.Now.AddHours(time)
-                //tokenLifeSPan = 
-               // expires: DateTime.UtcNow.AddMinutes(time)
+            //tokenLifeSPan = 
+            // expires: DateTime.UtcNow.AddMinutes(time)
             );
             //DateTime.UtcNow.
             var tokenLook = new JwtSecurityTokenHandler().WriteToken(token);
@@ -139,7 +139,7 @@ namespace IBIS_API.Controllers
             {
                 token = new JwtSecurityTokenHandler().WriteToken(token),
                 user = user.UserName,
-                
+
             });
         }
         [HttpPost]
@@ -163,7 +163,7 @@ namespace IBIS_API.Controllers
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<ActionResult> CheckAuthentication()
         {
-            
+
             return Ok();
         }
         [HttpGet]
@@ -177,7 +177,7 @@ namespace IBIS_API.Controllers
             var userName = HttpContext.User.Identity.Name; // works as well
             var currentUser = _httpContextAccessor.HttpContext.User; // works
             var userClaims = User;
-                var username = userClaims.FindFirstValue(ClaimTypes.Name);
+            var username = userClaims.FindFirstValue(ClaimTypes.Name);
             var user = await _userManager.FindByNameAsync(username);
             var roles = await _userManager.GetRolesAsync(user);
             string roleName = roles.FirstOrDefault().ToString();
@@ -192,8 +192,8 @@ namespace IBIS_API.Controllers
         [HttpPost]
         [Route("SendOTP")]
 
-        public async Task<IActionResult> SendOTP( User_Account uvm){ // if failiure with otp then just log in...
-            int otp= 4;
+        public async Task<IActionResult> SendOTP(User_Account uvm) { // if failiure with otp then just log in...
+            int otp = 4;
             String Message = "hi";
             try
             {
@@ -258,8 +258,8 @@ namespace IBIS_API.Controllers
                 return BadRequest(error);
                 // retry in front end for emails if this happens...
             }
-                  return Ok(otp);
-            
+            return Ok(otp);
+
 
 
         }
@@ -269,19 +269,19 @@ namespace IBIS_API.Controllers
         {
             var user = await _userManager.FindByNameAsync(uvm.Username);
             var role = _userManager.GetRolesAsync(user).ToString();
-                try
-                {
-                    //var principal = await _claimsPrincipalFactory.CreateAsync(user);
-                    //await HttpContext.SignInAsync(IdentityConstants.ApplicationScheme, principal);
-                    return GenerateJWTToken(user,role);
-                }
-                catch (Exception)
-                {
-                    return StatusCode(StatusCodes.Status500InternalServerError, "Internal Server Error. Please contact support.");
-                }
-            
-          
-          
+            try
+            {
+                //var principal = await _claimsPrincipalFactory.CreateAsync(user);
+                //await HttpContext.SignInAsync(IdentityConstants.ApplicationScheme, principal);
+                return GenerateJWTToken(user, role);
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Internal Server Error. Please contact support.");
+            }
+
+
+
         }
         [HttpPost]
         [Route("AuthenticateAdmin")]
@@ -289,21 +289,21 @@ namespace IBIS_API.Controllers
         {
             double time = (double)uvm.time;
             var user = await _userManager.FindByNameAsync(uvm.Username);
-            
-                try
-                {
-                    //var principal = await _claimsPrincipalFactory.CreateAsync(user);
-                    //await HttpContext.SignInAsync(IdentityConstants.ApplicationScheme, principal);
-                    return GenerateAdminJWTToken(user,time);
-                }
-                catch (Exception)
-                {
-                    return StatusCode(StatusCodes.Status500InternalServerError, "Internal Server Error. Please contact support.");
-                }
-            }
-        
 
-        
+            try
+            {
+                //var principal = await _claimsPrincipalFactory.CreateAsync(user);
+                //await HttpContext.SignInAsync(IdentityConstants.ApplicationScheme, principal);
+                return GenerateAdminJWTToken(user, time);
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Internal Server Error. Please contact support.");
+            }
+        }
+
+
+
 
         [HttpPost]
         [Route("Login")]
@@ -314,19 +314,19 @@ namespace IBIS_API.Controllers
             if (user != null && await _userManager.CheckPasswordAsync(user, uvm.Password))
             {
                 var role = _userManager.GetRolesAsync(user);
-               // var name = _roleManager.FindByIdAsync(int32(role.Id));
+                // var name = _roleManager.FindByIdAsync(int32(role.Id));
                 //var roleId = (String)role.Id;
                 // var r =  role.Id
                 _roleManager.FindByNameAsync(uvm.Username);
-               // _roleManager.FindByIdAsync(roleId);
-              // var n = user.Roles.FirstOrDefault();
+                // _roleManager.FindByIdAsync(roleId);
+                // var n = user.Roles.FirstOrDefault();
                 var roles = await _userManager.GetRolesAsync(user);
-                 string roleName = roles.FirstOrDefault().ToString();
-                
+                string roleName = roles.FirstOrDefault().ToString();
+
                 //return Ok(roleName);
                 return Created("", new
                 {
-                   roleName = roleName
+                    roleName = roleName
                 });
             }
             else
@@ -334,6 +334,52 @@ namespace IBIS_API.Controllers
                 return NotFound("Does not exist");
             }
         }
+        [HttpGet]
+        [Route("CreateAdmin")] // protect this maybe through code or... can actually check which user is accessing the route...
+        public async Task<IActionResult> CreateAdmin()
+        {
+            var username = "u21482358";
+            var email = "u21482358@tuks.co.za";
+            var user = await _userManager.FindByIdAsync(username);
+
+            if (user == null)
+            {
+                user = new AppUser
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    UserName = username,
+                    Email = email,
+
+                };
+                if (!(await _roleManager.RoleExistsAsync("manager"))) // got from microsoft...
+                {
+                    await _roleManager.CreateAsync(new IdentityRole("manager"));
+                }
+                var result = await _userManager.CreateAsync(user, "123456");
+                //var roleResult = _userManager.AddToRoleAsync(user, role.Name);
+                // https://learn.microsoft.com/en-us/answers/questions/623030/assign-user-to-role-during-registration
+                if (result.Succeeded)
+                {
+                    var defaultrole = _roleManager.FindByNameAsync("manager").Result;
+
+                    if (defaultrole != null)
+                    {
+                        IdentityResult roleresult = await _userManager.AddToRoleAsync(user, defaultrole.Name);
+                    }
+
+
+                    if (result.Errors.Count() > 0) return StatusCode(StatusCodes.Status500InternalServerError, "Internal Server Error. Please contact support.");
+                }
+                else
+                {
+                    return Forbid("Account already exists.");
+                }
+
+
+            }
+            return Ok();
+        }
+        
 
         [HttpPost]
         [Route("Register")]
@@ -350,9 +396,9 @@ namespace IBIS_API.Controllers
                     Email = uvm.Email,
 
                 };
-                if (!(await _roleManager.RoleExistsAsync("manager"))) // got from microsoft...
+                if (!(await _roleManager.RoleExistsAsync("guest"))) // got from microsoft...
                 {
-                    await _roleManager.CreateAsync(new IdentityRole("manager"));
+                    await _roleManager.CreateAsync(new IdentityRole("guest"));
                 }
                 var role = _roleManager.FindByNameAsync("manager").Result;
                 var result = await _userManager.CreateAsync(user, uvm.Password);
@@ -360,7 +406,7 @@ namespace IBIS_API.Controllers
                 // https://learn.microsoft.com/en-us/answers/questions/623030/assign-user-to-role-during-registration
                 if (result.Succeeded)
                 {
-                    var defaultrole = _roleManager.FindByNameAsync("manager").Result;
+                    var defaultrole = _roleManager.FindByNameAsync("guest").Result;
 
                     if (defaultrole != null)
                     {
