@@ -335,6 +335,28 @@ namespace IBIS_API.Controllers
             }
         }
         [HttpGet]
+        [Route("getCustomerOrders")] // protect this maybe through code or... can actually check which user is accessing the route...
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        public async Task<IActionResult> getCustomerOrders()
+        {
+            var userClaims = User;
+            var username = userClaims.FindFirstValue(ClaimTypes.Name);
+            var user = await _userManager.FindByNameAsync(username);
+            var customer = _context.Customers.Where(c => c.Email == user.Email).First();
+            var ordersList = new List<CustomerOrder>();
+            foreach(var customerOrder in _context.CustomerOrders)
+            {
+                if(customerOrder.Customer_ID == customer.Customer_ID)
+                {
+                    ordersList.Add(customerOrder);
+                }
+            }
+            return Ok(ordersList);
+
+        }
+
+
+        [HttpGet]
         [Route("CreateAdmin")] // protect this maybe through code or... can actually check which user is accessing the route...
         public async Task<IActionResult> CreateAdmin()
         {
@@ -386,7 +408,19 @@ namespace IBIS_API.Controllers
         public async Task<IActionResult> Register(User_Account uvm)
         {
             var user = await _userManager.FindByIdAsync(uvm.Username);
-
+            var statusText = "Account already exists";
+            var customers = _context.Customers.ToList();
+            if (customers.Count == 0)
+            {
+                return BadRequest("Not registerd on the system");
+                
+            }
+            var customer =  _context.Customers.Where(c => c.Email == uvm.Email).FirstOrDefault();
+            if(customer == null)
+            {
+                return Forbid("Not registerd on the system");
+            }
+           
             if (user == null)
             {
                 user = new AppUser

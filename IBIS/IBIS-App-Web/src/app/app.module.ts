@@ -114,7 +114,8 @@ import { CustomerViewComponent } from './customer-view/customer-view.component';
     ReportsComponent,
     TimerComponent,
     AddCategoryComponent,
-    AddSubCategoryComponent
+    AddSubCategoryComponent,
+    CustomerViewComponent
    
     
   

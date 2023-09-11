@@ -68,11 +68,11 @@ console.log(val)
         
        
       },
-      error:(err) =>{
+      error:(err:any) =>{
         
         //alert(err?.error.message)
         console.log(err)
-        this.ShowSnackBar('Login failed', 'error')
+        this.ShowSnackBar("Login failed", 'error')
         //this.loginForm.reset();
       }
     })

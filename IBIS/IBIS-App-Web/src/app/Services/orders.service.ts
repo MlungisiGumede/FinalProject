@@ -98,7 +98,7 @@ export class OrdersService {
        getCustomerOrderLine(customerOrder: any): Observable<CustomerOrderLine[]> {
         console.log(customerOrder)
          return this.httpClient
-           .post<CustomerOrderLine[]>(this.apiUrl + '/getCustomerOrderLine', customerOrder)
+           .get<CustomerOrderLine[]>(this.apiUrl + '/getCustomerOrderLine')
            .pipe(
              retry(2),
              catchError(this.handleError)

@@ -72,6 +72,9 @@ return new Promise((resolve, reject) => {
     }
              // take this out later maybe
           
+    }else{
+      localStorage.removeItem("Token")
+      resolve(true)
     }
    
   })

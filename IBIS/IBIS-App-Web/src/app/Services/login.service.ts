@@ -27,6 +27,9 @@ export class LoginService  {
 public GetUserRole(){
   return this.httpClient.get<any>(`${this.apiUrl}getUserRole`)
 }
+public getCustomerOrders(){
+  return this.httpClient.get<any>(`${this.apiUrl}getCustomerOrders`)
+}
   
 
   httpOptions = {

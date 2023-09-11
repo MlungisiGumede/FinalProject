@@ -72,8 +72,9 @@ onSubmit(){
       this.router.navigate(['/Login'])
        },
       (err) =>{
-        //console.log(err)
-        this.ShowSnackBar("Couldnt Register please try again", "error")
+        
+        console.log(err)
+        this.ShowSnackBar(err.error, "error")
       }
     )
   
