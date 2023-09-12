@@ -7,6 +7,7 @@ import { CustomerService } from '../Services/customer.service';
 import { valueOrDefault } from 'chart.js/dist/helpers/helpers.core';
 import { DatePipe } from '@angular/common';
 import { DOCUMENT } from '@angular/common';
+import { Route, Router } from '@angular/router';
 
 declare let paypal:any;  
 
@@ -25,9 +26,10 @@ welcome:any
 total:any
 //paypal:any
 result:any
-script: HTMLScriptElement = new HTMLScriptElement;
-  constructor(private loginservice: LoginService,private orderservice: OrdersService,
-    private customerService:CustomerService,private renderer2: Renderer2, @Inject(DOCUMENT) private document: Document) { }
+//script: HTMLScriptElement = new HTMLScriptElement;
+  constructor(private loginservice: LoginService,private orderservice: OrdersService, private customerService:CustomerService
+    ,private _route:Router){}
+    //,private renderer2: Renderer2, @Inject(DOCUMENT) private document: Document) { }
 
   ngOnInit(): void {
   this.GetCustomerOrders().then((res) => {
@@ -64,14 +66,14 @@ script: HTMLScriptElement = new HTMLScriptElement;
     await value
     return value
   }
-  loadExternalScript2(){
-    this.script = this.renderer2.createElement('script');
-    this.script.src = "https://www.paypal.com/sdk/js?client-id=[YOUR_CLIENT_ID]&currency=AUD";
-    this.script.type = 'text/javascript';
-    this.script.async = true;
-    this.script.charset = 'utf-8';
-    this.renderer2.appendChild(this.document.head, this.script);
-  }
+  // loadExternalScript2(){
+  //   this.script = this.renderer2.createElement('script');
+  //   this.script.src = "https://www.paypal.com/sdk/js?client-id=[YOUR_CLIENT_ID]&currency=AUD";
+  //   this.script.type = 'text/javascript';
+  //   this.script.async = true;
+  //   this.script.charset = 'utf-8';
+  //   this.renderer2.appendChild(this.document.head, this.script);
+  // }
   
     private loadExternalScript(scriptUrl: string) {
       return new Promise((resolve, reject) => {
@@ -81,6 +83,11 @@ script: HTMLScriptElement = new HTMLScriptElement;
         document.body.appendChild(scriptElement)
         //https://stackoverflow.com/questions/43806348/how-to-integrate-paypal-express-checkout-into-angular2-typescript-project
     })
+  }
+  Check(){
+    this.orderservice.checkout.next("checkout")
+   this._route.navigate(['payment']); // see oif works if not maybe comment out a line or something...
+    
   }
 //   CheckOut(url:any){
 // this.loadExternalScript("https://www.paypalobjects.com/api/checkout.js").then(() => {
@@ -120,52 +127,52 @@ script: HTMLScriptElement = new HTMLScriptElement;
 // }
 // )
 // }
-Checkout2(){
-  this.loadExternalScript2()
-  this.script.onload = () => {
-    paypal.Buttons({
-      style: {
-        // https://developer.paypal.com/docs/checkout/integration-features/customize-button/
-        layout: 'vertical',
-        color: 'blue',
-        shape: 'rect',
-        label: 'paypal'
-      },
-      createOrder: (data:any, actions:any) => {
-        return actions.order.create({
-          purchase_units: [
-            {
-              //description: this.product.description,
-              amount: {
-                currency_code: 'USD',
-                value: '0,01'
-              }
-            }
-          ]
-        });
-      },
-      onCancel: (data:any) => {
-        // Show a cancel page, or return to cart
-        // https://developer.paypal.com/docs/checkout/integration-features/cancellation-page/
-      },
-      onShippingChange: (data:any, actions:any) => {
-        // https://developer.paypal.com/docs/checkout/integration-features/shipping-callback/
-        // ...
-      },
-      onApprove: async (data:any, actions:any) => {
-        const order = await actions.order.capture();
-        console.log(order);
-        this.result = order.id + "  " + order.status;
-      },
-      onError: (err:any) => {
-        // https://developer.paypal.com/docs/checkout/integration-features/handle-errors/
-        console.log(err);
-        this.result = err;
-      }
-    })
-      .render("#paypal-button");
-  }
-}
+// Checkout2(){
+//   this.loadExternalScript2()
+//   this.script.onload = () => {
+//     paypal.Buttons({
+//       style: {
+//         // https://developer.paypal.com/docs/checkout/integration-features/customize-button/
+//         layout: 'vertical',
+//         color: 'blue',
+//         shape: 'rect',
+//         label: 'paypal'
+//       },
+//       createOrder: (data:any, actions:any) => {
+//         return actions.order.create({
+//           purchase_units: [
+//             {
+//               //description: this.product.description,
+//               amount: {
+//                 currency_code: 'USD',
+//                 value: '0,01'
+//               }
+//             }
+//           ]
+//         });
+//       },
+//       onCancel: (data:any) => {
+//         // Show a cancel page, or return to cart
+//         // https://developer.paypal.com/docs/checkout/integration-features/cancellation-page/
+//       },
+//       onShippingChange: (data:any, actions:any) => {
+//         // https://developer.paypal.com/docs/checkout/integration-features/shipping-callback/
+//         // ...
+//       },
+//       onApprove: async (data:any, actions:any) => {
+//         const order = await actions.order.capture();
+//         console.log(order);
+//         this.result = order.id + "  " + order.status;
+//       },
+//       onError: (err:any) => {
+//         // https://developer.paypal.com/docs/checkout/integration-features/handle-errors/
+//         console.log(err);
+//         this.result = err;
+//       }
+//     })
+//       .render("#paypal-button");
+//   }
+// }
   CalculateTotal(id:any){
     let total = 0
 

@@ -66,6 +66,7 @@ import { TimerComponent } from './timer/timer.component';
 import { AddSubCategoryComponent } from './add-sub-category/add-sub-category.component';
 import { AddCategoryComponent } from './add-category/add-category.component';
 import { CustomerViewComponent } from './customer-view/customer-view.component';
+import { PaymentComponent } from './payment/payment.component';
 
 
 @NgModule({
@@ -115,7 +116,8 @@ import { CustomerViewComponent } from './customer-view/customer-view.component';
     TimerComponent,
     AddCategoryComponent,
     AddSubCategoryComponent,
-    CustomerViewComponent
+    CustomerViewComponent,
+    PaymentComponent
    
     
   
@@ -165,7 +167,7 @@ import { CustomerViewComponent } from './customer-view/customer-view.component';
       {path: 'timer', component: TimerComponent,canActivate : [AuthGuardService]},
       //{path: 'timer/:username', component: TimerComponent },
       {path: 'customer-view', component: CustomerViewComponent,canActivate : [AuthGuardService]},
-
+      {path: 'payment', component: PaymentComponent},
 
       
 

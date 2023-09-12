@@ -1,6 +1,6 @@
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, catchError, forkJoin, retry, tap, throwError,switchMap, Subject } from 'rxjs';
+import { Observable, catchError, forkJoin, retry, tap, throwError,switchMap, Subject, BehaviorSubject } from 'rxjs';
 import { Orders } from '../Models/Orders';
 import { Product } from '../Models/Product';
 import { Inventory } from '../Models/Inventory';
@@ -24,6 +24,7 @@ export class OrdersService {
   suppliersApiUrl = 'https://localhost:7226/api/Suppliers';
   manytoManyAPIUrl = 'https://localhost:7226/api/ManyToMany';
   public addedOrder = new Subject<string>();
+  public checkout = new BehaviorSubject<any>(null)
   constructor(private httpClient: HttpClient) { }
 
 
