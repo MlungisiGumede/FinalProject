@@ -137,7 +137,7 @@ Checkout2(){
             {
               //description: this.product.description,
               amount: {
-                currency_code: 'AUD',
+                currency_code: 'USD',
                 value: '0,01'
               }
             }
