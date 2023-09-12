@@ -167,7 +167,7 @@ import { PaymentComponent } from './payment/payment.component';
       {path: 'timer', component: TimerComponent,canActivate : [AuthGuardService]},
       //{path: 'timer/:username', component: TimerComponent },
       {path: 'customer-view', component: CustomerViewComponent,canActivate : [AuthGuardService]},
-      {path: 'payment', component: PaymentComponent},
+      {path: 'payment', component: PaymentComponent,canActivate : [AuthGuardService]},
 
       
 

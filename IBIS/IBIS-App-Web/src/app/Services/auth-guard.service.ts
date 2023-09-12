@@ -42,7 +42,8 @@ return new Promise((resolve, reject) => {
       else if(this.LoginRequest(role,true)){ // navigated to log user in based on role
         console.log("log in request")
         resolve(false) // logged in and authenticated so disable
-        
+        console.log("log in request")
+   
       // }else if(!this.ValidRequest()){ // pass in the role
       //   //this._router.navigate(['/home'])
       //   console.log("wrong")
@@ -52,6 +53,16 @@ return new Promise((resolve, reject) => {
         this.ShowNavigation()
         resolve(true)
       }
+      if(this.path == "payment"){
+        if(this.PaymentValid()){
+          this.showNavigation.next(false)
+         resolve(true)
+        }else{
+          this.showNavigation.next(false)
+         this._router.navigate(['/customer-view'])
+         resolve(false)
+        }
+       } 
     }
     )
   }).catch((error:any) => {
@@ -100,18 +111,31 @@ return new Promise((resolve, reject) => {
 
   }
 }
+PaymentValid(){
+  let value = false
+  console.log("payment valid....")
+  
+    if(this._router.url=="/"){
+     
+    }else{
+      value = true
+    }
+   console.log(value)
+  
+  return value
+}
 
    
    IsDisabledRoute(role:any){
     let disabled = false
     console.log(this.path)
     if(role == "guest"){
-    if(this.path=="customer-view" || this.path=="Login" || this.path==""){
+    if(this.path=="customer-view" || this.path=="Login" || this.path=="" || this.path=="payment" ){
     }else{
       disabled = true
     }
   }else{
-    console.log(this.path)
+    console.log(this.path) // different logic for payment as already authenticated...
     if(this.path=="customer-view" || this.path=="otp" || this.path=="timer"){ // didnt disable otp when logged in...
       console.log("hit")
       this._router.navigate(['/home'])
@@ -121,14 +145,7 @@ return new Promise((resolve, reject) => {
   console.log(disabled)
   return disabled
    }
-   BanPreviousURL(path:any){
-     if(path?.startsWith("otp") || path?.startsWith("timer") || path?.startsWith("write-off"))
-       if(this._router.url=="/"){
-        this._router.navigate(['/Login'])
-        return true
-       }
-       return false
-   }
+  
    LoginRequest(role:any,authenticated:boolean){
     let path = this.path
     let logInRequest = false
@@ -153,13 +170,19 @@ return new Promise((resolve, reject) => {
 }  
 ValidRequest(){
   let value = false
-  if(this.path?.startsWith("otp") || this.path?.startsWith("timer")){
+  console.log(this.path)
+  // if(this.role == "guest"){
+  //   if(this.path == "payment"){
+      
+  //   }
+  // }
+  if(this.path?.startsWith("otp") || this.path?.startsWith("timer") ){
     if(this._router.url=="/"){
       this._router.navigate(['/Login'])
       value = false
     }
     console.log(this.path)
-    if(this._router.url=="/Login" || this._router.url=="/otp"){
+    if(this._router.url=="/Login" || this._router.url=="/otp" || this._router.url=="/customer-view"){
       console.log("in here")
       value = true
     }
