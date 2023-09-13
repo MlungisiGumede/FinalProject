@@ -62,8 +62,13 @@
           <!-- display2(element) -->
           <mat-form-field *ngSwitchCase="'product_ID'"  >
             <mat-label>Select Product</mat-label>
-            <mat-select formControlName="product_ID" >
-              <mat-option *ngFor="let product of dropDown" [value]="product.product_ID">
+            <mat-select  formControlName="product_ID" >
+              
+              <mat-option>
+              <input (keyup)="onKey($any($event.target).value)" (click)="$event.stopPropagation()" (keydown)="$event.stopPropagation()"/>
+              
+          </mat-option>
+              <mat-option *ngFor="let product of filteredDropDown" [value]="product.product_ID">
                 {{product.name}}
               </mat-option>
             </mat-select>

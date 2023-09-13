@@ -24,6 +24,7 @@
     "@capacitor/camera": "^5.0.7",
     "@capacitor/filesystem": "^5.1.2",
     "@ionic/angular": "latest",
+    "angular-dropdown-search": "^1.0.2",
     "chart.js": "^4.3.3",
     "jspdf": "^2.5.1",
     "ng2-search-filter": "^0.5.1",

@@ -124,7 +124,7 @@ export class AddCustomerOrderComponent implements OnInit {
   columnsSchema:any
   products:any
   dropDown:any
- 
+ filteredDropDown:any
   orders:any = []
   customerColumns = [] // columns schema then map...
   supplierColumns = []
@@ -133,43 +133,7 @@ export class AddCustomerOrderComponent implements OnInit {
     { id: 2, title: 'title 2' },
   ]
   
-//   products:any = [{
-//     product_ID: '1',
-//     name: 'Beef',
-//   },{
-//     product_ID: '2',
-//     name: 'Chicken',
-//   },
-//   {
-//     product_ID: '3',
-//     name: 'Cheese',
-//   },
-//   {
-//     product_ID: '4',
-//     name: 'Meat',
-//   }
-// ]
 
-// dropDown:any= [{
-//   product_ID: '1',
-//   name: 'Beef',
-// },{
-//   product_ID: '2',
-//   name: 'Chicken',
-// },  {
-//   product_ID: '3',
-//   name: 'Cheese',
-// },
-// {
-//   product_ID: '4',
-//   name: 'Meat',
-// }
-//] // populate from API call not from products
-
-
-
-
-  //formArr:FormArray<any> = new FormArray<any>([])
   constructor(public dialogRef: MatDialogRef<AddCustomerOrderComponent>,
   @Inject(MAT_DIALOG_DATA) public data: any,private formBuilder:FormBuilder,
   private productService:ProductService,private inventoryService:InventoryService,
@@ -185,9 +149,18 @@ export class AddCustomerOrderComponent implements OnInit {
       
       this.title = data.customer_FirstName + " "+ data.customer_Surname
       // this.productService.getProductList().subscribe((res:any)=>{
-      //   //this.products = res
+      //   this.products = res
       // })
     }
+    onKey(value:any) { 
+      this.filteredDropDown = this.search(value);
+      }
+      
+     // **// Filter the states list and send back to populate the selectedStates**
+      search(value: string) { 
+        let filter = value.toLowerCase();
+        return this.dropDown.filter((option:any) => option.name.toLowerCase().startsWith(filter));
+      }
    
    
     // this.displayedColumns.forEach((col) => {
@@ -222,7 +195,7 @@ export class AddCustomerOrderComponent implements OnInit {
         let product_ID =(this.form.get('records') as FormArray).controls[rowIndex].get('product_ID')?.value
         let productIndex = this.products.findIndex((item:any) => item.product_ID == product_ID)
         this.dropDown.push(this.products[productIndex])
-       
+         this.filteredDropDown.push(this.products[productIndex])
        
        
       }
@@ -251,6 +224,7 @@ export class AddCustomerOrderComponent implements OnInit {
           let productIndex = this.products.findIndex((item:any) => item.product_ID == product_ID)
          
           this.dropDown.push(this.products[productIndex])
+          this.filteredDropDown.push(this.products[productIndex])
         
         }
         const control =  this.form.get('records') as FormArray;
@@ -297,6 +271,7 @@ export class AddCustomerOrderComponent implements OnInit {
         let dropDown = res
         this.dropDown = [...dropDown]
         this.products = [...products]
+        this.filteredDropDown = [...this.dropDown]
         //console.log(this.products)
         console.log(this.dropDown)
       console.log(this.products)
@@ -319,12 +294,14 @@ export class AddCustomerOrderComponent implements OnInit {
       formArr.controls[rowIndex].get("name")?.setValue(this.products[productIndex].name)
      
       let val = formArr.controls[rowIndex].get('isDone')?.setValue(true)
-      
+      this.filteredDropDown = [...this.dropDown]
       let index = this.dropDown.findIndex((item:any) => item.product_ID == element.product_ID)
       this.dropDown.splice(index,1)
+      this.filteredDropDown.splice(index,1)
      
       this.dataSource = new MatTableDataSource((this.form.get('records') as FormArray).value);
      console.log(this.dropDown)
+     console.log(this.filteredDropDown)
      console.log(this.products)
      
      // let prodct_Name = this.products[index].Name
