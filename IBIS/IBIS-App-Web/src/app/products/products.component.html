@@ -1,6 +1,6 @@
 <ion-content class="ion-margin" id="htmlData">
   <div class="contents">
-    <ion-title><h1>Products</h1></ion-title>
+    <ion-title><h1>{{title}}</h1></ion-title>
     <ion-searchbar class="isb" placeholder="Search Products..." showCancelButton="focus" [(ngModel)]="filterTerm" animated></ion-searchbar><br/>
       <ion-grid class="ion-margin" class="ion-grid-padding">
         <ion-row>
@@ -10,10 +10,14 @@
           <ion-col>Subcategory</ion-col>
           <ion-col>Price per category</ion-col>
           <ion-col>Quantity</ion-col>
+          <!-- <ion-col *ngIf="request=='quantity'"></ion-col>
+          <ion-col *ngIf="request=='quantity'">Add Quantity</ion-col> -->
           <ion-col>Expiry Date</ion-col>
           <ion-col></ion-col>
           <ion-col></ion-col>
-          <ion-col></ion-col>
+          <ion-col *ngIf="!edited"></ion-col>
+          <ion-col *ngIf="!edited"></ion-col>
+          <ion-col *ngIf="!edited"></ion-col>
         </ion-row>
         <ion-item-divider></ion-item-divider>
         <ion-row *ngFor="let item of data | async | filter: filterTerm">
@@ -30,22 +34,48 @@
             <ion-label>{{GetSubCategoryName(item.subCategory_ID)}}</ion-label>
           </ion-col>
           <ion-col>
-            <ion-label>{{item.price}}</ion-label>
+            <ion-label *ngIf="request!='price'">{{item.price}}</ion-label>
+          </ion-col>
+          <ion-col *ngIf="request=='price'">
+            <input mat-input type="number" min="1" [(ngModel)]="price">
           </ion-col>
           <ion-col>
             <ion-label>{{item.quantity}}</ion-label>
           </ion-col>
+          <!-- <ion-col *ngIf="request=='quantity'">
+            <ion-label>+</ion-label>
+          </ion-col>
+          <ion-col *ngIf="request=='quantity'">
+            <input mat-input type="number" min="1" [(ngModel)]="quantity">
+          </ion-col> -->
           <ion-col>
             <ion-label>{{item.expiry}}</ion-label>
           </ion-col>
-          <ion-col class="inside">
-            <ion-button class="light-Btn" (click)="ViewProduct(item)">View</ion-button>
+          
+          <!-- <ion-col class="inside">
+            <ion-button class="light-Btn" *ngIf="!edited" (click)="AddQuantity(item)">Add Quantity</ion-button>
+          </ion-col> -->
+          <ion-col style="display: flex;">
+            <ion-button class="light-Btn" *ngIf="!edited" (click)="UpdatePrice(item)">Update Price</ion-button>
+            <ion-button class="light-Btn" *ngIf="!edited" (click)="ViewProduct(item)">View</ion-button>
+            <ion-button class="red-Btn" *ngIf="!edited" (click)="delete(item.product_ID)">Remove</ion-button>
+          </ion-col>
+          <!-- <ion-col >
+           
+          </ion-col> -->
+          <!-- <ion-col>
+            
+          </ion-col> -->
+        
+          <ion-col>
+            <ion-button class="green-Btn" [disabled]="!price" *ngIf="edited && request == 'price'" (click)="OnDone(item)">Done</ion-button>
           </ion-col>
           <ion-col>
-            <ion-button class="red-Btn" (click)="delete(item.product_ID)">Remove</ion-button>
+            <ion-button class="green-Btn" *ngIf="request == 'write-off' || request == 'write-up'" (click)="WriteOffScreen(item)">Select</ion-button>
           </ion-col>
+          
           <ion-col>
-            <ion-button class="green-Btn" [routerLink]="['/write-off', item.product_ID]">write off</ion-button>
+            <ion-button class="green-Btn" *ngIf="edited" (click)="Cancel()">Cancel</ion-button>
           </ion-col>
         </ion-row>
         <ion-item-divider></ion-item-divider>
@@ -55,5 +85,8 @@
       <ion-button class="light-Btn" (click)=" AddSubCategory()">Add SubCategory</ion-button>
       <ion-button class="red-Btn" (click)="generPDF()" >Generate Report</ion-button>
       <ion-button class="light-Btn"  [routerLink]="['/view-write-off']">view write offs</ion-button>
+        <ion-button class="light-Btn" (click)="request = 'write-off'; edited = 'true';title = 'Select Product to write off'" >Write off</ion-button>
+        <ion-button class="light-Btn" (click)="request = 'write-up';edited = 'true';title = 'Select Product to write up'" >Write Up</ion-button>
+      
   </div>
 

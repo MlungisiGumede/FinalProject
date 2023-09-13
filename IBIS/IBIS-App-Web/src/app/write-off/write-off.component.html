@@ -1,7 +1,7 @@
 
 
 
-<h1 class="newheading">Write off: </h1>
+<h1 class="newheading">{{title}}</h1>
 <table class="t">
     <tr class="thead">
       <th class="thead">Product ID</th>
@@ -12,21 +12,21 @@
       <th class="thead">Quantity</th>
       <th class="thead">Expiry Date</th>
     </tr>
-   <tr  class="row">
-         <td>{{data.product_ID}}</td>
-    <td>{{data.name}}</td>
-    <td>{{GetCategoryName(data.category_ID)}}</td>
-    <td>{{GetSubCategoryName(data.subCategory_ID)}}</td>
-    <td>{{data.price}}</td>
-    <td>{{data.quantity}}</td>
-    <td>{{data.expiry}}</td>
+   <tr  class="row"  *ngFor="let item of data | async">
+         <td>{{item.product_ID}}</td>
+    <td>{{item.name}}</td>
+    <td>{{GetCategoryName(item.category_ID)}}</td>
+    <td>{{GetSubCategoryName(item.subCategory_ID)}}</td>
+    <td>{{item.price}}</td>
+    <td>{{item.quantity}}</td>
+    <td>{{item.expiry}}</td>
     </tr>
 </table> 
 
 
 <div [formGroup]="form">
   
-      <ion-list>
+      <ion-list *ngIf="(type | async)==1">
         <ion-item>
           <ion-select formControlName="reason" aria-label="Fruit" interface="action-sheet" placeholder="Select reason" >
             <ion-select-option value="Expired">Expired product</ion-select-option>

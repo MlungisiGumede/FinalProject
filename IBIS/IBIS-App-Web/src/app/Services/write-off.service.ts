@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpErrorResponse} from '@angular/common/http';
-import { Observable, catchError, retry, throwError } from 'rxjs';
+import { BehaviorSubject, Observable, Subject, catchError, retry, throwError } from 'rxjs';
 import { Supplier } from '../Models/Supplier';
 import { WriteOff } from '../Models/writeOff';
 
@@ -9,7 +9,7 @@ import { WriteOff } from '../Models/writeOff';
   providedIn: 'root'
 })
 export class WriteOffService {
-
+public adjustQuantity = new BehaviorSubject<any>(null);
 
   apiUrl = 'https://localhost:7226/api/writeOff/';
 

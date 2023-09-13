@@ -18,6 +18,8 @@ import { ChangeDetectionStrategy, ChangeDetectorRef} from '@angular/core';
 import { Observable, catchError, map, of, throwError } from 'rxjs';
 import { AddCategoryComponent } from '../add-category/add-category.component';
 import { AddSubCategoryComponent } from '../add-sub-category/add-sub-category.component';
+import { WriteOff } from '../Models/writeOff';
+import { WriteOffService } from '../Services/write-off.service';
 
 var pdfMake = require('pdfmake/build/pdfmake');
 var pdfFonts = require('pdfmake/build/vfs_fonts');
@@ -36,7 +38,7 @@ export class ProductsComponent implements OnInit {
   data:Observable<any> = new Observable();
   data2: Product[] = [];
   reportData:any
-  products: Product[] = [];
+  products: any
   idtodelete :any;
   search= "";
   productItems: any;
@@ -45,13 +47,18 @@ export class ProductsComponent implements OnInit {
   filterTerm!: string;
   categories:any
   subCategories:any
+  edited:any
+  request:any
+  quantity:any
+  price:any
+  title:any = "Products"
   
 
 
   combinedData: { Name: string, Quantity: number , Price: number}[] = [];
 
   constructor(private productService: ProductService,public router: Router,private toastController: ToastController
-    ,private matDialog:MatDialog,private _snackbar: MatSnackBar) {
+    ,private matDialog:MatDialog,private _snackbar: MatSnackBar,private writeOffService:WriteOffService) {
       
     
     productService = {} as ProductService;
@@ -78,12 +85,22 @@ export class ProductsComponent implements OnInit {
     // ];
 
   }
+  WriteOffScreen(item:any){
+if(this.request == "write-off"){
+  item.type = 1
+}else{
+  item.type = 2
+}
+this.writeOffService.adjustQuantity.next(item)
+this.router.navigate(['/write-off'])
+  }
 
   async getProducts(){
     let val = new Promise((resolve, reject) => {
       this.productService.getProductList().subscribe(response => {
         console.log(response);
         this.data = of(response)
+        this.products = response
         this.reportData = response
         console.log(this.data)
         resolve(true)
@@ -152,7 +169,47 @@ ViewProduct(item:any){
     }
   })
 }
+AddQuantity(item:Product){
 
+this.request = "quantity"
+this.edited = true
+this.AssignProduct(item)
+}
+AssignProduct(item:any){
+  let products = []
+  let product = this.products.find((product:any) => product.product_ID == item.product_ID)
+  console.log(product)
+  products.push(product)
+  this.data = of(products)
+}
+UpdatePrice(item:Product){
+  this.request = "price"
+  this.edited = true
+  this.AssignProduct(item)
+}
+OnDone(item:Product){
+  this.edited = false
+  let product:any = this.products.find((product:any) => product.product_ID == item.product_ID)
+  if(this.request=="quantity"){
+    // nah rather API call then in subscribe reset the data...
+   
+    product.quantity = product.quantity + this.quantity
+    // below in an function...
+    this.productService.updateProduct(product).subscribe(()=>{
+      this.request = ""
+      this.getProducts()
+    })
+    
+  }else{
+    product.price = this.price
+    this.productService.updateProduct(product).subscribe(()=>{
+      this.request = ""
+      this.getProducts()
+    })
+  }
+ 
+ 
+}
   addproduct(){
     let dialogRef:any = []
     if(this.categories && this.subCategories){
@@ -160,6 +217,7 @@ ViewProduct(item:any){
         data:{'categories':this.categories,'subCategories':this.subCategories}
       });
     }
+
 
     //this.router.navigate(['/add-product']);
     dialogRef.afterClosed().subscribe((result:any) => {
@@ -170,6 +228,11 @@ ViewProduct(item:any){
         this.ShowSnackBar("failed to add product", "error");
       }
     })
+  }
+  Cancel(){
+    this.request = ""
+    this.edited = false
+    this.getProducts()
   }
   ShowSnackBar(message: string, panel: string) {
     this._snackbar.open(message, "close", {

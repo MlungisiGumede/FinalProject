@@ -117,7 +117,8 @@ import { PaymentComponent } from './payment/payment.component';
     AddCategoryComponent,
     AddSubCategoryComponent,
     CustomerViewComponent,
-    PaymentComponent
+    PaymentComponent,
+    //ProductsComponent
    
     
   
@@ -144,7 +145,8 @@ import { PaymentComponent } from './payment/payment.component';
       {path: 'view-inventory-item/:id', component: ViewInventoryItemComponent, canActivate : [AuthGuardService]},
       {path: 'add-order', component: AddOrderComponent, canActivate : [AuthGuardService]},
       {path: 'view-order/:id', component: ViewOrderComponent, canActivate : [AuthGuardService]},
-      {path: 'write-off/:id', component: WriteOffComponent, canActivate : [AuthGuardService]},
+      //{path: 'write-off/:id', component: WriteOffComponent, canActivate : [AuthGuardService]},
+      {path: 'write-off', component: WriteOffComponent, canActivate : [AuthGuardService]},
       {path: 'order-from-supplier/:id', component: OrderFromSupplierComponent},
       {path: 'Recipes', component: RecipesComponent, canActivate : [AuthGuardService]},
       {path: 'create-recipe', component: CreateRecipeComponent, canActivate : [AuthGuardService]},

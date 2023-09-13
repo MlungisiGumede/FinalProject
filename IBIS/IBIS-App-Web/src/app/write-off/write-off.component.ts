@@ -9,7 +9,7 @@ import { Directory, FileInfo, Filesystem } from '@capacitor/filesystem';
 import { WriteOffService } from '../Services/write-off.service';
 import { WriteOff } from '../Models/writeOff';
 import { DomSanitizer } from '@angular/platform-browser';
-import { every } from 'rxjs';
+import { every, of } from 'rxjs';
 
 
 
@@ -44,17 +44,15 @@ images: LocalFile[]=[];
   uploadFile:any
   categories:any
   subCategories:any
+  title:any
+  product:any
+  type:any
 
   
 
   constructor(private route : ActivatedRoute,private productService: ProductService,private fb : FormBuilder, private loadingCtrl: LoadingController,private writeoffservice: WriteOffService
     ,private router: Router,) {
-      this.form= this.fb.group({
-       // product_ID : ['', Validators.required],
-          reason : ['', Validators.required],
-         image: ['', Validators.required],
-          quantity : ['', Validators.required],
-        })
+    
     
     this.datawr = new WriteOff();
   }
@@ -63,32 +61,88 @@ images: LocalFile[]=[];
   
 
   ngOnInit(): void {
-    
-    this.id = this.route.snapshot.params['id']
+    this.form= this.fb.group({
+      // product_ID : ['', Validators.required],
+         reason : ['', Validators.required],
+        image: ['', Validators.required],
+         quantity : ['', Validators.required],
+       })
+       let products:any = []
+  this.AdjustQuantity().then(
+    (success)=>{
+      console.log("adjust")
+      this.GetCategories().then(
+        (success)=>{
+          console.log("cat")
+          this.GetSubCategories().then(
+            (success)=>{
+              console.log("sub")
+            products.push(this.product)
+            console.log(products)
+             this.data = of(products)
+             this.data = [...this.data]
+             this.data.subscribe(
+               (success:any)=>{
+                 console.log(success)
+               }
+             )
+            })
+        }
+      )
+    }
+  )
 
 
-   
 
-    this.id = this.route.snapshot.params['id']
-this.productService.getCategoriesList().subscribe((res)=>{
-  this.categories = res
-})
-this.productService.getSubCategoriesList().subscribe((res)=>{
-  this.subCategories = res
-})
-    this.productService.getprod(this.id).subscribe((res)=>{
-// subscribe maybe be problem
-      this.data = res
-      //res = this.viewproductform.value
-      
-      console.log('Product loaded:', this.data)
-   
-      });
-
-
-
+this.data = of(products)
 //this.loadFiles();
   }
+  async GetCategories(){
+  let value = new Promise((resolve, reject) => {
+    this.productService.getCategoriesList().subscribe((success)=>{
+      this.categories = success
+      resolve(success)
+    }),(error:any)=>{
+      reject(error)
+    }
+  })
+  await value
+  return value
+  }
+  async AdjustQuantity(){
+ let value = new Promise((resolve, reject) => {   this.writeoffservice.adjustQuantity.subscribe((res)=>{
+      console.log(res)
+      console.log(res[0])
+      if(res.type == 1){
+     this.type = of(1)
+this.title = "Write Off"
+
+      }else{
+        this.form.controls['reason'].setValue("write up") // date for write offs as well...
+        this.title = "Write Up"
+      }
+      this.product = res
+      console.log(this.product)
+      resolve(res)
+    }),(error:any)=>{
+      reject(error)
+    } // promisify... functions...
+  })
+  await value
+  return value
+  }
+  async GetSubCategories(){
+    let value = new Promise((resolve, reject) => {
+      this.productService.getSubCategoriesList().subscribe((success)=>{
+        this.subCategories = success
+        resolve(success)
+      }),(error:any)=>{
+        reject(error)
+      }
+    })
+    await value
+    return value
+    }
   GetCategoryName(id:any){
     return this.categories.find((item:any) => item.category_ID == id).name
   }
@@ -129,10 +183,20 @@ writeOff.quantity = this.form.controls['quantity'].value
 writeOff.reason = this.form.controls['reason'].value
 writeOff.product_ID = this.id
 
+
   this.writeoffservice.createWriteOff(writeOff).subscribe(res=>{
     console.log("success", res);
     this.router.navigate(['/view-write-offs']);
-    }) 
+    })
+    if(this.data.id == 1){
+      this.data.quantity = this.data.quantity - this.form.controls['quantity'].value 
+    }else{
+      this.data.quantity = this.data.quantity + this.form.controls['quantity'].value 
+    }
+    this.productService.updateProduct(this.data).subscribe(res=>{
+      console.log("success", res);
+    })
+   
 }
   // putting this 
 

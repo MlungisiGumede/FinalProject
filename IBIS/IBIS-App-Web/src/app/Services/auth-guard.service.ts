@@ -197,6 +197,7 @@ ValidRequest(){
     this.loginService.GetUserRole().subscribe((success)=>{
       resolve(success.roleName)
     }),(error:any)=>{
+      console.log("error with user")
       reject(error)
     }
     
