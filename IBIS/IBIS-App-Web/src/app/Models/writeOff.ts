@@ -6,5 +6,6 @@ export class WriteOff{
     reason?: string;
     image?: string;
     product_ID:any
+    adjustment_ID:any
     //base64?: string;
   }

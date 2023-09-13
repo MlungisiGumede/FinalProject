@@ -51,8 +51,7 @@ namespace IBIS_API.Controllers
             {
                 return BadRequest();
             }
-
-            _context.Entry(sup).State = EntityState.Modified;
+          
 
             try
             {
@@ -79,6 +78,18 @@ namespace IBIS_API.Controllers
         public async Task<ActionResult<Write_Offs>> PostWriteOff(Write_Offs writeOff)
         {
             _context.Write_Offss.Add(writeOff);
+            var product = _context.Products.Where(c => c.Product_ID == writeOff.Product_ID).FirstOrDefault();
+            if (writeOff.Adjustment_ID == 1)
+            {
+                product.Quantity = product.Quantity - writeOff.Quantity;
+            }
+            else
+            {
+                product.Quantity = product.Quantity + writeOff.Quantity;
+            }
+
+           
+            _context.Entry(product).State = EntityState.Modified;
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetwriteOff", new { id = writeOff.Write_Off_Id }, writeOff);

@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace IBIS_API.Migrations
 {
     [DbContext(typeof(DataContextcs))]
-    [Migration("20230903124655_initial")]
+    [Migration("20230913082032_initial")]
     partial class initial
     {
         /// <inheritdoc />
@@ -57,6 +57,22 @@ namespace IBIS_API.Migrations
                     b.HasKey("addressId");
 
                     b.ToTable("Addresses");
+                });
+
+            modelBuilder.Entity("IBIS_API.Models.Adjustment", b =>
+                {
+                    b.Property<int?>("Adjustment_ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int?>("Adjustment_ID"));
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Adjustment_ID");
+
+                    b.ToTable("AdjustmentTypes");
                 });
 
             modelBuilder.Entity("IBIS_API.Models.AppUser", b =>
@@ -277,6 +293,22 @@ namespace IBIS_API.Migrations
                     b.ToTable("OrderStatusList");
                 });
 
+            modelBuilder.Entity("IBIS_API.Models.PaymentType", b =>
+                {
+                    b.Property<int?>("PaymentType_ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int?>("PaymentType_ID"));
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("PaymentType_ID");
+
+                    b.ToTable("PaymentTypes");
+                });
+
             modelBuilder.Entity("IBIS_API.Models.Product", b =>
                 {
                     b.Property<int>("Product_ID")
@@ -458,14 +490,17 @@ namespace IBIS_API.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Write_Off_Id"));
 
+                    b.Property<int?>("Adjustment_ID")
+                        .HasColumnType("int");
+
                     b.Property<string>("Image")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("Product_ID")
                         .HasColumnType("int");
 
-                    b.Property<string>("Quantity")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<double?>("Quantity")
+                        .HasColumnType("float");
 
                     b.Property<string>("Reason")
                         .HasColumnType("nvarchar(max)");

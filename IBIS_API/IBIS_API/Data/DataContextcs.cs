@@ -47,6 +47,10 @@ namespace IBIS_API.Data
         public DbSet<Category> Categories { get; set; }
         public DbSet<SubCategory> SubCategories { get; set; }
 
+        public DbSet<Adjustment> AdjustmentTypes { get; set; }
+
+        public DbSet<PaymentType> PaymentTypes { get; set; }
+
         /*
         public DbSet<Equipment> Equipment { get; set; } 
         public  DbSet<Equipment_Category> Equipment_Categories { get; set; } 

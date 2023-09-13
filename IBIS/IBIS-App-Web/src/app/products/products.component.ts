@@ -20,6 +20,7 @@ import { AddCategoryComponent } from '../add-category/add-category.component';
 import { AddSubCategoryComponent } from '../add-sub-category/add-sub-category.component';
 import { WriteOff } from '../Models/writeOff';
 import { WriteOffService } from '../Services/write-off.service';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 
 var pdfMake = require('pdfmake/build/pdfmake');
 var pdfFonts = require('pdfmake/build/vfs_fonts');
@@ -52,6 +53,7 @@ export class ProductsComponent implements OnInit {
   quantity:any
   price:any
   title:any = "Products"
+  form:any
   
 
 
@@ -65,6 +67,10 @@ export class ProductsComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.form = new FormGroup({
+     
+      price: new FormControl("",[Validators.required, Validators.min(1)]),
+    })
     this.getProducts()
     this.productService.getCategoriesList().subscribe((res)=>{
       console.log(res)

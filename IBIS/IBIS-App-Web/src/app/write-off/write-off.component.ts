@@ -46,7 +46,10 @@ images: LocalFile[]=[];
   subCategories:any
   title:any
   product:any
+  type$:any
   type:any
+  text:any
+  quantity:any
 
   
 
@@ -114,12 +117,23 @@ this.data = of(products)
       console.log(res)
       console.log(res[0])
       if(res.type == 1){
-     this.type = of(1)
+     this.type$ = of(1)
+     this.type = 1
+     this.form= this.fb.group({
+      // product_ID : ['', Validators.required],
+         reason : ['', Validators.required],
+        image: ['', Validators.required],
+         quantity : ['', [Validators.required,Validators.max(res.quantity)]],
+       })
+      this.quantity = res.quantity
 this.title = "Write Off"
+this.text ="Enter amount to write off" // could maybe display but could do ngif without additional thingy before stuff loaded
 
       }else{
         this.form.controls['reason'].setValue("write up") // date for write offs as well...
-        this.title = "Write Up"
+        this.title = "Write Up:"
+        this.text = "Enter amount to write Up"
+        this.type = 2
       }
       this.product = res
       console.log(this.product)
@@ -181,21 +195,23 @@ let writeOff = new WriteOff();
 writeOff.image = this.uploadFile
 writeOff.quantity = this.form.controls['quantity'].value
 writeOff.reason = this.form.controls['reason'].value
-writeOff.product_ID = this.id
+writeOff.product_ID = this.product.product_ID
+writeOff.adjustment_ID = this.type
+
 
 
   this.writeoffservice.createWriteOff(writeOff).subscribe(res=>{
     console.log("success", res);
     this.router.navigate(['/view-write-offs']);
     })
-    if(this.data.id == 1){
-      this.data.quantity = this.data.quantity - this.form.controls['quantity'].value 
-    }else{
-      this.data.quantity = this.data.quantity + this.form.controls['quantity'].value 
-    }
-    this.productService.updateProduct(this.data).subscribe(res=>{
-      console.log("success", res);
-    })
+    // if(this.data.id == 1){
+    //   this.data.quantity = this.data.quantity - this.form.controls['quantity'].value 
+    // }else{
+    //   this.data.quantity = this.data.quantity + this.form.controls['quantity'].value 
+    // }
+    // this.productService.updateProduct(this.product).subscribe(res=>{
+    //   console.log("success", res);
+    // })
    
 }
   // putting this 

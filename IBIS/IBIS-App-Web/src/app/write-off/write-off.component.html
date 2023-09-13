@@ -26,7 +26,7 @@
 
 <div [formGroup]="form">
   
-      <ion-list *ngIf="(type | async)==1">
+      <ion-list *ngIf="(type$ | async)==1">
         <ion-item>
           <ion-select formControlName="reason" aria-label="Fruit" interface="action-sheet" placeholder="Select reason" >
             <ion-select-option value="Expired">Expired product</ion-select-option>
@@ -41,16 +41,18 @@
        
     
     <input type="file" id="file" style="display: none;" accept="image/*" formControlName="image" (change)="FileChoice($event);SetFileName($event)"  #fileUpload/>
+    <br>
+    
     <ion-button (click)="fileUpload.click()" >Upload image</ion-button>
     
     <span style="color: white;"> {{fileName}}</span>
   </label>
   
-    <h1 class="grey">Enter amount to write off</h1>
-    <input class="grey" type="text" formControlName="quantity">
+    <h1 class="grey">{{text}}</h1>
+    <input class="grey" type="number"   formControlName="quantity">
 
 
-
+<br><br>
       <ion-button  [disabled]="!form.valid" (click)="createWriteOff()">Submit write Off</ion-button>
    
     </div>
