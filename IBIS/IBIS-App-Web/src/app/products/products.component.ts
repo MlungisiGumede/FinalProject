@@ -190,6 +190,7 @@ AssignProduct(item:any){
 }
 UpdatePrice(item:Product){
   this.request = "price"
+  this.price = item.price
   this.edited = true
   this.AssignProduct(item)
 }
