@@ -25,6 +25,7 @@
     "@capacitor/filesystem": "^5.1.2",
     "@ionic/angular": "latest",
     "angular-dropdown-search": "^1.0.2",
+    "angular2-qrscanner": "^1.0.7",
     "angularx-qrcode": "^14.0.0",
     "chart.js": "^4.3.3",
     "jspdf": "^2.5.1",

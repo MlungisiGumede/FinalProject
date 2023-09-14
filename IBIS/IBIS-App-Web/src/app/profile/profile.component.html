@@ -3,8 +3,17 @@
     <ion-title><h1>View Business Profile</h1></ion-title>
       <ion-grid class="ion-margin" class="ion-grid-padding">
         <ion-row>
-            <qrcode #qrcode [qrdata]="url" [width]="200" elementType="img" [errorCorrectionLevel]="'M'"></qrcode>
-        
+            <qrcode #qrcode qrdata="https://u19074362.wixsite.com/kmjbutcherygroup6" [width]="200" elementType="canvas" [errorCorrectionLevel]="'M'"></qrcode>
+            <qr-scanner
+            [debug]="false"
+            [canvasWidth]="1080"
+            [canvasHeight]="720"
+            [stopAfterScan]="true"
+            [updateTime]="500"
+            (onRead)="OnResult($event)"
+            (result)="OnResult($event)"
+            >
+            </qr-scanner>
         
           <ion-col>
             <label for="file" >

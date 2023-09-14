@@ -69,6 +69,8 @@ import { CustomerViewComponent } from './customer-view/customer-view.component';
 import { PaymentComponent } from './payment/payment.component';
 import { QRCodeModule } from 'angularx-qrcode';
 import { ProfileComponent } from './profile/profile.component';
+//import { QrScannerComponent } from 'angular2-qrscanner';
+import { NgQrScannerModule } from 'angular2-qrscanner';
 
 
 @NgModule({
@@ -135,6 +137,7 @@ import { ProfileComponent } from './profile/profile.component';
     MatSnackBarModule,
     MatButtonModule,
     QRCodeModule,
+    NgQrScannerModule,
     RouterModule.forRoot([
       {path: '', redirectTo: '/Login', pathMatch: 'full'},
       {path: 'Login', component: LoginComponent, canActivate : [AuthGuardService] },
