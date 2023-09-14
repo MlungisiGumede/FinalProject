@@ -39,6 +39,8 @@ export class AddCustomerOrderComponent implements OnInit {
   rowIndexTemplate:any
   globalArray:any
   selectedValue:any
+  //selectedQuantity:any
+  quantityGreater = false
 //@ViewChild(MatTable) myTable: MatTable<any>;
   CustomercolumnsSchema = [
     // {
@@ -176,8 +178,9 @@ export class AddCustomerOrderComponent implements OnInit {
 
   addRow(){
     this.edited = true
+   
     const control =  this.form.get('records') as FormArray; 
-      
+    this.rowIndexTemplate = control.length
     control.push(this.initiateProductForm());
 
     this.dataSource = new MatTableDataSource((this.form.get('records') as FormArray).value);
@@ -190,7 +193,10 @@ export class AddCustomerOrderComponent implements OnInit {
         this.edited = true
         let val = (this.form.get('records') as FormArray).controls[rowIndex].get('isDone')?.setValue(false)
         const control =  this.form.get('records') as FormArray;
-     
+        let quantityGreater = control.controls[rowIndex].get('quantityGreater')
+        if(quantityGreater){
+          this.quantityGreater = true
+        }
         this.rowIndexTemplate = rowIndex
         let product_ID =(this.form.get('records') as FormArray).controls[rowIndex].get('product_ID')?.value
         let productIndex = this.products.findIndex((item:any) => item.product_ID == product_ID)
@@ -207,8 +213,9 @@ export class AddCustomerOrderComponent implements OnInit {
         return this.formBuilder.group({
           product_ID: new FormControl("", Validators.required),
           name: new FormControl(""),
-        quantity: new FormControl("", Validators.required),
-        price: new FormControl("",Validators.required),
+        quantity: new FormControl("",[Validators.required,Validators.min(1)] ),
+        quantityGreater: new FormControl(false),
+        price: new FormControl("",[Validators.required,Validators.min(1)]),
         isDone: new FormControl(false),
         isDelete: new FormControl("")
         });
@@ -244,7 +251,7 @@ export class AddCustomerOrderComponent implements OnInit {
         let formArr = this.form.get('records') as FormArray
         let quantity = formArr.controls[rowIndex].get('quantity')?.value
         let price = formArr.controls[rowIndex].get('price')?.value
-        if(quantity && price){
+        if(quantity && price && quantity*price>0){
           return quantity*price
         }
        return 
@@ -260,7 +267,27 @@ export class AddCustomerOrderComponent implements OnInit {
            total += quantity*price
          }
        }
-       return total
+       if(total>0){
+         return total
+       }
+       return 
+      }
+      ConsoleLog(element:any,key:any){
+        //console.log(element)
+        //console.log(key)
+      }
+      CheckQuantity(value:any,product_ID:any){
+    console.log(value)
+    console.log(product_ID)
+    let productIndex = this.products.findIndex((item:any) => item.product_ID == product_ID)
+     console.log(this.products[productIndex].quantity)
+    if(value>this.products[productIndex].quantity){
+      this.quantityGreater = true
+      this.dataSource = new MatTableDataSource((this.form.get('records') as FormArray).value); // see if without these lines...
+      this.dataSource._updateChangeSubscription()
+    }else{
+      this.quantityGreater = false
+    }
       }
      
   ngOnInit() {
@@ -295,7 +322,10 @@ export class AddCustomerOrderComponent implements OnInit {
       let productIndex = this.products.findIndex((item:any) => item.product_ID == product_ID)
       // setting based on product index and not on product ID.
       formArr.controls[rowIndex].get("name")?.setValue(this.products[productIndex].name)
-     
+      if(this.quantityGreater){
+        formArr.controls[rowIndex].get("quantityGreater")?.setValue(true)
+      }
+       this.quantityGreater = false
       let val = formArr.controls[rowIndex].get('isDone')?.setValue(true)
       this.filteredDropDown = [...this.dropDown]
       let index = this.dropDown.findIndex((item:any) => item.product_ID == element.product_ID)
@@ -337,7 +367,10 @@ export class AddCustomerOrderComponent implements OnInit {
       console.log(event)
       let product_ID = event.value
       let productIndex = this.products.findIndex((item:any) => item.product_ID == product_ID)
+      //this.CheckQuantity(this.selectedQuantity,product_ID)
       let val = (this.form.get('records') as FormArray).controls[rowIndex].get('price')?.setValue(this.products[productIndex].price)
+      let val2 = (this.form.get('records') as FormArray).controls[rowIndex].get('quantity')?.setValue(null)
+      this.quantityGreater = false
       this.dataSource = new MatTableDataSource((this.form.get('records') as FormArray).value);
       this.dataSource._updateChangeSubscription()
     }

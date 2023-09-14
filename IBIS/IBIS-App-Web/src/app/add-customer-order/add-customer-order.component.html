@@ -18,6 +18,13 @@
          hi
       <td mat-footer-cell *matFooterCellDef>Total: R{{ CalculateSubTotal()}} </td>
         </div>
+        <div *ngSwitchCase="'number'">
+          
+          <td mat-footer-cell *matFooterCellDef><p style="color:darkgoldenrod;" *ngIf="quantityGreater">
+          Warning:Quantity is greater than stock on hand
+        </p> </td>
+        </div>
+        
     <div *ngSwitchDefault>
     <td mat-footer-cell *matFooterCellDef> </td>
     </div>
@@ -75,8 +82,9 @@
             
           </mat-form-field>
           <div *ngSwitchCase="'isDelete'">
+            <button style="float: right;" mat-button (click)="DeleteRow(rowIndex)" >Delete</button>
             <button *ngIf="edited" [disabled]="!form.valid" class="button-add-row" (click)="OnDone(rowIndex)" mat-button style="float: right;">Done</button>
-              <button mat-button (click)="DeleteRow(rowIndex)" >Delete</button>
+              
              
             </div>
             <span *ngSwitchCase="'total'">
@@ -90,7 +98,7 @@
             
             <div *ngSwitchCase="'price'">
               
-              <input *ngIf="element.price" formControlName="price" mat-Input list="price" />
+              <input type="number" *ngIf="element.price" formControlName="price" matInput list="price" />
               <datalist *ngIf="element.price" id="price">
              <option [value]="element.price"  >
               {{element.price}}
@@ -101,8 +109,9 @@
   
            
           <mat-form-field *ngSwitchDefault>
-            <input [type]="col.type" matInput [formControlName]="col.key" />
-            <td mat-footer-cell *matFooterCellDef> </td>
+            <input #Input [type]="col.type" [formControlName]="col.key" (keyup)="CheckQuantity(Input.value,element.product_ID)" matInput />
+            {{ConsoleLog(element,col.key)}}
+            
           </mat-form-field>
         </div>
        
