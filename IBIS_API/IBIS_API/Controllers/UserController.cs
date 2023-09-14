@@ -334,6 +334,34 @@ namespace IBIS_API.Controllers
                 return NotFound("Does not exist");
             }
         }
+
+        [HttpPost]
+        [Route("fileUpload")]
+        public async Task<IActionResult> PostFile(FileUpload file)
+        {
+            var fileFound = _context.Files.FirstOrDefault();
+               if(fileFound != null)
+            {
+                _context.Remove(fileFound);
+            }
+            _context.Add(file);
+            await _context.SaveChangesAsync();
+            return Ok();
+
+        }
+        [HttpGet]
+        [Route("getFile")]
+        public async Task<IActionResult> GetFile()
+        {
+            var fileFound = _context.Files.FirstOrDefault();
+            if (fileFound == null)
+            {
+               return BadRequest("No File Found");
+            }
+            return Ok(fileFound);
+
+        }
+
         [HttpGet]
         [Route("getCustomerOrders")] // protect this maybe through code or... can actually check which user is accessing the route...
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]

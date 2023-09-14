@@ -51,6 +51,7 @@ namespace IBIS_API.Data
 
         public DbSet<PaymentType> PaymentTypes { get; set; }
 
+        public DbSet<FileUpload> Files { get; set; }
         /*
         public DbSet<Equipment> Equipment { get; set; } 
         public  DbSet<Equipment_Category> Equipment_Categories { get; set; } 

@@ -67,6 +67,8 @@ import { AddSubCategoryComponent } from './add-sub-category/add-sub-category.com
 import { AddCategoryComponent } from './add-category/add-category.component';
 import { CustomerViewComponent } from './customer-view/customer-view.component';
 import { PaymentComponent } from './payment/payment.component';
+import { QRCodeModule } from 'angularx-qrcode';
+import { ProfileComponent } from './profile/profile.component';
 
 
 @NgModule({
@@ -118,7 +120,8 @@ import { PaymentComponent } from './payment/payment.component';
     AddSubCategoryComponent,
     CustomerViewComponent,
     PaymentComponent,
-    //ProductsComponent
+    ProfileComponent
+    
    
     
   
@@ -131,6 +134,7 @@ import { PaymentComponent } from './payment/payment.component';
     MatDialogModule,
     MatSnackBarModule,
     MatButtonModule,
+    QRCodeModule,
     RouterModule.forRoot([
       {path: '', redirectTo: '/Login', pathMatch: 'full'},
       {path: 'Login', component: LoginComponent, canActivate : [AuthGuardService] },
@@ -170,7 +174,7 @@ import { PaymentComponent } from './payment/payment.component';
       //{path: 'timer/:username', component: TimerComponent },
       {path: 'customer-view', component: CustomerViewComponent,canActivate : [AuthGuardService]},
       {path: 'payment', component: PaymentComponent,canActivate : [AuthGuardService]},
-
+      {path:'profile',component:ProfileComponent}
       
 
 

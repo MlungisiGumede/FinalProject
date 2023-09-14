@@ -1,0 +1,29 @@
+<ion-content class="ion-margin" id="htmlData">
+  <div class="contents">
+    <ion-title><h1>View Business Profile</h1></ion-title>
+      <ion-grid class="ion-margin" class="ion-grid-padding">
+        <ion-row>
+            <qrcode #qrcode [qrdata]="url" [width]="200" elementType="img" [errorCorrectionLevel]="'M'"></qrcode>
+        
+        
+          <ion-col>
+            <label for="file" >
+            <input type="file" id="file" style="display: none;" accept="application/pdf" [ngModel]="fileName" (change)="FileChoice($event);SetFileName($event)"  #fileUpload/>
+            
+            <br>
+            <ion-button  class="green-Btn" (click)="fileUpload.click()" >Choose File</ion-button>
+            <ion-button  class="green-Btn" (click)="PostFile()" >Upload File</ion-button>
+            <ion-button class="green-Btn" (click)="Download()">Download Profile</ion-button>
+            </label>
+            
+            <span style="color: black;"> {{fileName}}</span>
+          </ion-col>
+          
+          
+          
+        </ion-row>
+        <ion-item-divider></ion-item-divider>
+      </ion-grid>
+      
+      
+  </div>

@@ -41,6 +41,7 @@ export class ViewCustomerOrderComponent implements OnInit {
   globalArray:any
   selectedValue:any
   customerOrder:any
+  filteredDropDown:any
   customerOrderLine = [{
     Customer_Order_ID: '1',
     product_ID: '1',
@@ -198,6 +199,15 @@ dropDown:any= [{
     this.title = data.name
       
      }
+     onKey(value:any) {
+      this.filteredDropDown = this.search(value);
+      }
+     
+     // **// Filter the states list and send back to populate the selectedStates**
+      search(value: string) {
+        let filter = value.toLowerCase();
+        return this.dropDown.filter((option:any) => option.name.toLowerCase().startsWith(filter));
+      }
     
     
    
@@ -231,9 +241,11 @@ dropDown:any= [{
         const control =  this.form.get('records') as FormArray;
      
         this.rowIndexTemplate = rowIndex
+        this.filteredDropDown = [...this.dropDown]
         let product_ID =(this.form.get('records') as FormArray).controls[rowIndex].get('product_ID')?.value
         let productIndex = this.products.findIndex((item:any) => item.product_ID == product_ID)
         this.dropDown.push(this.products[productIndex])
+        this.filteredDropDown.push(this.products[productIndex])
        
        
        
@@ -316,6 +328,7 @@ dropDown:any= [{
     
       })
        this.dropDown = [...this.data.products]
+       this.filteredDropDown = [...this.data.products]
        this.products = [...this.data.products]
       let control =  this.form.get('records') as FormArray
              this.data.orderLines.forEach((element:any) => {
@@ -330,6 +343,7 @@ dropDown:any= [{
             let index = this.dropDown.findIndex((item:any) => item.product_ID == element.product_ID)
             console.log(index)
             console.log(this.dropDown[index])
+            this.filteredDropDown.splice(index,1)
           this.dropDown.splice(index,1)
           console.log(this.dropDown)
           })
@@ -394,9 +408,10 @@ dropDown:any= [{
       formArr.controls[rowIndex].get("name")?.setValue(this.products[productIndex].name)
      
       let val = formArr.controls[rowIndex].get('isDone')?.setValue(true)
-      
+      this.filteredDropDown = [...this.dropDown]
       let index = this.dropDown.findIndex((item:any) => item.product_ID == element.product_ID)
       this.dropDown.splice(index,1)
+      this.filteredDropDown.splice(index,1)
      
       this.dataSource = new MatTableDataSource((this.form.get('records') as FormArray).value);
      
