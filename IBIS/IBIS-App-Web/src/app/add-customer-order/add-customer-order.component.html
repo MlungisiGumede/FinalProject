@@ -61,11 +61,11 @@
          
           <!-- display2(element) -->
           <mat-form-field *ngSwitchCase="'product_ID'"  >
-            <mat-label>Select Product</mat-label>
-            <mat-select  formControlName="product_ID" >
+            
+            <mat-select (selectionChange)="SetPrice($event,rowIndex)"  formControlName="product_ID" >
               
               <mat-option>
-              <input (keyup)="onKey($any($event.target).value)" (click)="$event.stopPropagation()" (keydown)="$event.stopPropagation()"/>
+              <input matInput (keyup)="onKey($any($event.target).value)" (click)="$event.stopPropagation()" (keydown)="$event.stopPropagation()"/>
               
           </mat-option>
               <mat-option *ngFor="let product of filteredDropDown" [value]="product.product_ID">
@@ -86,6 +86,16 @@
             <div *ngSwitchCase="'isDone'">
                  <input type="hidden">
                 
+            </div>
+            
+            <div *ngSwitchCase="'price'">
+              
+              <input *ngIf="element.price" formControlName="price" mat-Input list="price" />
+              <datalist *ngIf="element.price" id="price">
+             <option [value]="element.price"  >
+              {{element.price}}
+             </option>
+            </datalist>
             </div>
            
   

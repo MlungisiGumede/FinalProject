@@ -58,7 +58,7 @@ export class AddCustomerOrderComponent implements OnInit {
     },
     {
      key:"price",
-     type:"number",
+     type:"price",
      label:"Price per unit (kg)"
 
     },
@@ -199,6 +199,9 @@ export class AddCustomerOrderComponent implements OnInit {
        
        
       }
+      CheckPrice(rowIndex:any){
+        return (this.form.get('records') as FormArray).controls[rowIndex].get('price')?.value
+      }
 
       initiateProductForm(): FormGroup {
         return this.formBuilder.group({
@@ -329,6 +332,14 @@ export class AddCustomerOrderComponent implements OnInit {
       
       console.log(customerOrderViewModel)
 
+    }
+    SetPrice(event:any,rowIndex:any){
+      console.log(event)
+      let product_ID = event.value
+      let productIndex = this.products.findIndex((item:any) => item.product_ID == product_ID)
+      let val = (this.form.get('records') as FormArray).controls[rowIndex].get('price')?.setValue(this.products[productIndex].price)
+      this.dataSource = new MatTableDataSource((this.form.get('records') as FormArray).value);
+      this.dataSource._updateChangeSubscription()
     }
  
  

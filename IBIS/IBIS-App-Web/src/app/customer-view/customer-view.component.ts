@@ -51,7 +51,10 @@ result:any
     return datePipe.transform(date, 'yyyy/MM/dd');
     //return new Date(date)
      }
-  async GetCustomerOrders(){
+     ReviewBox(customerOrder_ID:any){
+       
+     }
+  async GetCustomerOrders(){ // should be in progress orders... or can filter as well by finished orders...
     let value = new Promise((resolve, reject) => {
       this.loginservice.getCustomerOrders().subscribe((res) => {
         console.log(res)
