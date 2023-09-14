@@ -109,7 +109,7 @@
   
            
           <mat-form-field *ngSwitchDefault>
-            <input #Input [type]="col.type" [formControlName]="col.key" (keyup)="CheckQuantity(Input.value,element.product_ID)" matInput />
+            <input *ngIf="element.product_ID" #Input [type]="col.type" [formControlName]="col.key" (keyup)="CheckQuantity(Input.value,element.product_ID)" matInput />
             {{ConsoleLog(element,col.key)}}
             
           </mat-form-field>

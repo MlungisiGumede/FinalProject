@@ -18,6 +18,13 @@
          hi
       <td mat-footer-cell *matFooterCellDef>Total: R{{ CalculateSubTotal()}} </td>
         </div>
+        <div *ngSwitchCase="'number'">
+         
+          <td mat-footer-cell *matFooterCellDef><p style="color:darkgoldenrod;" *ngIf="quantityGreater==true">
+          Warning:Quantity is greater than stock on hand
+        </p> </td>
+        </div>
+
     <div *ngSwitchDefault>
     <td mat-footer-cell *matFooterCellDef> </td>
     </div>
@@ -62,9 +69,9 @@
           <!-- display2(element) -->
           <mat-form-field *ngSwitchCase="'product_ID'"  >
             <mat-label>Select Product</mat-label>
-            <mat-select formControlName="product_ID" >
+            <mat-select formControlName="product_ID" (selectionChange)="SetPrice($event,rowIndex)" >
               <mat-option>
-                <input (keyup)="onKey($any($event.target).value)" (click)="$event.stopPropagation()" (keydown)="$event.stopPropagation()"/>
+                <input matInput (keyup)="onKey($any($event.target).value)" (click)="$event.stopPropagation()" (keydown)="$event.stopPropagation()"/>
                
             </mat-option>
                 <mat-option *ngFor="let product of filteredDropDown" [value]="product.product_ID">
@@ -75,8 +82,8 @@
             
           </mat-form-field>
           <div *ngSwitchCase="'isDelete'">
+            <button style="float: right;" mat-button (click)="DeleteRow(rowIndex)" >Delete</button>
             <button *ngIf="edited" [disabled]="!form.valid" class="button-add-row" (click)="OnDone(rowIndex)" mat-button style="float: right;">Done</button>
-              <button mat-button (click)="DeleteRow(rowIndex)" >Delete</button>
              
             </div>
             <span *ngSwitchCase="'total'">
@@ -85,18 +92,30 @@
              </span>
             <div *ngSwitchCase="'isDone'">
                  <input type="hidden">
+
+                 <div *ngSwitchCase="'price'">
+             
+                  <input type="number" *ngIf="element.price" formControlName="price" matInput list="price" />
+                  <datalist *ngIf="element.price" id="price">
+                 <option [value]="FindPrice(element.product_ID)"  >
+                  {{FindPrice(element.product_ID)}}
+                 </option>
+                </datalist>
+                </div>
+    
                 
             </div>
-            <div *ngSwitchCase="'quantity'">
-              <input [type]="col.type" matInput [formControlName]="col.key" step="1" />
-             
-         </div>
+         
   
            
-          <mat-form-field *ngSwitchDefault>
-            <input [type]="col.type" matInput [formControlName]="col.key" />
-            <td mat-footer-cell *matFooterCellDef> </td>
-          </mat-form-field>
+           
+            <mat-form-field  *ngSwitchDefault>
+              <input  #Input *ngIf="element.product_ID" [type]="col.type" [formControlName]="col.key" (keyup)="CheckQuantity(Input.value,element.product_ID)" matInput />
+              {{ConsoleLog(element,col.key)}}
+
+             
+            </mat-form-field>
+  
         </div>
        
        

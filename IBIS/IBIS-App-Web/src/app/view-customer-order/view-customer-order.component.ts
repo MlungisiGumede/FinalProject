@@ -34,6 +34,7 @@ export class ViewCustomerOrderComponent implements OnInit {
   title:any
   response:any = []
   arrived = false
+  quantityGreater = false
   //supplierOrder:SupplierOrder = new SupplierOrder
   //customerOrder:CustomerOrder = new CustomerOrder
   edited = false
@@ -73,7 +74,7 @@ export class ViewCustomerOrderComponent implements OnInit {
     },
     {
      key:"price",
-     type:"number",
+     type:"price",
      label:"Price per unit (kg)"
 
     },
@@ -202,6 +203,11 @@ dropDown:any= [{
      onKey(value:any) {
       this.filteredDropDown = this.search(value);
       }
+      ConsoleLog(element:any,key:any){
+        //console.log(element)
+        //console.log(key)
+      }
+
      
      // **// Filter the states list and send back to populate the selectedStates**
       search(value: string) {
@@ -239,7 +245,7 @@ dropDown:any= [{
         this.edited = true
         let val = (this.form.get('records') as FormArray).controls[rowIndex].get('isDone')?.setValue(false)
         const control =  this.form.get('records') as FormArray;
-     
+        this.quantityGreater = control.controls[rowIndex].get('quantityGreater')?.value
         this.rowIndexTemplate = rowIndex
         this.filteredDropDown = [...this.dropDown]
         let product_ID =(this.form.get('records') as FormArray).controls[rowIndex].get('product_ID')?.value
@@ -250,13 +256,26 @@ dropDown:any= [{
        
        
       }
+      SetPrice(event:any,rowIndex:any){
+        console.log(event)
+        let product_ID = event.value
+        let productIndex = this.products.findIndex((item:any) => item.product_ID == product_ID)
+        //this.CheckQuantity(this.selectedQuantity,product_ID)
+        let val = (this.form.get('records') as FormArray).controls[rowIndex].get('price')?.setValue(this.products[productIndex].price)
+        let val2 = (this.form.get('records') as FormArray).controls[rowIndex].get('quantity')?.setValue(null)
+        this.quantityGreater = false
+        this.dataSource = new MatTableDataSource((this.form.get('records') as FormArray).value);
+        this.dataSource._updateChangeSubscription()
+      }
+  
 
-      initiateProductForm(element:CustomerOrderLine,product_Name:any): FormGroup {
+      initiateProductForm(element:CustomerOrderLine,product_Name:any,quantityGreater:boolean): FormGroup {
         console.log(element)
         return this.formBuilder.group({
           product_ID: new FormControl(element.product_ID, Validators.required),
           name: new FormControl(product_Name),
         quantity: new FormControl(element.quantity, Validators.required),
+        quantityGreater: new FormControl(quantityGreater),
         price: new FormControl(element.price,Validators.required),
         isDone: new FormControl(true),
         isDelete: new FormControl("")
@@ -268,6 +287,7 @@ dropDown:any= [{
           product_ID: new FormControl("", Validators.required),
           name: new FormControl(""),
       quantity: new FormControl("", Validators.required),
+      quantityGreater: new FormControl(false),
         price: new FormControl("",Validators.required),
         isDone: new FormControl(false),
         isDelete: new FormControl("")
@@ -335,7 +355,13 @@ dropDown:any= [{
             let productIndex = this.products.findIndex((item:any) => item.product_ID == element.product_ID)
             let product_Name = this.products[productIndex].name
             console.log(element)
-            control.push(this.initiateProductForm(element,product_Name))
+            console.log(control.value)
+            if(element.quantity > this.products[productIndex].quantity){
+              control.push(this.initiateProductForm(element,product_Name,true))
+            }else{
+              control.push(this.initiateProductForm(element,product_Name,false))
+              
+            }
             console.log((this.form.get('records') as FormArray).value)
           });
        let val = (this.form.get('records') as FormArray).value.forEach((element:any) => {
@@ -356,7 +382,25 @@ dropDown:any= [{
           this.dataSource._updateChangeSubscription()
           //control.push(this.initiateProductForm(element,product_Name))
         }
-     
+        FindPrice(product_ID:any){
+          let productIndex = this.products.findIndex((item:any) => item.product_ID == product_ID)
+          return this.products[productIndex].price
+       }
+       CheckQuantity(value:any,product_ID:any){
+        console.log(value)
+        console.log(product_ID)
+        let productIndex = this.products.findIndex((item:any) => item.product_ID == product_ID)
+         console.log(this.products[productIndex].quantity)
+        if(value>this.products[productIndex].quantity){
+          this.quantityGreater = true
+          this.dataSource = new MatTableDataSource((this.form.get('records') as FormArray).value); // see if without these lines...
+          this.dataSource._updateChangeSubscription()
+        }else{
+          this.quantityGreater = false
+        }
+          }
+    
+ 
         
     
   
@@ -406,7 +450,13 @@ dropDown:any= [{
       let productIndex = this.products.findIndex((item:any) => item.product_ID == product_ID)
       // setting based on product index and not on product ID.
       formArr.controls[rowIndex].get("name")?.setValue(this.products[productIndex].name)
-     
+      if(this.quantityGreater == true){
+        formArr.controls[rowIndex].get("quantityGreater")?.setValue(true)
+      }else{
+        formArr.controls[rowIndex].get("quantityGreater")?.setValue(false)
+      }
+
+      this.quantityGreater = false
       let val = formArr.controls[rowIndex].get('isDone')?.setValue(true)
       this.filteredDropDown = [...this.dropDown]
       let index = this.dropDown.findIndex((item:any) => item.product_ID == element.product_ID)
