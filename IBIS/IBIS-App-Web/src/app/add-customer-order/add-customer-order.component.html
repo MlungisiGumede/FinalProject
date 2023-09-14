@@ -100,8 +100,8 @@
               
               <input type="number" *ngIf="element.price" formControlName="price" matInput list="price" />
               <datalist *ngIf="element.price" id="price">
-             <option [value]="element.price"  >
-              {{element.price}}
+             <option [value]="FindPrice(element.product_ID)"  >
+              {{FindPrice(element.product_ID)}}
              </option>
             </datalist>
             </div>

@@ -193,8 +193,8 @@ export class AddCustomerOrderComponent implements OnInit {
         this.edited = true
         let val = (this.form.get('records') as FormArray).controls[rowIndex].get('isDone')?.setValue(false)
         const control =  this.form.get('records') as FormArray;
-        let quantityGreater = control.controls[rowIndex].get('quantityGreater')
-        if(quantityGreater){
+        let quantityGreater = control.controls[rowIndex].get('quantityGreater')?.value
+        if(quantityGreater == true){
           this.quantityGreater = true
         }
         this.rowIndexTemplate = rowIndex
@@ -204,6 +204,10 @@ export class AddCustomerOrderComponent implements OnInit {
          this.filteredDropDown.push(this.products[productIndex])
        
        
+      }
+      FindPrice(product_ID:any){
+         let productIndex = this.products.findIndex((item:any) => item.product_ID == product_ID)
+         return this.products[productIndex].price
       }
       CheckPrice(rowIndex:any){
         return (this.form.get('records') as FormArray).controls[rowIndex].get('price')?.value
@@ -322,9 +326,11 @@ export class AddCustomerOrderComponent implements OnInit {
       let productIndex = this.products.findIndex((item:any) => item.product_ID == product_ID)
       // setting based on product index and not on product ID.
       formArr.controls[rowIndex].get("name")?.setValue(this.products[productIndex].name)
-      if(this.quantityGreater){
+      console.log(this.quantityGreater)
+      if(this.quantityGreater == true){
         formArr.controls[rowIndex].get("quantityGreater")?.setValue(true)
       }
+      console.log(formArr.controls[rowIndex].get("quantityGreater")?.value)
        this.quantityGreater = false
       let val = formArr.controls[rowIndex].get('isDone')?.setValue(true)
       this.filteredDropDown = [...this.dropDown]
