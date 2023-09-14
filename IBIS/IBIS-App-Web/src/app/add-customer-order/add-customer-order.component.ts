@@ -329,6 +329,8 @@ export class AddCustomerOrderComponent implements OnInit {
       console.log(this.quantityGreater)
       if(this.quantityGreater == true){
         formArr.controls[rowIndex].get("quantityGreater")?.setValue(true)
+      }else{
+        formArr.controls[rowIndex].get("quantityGreater")?.setValue(false)
       }
       console.log(formArr.controls[rowIndex].get("quantityGreater")?.value)
        this.quantityGreater = false

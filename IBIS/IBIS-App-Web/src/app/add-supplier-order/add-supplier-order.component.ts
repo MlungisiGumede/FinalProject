@@ -30,46 +30,7 @@ export class AddSupplierOrderComponent implements OnInit {
   rowIndexTemplate:any
   globalArray:any
   selectedValue:any
-//@ViewChild(MatTable) myTable: MatTable<any>;
-  // CustomercolumnsSchema = [
-  //   // {
-  //   //     key: "Customer_Order_ID",
-  //   //     type: "text",
-  //   //     label: "Product ID"
-  //   // },
-  //   {
-  //       key: "Product_ID",
-  //       type: "Product_ID", // maybe just enter in... maybe select...
-  //       label: "Product"
-  //   },
-  //   {
-  //       key: "Quantity",
-  //       type: "number",
-  //       label: "Quantity"
-  //   },
-  //   {
-  //    key:"Price",
-  //    type:"number",
-  //    label:"Price per unit (kg)"
-
-  //   },
-  //   {
-  //     key:"total",
-  //     type:"total",
-  //     label:"Total"
-  //   },
-  //   {
-  //       key: "isDone",
-  //       type: "isDone",
-  //       label: ""
-  //   },
-  //   {
-  //     key: "isDelete",
-  //     type: "isDelete",
-  //     label: ""
-  // }
-
-  //]
+  filteredDropDown:any
   SuppliercolumnsSchema = [
     // {
     //     key: "Id",
@@ -191,6 +152,14 @@ dropDown:any= [{
   disp(value:any){
     console.log(value)
   }
+  onKey(value:any) {
+    this.filteredDropDown = this.search(value);
+    }
+    search(value: string) {
+      let filter = value.toLowerCase();
+      return this.dropDown.filter((option:any) => option.name.toLowerCase().startsWith(filter));
+    }
+
 
   addRow(){
     this.edited = true
@@ -214,7 +183,7 @@ console.log(this.dropDown)
         let inventory_ID =(this.form.get('records') as FormArray).controls[rowIndex].get('inventory_ID')?.value
         let inventoryIndex = this.inventories.findIndex((item:any) => item.inventory_ID == inventory_ID)
         this.dropDown.push(this.inventories[inventoryIndex])
-       
+        this.filteredDropDown.push(this.inventories[inventoryIndex])
        
        
       }
@@ -233,8 +202,8 @@ console.log(this.dropDown)
         return this.formBuilder.group({
             inventory_ID:new FormControl("", Validators.required),
             name: new FormControl("", ),
-            quantity: new FormControl("", Validators.required),
-            price: new FormControl("",Validators.required),
+            quantity: new FormControl("", [Validators.required,Validators.min(1)]),
+            price: new FormControl("",[Validators.required,Validators.min(1)]),
             isDone: new FormControl(false),   // closest form group id then set it in form...
             isDelete: new FormControl("")
           
@@ -277,7 +246,8 @@ console.log(this.dropDown)
           let inventoryIndex = this.inventories.findIndex((item:any) => item.inventory_ID == inventory_ID)
          
           this.dropDown.push(this.inventories[inventoryIndex])
-        
+          this.filteredDropDown.push(this.inventories[inventoryIndex])
+
         }
         const control =  this.form.get('records') as FormArray;
 
@@ -307,8 +277,9 @@ console.log(this.dropDown)
       }) // BY ID...
       // check if data passes through else not iterable maybe... but doesnt matter?..?
         let inventories = this.data.inventories
-        let dropDown = this.data.inventories
-        this.dropDown = [...dropDown]
+        //let dropDown = this.data.inventories
+        this.dropDown = [...this.data.inventories]
+        this.filteredDropDown = [...this.data.inventories]
         this.inventories = [...inventories]
        // own method then await
   
@@ -342,10 +313,11 @@ console.log(this.dropDown)
       formArr.controls[rowIndex].get("name")?.setValue(this.inventories[inventoryIndex].name)
       console.log(formArr.controls[rowIndex].get("name")?.value)
       let val = formArr.controls[rowIndex].get('isDone')?.setValue(true)
-      
+      this.filteredDropDown = [...this.dropDown]
       let index = this.dropDown.findIndex((item:any) => item.inventory_ID == element.inventory_ID)
       this.dropDown.splice(index,1)
       console.log(this.dropDown)
+      this.filteredDropDown.splice(index,1)
       this.dataSource = new MatTableDataSource((this.form.get('records') as FormArray).value);
      
      

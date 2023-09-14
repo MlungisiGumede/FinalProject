@@ -58,7 +58,10 @@
             <mat-form-field *ngSwitchCase="'inventory_ID'" >
                 <mat-label>Select Inventory Item</mat-label>
                 <mat-select formControlName="inventory_ID">
-                  <mat-option *ngFor="let inventory of dropDown" [value]="inventory.inventory_ID">
+                  <mat-option>
+                    <input matInput (keyup)="onKey($any($event.target).value)" (click)="$event.stopPropagation()" (keydown)="$event.stopPropagation()"/>
+                  </mat-option>
+                  <mat-option *ngFor="let inventory of filteredDropDown" [value]="inventory.inventory_ID">
                     {{inventory.name}}
                   </mat-option>
                 </mat-select>

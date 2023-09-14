@@ -274,9 +274,9 @@ dropDown:any= [{
         return this.formBuilder.group({
           product_ID: new FormControl(element.product_ID, Validators.required),
           name: new FormControl(product_Name),
-        quantity: new FormControl(element.quantity, Validators.required),
+        quantity: new FormControl(element.quantity, [Validators.required,Validators.min(1)] ),
         quantityGreater: new FormControl(quantityGreater),
-        price: new FormControl(element.price,Validators.required),
+        price: new FormControl(element.price,[Validators.required,Validators.min(1)]),
         isDone: new FormControl(true),
         isDelete: new FormControl("")
         });
@@ -286,9 +286,9 @@ dropDown:any= [{
         return this.formBuilder.group({
           product_ID: new FormControl("", Validators.required),
           name: new FormControl(""),
-      quantity: new FormControl("", Validators.required),
+      quantity: new FormControl("", [Validators.required,Validators.min(1)] ),
       quantityGreater: new FormControl(false),
-        price: new FormControl("",Validators.required),
+        price: new FormControl("",[Validators.required,Validators.min(1)]),
         isDone: new FormControl(false),
         isDelete: new FormControl("")
         });
