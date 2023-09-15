@@ -78,6 +78,15 @@ namespace IBIS_API.Controllers
         public async Task<ActionResult<Write_Offs>> PostWriteOff(Write_Offs writeOff)
         {
             _context.Write_Offss.Add(writeOff);
+            var adjustment = _context.AdjustmentTypes.FirstOrDefault();
+            if (adjustment != null) {
+                var adjustment1 = new Adjustment();
+                var adjustment2 = new Adjustment();
+                adjustment1.Name = "Write Off";
+                adjustment2.Name = "Write Up";
+                _context.Add(adjustment1);
+                _context.Add(adjustment2);
+            }
             var product = _context.Products.Where(c => c.Product_ID == writeOff.Product_ID).FirstOrDefault();
             if (writeOff.Adjustment_ID == 1)
             {

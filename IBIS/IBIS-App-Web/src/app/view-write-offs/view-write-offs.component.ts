@@ -11,6 +11,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { MatDialog } from '@angular/material/dialog';
 import { ViewImageComponent } from '../view-image/view-image.component';
 import { Observable, of } from 'rxjs';
+import { DatePipe } from '@angular/common';
 
 var pdfMake = require('pdfmake/build/pdfmake');
 var pdfFonts = require('pdfmake/build/vfs_fonts');
@@ -135,7 +136,7 @@ this.getWriteOffs();
     var body:any = [];
     let index = false
   console.log(body)
-  let displayedColumns = ['Write Off ID', 'Product Name','Ímage', 'Quantity', 'Reason']
+  let displayedColumns = ['Write Off ID', 'Product Name','Ímage', 'Quantity', 'Reason','Transaction Type']
       body.push(displayedColumns);
       console.log(data)
        data.forEach((row:any) => {
@@ -154,6 +155,15 @@ this.getWriteOffs();
               row[column] =  {'image': row[column],'width': '100'}
             
               
+            }if(column == "adjustment_ID"){
+              console.log("hitting")
+              console.log(row[column])
+              if(row[column] == 1){
+                row[column] = "Write Off"
+              }else{
+                row[column] = "Write up"
+              }
+              
             }
             dataRow.push(row[column]);
            })
@@ -170,6 +180,60 @@ this.getWriteOffs();
       console.log(body)
       return body;
   }
+  FormControlBody(data:any, columns:any) { // https://stackoverflow.com/questions/26658535/building-table-dynamically-with-pdfmake
+    var body:any = [];
+    let index = false
+  console.log(body)
+  let displayedColumns = ['Write Off ID', 'Product Name','Ímage', 'Quantity', 'Reason','Transaction Type']
+      body.push(displayedColumns);
+      console.log(data)
+       data.forEach((row:any) => {
+        console.log(index)
+         let dataRow:any = [];
+  
+          columns.forEach( (column:any) => {
+            if(column == "product_ID"){
+              console.log(row[column])
+              row[column] = this.GetProductName(row[column])
+              console.log(row[column])
+
+            }if(column == "image"){
+              console.log("hitting")
+              console.log(row[column])
+              row[column] =  {'image': row[column],'width': '100'}
+            
+              
+            }if(column == "adjustment_ID"){
+              console.log("hitting")
+              console.log(row[column])
+              if(row[column] == 1){
+                row[column] = "Write Off"
+              }else{
+                row[column] = "Write up"
+              }
+              
+            }
+            dataRow.push([row[column],row[column]]);
+           })
+           
+           //index = true
+           body.push(dataRow)
+          }
+          
+         
+       )
+  
+      console.log(body)
+    
+      console.log(body)
+      return body;
+  }
+  GenerateDate(){
+    let date = Date.now();
+    let datePipe = new DatePipe('en-US');
+    return datePipe.transform(date, 'yyyy-MM-dd');
+  }
+  
 
   generPDF() {
     //console.log(this.FormBody(this.reportData,['image']))
@@ -182,7 +246,7 @@ this.getWriteOffs();
           color: '#047886'
         },
         {
-          text: 'write off report',
+          text: 'Write Off/Up report',
           fontSize: 20,
           bold: true,
           alignment: 'center',
@@ -225,8 +289,8 @@ this.getWriteOffs();
             headerRows: 1,
            // widths: ['*', 'auto', 'auto', 'auto'],
             body: 
-              this.FormBody(this.reportData,['write_Off_Id','product_ID', 'image', 'quantity', 'reason']),
-            //console.log(this.FormBody(this.reportData,['image','write_Off_Id', 'product_ID', 'quantity', 'reason']))
+              this.FormBody(this.reportData,['write_Off_Id','product_ID', 'image', 'quantity', 'reason', 'adjustment_ID']),
+            // add date created... or...?
               
             
 
@@ -237,7 +301,7 @@ this.getWriteOffs();
           style: 'sectionHeader'
         },
         {
-            text: 'this.invoice.additionalDetails',
+            text: 'Date Generated: '+this.GenerateDate(),
             margin: [0, 0 ,0, 15]          
         },
         {
@@ -247,14 +311,14 @@ this.getWriteOffs();
           ]
         },
         {
-          text: 'Terms and Conditions',
+          text: 'Description',
           style: 'sectionHeader'
         },
         {
             ul: [
-              'Order can be return in max 10 days.',
-              'Warrenty of the product will be subject to the manufacturer terms and conditions.',
-              'This is system generated invoice.',
+              'This is a write off/up report',
+              'Shows all adjustments made to stock through writing off or up',
+              'Generated with PDFMake',
             ],
         }
       ],

@@ -303,6 +303,71 @@ OnDone(item:Product){
         combinedData: JSON.stringify(this.combinedData)
       }
     });
+  }
+  GenerateCategoryPDF() {
+    let categoryNames = this.categories.map((item: any) => {
+      return item.name // generated through the ai thingy not all...
+    })
+    console.log(categoryNames);
+    let docDefinition = {
+      content: [
+        {
+          text: 'Control Break Report', // or just report maybe...
+          fontSize: 16,
+          alignment: 'center',
+          color: '#047886'
+        },
+        {
+          text: 'Category Report',
+          fontSize: 20,
+          bold: true,
+          alignment: 'center',
+          decoration: 'underline',
+          color: 'skyblue'
+        },
+        {
+          text: 'Details',
+          style: 'sectionHeader'
+        },
+        {
+          table: {
+            headerRows: 1,
+            body: [
+                    categoryNames,
+                    // [
+                          
+                    //       //   [
+                              
+                    //       //       {
+                    //       //           table: {
+                    //       //               body: [
+                    //       //                   [ 'Col1', 'Col2', 'Col3'],
+                    //       //                   [ '1', '2', '3'],
+                    //       //                   [ '1', '2', '3']
+                    //       //               ]
+                    //       //           },
+                    //       //       }
+                    //       //   ], [
+                              
+                    //       //     {
+                    //       //         table: {
+                    //       //             body: [
+                    //       //                 [ 'Col1', 'Col2', 'Col3'],
+                    //       //                 [ '1', '2', '3'],
+                    //       //                 [ '1', '2', '3']
+                    //       //             ]
+                    //       //         },
+                    //       //     }
+                    //       // ]
+                    // ]
+            ]
+          }
+        }
+     ] }
+    // pdfMake.createPdf(docDefinition).download();
+     //pdfMake.createPdf(docDefinition).print();      
+  
+     pdfMake.createPdf(docDefinition).open();  
   }  
  
   FormBody(data:any, columns:any) { // https://stackoverflow.com/questions/26658535/building-table-dynamically-with-pdfmake

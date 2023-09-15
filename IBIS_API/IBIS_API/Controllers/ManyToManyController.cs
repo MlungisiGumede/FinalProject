@@ -31,7 +31,7 @@ namespace IBIS_API.Controllers
         static bool enableSSL = true;
         static string emailFromAddress = "ma.gaitsmith@gmail.com"; //Sender Email Address  
                                                                    //Sender Password  
-        static string emailToAddress = "u21482358@tuks.co.za"; //Receiver Email Address  
+        static string emailToAddress = "ma.gaitsmith@gmail.com"; //Receiver Email Address  
         static string subject = "Hello";
 
 
@@ -117,9 +117,240 @@ public async Task<ActionResult> PostCustomerOrder(CustomerOrderViewModel? ord)
             return Ok();
         }
         [HttpGet]
+        [Route("GenerateSubCategoriesReport")]
+        public ActionResult GenerateSubCategoriesReport()
+        {
+            var subCategories = _context.SubCategories.ToList();
+            System.Data.DataTable dt = new System.Data.DataTable("Grid");
+
+
+            using (XLWorkbook wb = new XLWorkbook())
+            {
+                var worksheet = wb.Worksheets.Add("CustomerOrders");
+                worksheet.ColumnWidth = 25; // can maybe try select index of the column...
+                //worksheet.Cell(2, 1).InsertTable(dt);                     //wb2.SaveToFile("excel.xlsx");
+
+                //worksheet.Cell(1, 1).InsertTable(dt);
+                int i = 1;
+                var j = 3;
+                var maxLength = 0;
+                var totalsList = new List<double?>();
+                foreach (var subCategory in subCategories) // change to for loop...
+                {
+                    worksheet.Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center);
+                    worksheet.Cell(1, i).Value = subCategory.Name; // try to set a header maybe...
+                    //worksheet.Cell(1, i).Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center);
+                    worksheet.Cell(1, i).Style.Fill.SetBackgroundColor(XLColor.BabyBlue);
+                    worksheet.Range(worksheet.Cell(1, i), worksheet.Cell(1, i + 1)).Merge();
+                    worksheet.Cell(2, i).Value = "Product Name";
+                    worksheet.Cell(2, i + 1).Value = "Stock on Hand";
+                    worksheet.Cell(2, i).Style.Fill.SetBackgroundColor(XLColor.Pink);
+                    worksheet.Cell(2, i + 1).Style.Fill.SetBackgroundColor(XLColor.Pink);
+                    // worksheet.Cell(2, i+1).Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center); // set border maybe...
+                    // worksheet.Cell(2, i).Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center);
+                    double? subTotal = 0;
+                    if (_context.Products.Where(c => c.SubCategory_ID == subCategory.SubCategory_ID).Any())
+                    {
+                        var products = _context.Products.Where(c => c.SubCategory_ID == subCategory.SubCategory_ID).ToList(); // product per the category
+
+                        foreach (var product in products)
+                        {
+                            worksheet.Cell(j, i).Value = product.Name;
+                            worksheet.Cell(j, i + 1).Value = product.Quantity;
+                            subTotal = subTotal + product.Quantity;
+                            j++;
+                        }
+
+                        totalsList.Add(subTotal);
+                        subTotal = 0;
+                    }
+                    else
+                    {
+                        totalsList.Add(subTotal);
+                    }
+                    // display totals next to each other...
+                    // worksheet.Cell(j, i).Value = "Total";
+                    //worksheet.Cell(j, i + 1).Value = total;
+
+                    i = i + 2;
+                    if (j > maxLength)
+                    {
+                        maxLength = j;
+                    }
+                    j = 3;
+
+                }
+                double? total = 0;
+                int rowIndex = 1;
+                int k = 0;
+                var totals = totalsList.ToArray();
+                foreach (var subCategory in subCategories)
+                {
+
+
+
+
+                    total = total + totals[k];
+                    worksheet.Cell(maxLength, rowIndex).Value = "Total";
+                    worksheet.Cell(maxLength, rowIndex + 1).Value = "" + totals[k];
+
+                    k = k + 1;
+                    rowIndex = rowIndex + 2;
+                }
+                worksheet.Cell(maxLength, rowIndex).Value = "" + total;
+
+
+
+                using (MemoryStream ms = new MemoryStream())
+                using (var Writer = new StreamWriter(ms))
+                using (SmtpClient smtp = new SmtpClient(smtpAddress, portNumber)) // where are the brackets...
+                using (var message = new MailMessage(emailFromAddress, emailToAddress))
+                {
+
+                    //sheet
+                    wb.SaveAs(ms);
+
+                    // use try in the backend here...
+
+                    //FileStream fs = new FileStream("c:\\ExcelFile.xlsx",FileMode.Create,FileAccess.Write);
+                    // try with different type...
+                    Writer.Flush();
+                    ms.Position = 0;
+                    message.Attachments.Add(new Attachment(ms, "SubCategories.xlsx", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"));
+                    smtp.Credentials = new NetworkCredential(emailFromAddress, "sxkbtjguspnshajt");
+                    smtp.UseDefaultCredentials = false;
+                    smtp.EnableSsl = enableSSL;
+                    smtp.Send(message);
+                    // ms.WriteTo(fs);
+                    //fs.Close();
+                    // ms.Close();
+                    //File(ms.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "ExcelFile.xlsx");
+                }
+            }
+
+            return Ok();
+        }
+
+        [HttpGet]
+        [Route("GenerateCategoriesReport")]
+        public ActionResult GenerateCategoriesReport()
+        {
+            var categories = _context.Categories.ToList();
+            System.Data.DataTable dt = new System.Data.DataTable("Grid");
+           
+           
+            using (XLWorkbook wb = new XLWorkbook())
+            {
+                var worksheet = wb.Worksheets.Add("CustomerOrders");
+                worksheet.ColumnWidth = 25; // can maybe try select index of the column...
+                worksheet.Cell(2, 1).InsertTable(dt);                     //wb2.SaveToFile("excel.xlsx");
+                
+                //worksheet.Cell(1, 1).InsertTable(dt);
+                int i = 1;
+                var j = 3;
+                var maxLength = 0;
+                var totalsList = new List<double?>();
+                foreach (var category in categories) // change to for loop...
+                {
+                    worksheet.Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center);
+                    worksheet.Cell(1,i).Value = category.Name; // try to set a header maybe...
+                    //worksheet.Cell(1, i).Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center);
+                    worksheet.Cell(1, i).Style.Fill.SetBackgroundColor(XLColor.BabyBlue);
+                    worksheet.Range(worksheet.Cell(1, i), worksheet.Cell(1, i+1)).Merge();
+                    worksheet.Cell(2, i).Value = "Product Name";
+                    worksheet.Cell(2, i+1).Value = "Stock on Hand";
+                    worksheet.Cell(2, i).Style.Fill.SetBackgroundColor(XLColor.Pink);
+                    worksheet.Cell(2, i+1).Style.Fill.SetBackgroundColor(XLColor.Pink);
+                   // worksheet.Cell(2, i+1).Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center); // set border maybe...
+                   // worksheet.Cell(2, i).Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center);
+                    double? subTotal = 0;
+                    if (_context.Products.Where(c => c.Category_ID == category.Category_ID).Any())
+                    {
+                        var products = _context.Products.Where(c => c.Category_ID == category.Category_ID).ToList(); // product per the category
+                       
+                        foreach(var product in products)
+                        {
+                            worksheet.Cell(j, i).Value = product.Name;
+                            worksheet.Cell(j, i+1).Value = product.Quantity;
+                            subTotal = subTotal + product.Quantity;
+                            j++;
+                        }
+
+                        totalsList.Add(subTotal);
+                        subTotal = 0;
+                    }
+                    else
+                    {
+                        totalsList.Add(subTotal);
+                    }
+                    // display totals next to each other...
+                    // worksheet.Cell(j, i).Value = "Total";
+                    //worksheet.Cell(j, i + 1).Value = total;
+                   
+                    i = i + 2;
+                    if(j > maxLength)
+                    {
+                        maxLength = j;
+                    }
+                    j = 3;    
+                    
+                }
+                double? total = 0;
+                int rowIndex = 1;
+                int k = 0;
+                var totals = totalsList.ToArray();
+                foreach (var category in categories)
+                {
+                    
+                    
+                    
+                    
+                    total = total + totals[k];
+                    worksheet.Cell(maxLength, rowIndex).Value = "Total";
+                    worksheet.Cell(maxLength, rowIndex+1).Value = "" + totals[k];
+
+                    k= k+1;
+                    rowIndex = rowIndex + 2;
+                }
+                worksheet.Cell(maxLength, rowIndex).Value = ""+total;
+
+
+
+                using (MemoryStream ms = new MemoryStream())
+                using (var Writer = new StreamWriter(ms))
+                using (SmtpClient smtp = new SmtpClient(smtpAddress, portNumber)) // where are the brackets...
+                using (var message = new MailMessage(emailFromAddress, emailToAddress))
+                {
+
+                    //sheet
+                    wb.SaveAs(ms);
+
+                    // use try in the backend here...
+
+                    //FileStream fs = new FileStream("c:\\ExcelFile.xlsx",FileMode.Create,FileAccess.Write);
+                    // try with different type...
+                    Writer.Flush();
+                    ms.Position = 0;
+                    message.Attachments.Add(new Attachment(ms, "Categories.xlsx", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"));
+                    smtp.Credentials = new NetworkCredential(emailFromAddress, "sxkbtjguspnshajt");
+                    smtp.UseDefaultCredentials = false;
+                    smtp.EnableSsl = enableSSL;
+                    smtp.Send(message);
+                    // ms.WriteTo(fs);
+                    //fs.Close();
+                    // ms.Close();
+                    //File(ms.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "ExcelFile.xlsx");
+                }
+            }
+
+            return Ok();
+        }
+
+        [HttpGet]
         [Route("convertCustomerOrders")]
         public  ActionResult ConvertCustomerOrders()
         {
+
             System.Data.DataTable dt = new System.Data.DataTable("Grid");
             dt.Columns.AddRange(new DataColumn[6] { new DataColumn("Order ID"),
                                                      new DataColumn("Customer Name"),
