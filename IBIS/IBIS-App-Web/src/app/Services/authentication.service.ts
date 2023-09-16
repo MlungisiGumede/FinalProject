@@ -9,7 +9,7 @@ import { environment } from 'src/environments/environment';
   providedIn: 'root'
 })
 export class AuthenticationService implements HttpInterceptor {
-  apiUrl = environment.apiUrl+'User';
+  apiUrl = environment.apiUrl+'User/';
   intercept(req: HttpRequest<any>,
     next: HttpHandler): Observable<HttpEvent<any>> {
       //localStorage.getItem('Token') && localStorage.getItem('Token') != null

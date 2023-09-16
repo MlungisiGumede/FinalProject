@@ -25,6 +25,10 @@ export class LoginService  {
   public SetNewPassWord(user:User){
     return this.httpClient.post<User>(`${this.apiUrl}setNewPassWord`,user)
   }
+  GetWeatherForeCast(){
+   
+    return this.httpClient.get(`https://inf370team62023.azurewebsites.net/WeatherForeCast`);
+  }
 public GetUserRole(){
   return this.httpClient.get<any>(`${this.apiUrl}getUserRole`)
 }

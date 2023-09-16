@@ -28,7 +28,7 @@ export class LoginComponent implements OnInit {
    }
 
   ngOnInit(): void{
-    
+    this.loginservice.GetWeatherForeCast().subscribe(data => console.log(data));
 this.loginForm = this.fb.group({
 
   username : ['', Validators.required],
