@@ -3,12 +3,13 @@ import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http
 import { Observable, catchError, retry, throwError } from 'rxjs';
 import { Product } from '../Models/Product';
 import { Recipe } from '../Models/Recipes';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class RecipeService {
-  apiUrl = 'https://localhost:7226/api/Recipe';
+  apiUrl = environment.apiUrl + 'Recipe';
 
 
   constructor(private httpClient: HttpClient) { }

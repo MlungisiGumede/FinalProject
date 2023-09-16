@@ -1,4 +1,4 @@
 {
     "appService.defaultWebAppToDeploy": "/subscriptions/61564374-4d32-4d13-82f5-4dbec0cff51e/resourceGroups/DefaultResourceGroup-JNB/providers/Microsoft.Web/sites/IBISAPI20230915145616",
-    "appService.deploySubpath": "IBIS\\IBIS-App-Web"
+    //"appService.deploySubpath": "IBIS\\IBIS-App-Web"
 }

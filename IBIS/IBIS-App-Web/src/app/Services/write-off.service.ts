@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders, HttpErrorResponse} from '@angular/common/http'
 import { BehaviorSubject, Observable, Subject, catchError, retry, throwError } from 'rxjs';
 import { Supplier } from '../Models/Supplier';
 import { WriteOff } from '../Models/writeOff';
+import { environment } from 'src/environments/environment';
 
 
 @Injectable({
@@ -11,7 +12,7 @@ import { WriteOff } from '../Models/writeOff';
 export class WriteOffService {
 public adjustQuantity = new BehaviorSubject<any>(null);
 
-  apiUrl = 'https://localhost:7226/api/writeOff/';
+  apiUrl = environment.apiUrl + 'writeOff/';
 
 
   

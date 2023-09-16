@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpErrorResponse} from '@angular/common/http';
 import { Observable, catchError, retry, throwError } from 'rxjs';
 import { Supplier } from '../Models/Supplier';
+import { environment } from 'src/environments/environment';
 
 
 @Injectable({
@@ -10,7 +11,7 @@ import { Supplier } from '../Models/Supplier';
 export class SupplierService {
 
 
-  apiUrl = 'https://localhost:7226/api/Suppliers/';
+  apiUrl = environment.apiUrl + 'Suppliers/';
 
 
   

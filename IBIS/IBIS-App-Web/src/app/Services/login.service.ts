@@ -3,6 +3,7 @@ import { BehaviorSubject, Observable, throwError } from 'rxjs';
 import { HttpClient, HttpHeaders, HttpErrorResponse, HttpInterceptor} from '@angular/common/http';
 import { retry, catchError } from 'rxjs/operators';
 import { User } from '../Models/User';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +17,7 @@ export class LoginService  {
 //const headers
 
 
-  apiUrl = 'https://localhost:7226/api/User/';
+  apiUrl = environment.apiUrl + 'User/';
 
   constructor(private httpClient: HttpClient) { 
     this.loginstate = new BehaviorSubject<boolean>(false);

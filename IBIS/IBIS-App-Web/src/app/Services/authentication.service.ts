@@ -3,12 +3,13 @@ import { Injectable } from '@angular/core';
 import {tap,catchError, map} from 'rxjs/operators';
 import { Router } from '@angular/router';
 import {Observable,throwError} from 'rxjs';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthenticationService implements HttpInterceptor {
-  apiUrl = 'https://localhost:7226/api/User/';
+  apiUrl = environment.apiUrl+'User';
   intercept(req: HttpRequest<any>,
     next: HttpHandler): Observable<HttpEvent<any>> {
       //localStorage.getItem('Token') && localStorage.getItem('Token') != null

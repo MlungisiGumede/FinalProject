@@ -2,6 +2,7 @@ import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http
 import { Injectable } from '@angular/core';
 import { Observable, catchError, retry, throwError } from 'rxjs';
 import { Inventory } from '../Models/Inventory';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -9,8 +10,8 @@ import { Inventory } from '../Models/Inventory';
 export class InventoryService {
 
 
-  apiUrl = 'https://localhost:7226/api/Item';
-
+  apiUrl = environment.apiUrl + '/Item';
+  
   constructor(private httpClient: HttpClient) { }
 
   httpOptions = {

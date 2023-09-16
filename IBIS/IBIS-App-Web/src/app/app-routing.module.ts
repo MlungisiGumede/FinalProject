@@ -16,14 +16,8 @@ const routes: Routes = [
       (m) => m.CreateUserAccountModule
     ),
 },
-{
-  path: 'Dashboard',
-  loadChildren: () =>
-    import('./ComponentModules/dashboard.module').then(
-      (m) => m.DashboardModule
-    ),
-},
-// {
+
+  
 //   path: 'Product-Report',
 //   loadChildren: () =>
 //     import('./ComponentModules/ProductReport.module').then(

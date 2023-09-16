@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { User } from '../Models/User';
 import { FileUpload } from '../Models/FileUpload';
+import { environment } from 'src/environments/environment';
 
 
 @Injectable({
@@ -10,7 +11,7 @@ import { FileUpload } from '../Models/FileUpload';
 })
 export class UserService {
 
-  apiUrl = 'https://localhost:7226/api/User';
+  apiUrl = environment.apiUrl + 'User';
   constructor(private httpClient: HttpClient) {
     this.httpClient = httpClient
    }

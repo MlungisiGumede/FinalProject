@@ -11,18 +11,19 @@ import { SupplierOrder } from '../Models/SupplierOrder';
 import { CustomerOrderViewModel } from '../Models/CustomerOrderViewModel';
 import { SupplierOrderViewModel } from '../Models/SupplierOrderViewModel';
 import { Category } from '../Models/Category';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 
 export class OrdersService {
-  apiUrl = 'https://localhost:7226/api/Order';
-  productApiUrl = 'https://localhost:7226/api/Products';
-  inventoryApiUrl = 'https://localhost:7226/api/Item';
-  customersApiUrl = 'https://localhost:7226/api/Customers';
-  suppliersApiUrl = 'https://localhost:7226/api/Suppliers';
-  manytoManyAPIUrl = 'https://localhost:7226/api/ManyToMany';
+  apiUrl = environment.apiUrl + 'Order';
+  productApiUrl = environment.apiUrl  + 'Products';
+  inventoryApiUrl = environment.apiUrl + 'Item';
+  customersApiUrl = environment.apiUrl +'Customers';
+  suppliersApiUrl = environment.apiUrl +'Suppliers';
+  manytoManyAPIUrl = environment.apiUrl +'ManyToMany';
   public addedOrder = new Subject<string>();
   public checkout = new BehaviorSubject<any>(null)
   constructor(private httpClient: HttpClient) { }

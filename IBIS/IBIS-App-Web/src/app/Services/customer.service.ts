@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable, catchError, retry, throwError } from 'rxjs';
 import { Supplier } from '../Models/Supplier';
 import { Customer } from '../Models/Customer';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +14,8 @@ export class CustomerService {
     
   }
 
-  apiUrl = 'https://localhost:7226/api/Customers/';
+  
+  apiUrl = environment.apiUrl+'Customers/';
 
   httpOptions = {
     headers: new HttpHeaders({
