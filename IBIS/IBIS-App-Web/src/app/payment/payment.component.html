@@ -1,8 +1,14 @@
-<div style="background-color: white;">
-    <div >Total amount to pay: ${{amount}}</div>
-    <div >Please do not refresh the browser while the transaction is processing</div>
+<ion-card class="payment">
+
+  <ion-card-content class="paymentbox">
+    <h1><strong>Payment</strong></h1>
+    <h3><strong>Total amount to pay: ${{amount}}</strong></h3>
+    <h4>Please do not refresh the browser while the transaction is processing.</h4>
     <div #paymentRef></div>
-    <div  (click)="cancel()">Cancel</div>
-  </div> 
+    <ion-button class="cancelBtn" (click)="cancel()" color="danger">Cancel</ion-button>
+  </ion-card-content>
+
+</ion-card>
+
 
   
