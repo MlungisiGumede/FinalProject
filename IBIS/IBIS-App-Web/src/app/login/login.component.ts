@@ -3,8 +3,10 @@ import { LoginService } from '../Services/login.service';
 import { User } from '../Models/User';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Route, Router } from '@angular/router';
-import { ToastController } from '@ionic/angular';
+import {ModalController,ToastController } from '@ionic/angular';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { HelpFunctionComponent } from '../help-function/help-function.component';
+
 
 @Component({
   selector: 'app-login',
@@ -17,7 +19,8 @@ export class LoginComponent implements OnInit {
   name ="";
   loginForm!: FormGroup;
   
-  constructor(private loginservice: LoginService,private fb: FormBuilder, private router: Router,private toastController: ToastController,
+  constructor(private loginservice: LoginService,private fb: FormBuilder, private router: Router,
+    private toastController: ToastController, public helpModal: ModalController,
     private _snackbar: MatSnackBar) {
 
 
@@ -83,6 +86,14 @@ console.log(val)
   
     
   }
+
+
+  async showHelp(){
+    const modal = await this.helpModal.create({
+      component: HelpFunctionComponent});
+      return await modal.present();
+  }
+
   ShowSnackBar(message: string, panel: string) {
     this._snackbar.open(message, "close", {
       duration: 5000,
