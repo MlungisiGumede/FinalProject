@@ -71,6 +71,8 @@ import { QRCodeModule } from 'angularx-qrcode';
 import { ProfileComponent } from './profile/profile.component';
 //import { QrScannerComponent } from 'angular2-qrscanner';
 import { NgQrScannerModule } from 'angular2-qrscanner';
+import { InventoryHelpComponent } from './inventory-help/inventory-help.component';
+import { RegisterHelpComponent } from './register-help/register-help.component';
 
 
 @NgModule({
@@ -122,7 +124,9 @@ import { NgQrScannerModule } from 'angular2-qrscanner';
     AddSubCategoryComponent,
     CustomerViewComponent,
     PaymentComponent,
-    ProfileComponent
+    ProfileComponent,
+    InventoryHelpComponent,
+    RegisterHelpComponent
     
    
     

@@ -22,6 +22,7 @@
 </ion-button>
 <body>
 <div class="container" >
+  <ion-icon id="helpIcon" name="help-circle" style="color: #002850;" (click)="showHelp()"></ion-icon>
  <div class="title"  readonly>Register</div>
  <div class="content">
    <form  [formGroup]="registerForm" (ngSubmit)="onRegister()">

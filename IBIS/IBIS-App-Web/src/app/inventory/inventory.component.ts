@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { InventoryService } from '../Services/inventory.service';
 import { Inventory } from '../Models/Inventory';
-import { ToastController } from '@ionic/angular';
+import { ModalController, ToastController } from '@ionic/angular';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 import { Ng2SearchPipe } from 'ng2-search-filter/src/ng2-filter.pipe';
@@ -14,6 +14,7 @@ import { Supplier } from '../Models/Supplier';
 import { Observable, catchError, map, of, throwError } from 'rxjs';
 import { ViewInventoryItemComponent } from '../view-inventory-item/view-inventory-item.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { InventoryHelpComponent } from '../inventory-help/inventory-help.component';
 //import pdfMake from "pdfmake/build/pdfmake";
 //import * as pdfMake from 'pdfmake/build/pdfmake';
 //import * as pdfFonts from "pdfmake/build/vfs_fonts";  
@@ -41,11 +42,16 @@ export class InventoryComponent implements OnInit {
   reportData:any
 
   constructor(public router: Router, private inv : InventoryService,private toastController: ToastController,private fb : FormBuilder
-    ,public matDialog: MatDialog,public supplierService:SupplierService,
+    ,public matDialog: MatDialog,public supplierService:SupplierService,public helpModal: ModalController,
     private _snackbar: MatSnackBar) {
     //this.inventory = new Inventory();
 
    }
+   async showHelp(){
+    const modal = await this.helpModal.create({
+      component: InventoryHelpComponent});
+      return await modal.present();
+  }
 
 
   ViewInventory(item:any){

@@ -3,6 +3,8 @@ import { LoginService } from '../Services/login.service';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { ModalController } from '@ionic/angular';
+import { RegisterHelpComponent } from '../register-help/register-help.component';
 
 
 @Component({
@@ -16,7 +18,8 @@ export class RegisterComponent implements OnInit {
   submitted = false;
   isModalOpen = false;
 
-  constructor(private register: LoginService, private fb: FormBuilder,private router:Router, private _snackbar: MatSnackBar) { }
+  constructor(private register: LoginService, private fb: FormBuilder,private router:Router, public helpModal: ModalController,
+     private _snackbar: MatSnackBar) { }
   registerForm!: FormGroup ;
 
   ngOnInit(): void {
@@ -36,6 +39,11 @@ this.registerForm = this.fb.group({
   }
   setOpen(isOpen: boolean) {
     this.isModalOpen = isOpen;
+  }
+  async showHelp(){
+    const modal = await this.helpModal.create({
+      component: RegisterHelpComponent});
+      return await modal.present();
   }
 
 async BackToLogin(){
