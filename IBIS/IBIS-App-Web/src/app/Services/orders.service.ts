@@ -12,6 +12,7 @@ import { CustomerOrderViewModel } from '../Models/CustomerOrderViewModel';
 import { SupplierOrderViewModel } from '../Models/SupplierOrderViewModel';
 import { Category } from '../Models/Category';
 import { environment } from 'src/environments/environment';
+import { ProductViewModel } from '../Models/ProductViewModel';
 
 @Injectable({
   providedIn: 'root'
@@ -69,6 +70,12 @@ export class OrdersService {
              retry(2),
              catchError(this.handleError)
            )
+       }
+       getProductViewModel(){
+        return this.httpClient.get<ProductViewModel[]>(this.manytoManyAPIUrl + '/getProductVM')
+       }
+       getCustomerOrdersViewModel(){
+        return this.httpClient.get<CustomerOrderViewModel[]>(this.manytoManyAPIUrl + '/getCustomerOrdersVM')
        }
        ConvertSupplierOrdersToExcel(){
         return this.httpClient.get(this.manytoManyAPIUrl + '/convertSupplierOrders')

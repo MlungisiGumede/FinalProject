@@ -249,8 +249,10 @@ namespace IBIS_API.Migrations
                     SupplierOrder_ID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Supplier_ID = table.Column<int>(type: "int", nullable: true),
+                    OrderStatus_ID = table.Column<int>(type: "int", nullable: true),
                     Date_Created = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    OrderStatus_ID = table.Column<int>(type: "int", nullable: true)
+                    Date_Sold = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Date_Cancelled = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {

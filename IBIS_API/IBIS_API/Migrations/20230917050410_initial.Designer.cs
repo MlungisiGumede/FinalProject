@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace IBIS_API.Migrations
 {
     [DbContext(typeof(DataContextcs))]
-    [Migration("20230914044413_initial")]
+    [Migration("20230917050410_initial")]
     partial class initial
     {
         /// <inheritdoc />
@@ -439,7 +439,13 @@ namespace IBIS_API.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int?>("SupplierOrder_ID"));
 
+                    b.Property<string>("Date_Cancelled")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Date_Created")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Date_Sold")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("OrderStatus_ID")

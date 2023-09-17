@@ -436,7 +436,13 @@ namespace IBIS_API.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int?>("SupplierOrder_ID"));
 
+                    b.Property<string>("Date_Cancelled")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Date_Created")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Date_Sold")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("OrderStatus_ID")

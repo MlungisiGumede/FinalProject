@@ -18,6 +18,8 @@ using System.Net;
 using DocumentFormat.OpenXml;
 using ClosedXML.Excel;
 using System.Globalization;
+using DocumentFormat.OpenXml.VariantTypes;
+using System.Security.Cryptography;
 
 namespace IBIS_API.Controllers
 {
@@ -551,6 +553,7 @@ public async Task<ActionResult> PostCustomerOrder(CustomerOrderViewModel? ord)
         public async Task<ActionResult> PutSupplierOrderStatus(SupplierOrder ord)
         {
             // dont send primary key of order lines through...
+           
             _context.Entry(ord).State = EntityState.Modified; // nah do the whole attaching thing...
 
             await _context.SaveChangesAsync();
@@ -591,6 +594,60 @@ public async Task<ActionResult> PostCustomerOrder(CustomerOrderViewModel? ord)
 
             return NoContent();
 
+        }
+        [HttpGet]
+        [Route("getCustomerOrdersVM")]
+        public async Task<ActionResult> GetCustomerOrdersVM()
+        {
+            var customerOrders = _context.CustomerOrders.ToList();
+            var customerOrderLine = _context.CustomerOrdersLine.ToList();
+            List<CustomerOrderVM2> customerOrdersList = new List<CustomerOrderVM2>();
+            foreach(var customerOrder in customerOrders) {
+                CustomerOrderVM2? ord = new CustomerOrderVM2();
+                ord.Customer_Name = _context.Customers.Where(c => c.Customer_ID == customerOrder.Customer_ID).Select(c => c.Customer_FirstName + " " + c.Customer_Surname).FirstOrDefault();
+                ord.Date_Created = customerOrder.Date_Created;
+                ord.CustomerOrder_ID = customerOrder.CustomerOrder_ID; // manage insert later...
+                if(customerOrder.OrderStatus_ID == 1)
+                {
+                    ord.Order_Status = "In Progress";
+                }
+                else if(customerOrder.OrderStatus_ID == 2)
+                {
+                    ord.Order_Status = "Done";
+                }
+                else
+                {
+                    ord.Order_Status = "Cancel";
+                }
+                ord.Total = _context.CustomerOrdersLine.Where(c => c.CustomerOrder_ID == customerOrder.CustomerOrder_ID).Sum(c => c.Quantity * c.Price);
+                customerOrdersList.Add(ord);
+            }
+            return Ok(customerOrdersList);
+        }
+
+        [HttpGet]
+        [Route("getProductVM")]
+        public async Task<ActionResult> GetProductVM()
+        {
+            var products = _context.Products.ToList();
+            var productVMList = new List<ProductVM>();
+            foreach(var product  in products)
+            {
+                var productVM = new ProductVM();
+                productVM.Product_ID = product.Product_ID;
+                productVM.Name = product.Name;
+                productVM.Quantity = product.Quantity;
+                var customerOrders = _context.CustomerOrders.Where(c => c.OrderStatus_ID == 1).ToList();
+                productVM.QuantityAfterOrders = product.Quantity;
+                foreach (var customerOrder in customerOrders)
+                {
+
+                   productVM.QuantityAfterOrders = productVM.QuantityAfterOrders -  _context.CustomerOrdersLine.Where(c => (c.CustomerOrder_ID == customerOrder.CustomerOrder_ID && c.Product_ID == product.Product_ID )).Sum(c => c.Quantity); 
+                }
+               productVMList.Add(productVM);
+                
+            }
+            return Ok(productVMList);
         }
 
 
