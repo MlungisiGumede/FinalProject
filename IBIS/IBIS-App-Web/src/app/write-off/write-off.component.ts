@@ -10,6 +10,8 @@ import { WriteOffService } from '../Services/write-off.service';
 import { WriteOff } from '../Models/writeOff';
 import { DomSanitizer } from '@angular/platform-browser';
 import { every, of } from 'rxjs';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { map,catchError, throwError } from 'rxjs';
 
 
 
@@ -50,11 +52,12 @@ images: LocalFile[]=[];
   type:any
   text:any
   quantity:any
+  buttonText:any
 
   
 
   constructor(private route : ActivatedRoute,private productService: ProductService,private fb : FormBuilder, private loadingCtrl: LoadingController,private writeoffservice: WriteOffService
-    ,private router: Router,) {
+    ,private router: Router, private _snackBar: MatSnackBar) {
     
     
     this.datawr = new WriteOff();
@@ -118,6 +121,7 @@ this.data = of(products)
       console.log(res[0])
       if(res.type == 1){
      this.type$ = of(1)
+     this.buttonText = "Write Off"
      this.type = 1
      this.form= this.fb.group({
       // product_ID : ['', Validators.required],
@@ -130,6 +134,7 @@ this.title = "Write Off"
 this.text ="Enter amount to write off" // could maybe display but could do ngif without additional thingy before stuff loaded
 
       }else{
+        this.buttonText = "Write Up"
         this.form.controls['reason'].setValue("write up") // date for write offs as well...
         this.title = "Write Up:"
         this.text = "Enter amount to write Up"
@@ -200,9 +205,34 @@ writeOff.adjustment_ID = this.type
 
 
 
-  this.writeoffservice.createWriteOff(writeOff).subscribe(res=>{
+  this.writeoffservice.createWriteOff(writeOff).pipe(map(
+    (res)=>{
+
+console.log(this.type)
+
+
+if(this.type == 1){
+  this.ShowSnackBar("Product successfuly written off", "success");
+}else{
+  this.ShowSnackBar("Product successfuly written up", "success");
+}
+
+  }),catchError((err) =>{
+    console.log(err)
+    console.log(this.type)
+  if(this.type == 1){
+    this.ShowSnackBar("Failed to write off product", "error");
+  }else{
+    this.ShowSnackBar("Failed to write product up", "error");
+  }
+   
+   return throwError(err)
+  
+  }
+  )
+  ).subscribe(res=>{
     console.log("success", res);
-    this.router.navigate(['/view-write-offs']);
+    //this.router.navigate(['/view-write-offs']);
     })
     // if(this.data.id == 1){
     //   this.data.quantity = this.data.quantity - this.form.controls['quantity'].value 
@@ -213,6 +243,12 @@ writeOff.adjustment_ID = this.type
     //   console.log("success", res);
     // })
    
+}
+private ShowSnackBar(message: string, panel: string){
+  this._snackBar.open(message, "close", {
+    duration: 2000,
+    panelClass: [panel]
+  })
 }
   // putting this 
 

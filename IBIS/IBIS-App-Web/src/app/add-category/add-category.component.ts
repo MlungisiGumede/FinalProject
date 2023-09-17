@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 import { ProductService } from '../Services/product.service';
+import {map,catchError,} from 'rxjs/operators';
 
 @Component({
   selector: 'app-add-category',
@@ -19,8 +20,27 @@ form:any
   }
 
 AddCategory(){
-this.productService.AddCategory(this.form.value).subscribe((res)=>{
+this.productService.AddCategory(this.form.value).pipe(map(
+  (res)=>{
+
+
+
+
+
+
+}),
+catchError((err) =>{
+  console.log(err)
   
+  this.dialogRef.close(false);
+ 
+  return err
+}))
+
+.subscribe(res=>{
+  console.log("success", res);
+  this.dialogRef.close(true);
 })
 }
 }
+

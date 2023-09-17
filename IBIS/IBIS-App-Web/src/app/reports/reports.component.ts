@@ -58,6 +58,7 @@ export class ReportsComponent implements OnInit {
   customerOrdersVM:CustomerOrderVM[]|any
   period:any
   request:any
+  success:any
   products:ProductViewModel[]|any
   
   combinedData: { Name: string, Quantity: number, Price: number }[] = [];
@@ -154,6 +155,7 @@ export class ReportsComponent implements OnInit {
   DatedOrdersReport(){
     this.getCustomerOrdersViewModel().then(response => {
         let dropDownIndex = this.dropDown.findIndex((item:any) => item.monthNumber == this.selectedValue)
+        this.selectedValue = ""
         console.log(dropDownIndex)
     let selectedPeriod = this.dropDown[dropDownIndex]
     const date = new Date();
@@ -286,7 +288,12 @@ export class ReportsComponent implements OnInit {
 
   }
 CreateSupplierOrdersChart(){
+
   this.isCustomerOrder = false
+  let myChart = Chart.getChart("myChart")
+ if(myChart){
+   myChart.destroy()
+ }
   let doneOrders = this.supplierOrders.filter((item:any) => item.orderStatus_ID == 2)
  let doneOrdersLength = this.supplierOrders.filter((item:any) => item.orderStatus_ID == 2).length
  let cancelledOrders = this.supplierOrders.filter((item:any) => item.orderStatus_ID == 3)
@@ -300,10 +307,7 @@ let cancelledTotal = this.CalculateSupplierOrdersTotal(cancelledOrders)
 let inProgressTotal = this.CalculateSupplierOrdersTotal(inProgressOrders)
 console.log(inProgressOrdersLength)
  console.log(doneOrders)
- let myChart = Chart.getChart("myChart")
- if(myChart){
-   myChart.destroy()
- }
+ 
     this.chart = new Chart("myChart", {
       type: 'bar', //this denotes tha type of chart
 
@@ -356,6 +360,7 @@ CreateStockTakeChart(){
   
   this.GetProductVM().then(response => {
     let productIndex = this.products.findIndex((item:any) => item.product_ID == this.selectedProduct)
+    this.selectedProduct = ""
     let product = this.products[productIndex]
     let myChart = Chart.getChart("myChart")
     if(myChart){
@@ -405,7 +410,7 @@ CreateStockTakeChart(){
         tooltip: {
           enabled: true,
           callbacks: {
-            label(tooltipItem) {
+            label(tooltipItem) { // ai helped with this or whatever...
               console.log(tooltipItem)
               if(tooltipItem.label.includes("Stock After Orders")){
                 return + " " + product.quantityAfterOrders
@@ -432,6 +437,11 @@ CreateStockTakeChart(){
   CreateCustomerOrdersChart(){
     this.isCustomerOrder = true
  //this.supplierOrders filter the list...
+ let myChart = Chart.getChart("myChart")
+
+ if(myChart){
+   myChart.destroy()
+ }
  let doneOrders = this.customerOrders.filter((item:any) => item.orderStatus_ID == 2)
  let doneOrdersLength = this.customerOrders.filter((item:any) => item.orderStatus_ID == 2).length
  let cancelledOrders = this.customerOrders.filter((item:any) => item.orderStatus_ID == 3)
@@ -445,11 +455,7 @@ let cancelledTotal = this.CalculateCustomerOrdersTotal(cancelledOrders)
 let inProgressTotal = this.CalculateCustomerOrdersTotal(inProgressOrders)
 console.log(inProgressOrdersLength)
  console.log(doneOrders)
- let myChart = Chart.getChart("myChart")
 
- if(myChart){
-   myChart.destroy()
- }
  
     this.chart = new Chart("myChart", {
       type: 'bar', //this denotes tha type of chart

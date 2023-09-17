@@ -5,16 +5,18 @@
           <div class="user-details">
             <div class="input-box">
               <span class="details">Category Name</span>
+              <ion-item class="drop-down-sub2">
+                <ion-label position="floating">Category</ion-label>
+                <ion-select interface="popover"   formControlName="category_ID">
+                  <ion-select-option 
+                   *ngFor="let category of categories" [value]="category.category_ID">{{ category.name }}</ion-select-option>
+                </ion-select>
+              </ion-item>
+              <span class="details">SubCategory Name</span>
               <input type="text" placeholder="name" formControlName="name" >
             </div>
           </div>
-          <ion-item class="drop-down-sub2">
-            <ion-label position="floating">Category</ion-label>
-            <ion-select interface="popover"   formControlName="category_ID">
-              <ion-select-option 
-               *ngFor="let category of categories" [value]="category.category_ID">{{ category.name }}</ion-select-option>
-            </ion-select>
-          </ion-item>
+          
           <ion-button [disabled]="!form.valid" (click)="AddSubCategory()"  style="background-color: white;color: black;">Submit</ion-button>
         </form>
           </div>

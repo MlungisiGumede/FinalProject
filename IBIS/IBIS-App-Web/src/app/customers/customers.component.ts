@@ -60,6 +60,20 @@ filterTerm!:string;
     data: item,
     //width:'50%'
   })
+ dialogRef.afterClosed().subscribe((res:any) => {
+   console.log(res)
+   console.log(res.data)
+   if(res){
+     console.log("hi")
+     this.ShowSnackBar("Customer order successfully created", "success");
+     this.getCustomers()
+     
+      
+   }else if(res == false){
+     this.ShowSnackBar("Customer order could not be created", "error");
+    
+   }
+ })
   }
 
 
@@ -73,7 +87,7 @@ this.customerSerivce.DeleteCustomer(id).pipe(map(
 }),
 catchError((err) =>{
   console.log(err)
-  this.ShowSnackBar("failed to remove product", "error");
+  this.ShowSnackBar("failed to remove customer", "error");
   return throwError(err)
 })).subscribe(Response => {
   console.log(Response);

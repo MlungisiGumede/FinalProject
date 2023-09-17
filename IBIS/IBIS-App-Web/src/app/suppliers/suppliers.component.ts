@@ -50,6 +50,14 @@ SupplierOrder(item:any){
     const dialog = this.matDialog.open(AddSupplierOrderComponent, {
       data:{'inventories':res,'name':item.name,'order':item}
     })
+    dialog.afterClosed().subscribe(result => {
+      if(result){
+        this.ShowSnackBar("Supplier Order successfully added", "success");
+        this.getall();
+      }else if(result == false){
+        this.ShowSnackBar("Supplier Order could not be added", "error");
+      }
+    })
   })
 
 }

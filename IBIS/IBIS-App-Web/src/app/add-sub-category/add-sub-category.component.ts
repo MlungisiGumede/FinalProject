@@ -3,6 +3,7 @@ import { MatDialogRef } from '@angular/material/dialog';
 import { OrdersService } from '../Services/orders.service';
 import { ProductService } from '../Services/product.service';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { catchError, map, throwError } from 'rxjs';
 
 @Component({
   selector: 'app-add-sub-category',
@@ -27,8 +28,23 @@ this.form = new FormGroup({
   }
   AddSubCategory(){
     console.log(this.form.value)
-    this.productService.AddSubCategory(this.form.value).subscribe((res)=>{
-      
+    this.productService.AddSubCategory(this.form.value).pipe(map(
+      (res)=>{
+
+
+
+
+
+
+    }),
+    catchError((err) =>{
+      console.log(err)
+      this.dialogRef.close(false);
+     
+      return throwError(err)
+    }))
+.subscribe((res)=>{
+  this.dialogRef.close(true);
     })
   }
   SetValue(value:any){

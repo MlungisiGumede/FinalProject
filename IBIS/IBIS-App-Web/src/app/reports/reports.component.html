@@ -9,10 +9,10 @@
         <ion-button class="light-Btn" (click)="generateSupplierReport()">Suppliers Report</ion-button>
         <ion-button class="light-Btn" (click)="generateWriteOffsReport()">Write Off Report</ion-button> -->
         <ion-row>
-        <ion-button class="light-Btn" (click)="CreateCustomerOrdersChart();request=''"> Customer Orders Report</ion-button>
-        <ion-button class="light-Btn" (click)="CreateSupplierOrdersChart();request=''"> Supplier Orders Report</ion-button>
-        <ion-button class="light-Btn" (click)="request='stock';ClearChart()"> Stock Take Report</ion-button>
-         <ion-button class="light-Btn" (click)="request='order';ClearChart()">Customer Dated Orders Report ( 6 Months )</ion-button>
+        <ion-button class="light-Btn" (click)="success=false;request='ordersChart';selectedProduct='';selectedValue='';CreateCustomerOrdersChart();success=true"> Customer Orders Report</ion-button>
+        <ion-button class="light-Btn" (click)="success=false;request='ordersChart';selectedProduct='';selectedValue='';CreateSupplierOrdersChart();success=true"> Supplier Orders Report</ion-button>
+        <ion-button class="light-Btn" (click)="request='stock';ClearChart();selectedValue='';success=false"> Stock Take Report</ion-button>
+         <ion-button class="light-Btn" (click)="request='order';ClearChart();selectedProduct='';success=false">Customer Dated Orders Report ( 6 Months )</ion-button>
         </ion-row>
         <ion-row>
         <mat-form-field *ngIf="request == 'order'">
@@ -31,13 +31,13 @@
       </mat-form-field>
     </ion-row>
     <ion-row *ngIf="request == 'order' || request == 'stock'">
-      <ion-button (click)="Confirm();request=''">Confirm</ion-button>
-      <ion-button (click)="request=''">Cancel</ion-button>
+      <ion-button [disabled]="!selectedValue && !selectedProduct" (click)="Confirm();request='';">Confirm</ion-button>
+      <ion-button (click)="request='';selectedProduct='';selectedValue=''">Cancel</ion-button>
     </ion-row>
         <div  class="chart-container">
           <canvas  id="myChart" >{{ chart }}</canvas>
     </div>
-    <button *ngIf="chart" mat-raised-button (click)="ExportToExcel()" >Export to Excel</button>
+    <button *ngIf="request == 'ordersChart' && success" mat-raised-button (click)="ExportToExcel()" >Export to Excel</button>
     </div>
 
 

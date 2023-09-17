@@ -8,6 +8,7 @@ import { SupplierOrderLine } from '../Models/SupplierOrderLine';
 import { SupplierOrderViewModel } from '../Models/SupplierOrderViewModel';
 import { SupplierOrder } from '../Models/SupplierOrder';
 import { OrdersService } from '../Services/orders.service';
+import { catchError, map, throwError } from 'rxjs';
 
 @Component({
   selector: 'app-view-supplier-order',
@@ -419,10 +420,25 @@ console.log(this.dropDown)
          
         });
         supplierOrderViewModel.supplierOrderLines = orderLines
-        this.orderService.UpdateSupplierOrder(supplierOrderViewModel).subscribe(() => {
-          this.dialogRef.close("success")
+        this.orderService.UpdateSupplierOrder(supplierOrderViewModel).pipe(map(
+          (res)=>{
+    
+    
+    
+    
+    
+    
+        }),
+        catchError((err) =>{
+          console.log(err)
+          this.dialogRef.close(false);
+         
+          return throwError(err)
+        }))
+    .subscribe(() => {
+          this.dialogRef.close(true)
         }), (error:any) => {
-          this.dialogRef.close("error")
+          this.dialogRef.close(false)
         }
         
     }

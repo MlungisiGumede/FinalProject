@@ -13,6 +13,8 @@ import { CustomerOrderViewModel } from '../Models/CustomerOrderViewModel';
 import { CustomerOrderLine } from '../Models/CustomerOrderLine';
 import { CustomerOrder } from '../Models/CustomerOrder';
 import { DatePipe } from '@angular/common';
+import { catchError, map, throwError } from 'rxjs';
+
 //import { SupplierOrder } from '../Models/SupplierOrder';
 //import { CustomerOrder } from '../Models/CustomerOrder';
 
@@ -359,7 +361,22 @@ export class AddCustomerOrderComponent implements OnInit {
       let orderLines = (this.form.get('records') as FormArray).value
       
       customerOrderViewModel.customerOrderLines = orderLines
-  this.orderService.CreateCustomerOrder(customerOrderViewModel).subscribe((res:any)=>{
+  this.orderService.CreateCustomerOrder(customerOrderViewModel).pipe(map(
+    (res)=>{
+
+
+
+
+
+
+  }),
+  catchError((err) =>{
+    console.log(err)
+    this.dialogRef.close(false);
+   
+    return throwError(err)
+  })).
+subscribe((res:any)=>{
    //let total = this.CalculateSubTotal()
    this.orderService.addedOrder.next(res)
    this.dialogRef.close("success")

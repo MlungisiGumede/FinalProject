@@ -12,6 +12,8 @@ import { ViewCustomerOrderComponent } from '../view-customer-order/view-customer
 import { Observable, forkJoin, of } from 'rxjs';
 import { ProductService } from '../Services/product.service';
 import { DatePipe } from '@angular/common';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { catchError, map, throwError } from 'rxjs';
 var pdfMake = require('pdfmake/build/pdfmake');
 var pdfFonts = require('pdfmake/build/vfs_fonts');
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
@@ -110,7 +112,7 @@ export class OrdersComponent implements OnInit {
 
   constructor(public router: Router, private orderservice : OrdersService,
     private matDialog: MatDialog,public cdr:ChangeDetectorRef,
-    private productservice: ProductService) {
+    private productservice: ProductService,private _snackbar: MatSnackBar) {
       
     }
       // this.data = this.supplierOrders
@@ -281,17 +283,48 @@ CheckOrderStatus(){
     
   if(this.isCustomerOrder){
     
-    this.orderservice.DeleteCustomerOrder(element.customerOrder_ID).subscribe((Response:any) => {
+    this.orderservice.DeleteCustomerOrder(element.customerOrder_ID).pipe(map(
+      (res)=>{
+
+
+
+
+
+
+    }),
+    catchError((err) =>{
+      console.log(err)
+      this.ShowSnackBar("Customer order could not be deleted", "error");
+     
+      return throwError(err)
+    }))
+.subscribe((Response:any) => {
       console.log(Response);
       this.ReadOrders()
+      this.ShowSnackBar("Customer order successfully deleted", "success")
   })
     
       //this.data = Response;
       //this.getOrders();
     }else{
-      this.orderservice.DeleteSupplierOrder(element.supplierOrder_ID).subscribe((Response:any) => {
+      this.orderservice.DeleteSupplierOrder(element.supplierOrder_ID).pipe(map(
+        (res)=>{
+  
+  
+  
+  
+  
+  
+      }),
+      catchError((err) =>{
+        console.log(err)
+        this.ShowSnackBar("Supplier order could not be deleted", "error");
+       
+        return throwError(err)
+      })).subscribe((Response:any) => {
         console.log(Response);
         this.ReadOrders()
+        this.ShowSnackBar("Supplier order successfully deleted", "success")
       })
       // let supplierOrder = this.supplierOrders[rowIndex]
       // this.orderservice.delete(supplierOrder.supplierOrder_ID).subscribe(Response => {
@@ -327,9 +360,12 @@ CheckOrderStatus(){
       
     })
     dialogRef.afterClosed().subscribe(result => {
-      if(result == "success"){
+      if(result){
+
         this.ReadOrders()
-      }else if(result == "error"){
+        this.ShowSnackBar("Customer order successfuly edited", "success")
+      }else if(result == false){
+        this.ShowSnackBar("failed to edit customer order", "error")
         alert("error")
       }
     })
@@ -349,9 +385,12 @@ CheckOrderStatus(){
       
     })    
     dialogRef.afterClosed().subscribe(result => {
-      if(result == "success"){
+      if(result){
+
         this.ReadOrders()
-      }else if(result == "error"){
+        this.ShowSnackBar("supplier order succcessfully edited", "success")
+      }else if(result == false){
+        this.ShowSnackBar("Failed to edit supplier order", "error")
         alert("error")
       }
     })
@@ -359,6 +398,14 @@ CheckOrderStatus(){
 }
     
   }
+  ShowSnackBar(message: string, panel: string) {
+    this._snackbar.open(message, "close", {
+      duration: 5000,
+      panelClass: [panel]
+      
+    });
+  }
+
 
   
 

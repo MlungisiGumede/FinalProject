@@ -36,7 +36,6 @@ constructor(public matDialogRef: MatDialogRef<AddCustomerComponent>
 
 
 
-
     }),
     catchError((err) =>{
       console.log(err)
@@ -46,10 +45,9 @@ constructor(public matDialogRef: MatDialogRef<AddCustomerComponent>
     })).
 subscribe(res=>{
       console.log("success", res);
-      this.matDialogRef.close(true)
-      }),(err:any)=>{
-        this.matDialogRef.close(false)
-      }
+      this.matDialogRef.close(true);
+
+      })
       
       }
 

@@ -12,6 +12,8 @@ import { ChangeDetectorRef } from '@angular/core';
 import { CustomerOrderLine } from '../Models/CustomerOrderLine';
 import { CustomerOrder } from '../Models/CustomerOrder';
 import { CustomerOrderViewModel } from '../Models/CustomerOrderViewModel';
+import { catchError, map, throwError } from 'rxjs';
+
 //import { SupplierOrder } from '../Models/SupplierOrder';
 //import { CustomerOrder } from '../Models/CustomerOrder';
 
@@ -418,10 +420,25 @@ dropDown:any= [{
         console.log(element.customerOrder_ID)
       });
       customerOrderViewModel.customerOrderLines = orderLines
-      this.orderService.UpdateCustomerOrder(customerOrderViewModel).subscribe(() => {
-        this.dialogRef.close("success")
+      this.orderService.UpdateCustomerOrder(customerOrderViewModel).pipe(map(
+        (res)=>{
+  
+  
+  
+  
+  
+  
+      }),
+      catchError((err) =>{
+        console.log(err)
+        this.dialogRef.close(false);
+       
+        return throwError(err)
+      })).
+  subscribe(() => {
+        this.dialogRef.close(true)
       }), (error:any) => {
-        this.dialogRef.close("error")
+        this.dialogRef.close(false)
       }
       
   }

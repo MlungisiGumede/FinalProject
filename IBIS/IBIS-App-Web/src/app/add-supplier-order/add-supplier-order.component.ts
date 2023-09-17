@@ -7,6 +7,7 @@ import { AddSupplierComponent } from '../add-supplier/add-supplier.component';
 import { SupplierOrderViewModel } from '../Models/SupplierOrderViewModel';
 import { SupplierOrder } from '../Models/SupplierOrder';
 import { OrdersService } from '../Services/orders.service';
+import { catchError, map, throwError } from 'rxjs';
 
 @Component({
   selector: 'app-add-supplier-order',
@@ -220,12 +221,27 @@ console.log(this.dropDown)
         let orderLines = (this.form.get('records') as FormArray).value
         
         supplierOrderViewModel.supplierOrderLines = orderLines
-    this.orderService.CreateSupplierOrder(supplierOrderViewModel).subscribe((res:any)=>{
+    this.orderService.CreateSupplierOrder(supplierOrderViewModel).pipe(map(
+      (res)=>{
+
+
+
+
+
+
+    }),
+    catchError((err) =>{
+      console.log(err)
+      this.dialogRef.close(false);
+     
+      return throwError(err)
+    })).
+subscribe((res:any)=>{
      //let total = this.CalculateSubTotal()
      this.orderService.addedOrder.next(res)
-     this.dialogRef.close("success")
+     this.dialogRef.close(true)
     }),(error:any) => {
-      this.dialogRef.close("error")
+      this.dialogRef.close(false)
     }
       
         

@@ -124,10 +124,45 @@ const dialogRef = this.matDialog.open(AddCategoryComponent,{
   //width: '250px',
   //height: '200px'
 });
+dialogRef.afterClosed().subscribe((res:any) => {
+  console.log(res)
+  console.log(res.data)
+  if(res){
+    console.log("hi")
+    this.ShowSnackBar("Category successfully added", "success");
+    this.productService.getCategoriesList().subscribe((res)=>{
+      console.log(res)
+      this.categories = res
+    })
+   
+     
+  }else if(res == false){
+    this.ShowSnackBar("Category could not be added", "error");
+   
+}
+})
+
   }
   AddSubCategory(){
 
     const dialogRef = this.matDialog.open(AddSubCategoryComponent);
+    dialogRef.afterClosed().subscribe((res:any) => {
+      console.log(res)
+      console.log(res.data)
+      if(res){
+        console.log("hi")
+        this.ShowSnackBar("SubCategory successfully added", "success");
+        this.productService.getSubCategoriesList().subscribe((res)=>{
+          console.log(res)
+          this.categories = res
+        })
+       
+         
+      }else if(res == false){
+        this.ShowSnackBar(" SubCategory could not be added", "error");
+       
+    }
+    })
   }
   GetCategoryName(id:any){
     return this.categories.find((item:any) => item.category_ID == id).name
@@ -209,8 +244,24 @@ OnDone(item:Product){
     
   }else{
     product.price = this.price
-    this.productService.updateProduct(product).subscribe(()=>{
+    this.productService.updateProduct(product).pipe(map(
+      (res)=>{
+
+
+
+
+
+
+    }),
+    catchError((err) =>{
+      console.log(err)
+      this.ShowSnackBar("failed to update price", "error");
+     
+      return throwError(err)
+    }))
+.subscribe(()=>{
       this.request = ""
+      this.ShowSnackBar("successfully updated price", "error");
       this.getProducts()
     })
   }

@@ -10,7 +10,7 @@ import { environment } from 'src/environments/environment';
 export class InventoryService {
 
 
-  apiUrl = environment.apiUrl + '/Item';
+  apiUrl = environment.apiUrl + 'Item';
   
   constructor(private httpClient: HttpClient) { }
 
