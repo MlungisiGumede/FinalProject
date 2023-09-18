@@ -40,6 +40,7 @@ export class ViewCustomerOrderComponent implements OnInit {
   //supplierOrder:SupplierOrder = new SupplierOrder
   //customerOrder:CustomerOrder = new CustomerOrder
   edited = false
+  edit:any
   rowIndexTemplate:any
   globalArray:any
   selectedValue:any
@@ -198,7 +199,7 @@ dropDown:any= [{
       this.displayedColumns = this.CustomercolumnsSchema.map((col) => col.key);
      this.customerOrder = data
       // getSuppliers
-     
+     this.edit = data.edit
     this.title = data.name
       
      }

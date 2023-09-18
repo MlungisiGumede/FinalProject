@@ -15,6 +15,10 @@ namespace IBIS_API.Models {
 
         public int? OrderStatus_ID { get; set; }
 
+        public int? PaymentType_ID { get; set; } // this be here... or...
+
+        public int? Transaction_ID { get; set; }
+
         public virtual ICollection<Product>? Product { get; set; }
         //public List<CustomerOrderLine> CustomerOrderLines { get; set; }
     }

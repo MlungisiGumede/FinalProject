@@ -542,8 +542,52 @@ public async Task<ActionResult> PostCustomerOrder(CustomerOrderViewModel? ord)
         public async Task<ActionResult> PutCustomerOrderStatus(CustomerOrder ord)
         {
             // dont send primary key of order lines through...
-            _context.Entry(ord).State = EntityState.Modified; // nah do the whole attaching thing...
+            
+            
+            var products = _context.Products.ToList();
+            if (ord.OrderStatus_ID == 2)
+            {
+                
+                foreach ( var product in products)
+                {
 
+                    product.Quantity = product.Quantity - _context.CustomerOrdersLine.Where(c => c.CustomerOrder_ID == ord.CustomerOrder_ID).Where(c => c.Product_ID == product.Product_ID).Sum(c => c.Quantity);
+                    if (product.Quantity < 0)
+                    {
+                        return BadRequest("Can't have negative Stock on hand, First Problem returned : " + product.Name);
+                    }
+                    _context.Products.Update(product);
+                }
+                
+            }
+            else
+            {
+                var customerOrder = _context.CustomerOrders.Where(c => c.CustomerOrder_ID == ord.CustomerOrder_ID).FirstOrDefault();
+                _context.ChangeTracker.Clear();
+                if (customerOrder.OrderStatus_ID == 2)
+                {
+                   
+                    foreach (var product in products)
+                    {
+                        var prod = product;
+                        prod.Quantity = prod.Quantity + _context.CustomerOrdersLine.Where(c => c.CustomerOrder_ID == ord.CustomerOrder_ID).Where(c => c.Product_ID == prod.Product_ID).Sum(c => c.Quantity);
+                        product.Quantity = prod.Quantity;
+                       
+                        _context.Products.Update(prod);
+                    }
+                }
+                else
+                {
+                    
+                }
+                //customerOrder.OrderStatus_ID == ord.OrderStatus_ID;
+                
+            }
+            // nah do the whole attaching thing...
+
+            // _context.Custom
+            
+            _context.CustomerOrders.Update(ord);
             await _context.SaveChangesAsync();
 
             return NoContent();

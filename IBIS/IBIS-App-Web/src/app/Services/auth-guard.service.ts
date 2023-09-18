@@ -15,12 +15,14 @@ export class AuthGuardService implements CanActivate {
   LogInRequest:any
   path:any
   role:any
+  profileRole:any = new BehaviorSubject<any>(null);
   constructor(private _router:Router,private loginService:LoginService,private authenticationService:AuthenticationService) {
   }
 
    canActivate(route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Promise<boolean> {
       this.previousUrl = new BehaviorSubject(this._router.url)
+
      
 console.log(route.routeConfig?.path)
 return new Promise((resolve, reject) => {
@@ -62,7 +64,28 @@ return new Promise((resolve, reject) => {
          this._router.navigate(['/customer-view'])
          resolve(false)
         }
-       } 
+       }
+       if(this.path == "profile"){
+        this.profileRole.next(role)
+        if(role == "guest"){
+          this.showNavigation.next(false)
+         resolve(true)
+        }else{
+          this.showNavigation.next(true)
+         
+         resolve(true)
+        }
+       }
+       if(this.path == "timer"){
+        if(this.PaymentValid()){
+          this.showNavigation.next(false)
+         resolve(true)
+        }else{
+          this.showNavigation.next(false)
+         this._router.navigate(['/customer-view'])
+         resolve(false)
+        }
+       }
     }
     )
   }).catch((error:any) => {
@@ -130,7 +153,7 @@ PaymentValid(){
     let disabled = false
     console.log(this.path)
     if(role == "guest"){
-    if(this.path=="customer-view" || this.path=="Login" || this.path=="" || this.path=="payment" ){
+    if(this.path=="customer-view" || this.path=="Login" || this.path=="" || this.path=="payment" || this.path=="profile" ){
     }else{
       disabled = true
     }
@@ -182,7 +205,7 @@ ValidRequest(){
       value = false
     }
     console.log(this.path)
-    if(this._router.url=="/Login" || this._router.url=="/otp" || this._router.url=="/customer-view"){
+    if(this._router.url=="/Login" || this._router.url=="/newPassword" || this._router.url=="/otp" || this._router.url=="/customer-view"){
       console.log("in here")
       value = true
     }

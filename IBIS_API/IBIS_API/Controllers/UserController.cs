@@ -339,26 +339,57 @@ namespace IBIS_API.Controllers
         [Route("fileUpload")]
         public async Task<IActionResult> PostFile(FileUpload file)
         {
-            var fileFound = _context.Files.FirstOrDefault();
-               if(fileFound != null)
+            FileUpload fileFound = null;
+            if (file.type == 1)
             {
-                _context.Remove(fileFound);
-            }
-            _context.Add(file);
-            await _context.SaveChangesAsync();
-            return Ok();
+                fileFound = _context.Files.Where(c => c.type == 1).FirstOrDefault();
+                if (fileFound != null)
+                {
+                    _context.Remove(fileFound);
+                    _context.Add(file);
+                }
+                else
+                {
+                    _context.Add(file);
+                }
 
+            }
+            else
+            {
+                fileFound = _context.Files.Where(c => c.type == 2).FirstOrDefault();
+                if (fileFound != null)
+                {
+                    _context.Remove(fileFound);
+                    _context.Add(file);
+                }
+                else
+                {
+                    _context.Add(file);
+                }
+
+
+
+
+
+
+            }
+            await _context.SaveChangesAsync();
+            return Ok(file);
         }
         [HttpGet]
         [Route("getFile")]
         public async Task<IActionResult> GetFile()
         {
-            var fileFound = _context.Files.FirstOrDefault();
-            if (fileFound == null)
+            var FileList = new List<FileUpload>();
+            var imageFound = _context.Files.Where(c => c.type == 1).FirstOrDefault();
+            var pdfFound = _context.Files.Where(c => c.type == 2).FirstOrDefault();
+            FileList.Add(imageFound);
+            FileList.Add(pdfFound);
+            if (FileList.Count == 0)
             {
                return BadRequest("No File Found");
             }
-            return Ok(fileFound);
+            return Ok(FileList);
 
         }
 

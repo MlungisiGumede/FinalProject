@@ -4,7 +4,7 @@
     
     <h2>{{title}}</h2>
 
-    <button class="button-add-row" [disabled]="edited" mat-button (click)="addRow()">Add Row</button>
+    <button *ngIf="edit" class="button-add-row" [disabled]="edited" mat-button (click)="addRow()">Add Row</button>
    
   </article>
   <form action="" [formGroup]="form">
@@ -35,7 +35,7 @@
          
          <section *ngSwitchCase="'isDone'" >
           <div class="btn-edit">
-            <button [disabled]="edited==true"  mat-button (click)="element.isDone = !element.isDone;editRow(rowIndex)">
+            <button [disabled]="edited==true" *ngIf="edit" mat-button (click)="element.isDone = !element.isDone;editRow(rowIndex)">
               Edit
             </button>
           </div>
@@ -46,7 +46,7 @@
        
           <div *ngSwitchCase="'isDelete'">
             
-              <button mat-button (click)="DeleteRow(rowIndex)" >Delete</button>
+              <button mat-button *ngIf="edit" (click)="DeleteRow(rowIndex)" >Delete</button>
               
             </div>
             <span *ngSwitchCase="'total'">
@@ -82,8 +82,8 @@
             
           </mat-form-field>
           <div *ngSwitchCase="'isDelete'">
-            <button style="float: right;" mat-button (click)="DeleteRow(rowIndex)" >Delete</button>
-            <button *ngIf="edited" [disabled]="!form.valid" class="button-add-row" (click)="OnDone(rowIndex)" mat-button style="float: right;">Done</button>
+            <button style="float: right;" mat-button (click)="DeleteRow(rowIndex)" *ngIf="edit" >Delete</button>
+            <button *ngIf="edited && edit" [disabled]="!form.valid" class="button-add-row"  (click)="OnDone(rowIndex)" mat-button style="float: right;">Done</button>
              
             </div>
             <span *ngSwitchCase="'total'">
@@ -125,7 +125,7 @@
     <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
     <tr mat-footer-row *matFooterRowDef="displayedColumns;sticky:true"></tr>
   </table>
-  <input (click)="Edit()" *ngIf="dataSource.data.length > 0" style="width: 200px!important;" type="submit" value="Update" [disabled]="!form.valid ||edited==true">
+  <input (click)="Edit()" *ngIf="dataSource.data.length > 0 && edit" style="width: 200px!important;" type="submit" value="Update" [disabled]="!form.valid ||edited==true">
   </form>
 
 

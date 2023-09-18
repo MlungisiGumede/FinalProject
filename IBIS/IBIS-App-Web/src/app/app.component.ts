@@ -78,7 +78,7 @@ constructor(private loginService : LoginService, public router: Router,
   title = 'IBIS-App';
   use: userprofile[] = [
     {value: 'user-0', viewValue: 'Display Settings',route: 'Dashboard'},
-    {value: 'user-1', viewValue: 'Profile',route: 'viewUser'},
+    {value: 'user-1', viewValue: 'Profile',route: 'profile'},
     {value: 'user-2', viewValue: 'Logout',route: 'Login'},
   ];
   tabs: TabItem[] = [
@@ -133,6 +133,7 @@ constructor(private loginService : LoginService, public router: Router,
     //this.authGuardService.ShowNavigation()
     this.router.navigate(['/Login'])
   }
+
   }
 
 }

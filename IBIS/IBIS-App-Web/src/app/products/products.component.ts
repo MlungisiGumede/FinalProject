@@ -154,7 +154,7 @@ dialogRef.afterClosed().subscribe((res:any) => {
         this.ShowSnackBar("SubCategory successfully added", "success");
         this.productService.getSubCategoriesList().subscribe((res)=>{
           console.log(res)
-          this.categories = res
+          this.subCategories = res
         })
        
          

@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace IBIS_API.Migrations
 {
     [DbContext(typeof(DataContextcs))]
-    [Migration("20230917050410_initial")]
+    [Migration("20230918043514_initial")]
     partial class initial
     {
         /// <inheritdoc />
@@ -202,6 +202,12 @@ namespace IBIS_API.Migrations
                     b.Property<int?>("OrderStatus_ID")
                         .HasColumnType("int");
 
+                    b.Property<int?>("PaymentType_ID")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("Transaction_ID")
+                        .HasColumnType("int");
+
                     b.HasKey("CustomerOrder_ID");
 
                     b.ToTable("CustomerOrders");
@@ -243,6 +249,9 @@ namespace IBIS_API.Migrations
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("type")
+                        .HasColumnType("int");
 
                     b.HasKey("FileUpload_ID");
 

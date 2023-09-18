@@ -9,6 +9,8 @@ namespace IBIS_API.Models
 
         public string? Base64 { get; set;}
 
+        public int? type { get; set; }
+
 
     }
 }

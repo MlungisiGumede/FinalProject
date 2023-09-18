@@ -69,7 +69,7 @@ export class PaymentComponent implements OnInit {
   }
 
   cancel() {
-    //this.router.navigate(['cart']);
+    this.router.navigate(['customer-view']);
   }
 
 

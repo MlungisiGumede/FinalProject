@@ -199,6 +199,12 @@ namespace IBIS_API.Migrations
                     b.Property<int?>("OrderStatus_ID")
                         .HasColumnType("int");
 
+                    b.Property<int?>("PaymentType_ID")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("Transaction_ID")
+                        .HasColumnType("int");
+
                     b.HasKey("CustomerOrder_ID");
 
                     b.ToTable("CustomerOrders");
@@ -240,6 +246,9 @@ namespace IBIS_API.Migrations
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("type")
+                        .HasColumnType("int");
 
                     b.HasKey("FileUpload_ID");
 

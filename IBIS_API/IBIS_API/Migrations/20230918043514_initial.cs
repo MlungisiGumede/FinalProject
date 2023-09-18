@@ -98,7 +98,9 @@ namespace IBIS_API.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Customer_ID = table.Column<int>(type: "int", nullable: true),
                     Date_Created = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    OrderStatus_ID = table.Column<int>(type: "int", nullable: true)
+                    OrderStatus_ID = table.Column<int>(type: "int", nullable: true),
+                    PaymentType_ID = table.Column<int>(type: "int", nullable: true),
+                    Transaction_ID = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -129,7 +131,8 @@ namespace IBIS_API.Migrations
                     FileUpload_ID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Base64 = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Base64 = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    type = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {

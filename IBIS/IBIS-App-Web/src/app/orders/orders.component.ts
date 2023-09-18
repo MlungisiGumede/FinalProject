@@ -118,12 +118,25 @@ export class OrdersComponent implements OnInit {
       // this.data = this.supplierOrders
     
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
    
- this.ReadOrders()
+ await this.ReadOrders()
 this.orderservice.addedOrder.subscribe((result:any)=>{
   this.ReadOrders()
 })
+  }
+  async ReadProducts(){
+let value = new Promise((resolve, reject) => {
+  this.productservice.getProductList().subscribe((success)=>{
+    this.products = success
+    resolve(success)
+  }),(error:any)=>{
+    reject(error)
+  }
+  
+})
+await value
+return value
   }
   async ReadOrders(){
   let val = new Promise((resolve:any)=>{ this.orderservice.getOrders().subscribe((result:any) =>{
@@ -340,9 +353,14 @@ CheckOrderStatus(){
     this.router.navigate(['/add-order']);
 
   }
-  View(element:any){
+  async View(element:any){
     console.log(element)
-    this.ReadOrders()
+    await this.ReadOrders()
+    await this.ReadProducts()
+    let edit = true
+    if(element.orderStatus_ID == 2 || element.orderStatus_ID == 3){
+      edit = false
+    }
     if(this.customersOrderLine && this.products){
     if(this.isCustomerOrder){
       if(this.isCustomerOrder){
@@ -356,7 +374,7 @@ CheckOrderStatus(){
       let name = this.getCustomerName(element.customer_ID)
      const dialogRef = this.matDialog.open(ViewCustomerOrderComponent, {
         data:{'orderLines':customerOrderline,'products':this.products,'customerOrder':element
-      ,'name':name}
+      ,'name':name,'edit':edit}
       
     })
     dialogRef.afterClosed().subscribe(result => {
@@ -424,8 +442,26 @@ CheckOrderStatus(){
     item.orderStatus_ID = id
     let array:any = []
     if(this.isCustomerOrder){
-this.orderservice.UpdateCustomerOrderStatus(item).subscribe(Response => {
+this.orderservice.UpdateCustomerOrderStatus(item).pipe(map(
+  (res)=>{
 
+
+
+
+
+
+}),
+catchError((err) =>{
+  console.log(err)
+if(err.status == 400){
+  this.ShowSnackBar(err.error, "error");
+ 
+  
+}
+return throwError(err)
+    })).
+subscribe(Response => {
+this.ShowSnackBar("Customer order status successfully updated", "success")
   this.orderservice.getOrders().subscribe((result:any) =>{
  
     if(result[0]){
