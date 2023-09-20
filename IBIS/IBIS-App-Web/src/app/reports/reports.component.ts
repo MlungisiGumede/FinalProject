@@ -13,6 +13,8 @@ import { CustomerOrder } from '../Models/CustomerOrder';
 import { DatePipe } from '@angular/common';
 import { CustomerOrderVM } from '../Models/CustomerOrderVM';
 import { ProductViewModel } from '../Models/ProductViewModel';
+import { catchError, map, throwError } from 'rxjs';
+import { MatSnackBar } from '@angular/material/snack-bar';
 var pdfMake = require('pdfmake/build/pdfmake');
 var pdfFonts = require('pdfmake/build/vfs_fonts');
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
@@ -59,12 +61,13 @@ export class ReportsComponent implements OnInit {
   period:any
   request:any
   success:any
+  filteredCustomerOrderLines:any
   products:ProductViewModel[]|any
   
   combinedData: { Name: string, Quantity: number, Price: number }[] = [];
   constructor(private productService: ProductService, private route: ActivatedRoute,
      private inv : InventoryService,private supply: SupplierService,private orderservice : OrdersService, private writeOffService : WriteOffService
-     ,public orderService:OrdersService) {
+     ,public orderService:OrdersService,private _snackBar: MatSnackBar) {
       Chart.register(...registerables);
       }
 
@@ -102,19 +105,59 @@ export class ReportsComponent implements OnInit {
   }
   ExportToExcel(){
     if(this.isCustomerOrder){
-      this.orderService.ConvertCustomerOrdersToExcel().subscribe(response =>{
+      this.orderService.ConvertCustomerOrdersToExcel().pipe(map(
+        (res)=>{
+  
+  this.ShowSnackBar('Customer Orders Successfully Exported to Excel Check Your email', 'success')
+  
+  
+  
+  
+      }),
+      catchError((err) =>{
+        console.log(err)
+        this.ShowSnackBar('Failed to convert customer orders to excel or send it or both', 'error')
+       
+        return throwError(err)
+      }))
+  .subscribe(response =>{
         
       })
     }else{
-      this.orderService.ConvertSupplierOrdersToExcel().subscribe(response =>{
+      this.orderService.ConvertSupplierOrdersToExcel().pipe(map(
+        (res)=>{
+  
+  //this.ShowSnackBar('Supplier Orders Successfully Exported to Excel Check Your email', 'success')
+  
+  
+  
+  
+      }),
+      catchError((err) =>{
+        console.log(err)
+        this.ShowSnackBar('Failed to convert supplier orders to excel or send it or both', 'error')
+       
+        return throwError(err)
+      })).subscribe(response =>{
+        this.ShowSnackBar('Supplier Orders Successfully Exported to Excel Check Your email', 'success')
       })
     }
   }
+  ShowSnackBar(message: string, panel: string) {
+    this._snackBar.open(message, "close", {
+      duration: 5000,
+      panelClass: [panel]
+     
+    });
+  }
+
   Confirm(){
     if(this.request =='order'){
       this.DatedOrdersReport()
     }else if(this.request == 'stock'){
       this.CreateStockTakeChart()
+    }else{
+      this.MostPopularProducts()
     }
   }
  
@@ -355,6 +398,91 @@ ClearChart(){
   this.chart.destroy()
   }
 }
+MostPopularProducts(){
+  let labels:any = []
+  let quantities:any = []
+  let dropDownIndex = this.dropDown.findIndex((item:any) => item.monthNumber == this.selectedValue)
+  this.selectedValue = ""
+  console.log(dropDownIndex)
+let selectedPeriod = this.dropDown[dropDownIndex]
+const date = new Date();
+date.setMonth(selectedPeriod.monthNumber);
+let startOfPeriod = new Date(selectedPeriod.year, selectedPeriod.monthNumber, 1)
+let endOfPeriod = new Date(selectedPeriod.year, selectedPeriod.monthNumber + 1, 0)
+console.log(startOfPeriod)
+this.filteredCustomerOrderLines = []
+console.log(this.customerOrders)
+this.filtereredCustomerOrders = this.customerOrders.filter((item:any) =>new Date(item.date_Created) >= startOfPeriod && new Date(item.date_Created) <= endOfPeriod)
+console.log(this.filtereredCustomerOrders)
+this.filtereredCustomerOrders.forEach((item:any) => {
+  this.customerOrderLine.forEach((element:any) => {
+    if(item.customerOrder_ID == element.customerOrder_ID){
+      this.filteredCustomerOrderLines.push(element)
+    }
+  })
+})
+console.log(this.filteredCustomerOrderLines)
+this.period =  selectedPeriod.value
+      this.products.forEach((item:any) => {
+        let product:Product = new Product()
+  product.quantity = 0
+  product.name = item.name
+        this.filteredCustomerOrderLines.forEach((element:any) => {
+          if(item.product_ID == element.product_ID){
+            product.quantity = product.quantity + element.quantity
+          }
+        })
+        quantities.push(product.quantity)
+         labels.push(item.name) // or product.name...
+      })
+      let myChart = Chart.getChart("myChart")
+      if(myChart){
+        myChart.destroy()
+      }
+      this.chart = new Chart("myChart", {
+        type: 'bar', //this denotes tha type of chart
+        data: {
+          labels: labels,
+          datasets: [
+            {
+              label: 'Total',
+              data: quantities,
+              backgroundColor: [
+                'rgba(255, 99, 132, 0.2)', // keep these or...
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(153, 102, 255, 0.2)',
+                'rgba(255, 159, 64, 0.2)'
+              ],
+              borderColor: [
+                'rgba(255, 99, 132, 1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(75, 192, 192, 1)',
+                'rgba(153, 102, 255, 1)',
+                'rgba(255, 159, 64, 1)'
+              ],
+            }
+          ]
+      },
+      options: {
+        aspectRatio:2.5,
+       
+        plugins: {
+          title: {
+              display: true,
+              text: 'Most Popular Products Placed for the period '+this.period
+          },
+          legend: {
+            display: false
+          }
+        }
+      }
+      
+    })
+    
+}
 CreateStockTakeChart(){
   //as // put keys for graph... or...
   
@@ -366,6 +494,7 @@ CreateStockTakeChart(){
     if(myChart){
       myChart.destroy()
     }
+   
  
   let colour = 'green'
   let labelString = " (Positive)"

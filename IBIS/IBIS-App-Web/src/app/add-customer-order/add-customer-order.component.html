@@ -67,6 +67,7 @@
         <div [ngSwitch]="col.type" *ngIf="!element.isDone">
          
           <!-- display2(element) -->
+         
           <mat-form-field *ngSwitchCase="'product_ID'"  >
             
             <mat-select (selectionChange)="SetPrice($event,rowIndex)"  formControlName="product_ID" >
@@ -87,6 +88,7 @@
               
              
             </div>
+          
             <span *ngSwitchCase="'total'">
               {{CalculateTotal(rowIndex)}}
              
@@ -108,11 +110,11 @@
            
   
            
-          <mat-form-field *ngSwitchDefault>
+          <div *ngSwitchDefault>
             <input *ngIf="element.product_ID" #Input [type]="col.type" [formControlName]="col.key" (keyup)="CheckQuantity(Input.value,element.product_ID)" matInput />
             {{ConsoleLog(element,col.key)}}
             
-          </mat-form-field>
+          </div>
         </div>
        
        

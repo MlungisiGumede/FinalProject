@@ -81,12 +81,23 @@
 
              
               </div>
+              <div *ngSwitchCase="2">
+                <!-- <mat-icon class="light-Btn" (click)="delete(item)">Refund</mat-icon> -->
+                <mat-icon class="red-Btn" (click)="View(item)">View</mat-icon>
+                <ion-button class="red-Btn" id="1" (click)="UpdateOrderStatus(item,3)">Refund</ion-button>
+              <ion-button class="light-Btn" id="1" (click)="UpdateOrderStatus(item,3)">Sold</ion-button>
+             
+              
+             
+               
+               
+               
+              </div>
 
-
-            <div *ngSwitchCase="2">
+            <div *ngSwitchCase="3">
               <mat-icon class="light-Btn" (click)="delete(item)">delete</mat-icon>
               <mat-icon class="red-Btn" (click)="View(item)">edit</mat-icon>
-              <mat-icon class="red-Btn" id="1" (click)="UpdateOrderStatus(item,3)">cancel</mat-icon>
+              <mat-icon *ngIf="item.transaction_ID == null" class="red-Btn" id="1" (click)="UpdateOrderStatus(item,3)">cancel</mat-icon>
             <mat-icon class="light-Btn" id="1" (click)="UpdateOrderStatus(item,1)">pending</mat-icon>
            
             
@@ -95,11 +106,11 @@
              
              
             </div>
-            <div *ngSwitchCase="3">
+            <div *ngSwitchCase="4">
               
-              <mat-icon class="light-Btn" (click)="delete(item)">delete</mat-icon>
+              <!-- <mat-icon class="light-Btn" (click)="delete(item)">delete</mat-icon> -->
               <mat-icon class="light-Btn" (click)="View(item)">edit</mat-icon>
-              <mat-icon class="red-Btn" (click)="UpdateOrderStatus(item,2)">check</mat-icon>
+              <ion-button class="red-Btn" (click)="UpdateOrderStatus(item,2)">Sold</ion-button>
               <mat-icon class="light-Btn" (click)="UpdateOrderStatus(item,1)">pending</mat-icon>
              
               

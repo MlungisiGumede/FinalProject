@@ -48,6 +48,10 @@
               "target": "Package",
               "version": "[6.4.4, )"
             },
+            "Finance": {
+              "target": "Package",
+              "version": "[1.0.5, )"
+            },
             "Microsoft.AspNetCore.Authentication.JwtBearer": {
               "target": "Package",
               "version": "[6.0.16, )"
@@ -88,9 +92,17 @@
               "target": "Package",
               "version": "[6.0.16, )"
             },
+            "Spire.XLS": {
+              "target": "Package",
+              "version": "[13.9.1, )"
+            },
             "Swashbuckle.AspNetCore": {
               "target": "Package",
               "version": "[6.2.3, )"
+            },
+            "Vse.Web.Serialization.ControlledSerializationJsonConverter": {
+              "target": "Package",
+              "version": "[1.0.2, )"
             }
           },
           "imports": [

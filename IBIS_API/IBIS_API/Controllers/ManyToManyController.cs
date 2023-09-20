@@ -20,6 +20,12 @@ using ClosedXML.Excel;
 using System.Globalization;
 using DocumentFormat.OpenXml.VariantTypes;
 using System.Security.Cryptography;
+using Spire.Xls;
+using System.IO;
+using System.Text.RegularExpressions;
+//using Zayko.Finance;
+//using System.Net;
+//using System.Web.Script.Serialization;
 
 namespace IBIS_API.Controllers
 {
@@ -208,17 +214,21 @@ public async Task<ActionResult> PostCustomerOrder(CustomerOrderViewModel? ord)
                 using (SmtpClient smtp = new SmtpClient(smtpAddress, portNumber)) // where are the brackets...
                 using (var message = new MailMessage(emailFromAddress, emailToAddress))
                 {
-
+                    
                     //sheet
                     wb.SaveAs(ms);
-
+                    Workbook book = new Workbook();
+                    book.LoadFromStream(ms);
+                    book.SaveToStream(ms, FileFormat.PDF);
+                   
+                   
                     // use try in the backend here...
 
                     //FileStream fs = new FileStream("c:\\ExcelFile.xlsx",FileMode.Create,FileAccess.Write);
                     // try with different type...
                     Writer.Flush();
                     ms.Position = 0;
-                    message.Attachments.Add(new Attachment(ms, "SubCategories.xlsx", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"));
+                    message.Attachments.Add(new Attachment(ms, "SubCategories.pdf", "application/pdf"));
                     smtp.Credentials = new NetworkCredential(emailFromAddress, "sxkbtjguspnshajt");
                     smtp.UseDefaultCredentials = false;
                     smtp.EnableSsl = enableSSL;
@@ -231,6 +241,232 @@ public async Task<ActionResult> PostCustomerOrder(CustomerOrderViewModel? ord)
             }
 
             return Ok();
+        }
+        [HttpGet]
+        [Route("GenerateSubCategoriesReport2")]
+        public ActionResult GenerateSubCategoriesReport2()
+        {
+            var subCategories = _context.SubCategories.ToList();
+            System.Data.DataTable dt = new System.Data.DataTable("Grid");
+
+
+            using (XLWorkbook wb = new XLWorkbook())
+            {
+                var worksheet = wb.Worksheets.Add("CustomerOrders");
+                worksheet.ColumnWidth = 25; // can maybe try select index of the column...
+                //worksheet.Cell(2, 1).InsertTable(dt);                     //wb2.SaveToFile("excel.xlsx");
+
+                //worksheet.Cell(1, 1).InsertTable(dt);
+                int i = 1;
+                var maxLength = 0;
+                var totalsList = new List<double?>();
+                double? total = 0;
+                foreach (var subCategory in subCategories) // change to for loop...
+                {
+                    worksheet.Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center);
+                    worksheet.Cell(i, 1).Value = subCategory.Name; // try to set a header maybe...
+                    //worksheet.Cell(1, i).Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center);
+                    worksheet.Cell(i, 1).Style.Fill.SetBackgroundColor(XLColor.BabyBlue);
+                    worksheet.Range(worksheet.Cell(i, 1), worksheet.Cell(i, 2)).Merge();
+                    i++;
+                    worksheet.Cell(i, 1).Value = "Product Name";
+                    worksheet.Cell(i, 2).Value = "Stock on Hand";
+                    worksheet.Cell(i, 1).Style.Fill.SetBackgroundColor(XLColor.Pink);
+                    worksheet.Cell(i,2).Style.Fill.SetBackgroundColor(XLColor.Pink);
+                    // worksheet.Cell(2, i+1).Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center); // set border maybe...
+                    // worksheet.Cell(2, i).Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center);
+                    double? subTotal = 0;
+                   
+                    i++;
+                    if (_context.Products.Where(c => c.SubCategory_ID == subCategory.SubCategory_ID).Any())
+                    {
+                        var products = _context.Products.Where(c => c.SubCategory_ID == subCategory.SubCategory_ID).ToList(); // product per the category
+                       
+                        foreach (var product in products)
+                        {
+                            worksheet.Cell(i, 1).Value = product.Name;
+                            worksheet.Cell(i, 2).Value = product.Quantity;
+                            subTotal = subTotal + product.Quantity;
+                            total = total + product.Quantity;
+                            i++;
+                        }
+                        worksheet.Cell(i, 1).Value = "Total";
+                        worksheet.Cell(i, 2).Value = subTotal;
+                        
+                        subTotal = 0;
+                    }
+                    else
+                    {
+                        worksheet.Cell(i, 1).Value = "N/A";
+                        worksheet.Cell(i, 2).Value = subTotal;
+                    }
+
+                    i++;
+                }
+                worksheet.Cell(i, 1).Value = "Total";
+                worksheet.Cell(i, 1).Style.Fill.SetBackgroundColor(XLColor.Green);
+                worksheet.Range(worksheet.Cell(i, 1), worksheet.Cell(i, 2)).Merge();
+                worksheet.Cell(i+1, 1).Value = "Total products";
+                worksheet.Cell(i+1, 2).Value = total;
+
+
+
+
+
+                using (MemoryStream ms = new MemoryStream())
+                using (var Writer = new StreamWriter(ms))
+                using (SmtpClient smtp = new SmtpClient(smtpAddress, portNumber)) // where are the brackets...
+                using (var message = new MailMessage(emailFromAddress, emailToAddress))
+                {
+
+                    //sheet
+                    wb.SaveAs(ms);
+                    Workbook book = new Workbook();
+                    book.LoadFromStream(ms);
+                    book.SaveToStream(ms, FileFormat.PDF);
+
+
+                    // use try in the backend here...
+
+                    //FileStream fs = new FileStream("c:\\ExcelFile.xlsx",FileMode.Create,FileAccess.Write);
+                    // try with different type...
+                    Writer.Flush();
+                    ms.Position = 0;
+                    message.Attachments.Add(new Attachment(ms, "SubCategories.pdf", "application/pdf"));
+                    smtp.Credentials = new NetworkCredential(emailFromAddress, "sxkbtjguspnshajt");
+                    smtp.UseDefaultCredentials = false;
+                    smtp.EnableSsl = enableSSL;
+                    smtp.Send(message);
+                    // ms.WriteTo(fs);
+                    //fs.Close();
+                    // ms.Close();
+                    //File(ms.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "ExcelFile.xlsx");
+                }
+            }
+
+            return Ok();
+        }
+
+        [HttpGet]
+        [Route("GenerateCategoriesReport2")]
+        public ActionResult GenerateCatgeoriesReport2()
+        {
+            var categories = _context.Categories.ToList();
+            System.Data.DataTable dt = new System.Data.DataTable("Grid");
+
+
+            using (XLWorkbook wb = new XLWorkbook())
+            {
+                var worksheet = wb.Worksheets.Add("CustomerOrders");
+                worksheet.ColumnWidth = 25; // can maybe try select index of the column...
+                //worksheet.Cell(2, 1).InsertTable(dt);                     //wb2.SaveToFile("excel.xlsx");
+
+                //worksheet.Cell(1, 1).InsertTable(dt);
+                int i = 1;
+                var maxLength = 0;
+                var totalsList = new List<double?>();
+                double? total = 0;
+                foreach (var category in categories) // change to for loop...
+                {
+                    worksheet.Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center);
+                    worksheet.Cell(i, 1).Value = category.Name; // try to set a header maybe...
+                    //worksheet.Cell(1, i).Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center);
+                    worksheet.Cell(i, 1).Style.Fill.SetBackgroundColor(XLColor.BabyBlue);
+                    worksheet.Range(worksheet.Cell(i, 1), worksheet.Cell(i, 2)).Merge();
+                    i++;
+                    worksheet.Cell(i, 1).Value = "Product Name";
+                    worksheet.Cell(i, 2).Value = "Stock on Hand";
+                    worksheet.Cell(i, 1).Style.Fill.SetBackgroundColor(XLColor.Pink);
+                    worksheet.Cell(i, 2).Style.Fill.SetBackgroundColor(XLColor.Pink);
+                    // worksheet.Cell(2, i+1).Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center); // set border maybe...
+                    // worksheet.Cell(2, i).Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center);
+                    double? subTotal = 0;
+
+                    i++;
+                    if (_context.Products.Where(c => c.SubCategory_ID == category.Category_ID).Any())
+                    {
+                        var products = _context.Products.Where(c => c.SubCategory_ID == category.Category_ID).ToList(); // product per the category
+
+                        foreach (var product in products)
+                        {
+                            worksheet.Cell(i, 1).Value = product.Name;
+                            worksheet.Cell(i, 2).Value = product.Quantity;
+                            subTotal = subTotal + product.Quantity;
+                            total = total + product.Quantity;
+                            i++;
+                        }
+                        worksheet.Cell(i, 1).Value = "Total";
+                        worksheet.Cell(i, 2).Value = subTotal;
+
+                        subTotal = 0;
+                    }
+                    else
+                    {
+                        worksheet.Cell(i, 1).Value = "N/A";
+                        worksheet.Cell(i, 2).Value = subTotal;
+                    }
+
+                    i++;
+                }
+                worksheet.Cell(i, 1).Value = "Total";
+                worksheet.Cell(i, 1).Style.Fill.SetBackgroundColor(XLColor.Green);
+                worksheet.Range(worksheet.Cell(i, 1), worksheet.Cell(i, 2)).Merge();
+                worksheet.Cell(i + 1, 1).Value = "Total products";
+                worksheet.Cell(i + 1, 2).Value = total;
+
+
+
+
+
+                using (MemoryStream ms = new MemoryStream())
+                using (var Writer = new StreamWriter(ms))
+                using (SmtpClient smtp = new SmtpClient(smtpAddress, portNumber)) // where are the brackets...
+                using (var message = new MailMessage(emailFromAddress, emailToAddress))
+                {
+
+                    //sheet
+                    wb.SaveAs(ms);
+                    Workbook book = new Workbook();
+                    book.LoadFromStream(ms);
+                    book.SaveToStream(ms, FileFormat.PDF);
+
+
+                    // use try in the backend here...
+
+                    //FileStream fs = new FileStream("c:\\ExcelFile.xlsx",FileMode.Create,FileAccess.Write);
+                    // try with different type...
+                    Writer.Flush();
+                    ms.Position = 0;
+                    message.Attachments.Add(new Attachment(ms, "Categories.pdf", "application/pdf"));
+                    smtp.Credentials = new NetworkCredential(emailFromAddress, "sxkbtjguspnshajt");
+                    smtp.UseDefaultCredentials = false;
+                    smtp.EnableSsl = enableSSL;
+                    smtp.Send(message);
+                    // ms.WriteTo(fs);
+                    //fs.Close();
+                    // ms.Close();
+                    //File(ms.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "ExcelFile.xlsx");
+                }
+            }
+
+            return Ok();
+        }
+        [HttpGet]
+        //[WebMethod]
+        [Route("ConvertRate")]
+        public ActionResult ConvertRate()
+        {
+            WebClient wb = new WebClient();
+            var toCurrency = "USD";
+            var fromCurrency = "AUD";
+            WebClient web = new WebClient();
+            string apiURL = String.Format("http://finance.google.com/finance/converter?a={0}&from={1}&to={2}", 1000, fromCurrency.ToUpper(), toCurrency.ToUpper());
+            string response = web.DownloadString(apiURL);
+            var split = response.Split((new string[] { "<span class=bld>" }), StringSplitOptions.None);
+            var value = split[1].Split(' ')[0];
+            decimal rate = decimal.Parse(value, CultureInfo.InvariantCulture);
+            return Ok(rate);
+
         }
 
         [HttpGet]
@@ -347,7 +583,11 @@ public async Task<ActionResult> PostCustomerOrder(CustomerOrderViewModel? ord)
 
             return Ok();
         }
-
+        [HttpGet]
+        public ActionResult ConvertCategoriesToPdf()
+        {
+            return Ok();
+        }
         [HttpGet]
         [Route("convertCustomerOrders")]
         public  ActionResult ConvertCustomerOrders()
@@ -410,7 +650,7 @@ public async Task<ActionResult> PostCustomerOrder(CustomerOrderViewModel? ord)
                                             //wb2.SaveToFile("excel.xlsx");
                 worksheet.Cell(1, 1).Value = "Customer Orders Report";
                 worksheet.Cell(2, 1).InsertTable(dt);
-
+                
                 using (MemoryStream ms = new MemoryStream())
                 using (var Writer = new StreamWriter(ms))
                 using (SmtpClient smtp = new SmtpClient(smtpAddress, portNumber)) // where are the brackets...
@@ -543,7 +783,15 @@ public async Task<ActionResult> PostCustomerOrder(CustomerOrderViewModel? ord)
         {
             // dont send primary key of order lines through...
             
-            
+            if(ord.Transaction_ID != null)
+            {
+                var order = _context.CustomerOrders.Where(c => c.CustomerOrder_ID == ord.CustomerOrder_ID).First();
+                 order.Transaction_ID = ord.Transaction_ID;
+                _context.CustomerOrders.Update(order);
+                await _context.SaveChangesAsync();
+
+                return NoContent();
+            }
             var products = _context.Products.ToList();
             if (ord.OrderStatus_ID == 2)
             {

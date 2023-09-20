@@ -27,6 +27,7 @@ export class OrdersService {
   manytoManyAPIUrl = environment.apiUrl +'ManyToMany';
   public addedOrder = new Subject<string>();
   public checkout = new BehaviorSubject<any>(null)
+  public orderVM = new BehaviorSubject<any>(null)
   constructor(private httpClient: HttpClient) { }
 
 
@@ -55,7 +56,10 @@ export class OrdersService {
        createOrder(ord: Orders){
         return this.httpClient.post(this.apiUrl, ord, this.httpOptions)
       }
-  
+     getCurrency():any{
+      let url = 'https://api.currencybeacon.com/v1/latest?api_key=FrWo45q23NJqHOVAbqny7GsgCvnJAZNN'
+      return this.httpClient.get(url);
+     }
     UpdateCustomerOrderStatus(item:CustomerOrder){
       return this.httpClient.put(this.manytoManyAPIUrl + '/putCustomerOrderStatus', item, this.httpOptions)
     }

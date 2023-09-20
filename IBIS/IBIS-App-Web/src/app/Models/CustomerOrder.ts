@@ -3,4 +3,5 @@ export class CustomerOrder{
     customer_ID: any;
     date_Created: any;
     orderStatus_ID:any
+    transaction_ID:any
 }

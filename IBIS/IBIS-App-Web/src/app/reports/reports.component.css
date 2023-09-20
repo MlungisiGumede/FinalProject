@@ -19,6 +19,22 @@
   .active, .collapsible:hover {
     background-color: #1561ac;
   }
+   /* https://stackoverflow.com/questions/39473991/how-to-make-a-chart-js-bar-chart-scrollable */
+  .chartWrapper {
+    position: relative;
+  }
+  
+  .chartWrapper > canvas {
+    position: absolute;
+    left: 0;
+    top: 0;
+    pointer-events: none;
+  }
+  
+  .chartAreaWrapper {
+    
+    overflow-x: scroll;
+  }
   /* canvas {
     position: absolute;
     top: 0;

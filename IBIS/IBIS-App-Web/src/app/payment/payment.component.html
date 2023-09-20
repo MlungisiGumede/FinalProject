@@ -2,7 +2,8 @@
 
   <ion-card-content class="paymentbox">
     <h1><strong>Payment</strong></h1>
-    <h3><strong>Total amount to pay: ${{amount}}</strong></h3>
+    <h3><strong>Total amount to pay in Rands: R{{totalR}}</strong></h3>
+    <h3><strong>Total amount to pay in Dollars Rounded Up (exchange rates mary vary slightly): ${{total$}}</strong></h3>
     <h4>Please do not refresh the browser while the transaction is processing.</h4>
     <div #paymentRef></div>
     <ion-button class="cancelBtn" (click)="cancel()" color="danger">Cancel</ion-button>

@@ -96,14 +96,21 @@ export class OrdersComponent implements OnInit {
       },
       {
         status_ID: 2,
-        Name: 'Done'
+        Name: 'In Progress Paid'
       },
       {
         status_ID: 3,
-        Name: 'Cancelled'
+        Name: 'Done'
       },
       {
         status_ID: 4,
+        Name: 'Refunded'
+      },{
+        status_ID: 5,
+        Name: 'Cancelled'
+      },
+      {
+        status_ID: 6,
         Name: 'All'
       }
     ] // read from the database or nah...
@@ -124,6 +131,7 @@ export class OrdersComponent implements OnInit {
 this.orderservice.addedOrder.subscribe((result:any)=>{
   this.ReadOrders()
 })
+
   }
   async ReadProducts(){
 let value = new Promise((resolve, reject) => {
@@ -441,6 +449,8 @@ CheckOrderStatus(){
   UpdateOrderStatus(item:any,id:any){
     item.orderStatus_ID = id
     let array:any = []
+    let date = this.ConvertDate(item.Date_Created)
+    item.date_Created = date?.toString()
     if(this.isCustomerOrder){
 this.orderservice.UpdateCustomerOrderStatus(item).pipe(map(
   (res)=>{
@@ -483,6 +493,8 @@ this.ShowSnackBar("Customer order status successfully updated", "success")
 })
   }else    if(!this.isCustomerOrder){
     item.orderStatus_ID = id
+    let date = this.ConvertDate(item.Date_Created)
+    item.date_Created = date?.toString()
     this.orderservice.UpdateSupplierOrderStatus(item).subscribe(Response => {
     
       this.orderservice.getOrders().subscribe((result:any) =>{
