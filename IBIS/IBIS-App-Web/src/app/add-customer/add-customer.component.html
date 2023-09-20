@@ -6,23 +6,44 @@
          <div class="user-details" [formGroup]=form>
            <div class="input-box">
              <span class="details">First Name</span>
-             <input type="text" placeholder="name" formControlName="Customer_FirstName" >
+             <input type="text" placeholder="First Name" formControlName="Customer_FirstName">
+             <ion-note class="error-message" *ngIf="form.get('Customer_FirstName')?.hasError('required')">
+              First Name is required.
+            </ion-note>
            </div>
            <div class="input-box">
              <span class="details">Surname</span>
-             <input type="text" placeholder="surname" formControlName="Customer_Surname">
+             <input type="text" placeholder="Surname" formControlName="Customer_Surname">
+             <ion-note class="error-message" *ngIf="form.get('Customer_Surname')?.hasError('required')">
+              Last Name is required.
+            </ion-note>
            </div>
            <div class="input-box">
              <span class="details">Address</span>
-             <input type="text" placeholder="address" formControlName="Address">
+             <input type="text" placeholder="Address" formControlName="Address">
+             <ion-note class="error-message" *ngIf="form.get('Address')?.hasError('required')">
+              Address is required.
+            </ion-note>
            </div>
            <div class="input-box">
              <span class="details">Phone number</span>
-             <input type="tel" placeholder="phone number" formControlName="Phone" >
+             <input type="tel" placeholder="Phone number" formControlName="Phone" >
+            <ion-note class="error-message" *ngIf="form.get('Phone')?.hasError('minLength')">
+              Phone number must have at least 10 digits.
+            </ion-note>
+            <ion-note class="error-message" *ngIf="form.get('Phone')?.hasError('maxLength')">
+              Phone number cannot have more than 10 digits.
+            </ion-note>
+            <ion-note class="error-message" *ngIf="form.get('Phone')?.hasError('pattern')">
+              Valid phone number is required.
+            </ion-note>
            </div>
            <div class="input-box">
             <span class="details">Email</span>
-            <input type="tel" (keyup)="display()" placeholder="email" formControlName="Email" >
+            <input type="text" (keyup)="display()" placeholder="Email" formControlName="Email" >
+            <ion-note class="error-message" *ngIf="form.get('Email')?.hasError('email')">
+              Enter valid email.
+            </ion-note>
           </div>
          </div>
          <div class="button">
