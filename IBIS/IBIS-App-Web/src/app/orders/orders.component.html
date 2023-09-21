@@ -21,6 +21,7 @@
           <ion-col  *ngIf="!isCustomerOrder">Supplier</ion-col>
           <ion-col>Date Created</ion-col>
           <ion-col>Total</ion-col>
+          <ion-col *ngIf="isCustomerOrder">Description</ion-col>
           
           <ion-col></ion-col>
         </ion-row>
@@ -43,6 +44,9 @@
           </ion-col>
           <ion-col>
             <ion-label>R{{CalculateTotal(item.customerOrder_ID)}}</ion-label>
+          </ion-col>
+          <ion-col>
+            <ion-label>{{ReturnType(item)}}</ion-label>
           </ion-col>
  
         </div>
@@ -74,7 +78,7 @@
               
               
               
-              <mat-icon class="light-Btn" (click)="delete(item)">delete</mat-icon>
+              <mat-icon class="light-Btn" *ngIf="!item.transaction_ID" (click)="delete(item)">delete</mat-icon>
               <mat-icon class="light-Btn"  (click)="View(item)">edit</mat-icon>
               <mat-icon class="red-Btn" id="1" (click)="UpdateOrderStatus(item,3)">cancel</mat-icon>
               <mat-icon class="light-Btn" (click)="UpdateOrderStatus(item,2)">check</mat-icon>
@@ -82,10 +86,10 @@
              
               </div>
               <div *ngSwitchCase="2">
-                <!-- <mat-icon class="light-Btn" (click)="delete(item)">Refund</mat-icon> -->
+                 <mat-icon class="light-Btn"  *ngIf="!item.transaction_ID" (click)="delete(item)">delete</mat-icon> 
                 <mat-icon class="red-Btn" (click)="View(item)">View</mat-icon>
-                <ion-button class="red-Btn" id="1" (click)="UpdateOrderStatus(item,3)">Refund</ion-button>
-              <ion-button class="light-Btn" id="1" (click)="UpdateOrderStatus(item,3)">Sold</ion-button>
+                <mat-icon class="red-Btn" id="1" (click)="UpdateOrderStatus(item,3)">cancel</mat-icon>
+              <mat-icon class="light-Btn" id="1" (click)="UpdateOrderStatus(item,1)">pending</mat-icon>
              
               
              
@@ -95,9 +99,9 @@
               </div>
 
             <div *ngSwitchCase="3">
-              <mat-icon class="light-Btn" (click)="delete(item)">delete</mat-icon>
+              <mat-icon class="light-Btn"  *ngIf="!item.transaction_ID" (click)="delete(item)">delete</mat-icon>
               <mat-icon class="red-Btn" (click)="View(item)">edit</mat-icon>
-              <mat-icon *ngIf="item.transaction_ID == null" class="red-Btn" id="1" (click)="UpdateOrderStatus(item,3)">cancel</mat-icon>
+              <mat-icon class="red-Btn" id="1" (click)="UpdateOrderStatus(item,3)">cancel</mat-icon>
             <mat-icon class="light-Btn" id="1" (click)="UpdateOrderStatus(item,1)">pending</mat-icon>
            
             
@@ -106,25 +110,14 @@
              
              
             </div>
-            <div *ngSwitchCase="4">
-              
-              <!-- <mat-icon class="light-Btn" (click)="delete(item)">delete</mat-icon> -->
-              <mat-icon class="light-Btn" (click)="View(item)">edit</mat-icon>
-              <ion-button class="red-Btn" (click)="UpdateOrderStatus(item,2)">Sold</ion-button>
-              <mat-icon class="light-Btn" (click)="UpdateOrderStatus(item,1)">pending</mat-icon>
-             
-              
-              
-              
-              <!-- <mat-icon  (click)="View(rowIndex)">edit</mat-icon> -->
-              
-              </div>
+
+            
               
             
                 <div *ngSwitchCase="4">
                   
-                  <mat-icon  class="light-Btn" (click)="View(item)">edit</mat-icon>
-                  <mat-icon class="light-Btn" (click)="delete(item)">delete</mat-icon>
+                  <mat-icon  class="light-Btn"   (click)="View(item)">edit</mat-icon>
+                  <mat-icon class="light-Btn" *ngIf="!item.transaction_ID" (click)="delete(item)">delete</mat-icon>
                   
                   </div>
                   </div>

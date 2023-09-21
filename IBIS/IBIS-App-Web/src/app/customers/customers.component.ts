@@ -12,6 +12,7 @@ import { ChangeDetectorRef } from '@angular/core';
 import { AddCustomerOrderComponent } from '../add-customer-order/add-customer-order.component';
 import { Observable, catchError, map, of, throwError } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { UserService } from '../Services/user.service';
 @Component({
   selector: 'app-customers',
   templateUrl: './customers.component.html',
@@ -21,7 +22,8 @@ export class CustomersComponent implements OnInit {
 data:Observable<any> = new Observable();
 filterTerm!:string;
   constructor(public matDialog:MatDialog,private customerSerivce : CustomerService ,public toastController: ToastController
-    ,public cdr:ChangeDetectorRef,private _snackbar: MatSnackBar) { }
+    ,public cdr:ChangeDetectorRef,private _snackbar: MatSnackBar,
+    private userService:UserService) { }
 
   ngOnInit() {
 //localStorage.removeItem("Token")
@@ -80,7 +82,7 @@ filterTerm!:string;
   async DeleteCustomer(id: any){
      
 
-this.customerSerivce.DeleteCustomer(id).pipe(map(
+this.userService.DeleteCustomer(id).pipe(map(
   (res)=>{
 
 

@@ -77,12 +77,6 @@ export class CustomerService {
     //  }
       
     
-       DeleteCustomer(id: any): Observable<any> {
-        console.log(id)
-         return this.httpClient.delete<Customer>(`${this.apiUrl}${id}` , this.httpOptions)
-           .pipe(
-             catchError(this.handleError)
-           );
-       }
+    
      }
 

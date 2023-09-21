@@ -3,6 +3,7 @@ using IBIS_API.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -16,7 +17,7 @@ namespace IBIS_API.Controllers
     public class CustomersController : Controller
     {
         private readonly DataContextcs _context;
-
+       
         public CustomersController(DataContextcs context)
         {
             _context = context;
@@ -82,6 +83,7 @@ namespace IBIS_API.Controllers
         [HttpPost]
         public async Task<ActionResult<Customer>> PostCustomer(Customer cus)
         {
+            //var user = await _userManager.FindByNameAsync(username);
             _context.Customers.Add(cus);
             await _context.SaveChangesAsync();
 
@@ -89,33 +91,7 @@ namespace IBIS_API.Controllers
         }
 
         // DELETE: api/Addresses/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteCustomer(int id)
-        {
-            var cus = await _context.Customers.FindAsync(id);
-            if (cus == null)
-            {
-                return NotFound();
-            }
-
-            _context.Customers.Remove(cus);
-            var orders = _context.CustomerOrders.Where(c => c.Customer_ID == id).ToList();
-            var orderLines = _context.CustomerOrdersLine.ToList();
-            foreach (var order in  orders)
-            {
-                foreach(var orderLine in orderLines)
-                {
-                    if(order.CustomerOrder_ID == orderLine.CustomerOrder_ID)
-                    {
-                        _context.Remove(orderLine);
-                    }
-                }
-            }
-            _context.RemoveRange(orders);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
-        }
+    
         private bool CustomerExists(int id)
         {
             return _context.Customers.Any(e => e.Customer_ID == id);

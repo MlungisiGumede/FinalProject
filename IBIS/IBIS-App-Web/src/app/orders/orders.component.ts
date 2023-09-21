@@ -94,23 +94,17 @@ export class OrdersComponent implements OnInit {
         status_ID: 1,
         Name: 'In Progress'
       },
+     
       {
         status_ID: 2,
-        Name: 'In Progress Paid'
-      },
-      {
-        status_ID: 3,
         Name: 'Done'
       },
       {
-        status_ID: 4,
-        Name: 'Refunded'
-      },{
-        status_ID: 5,
+        status_ID: 3,
         Name: 'Cancelled'
       },
       {
-        status_ID: 6,
+        status_ID: 4,
         Name: 'All'
       }
     ] // read from the database or nah...
@@ -197,6 +191,29 @@ this.CheckOrderStatus()
   getCustomerName(id:any){
     let customer = this.customers.find((customer:any) => customer.customer_ID == id)
     return customer.customer_FirstName + " " + customer.customer_Surname
+  }
+  ReturnType(item:any){
+    if(item.orderStatus_ID == 1){
+      if(item.transaction_ID){
+        return "Paid Online and pending"
+      }else{
+        return "Pending"
+      }
+    }else if(item.orderStatus_ID == 2){
+      if(item.transaction_ID){
+        return "Done and Paid Online"
+      }else{
+        return "Done instore"
+      }
+    }else if(item.orderStatus_ID == 3){
+      if(item.transaction_ID){
+        return "Cancelled and Refunded"
+      }else{
+        return "Cancelled"
+      }
+      
+    }
+    return
   }
   getSupplierName(id:any){
     console.log(id)
@@ -366,7 +383,7 @@ CheckOrderStatus(){
     await this.ReadOrders()
     await this.ReadProducts()
     let edit = true
-    if(element.orderStatus_ID == 2 || element.orderStatus_ID == 3){
+    if(element.orderStatus_ID == 2 || element.orderStatus_ID == 3 || element.transaction_ID != null){
       edit = false
     }
     if(this.customersOrderLine && this.products){

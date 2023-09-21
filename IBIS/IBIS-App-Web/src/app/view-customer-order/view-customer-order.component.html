@@ -35,7 +35,7 @@
          
          <section *ngSwitchCase="'isDone'" >
           <div class="btn-edit">
-            <button [disabled]="edited==true" *ngIf="edit" mat-button (click)="element.isDone = !element.isDone;editRow(rowIndex)">
+            <button [disabled]="edited==true" *ngIf="edit" mat-button (click)="element.isDone = !element.isDone;editRow(rowIndex);">
               Edit
             </button>
           </div>

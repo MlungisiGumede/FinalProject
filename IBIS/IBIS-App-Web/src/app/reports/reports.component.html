@@ -14,6 +14,8 @@
         <ion-button class="light-Btn" (click)="request='stock';ClearChart();selectedValue='';success=false"> Stock Take Report</ion-button>
          <ion-button class="light-Btn" (click)="request='order';ClearChart();selectedProduct='';success=false">Customer Dated Orders Report ( 6 Months )</ion-button>
          <ion-button class="light-Btn" (click)="request='popular';ClearChart();selectedProduct='';success=false">Most Popular Products ordered. ( 6 Months )</ion-button>
+         <ion-button class="light-Btn" (click)="request='category'" >Category Report</ion-button>
+         <ion-button class="light-Btn" (click)="request='subCategory'" >SubCategory Report</ion-button>
         </ion-row>
         <ion-row>
         <mat-form-field *ngIf="request == 'order' || request == 'popular'">
@@ -32,8 +34,13 @@
       </mat-form-field>
     </ion-row>
     <ion-row *ngIf="request == 'order' || request == 'stock' || request == 'popular'">
+      
       <ion-button [disabled]="!selectedValue && !selectedProduct" (click)="Confirm();request='';">Confirm</ion-button>
       <ion-button (click)="request='';selectedProduct='';selectedValue=''">Cancel</ion-button>
+    </ion-row>
+    <ion-row *ngIf="request=='subCategory' || request=='category'">
+    <ion-button  (click)="ConfirmPDF();request='';">PDF</ion-button>
+      <ion-button  (click)="ConfirmExcel();request='';">Excel</ion-button>
     </ion-row>
         <div  class="chart-container">
           

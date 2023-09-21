@@ -249,6 +249,7 @@ dropDown:any= [{
         let val = (this.form.get('records') as FormArray).controls[rowIndex].get('isDone')?.setValue(false)
         const control =  this.form.get('records') as FormArray;
         this.quantityGreater = control.controls[rowIndex].get('quantityGreater')?.value
+        console.log(this.quantityGreater)
         this.rowIndexTemplate = rowIndex
         this.filteredDropDown = [...this.dropDown]
         let product_ID =(this.form.get('records') as FormArray).controls[rowIndex].get('product_ID')?.value

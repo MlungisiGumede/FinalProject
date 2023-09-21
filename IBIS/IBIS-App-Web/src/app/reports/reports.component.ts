@@ -55,7 +55,7 @@ export class ReportsComponent implements OnInit {
   dropDown:any = []
   selectedValue:any
   selectedProduct:any
-  filtereredCustomerOrders:any
+  filtereredCustomerOrders:CustomerOrderVM[]|any    
   ordersTotal:any
   customerOrdersVM:CustomerOrderVM[]|any
   period:any
@@ -102,6 +102,43 @@ export class ReportsComponent implements OnInit {
       console.log('yes we received the data from the product component', this.combinedData)
       
     });
+  }
+  GenerateSubCategoriesReportPDF(){
+    this.productService.GenerateSubCategoryReportPDF().subscribe((res)=>{
+      console.log(res)
+      const link = document.createElement("a")
+      link.href = "data:application/pdf;base64,"+res.base64
+      link.download = "SubCategories.pdf"
+      link.click()
+      
+      link.remove()
+    })
+  }
+  GenerateCategoriesReportPDF(){
+    this.productService.GenerateCategoryReportPDF().subscribe((res)=>{
+      console.log(res)
+      const link = document.createElement("a")
+      link.href = "data:application/pdf;base64,"+res.base64
+      link.download = "Categories.pdf"
+      link.click()
+      
+      link.remove()
+    })
+  }
+  GenerateCategoriesReportExcel(){
+    this.productService.GenerateCategoryReportExcel().subscribe((res)=>{
+      console.log(res)
+      alert("success")
+    })
+  }
+  GenerateSubCategoriesReportExcel(){
+    this.productService.GenerateSubCategoryReportExcel().subscribe((res)=>{
+      console.log(res)
+      alert("success")
+      
+      
+     
+    })
   }
   ExportToExcel(){
     if(this.isCustomerOrder){
@@ -158,6 +195,20 @@ export class ReportsComponent implements OnInit {
       this.CreateStockTakeChart()
     }else{
       this.MostPopularProducts()
+    }
+  }
+  ConfirmPDF(){
+    if(this.request =='category'){
+      this.GenerateCategoriesReportPDF()
+    }else if(this.request == 'subCategory'){
+      this.GenerateSubCategoriesReportPDF()
+    }
+  }
+  ConfirmExcel(){
+    if(this.request =='category'){
+      this.GenerateCategoriesReportExcel()
+    }else if(this.request == 'subCategory'){
+      this.GenerateSubCategoriesReportExcel()
     }
   }
  
@@ -256,7 +307,7 @@ export class ReportsComponent implements OnInit {
           table: {
             headerRows: 1,
             // widths: ['*', 'auto', 'auto', 'auto'],
-            body: this.FormBody(this.filtereredCustomerOrders, ['customerOrder_ID','date_Created','order_Status','total',,'customer_Name'])
+            body: this.FormBody(this.filtereredCustomerOrders, ['customerOrder_ID','date_Created','order_Status','total','customer_Name'])
           }
         },
         {
@@ -293,7 +344,7 @@ export class ReportsComponent implements OnInit {
    
       pdfMake.createPdf(docDefinition).open();
   }
-  FormBody(data:CustomerOrder[], columns:any) { // https://stackoverflow.com/questions/26658535/building-table-dynamically-with-pdfmake
+  FormBody(data:CustomerOrderVM[], columns:any) { // https://stackoverflow.com/questions/26658535/building-table-dynamically-with-pdfmake
     var body = [];
   console.log(data)
   
@@ -309,6 +360,7 @@ export class ReportsComponent implements OnInit {
             if(column == "date_Created"){
               row[column] = this.ConvertDate(row[column])
                }
+               
                
               dataRow.push(row[column]);
       

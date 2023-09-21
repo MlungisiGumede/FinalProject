@@ -3,4 +3,5 @@ export class CustomerOrderVM{
     customer_Name: any
     date_Created: any
     total: any
+    order_Status:any
 }

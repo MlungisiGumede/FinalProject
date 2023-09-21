@@ -11,5 +11,7 @@
         public String? Order_Status { get; set; }
 
        public double Total { get; set; }
+
+     
     }
 }

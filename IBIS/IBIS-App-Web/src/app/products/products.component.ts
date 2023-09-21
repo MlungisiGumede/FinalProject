@@ -60,7 +60,8 @@ export class ProductsComponent implements OnInit {
   combinedData: { Name: string, Quantity: number , Price: number}[] = [];
 
   constructor(private productService: ProductService,public router: Router,private toastController: ToastController
-    ,private matDialog:MatDialog,private _snackbar: MatSnackBar,private writeOffService:WriteOffService) {
+    ,private matDialog:MatDialog,private _snackbar: MatSnackBar,private writeOffService:WriteOffService,
+    ) {
       
     
     productService = {} as ProductService;
@@ -91,6 +92,7 @@ export class ProductsComponent implements OnInit {
     // ];
 
   }
+
   WriteOffScreen(item:any){
 if(this.request == "write-off"){
   item.type = 1

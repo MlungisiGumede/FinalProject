@@ -263,6 +263,39 @@ namespace IBIS_API.Controllers
 
 
         }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteCustomer(int id)
+        {
+            var cus = await _context.Customers.FindAsync(id);
+            if (cus == null)
+            {
+                return NotFound();
+            }
+            var user = await _userManager.FindByEmailAsync(cus.Email);
+            _userManager.RemoveFromRoleAsync(user, "guest");
+            var claims = await _userManager.GetClaimsAsync(user);
+            //_userManager.Remove(user);
+            _context.Customers.Remove(cus);
+            var result = await _userManager.RemoveClaimsAsync(user, claims);
+            var res = await _userManager.DeleteAsync(user);
+            var orders = _context.CustomerOrders.Where(c => c.Customer_ID == id).ToList();
+            var orderLines = _context.CustomerOrdersLine.ToList();
+            foreach (var order in orders)
+            {
+                foreach (var orderLine in orderLines)
+                {
+                    if (order.CustomerOrder_ID == orderLine.CustomerOrder_ID)
+                    {
+                        _context.Remove(orderLine);
+                    }
+                }
+            }
+            _context.RemoveRange(orders);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
         [HttpPost]
         [Route("Authenticate")]
         public async Task<ActionResult> Authenticate(User_Account uvm)

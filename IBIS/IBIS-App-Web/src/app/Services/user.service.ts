@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, catchError } from 'rxjs';
 import { User } from '../Models/User';
 import { FileUpload } from '../Models/FileUpload';
 import { environment } from 'src/environments/environment';
+import { Customer } from '../Models/Customer';
 
 
 @Injectable({
@@ -29,4 +30,11 @@ public GetFiles(){
 public UploadProfile(file: any){
   return this.httpClient.post<User>(`${this.apiUrl}/uploadProfile`,file)
 }
+DeleteCustomer(id: any): Observable<any> {
+  console.log(id)
+   return this.httpClient.delete<Customer>(`${this.apiUrl}${id}` , )
+     .pipe(
+       
+     );
+ }
 }

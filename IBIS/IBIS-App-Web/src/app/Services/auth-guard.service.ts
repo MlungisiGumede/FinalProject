@@ -22,7 +22,7 @@ export class AuthGuardService implements CanActivate {
    canActivate(route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Promise<boolean> {
       this.previousUrl = new BehaviorSubject(this._router.url)
-
+//localStorage.removeItem('Token')
      
 console.log(route.routeConfig?.path)
 return new Promise((resolve, reject) => {

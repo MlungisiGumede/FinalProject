@@ -15,7 +15,7 @@ using Microsoft.AspNetCore.Mvc.Infrastructure;
 using System.Data;
 using System.Net.Mail;
 using System.Net;
-using DocumentFormat.OpenXml;
+//using DocumentFormat.OpenXml;
 using ClosedXML.Excel;
 using System.Globalization;
 using DocumentFormat.OpenXml.VariantTypes;
@@ -23,9 +23,12 @@ using System.Security.Cryptography;
 using Spire.Xls;
 using System.IO;
 using System.Text.RegularExpressions;
-//using Zayko.Finance;
-//using System.Net;
-//using System.Web.Script.Serialization;
+using DocumentFormat.OpenXml.Spreadsheet;
+using Spire.Pdf.Conversion;
+using System;
+using Spire.Pdf;
+using Spire.Xls.Core;
+
 
 namespace IBIS_API.Controllers
 {
@@ -125,7 +128,7 @@ public async Task<ActionResult> PostCustomerOrder(CustomerOrderViewModel? ord)
             return Ok();
         }
         [HttpGet]
-        [Route("GenerateSubCategoriesReport")]
+        [Route("GenerateSubCategoriesReportExcel")]
         public ActionResult GenerateSubCategoriesReport()
         {
             var subCategories = _context.SubCategories.ToList();
@@ -214,21 +217,14 @@ public async Task<ActionResult> PostCustomerOrder(CustomerOrderViewModel? ord)
                 using (SmtpClient smtp = new SmtpClient(smtpAddress, portNumber)) // where are the brackets...
                 using (var message = new MailMessage(emailFromAddress, emailToAddress))
                 {
-                    
-                    //sheet
-                    wb.SaveAs(ms);
-                    Workbook book = new Workbook();
-                    book.LoadFromStream(ms);
-                    book.SaveToStream(ms, FileFormat.PDF);
-                   
-                   
-                    // use try in the backend here...
 
-                    //FileStream fs = new FileStream("c:\\ExcelFile.xlsx",FileMode.Create,FileAccess.Write);
-                    // try with different type...
+                    //sheet
+                    ms.Position = 0;
+                    wb.SaveAs(ms);
                     Writer.Flush();
                     ms.Position = 0;
-                    message.Attachments.Add(new Attachment(ms, "SubCategories.pdf", "application/pdf"));
+                    message.Attachments.Add(new Attachment(ms, "SubCategories.xlsx", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"));
+                    //message.Attachments.Add(new Attachment(ms, "SubCategories.pdf", "application/pdf"));
                     smtp.Credentials = new NetworkCredential(emailFromAddress, "sxkbtjguspnshajt");
                     smtp.UseDefaultCredentials = false;
                     smtp.EnableSsl = enableSSL;
@@ -243,7 +239,7 @@ public async Task<ActionResult> PostCustomerOrder(CustomerOrderViewModel? ord)
             return Ok();
         }
         [HttpGet]
-        [Route("GenerateSubCategoriesReport2")]
+        [Route("GenerateSubCategoriesReportPDF")]
         public ActionResult GenerateSubCategoriesReport2()
         {
             var subCategories = _context.SubCategories.ToList();
@@ -321,10 +317,25 @@ public async Task<ActionResult> PostCustomerOrder(CustomerOrderViewModel? ord)
 
                     //sheet
                     wb.SaveAs(ms);
-                    Workbook book = new Workbook();
+                    Spire.Xls.Workbook book = new Spire.Xls.Workbook();
                     book.LoadFromStream(ms);
-                    book.SaveToStream(ms, FileFormat.PDF);
+                    foreach (Spire.Xls.Worksheet sheet in book.Worksheets)
+                    {
+                        //set centered alignment
+                        sheet.PageSetup.CenterHorizontally = true;
+                        //sheet.PageSetup.CenterVertically = true;
+                    }
+                    book.SaveToStream(ms, Spire.Xls.FileFormat.PDF);
+                    book.SaveToStream(ms, Spire.Xls.FileFormat.PDF);
+                    var bytes = ms.ToArray();
+                    var base64 = Convert.ToBase64String(bytes);
 
+                    //PdfConverter pdfConverter = new PdfConverter(book);
+                    //return File(ms,"application/pdf");
+                    FileUpload file = new FileUpload();
+                    file.Base64 = base64;
+                    //return File(ms,"application/pdf");
+                    return Ok(file);
 
                     // use try in the backend here...
 
@@ -348,7 +359,7 @@ public async Task<ActionResult> PostCustomerOrder(CustomerOrderViewModel? ord)
         }
 
         [HttpGet]
-        [Route("GenerateCategoriesReport2")]
+        [Route("GenerateCategoriesReportPDF")]
         public ActionResult GenerateCatgeoriesReport2()
         {
             var categories = _context.Categories.ToList();
@@ -426,10 +437,26 @@ public async Task<ActionResult> PostCustomerOrder(CustomerOrderViewModel? ord)
 
                     //sheet
                     wb.SaveAs(ms);
-                    Workbook book = new Workbook();
+                    Spire.Xls.Workbook book = new Spire.Xls.Workbook();
                     book.LoadFromStream(ms);
-                    book.SaveToStream(ms, FileFormat.PDF);
+                    book.SaveToStream(ms, Spire.Xls.FileFormat.PDF);
+                    foreach (Spire.Xls.Worksheet sheet in book.Worksheets)
+                    {
+                        //set centered alignment
+                        sheet.PageSetup.CenterHorizontally = true;
+                        //sheet.PageSetup.CenterVertically = true;
+                    }
+                    book.SaveToStream(ms, Spire.Xls.FileFormat.PDF);
+                    book.SaveToStream(ms, Spire.Xls.FileFormat.PDF);
+                    var bytes = ms.ToArray();
+                    var base64 = Convert.ToBase64String(bytes);
 
+                    //PdfConverter pdfConverter = new PdfConverter(book);
+                    //return File(ms,"application/pdf");
+                    FileUpload file = new FileUpload();
+                    file.Base64 = base64;
+                    //return File(ms,"application/pdf");
+                    return Ok(file);
 
                     // use try in the backend here...
 
@@ -470,7 +497,7 @@ public async Task<ActionResult> PostCustomerOrder(CustomerOrderViewModel? ord)
         }
 
         [HttpGet]
-        [Route("GenerateCategoriesReport")]
+        [Route("GenerateCategoriesReportExcel")]
         public ActionResult GenerateCategoriesReport()
         {
             var categories = _context.Categories.ToList();
@@ -583,11 +610,7 @@ public async Task<ActionResult> PostCustomerOrder(CustomerOrderViewModel? ord)
 
             return Ok();
         }
-        [HttpGet]
-        public ActionResult ConvertCategoriesToPdf()
-        {
-            return Ok();
-        }
+      
         [HttpGet]
         [Route("convertCustomerOrders")]
         public  ActionResult ConvertCustomerOrders()
@@ -782,10 +805,11 @@ public async Task<ActionResult> PostCustomerOrder(CustomerOrderViewModel? ord)
         public async Task<ActionResult> PutCustomerOrderStatus(CustomerOrder ord)
         {
             // dont send primary key of order lines through...
-            
-            if(ord.Transaction_ID != null)
+            var order = _context.CustomerOrders.Where(c => c.CustomerOrder_ID == ord.CustomerOrder_ID).First();
+            _context.ChangeTracker.Clear();
+            if (ord.Transaction_ID != null && order.Transaction_ID == null)
             {
-                var order = _context.CustomerOrders.Where(c => c.CustomerOrder_ID == ord.CustomerOrder_ID).First();
+                   
                  order.Transaction_ID = ord.Transaction_ID;
                 _context.CustomerOrders.Update(order);
                 await _context.SaveChangesAsync();
@@ -834,7 +858,7 @@ public async Task<ActionResult> PostCustomerOrder(CustomerOrderViewModel? ord)
             // nah do the whole attaching thing...
 
             // _context.Custom
-            
+            ord.Date_Created = order.Date_Created;
             _context.CustomerOrders.Update(ord);
             await _context.SaveChangesAsync();
 
@@ -898,18 +922,41 @@ public async Task<ActionResult> PostCustomerOrder(CustomerOrderViewModel? ord)
                 CustomerOrderVM2? ord = new CustomerOrderVM2();
                 ord.Customer_Name = _context.Customers.Where(c => c.Customer_ID == customerOrder.Customer_ID).Select(c => c.Customer_FirstName + " " + c.Customer_Surname).FirstOrDefault();
                 ord.Date_Created = customerOrder.Date_Created;
+                //ord.Transaction_ID = customerOrder.Transaction_ID;
                 ord.CustomerOrder_ID = customerOrder.CustomerOrder_ID; // manage insert later...
                 if(customerOrder.OrderStatus_ID == 1)
                 {
-                    ord.Order_Status = "In Progress";
+                    if(customerOrder.Transaction_ID != null)
+                    {
+                        ord.Order_Status = "Paid and Pending";
+                    }
+                    else
+                    {
+                        ord.Order_Status = "Pending";
+                    }
+                   // ord.Order_Status = "In Progress";
                 }
                 else if(customerOrder.OrderStatus_ID == 2)
                 {
-                    ord.Order_Status = "Done";
+                    if (customerOrder.Transaction_ID != null)
+                    {
+                        ord.Order_Status = "Completed and paid online";
+                    }
+                    else
+                    {
+                        ord.Order_Status = "Completed Instore";
+                    }
                 }
                 else
                 {
-                    ord.Order_Status = "Cancel";
+                    if (customerOrder.Transaction_ID != null)
+                    {
+                        ord.Order_Status = "Cancelled and refunded";
+                    }
+                    else
+                    {
+                        ord.Order_Status = "Cancelled";
+                    }
                 }
                 ord.Total = _context.CustomerOrdersLine.Where(c => c.CustomerOrder_ID == customerOrder.CustomerOrder_ID).Sum(c => c.Quantity * c.Price);
                 customerOrdersList.Add(ord);

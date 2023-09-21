@@ -11,7 +11,7 @@ import { environment } from 'src/environments/environment';
 })
 export class ProductService {
   apiUrl = environment.apiUrl + 'Products';
-
+  manytoManyAPIUrl = environment.apiUrl +'ManyToMany';
 
   constructor(private httpClient: HttpClient) { }
 
@@ -58,6 +58,39 @@ export class ProductService {
      getSubCategoriesList(): Observable<SubCategory[]> {
       return this.httpClient
         .get<SubCategory[]>(this.apiUrl + '/getSubCategories')
+        .pipe(
+          retry(2),
+          catchError(this.handleError)
+        )
+     }
+     GenerateSubCategoryReportPDF(): Observable<any> {
+      return this.httpClient
+        .get<any>(this.manytoManyAPIUrl + '/GenerateSubCategoriesReportPDF')
+        .pipe(
+          retry(2),
+          catchError(this.handleError)
+        )
+       
+     }
+     GenerateCategoryReportPDF(): Observable<any> {
+      return this.httpClient
+        .get<any>(this.manytoManyAPIUrl + '/GenerateCategoriesReportPDF')
+        .pipe(
+          retry(2),
+          catchError(this.handleError)
+        )
+     }
+     GenerateCategoryReportExcel(): Observable<any> {
+      return this.httpClient
+        .get<any>(this.manytoManyAPIUrl + '/GenerateCategoriesReportExcel')
+        .pipe(
+          retry(2),
+          catchError(this.handleError)
+        )
+     }
+     GenerateSubCategoryReportExcel(): Observable<any> {
+      return this.httpClient
+        .get<any>(this.manytoManyAPIUrl + '/GenerateSubCategoriesReportExcel')
         .pipe(
           retry(2),
           catchError(this.handleError)
