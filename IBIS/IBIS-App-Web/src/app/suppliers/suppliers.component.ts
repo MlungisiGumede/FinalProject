@@ -3,7 +3,7 @@ import { Supplier } from '../Models/Supplier';
 import { SupplierService } from '../Services/supplier.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LoginService } from '../Services/login.service';
-import { IonicModule, ToastController } from '@ionic/angular';
+import { IonicModule, ModalController, ToastController } from '@ionic/angular';
 import { MatDialog } from '@angular/material/dialog';
 import { AddSupplierComponent } from '../add-supplier/add-supplier.component';
 import { AddSupplierOrderComponent } from '../add-supplier-order/add-supplier-order.component';
@@ -11,6 +11,7 @@ import { InventoryService } from '../Services/inventory.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Observable, catchError, map, of, throwError } from 'rxjs';
 import { ViewSupplierComponent } from '../view-supplier/view-supplier.component';
+import { SupplierHelpComponent } from '../supplier-help/supplier-help.component';
 
 var pdfMake = require('pdfmake/build/pdfmake');
 var pdfFonts = require('pdfmake/build/vfs_fonts');
@@ -33,7 +34,7 @@ export class SuppliersComponent implements OnInit {
 
   constructor(private supply: SupplierService,public router: Router,private route: ActivatedRoute,private logged: LoginService,private toastController: ToastController
     ,private matDialog: MatDialog,public inventoryService: InventoryService,
-    private _snackbar: MatSnackBar) {
+    private _snackbar: MatSnackBar,public helpModal: ModalController) {
       
     
 
@@ -86,6 +87,11 @@ dialogRef.afterClosed().subscribe(result => {
       this.data = of(response);
     })
 
+  }
+  async showHelp(){
+    const modal = await this.helpModal.create({
+      component: SupplierHelpComponent});
+      return await modal.present();
   }
 
   ShowSnackBar(message: string, panel: string) {

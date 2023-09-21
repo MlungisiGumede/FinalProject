@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
-import { IonicModule } from '@ionic/angular';
+import { IonicModule, ModalController } from '@ionic/angular';
 import { Orders } from '../Models/Orders';
 import { Router } from '@angular/router';
 import { OrdersService } from '../Services/orders.service';
@@ -14,6 +14,7 @@ import { ProductService } from '../Services/product.service';
 import { DatePipe } from '@angular/common';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { catchError, map, throwError } from 'rxjs';
+import { OrdersHelpComponent } from '../orders-help/orders-help.component';
 var pdfMake = require('pdfmake/build/pdfmake');
 var pdfFonts = require('pdfmake/build/vfs_fonts');
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
@@ -119,7 +120,7 @@ export class OrdersComponent implements OnInit {
 
   constructor(public router: Router, private orderservice : OrdersService,
     private matDialog: MatDialog,public cdr:ChangeDetectorRef,
-    private productservice: ProductService,private _snackbar: MatSnackBar) {
+    private productservice: ProductService,private _snackbar: MatSnackBar,public helpModal: ModalController) {
       
     }
       // this.data = this.supplierOrders
@@ -256,6 +257,11 @@ console.log("customer")
     this.title = "Customer Orders"
     //this.cdr.detectChanges()
  }
+  }
+  async showHelp(){
+    const modal = await this.helpModal.create({
+      component: OrdersHelpComponent});
+      return await modal.present();
   }
   
 

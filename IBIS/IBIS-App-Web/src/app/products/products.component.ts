@@ -5,7 +5,7 @@ import { DataSource } from '@angular/cdk/table';
 import { Product } from '../Models/Product';
 import { ProductService } from '../Services/product.service';
 import { Router } from '@angular/router';
-import { IonicModule, ToastController } from '@ionic/angular';
+import { IonicModule, ModalController, ToastController } from '@ionic/angular';
 import { ChartDataset, ChartType, ChartOptions } from 'chart.js';
 import { Chart } from 'chart.js';
 import jsPDF from 'jspdf';
@@ -21,6 +21,7 @@ import { AddSubCategoryComponent } from '../add-sub-category/add-sub-category.co
 import { WriteOff } from '../Models/writeOff';
 import { WriteOffService } from '../Services/write-off.service';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { ProductsHelpComponent } from '../products-help/products-help.component';
 
 var pdfMake = require('pdfmake/build/pdfmake');
 var pdfFonts = require('pdfmake/build/vfs_fonts');
@@ -60,7 +61,7 @@ export class ProductsComponent implements OnInit {
   combinedData: { Name: string, Quantity: number , Price: number}[] = [];
 
   constructor(private productService: ProductService,public router: Router,private toastController: ToastController
-    ,private matDialog:MatDialog,private _snackbar: MatSnackBar,private writeOffService:WriteOffService) {
+    ,private matDialog:MatDialog,private _snackbar: MatSnackBar,private writeOffService:WriteOffService,public helpModal: ModalController) {
       
     
     productService = {} as ProductService;
@@ -169,6 +170,11 @@ dialogRef.afterClosed().subscribe((res:any) => {
   }
   GetSubCategoryName(id:any){
     return this.subCategories.find((item:any) => item.subCategory_ID == id).name
+  }
+  async showHelp(){
+    const modal = await this.helpModal.create({
+      component: ProductsHelpComponent});
+      return await modal.present();
   }
 
   async delete(id: number){

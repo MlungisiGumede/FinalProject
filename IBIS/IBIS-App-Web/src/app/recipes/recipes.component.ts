@@ -2,8 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { Recipe } from '../Models/Recipes';
 import { RecipeService } from '../Services/recipe.service';
 import { Router } from '@angular/router';
-import { ToastController } from '@ionic/angular';
+import { ModalController, ToastController } from '@ionic/angular';
 import { AiImageServiceService } from '../Services/ai-image-service.service';
+import { RecipesHelpComponent } from '../recipes-help/recipes-help.component';
 @Component({
   selector: 'app-recipes',
   templateUrl: './recipes.component.html',
@@ -17,7 +18,8 @@ export class RecipesComponent implements OnInit {
   isModalOpen = false;
   title = 'OpenAI Image API';
   imageUrl ='';
-  constructor(private recService: RecipeService,public router: Router,private toastController: ToastController, private aiService: AiImageServiceService) {
+  constructor(private recService: RecipeService,public router: Router,private toastController: ToastController, 
+    private aiService: AiImageServiceService,public helpModal: ModalController) {
     recService = {} as RecipeService;
    }
 
@@ -62,6 +64,12 @@ this.presentToast('top')
 
     this.router.navigate(['/create-recipe']);
 
+  }
+
+  async showHelp(){
+    const modal = await this.helpModal.create({
+      component: RecipesHelpComponent});
+      return await modal.present();
   }
 
 
