@@ -1,0 +1,8 @@
+<div [formGroup]="form">
+    <title>Enter Review</title>
+  <textarea rows="5" cols="30" placeHolder="Enter Short Review (50 Characters)" formControlName="review"> 
+</textarea>
+
+  <br><button mat-raised-button  [disabled]="!form.valid" (click)="Submit();">Submit</button>
+  <button mat-raised-button (click)="Close()">Cancel</button>
+</div>

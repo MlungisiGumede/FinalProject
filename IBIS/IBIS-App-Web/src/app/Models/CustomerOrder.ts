@@ -4,4 +4,5 @@ export class CustomerOrder{
     date_Created: any;
     orderStatus_ID:any
     transaction_ID:any
+    review:any
 }

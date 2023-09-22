@@ -273,26 +273,50 @@ namespace IBIS_API.Controllers
                 return NotFound();
             }
             var user = await _userManager.FindByEmailAsync(cus.Email);
-            _userManager.RemoveFromRoleAsync(user, "guest");
             var claims = await _userManager.GetClaimsAsync(user);
-            //_userManager.Remove(user);
             _context.Customers.Remove(cus);
-            var result = await _userManager.RemoveClaimsAsync(user, claims);
-            var res = await _userManager.DeleteAsync(user);
-            var orders = _context.CustomerOrders.Where(c => c.Customer_ID == id).ToList();
-            var orderLines = _context.CustomerOrdersLine.ToList();
-            foreach (var order in orders)
+            var result1 = await _userManager.RemoveFromRoleAsync(user, "guest");
+
+
+            if (result1.Succeeded)
             {
-                foreach (var orderLine in orderLines)
+                var result = await _userManager.RemoveClaimsAsync(user, claims);
+                if (result.Succeeded)
                 {
-                    if (order.CustomerOrder_ID == orderLine.CustomerOrder_ID)
+                    var res = await _userManager.DeleteAsync(user);
+                    if (res.Succeeded)
                     {
-                        _context.Remove(orderLine);
+                        var orders = _context.CustomerOrders.Where(c => c.Customer_ID == id).ToList();
+                        var orderLines = _context.CustomerOrdersLine.ToList();
+                        foreach (var order in orders)
+                        {
+                            foreach (var orderLine in orderLines)
+                            {
+                                if (order.CustomerOrder_ID == orderLine.CustomerOrder_ID)
+                                {
+                                    _context.Remove(orderLine);
+                                }
+                            }
+                        }
+                        _context.RemoveRange(orders);
+                        await _context.SaveChangesAsync();
+                    }
+                    else
+                    {
+                        return BadRequest("Failed to remove customer ");
                     }
                 }
+                else
+                {
+                    return BadRequest("Failed to remove customer ");
+                }
             }
-            _context.RemoveRange(orders);
-            await _context.SaveChangesAsync();
+            else
+            {
+                return BadRequest("Failed to remove customer ");
+            }
+           
+            
 
             return NoContent();
         }

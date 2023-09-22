@@ -222,6 +222,9 @@ this.CheckOrderStatus()
     let supplier = this.suppliers.find((supplier:any) => supplier.supplier_ID == id)
     return supplier.name
   }
+  ClassifyReviews(){
+    
+  }
   ToSupplier(){
     // edit records to standardize... then whatever is true is sent to API...
       console.log("supplier")

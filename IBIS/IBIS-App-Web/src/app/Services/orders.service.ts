@@ -56,6 +56,7 @@ export class OrdersService {
        createOrder(ord: Orders){
         return this.httpClient.post(this.apiUrl, ord, this.httpOptions)
       }
+      
      getCurrency():any{
       let url = 'https://api.currencybeacon.com/v1/latest?api_key=FrWo45q23NJqHOVAbqny7GsgCvnJAZNN'
       return this.httpClient.get(url);

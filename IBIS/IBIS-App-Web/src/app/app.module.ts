@@ -73,6 +73,7 @@ import { ProfileComponent } from './profile/profile.component';
 import { NgQrScannerModule } from 'angular2-qrscanner';
 import { InventoryHelpComponent } from './inventory-help/inventory-help.component';
 import { RegisterHelpComponent } from './register-help/register-help.component';
+import { ReviewComponent } from './review/review.component';
 
 
 @NgModule({
@@ -126,8 +127,8 @@ import { RegisterHelpComponent } from './register-help/register-help.component';
     PaymentComponent,
     ProfileComponent,
     InventoryHelpComponent,
-    RegisterHelpComponent
-    
+    RegisterHelpComponent,
+    ReviewComponent
    
     
   
@@ -209,7 +210,7 @@ import { RegisterHelpComponent } from './register-help/register-help.component';
   entryComponents: [AddCustomerComponent,ViewCustomerComponent,AddCustomerOrderComponent,
   ViewImageComponent,AddSupplierComponent,ViewCustomerOrderComponent,ViewSupplierOrderComponent,
   AddSupplierOrderComponent,AddInventoryItemComponent,ViewInventoryItemComponent,ViewSupplierComponent,
-AddProductComponent,AddSubCategoryComponent,AddCategoryComponent],
+AddProductComponent,AddSubCategoryComponent,AddCategoryComponent,ReviewComponent],
   providers: [{provide:HTTP_INTERCEPTORS,useClass:AuthenticationService,multi:true}
   ,AuthGuardService],
   bootstrap: [AppComponent]

@@ -816,6 +816,15 @@ public async Task<ActionResult> PostCustomerOrder(CustomerOrderViewModel? ord)
 
                 return NoContent();
             }
+            if (ord.Review != null)
+            {
+
+                order.Review = ord.Review;
+                _context.CustomerOrders.Update(order);
+                await _context.SaveChangesAsync();
+
+                return NoContent();
+            }
             var products = _context.Products.ToList();
             if (ord.OrderStatus_ID == 2)
             {

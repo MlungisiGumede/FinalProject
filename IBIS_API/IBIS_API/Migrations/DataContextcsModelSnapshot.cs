@@ -202,6 +202,9 @@ namespace IBIS_API.Migrations
                     b.Property<int?>("PaymentType_ID")
                         .HasColumnType("int");
 
+                    b.Property<string>("Review")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Transaction_ID")
                         .HasColumnType("nvarchar(max)");
 

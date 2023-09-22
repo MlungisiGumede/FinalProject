@@ -88,6 +88,7 @@ this.userService.DeleteCustomer(id).pipe(map(
 
 }),
 catchError((err) =>{
+  
   console.log(err)
   this.ShowSnackBar("failed to remove customer", "error");
   return throwError(err)

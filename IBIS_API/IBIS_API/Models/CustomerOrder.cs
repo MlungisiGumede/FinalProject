@@ -19,6 +19,8 @@ namespace IBIS_API.Models {
 
         public String? Transaction_ID { get; set; }
 
+        public String? Review { get; set; }
+
         public virtual ICollection<Product>? Product { get; set; }
         //public List<CustomerOrderLine> CustomerOrderLines { get; set; }
     }

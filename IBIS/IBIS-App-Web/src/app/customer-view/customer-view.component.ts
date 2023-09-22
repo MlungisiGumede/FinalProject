@@ -11,6 +11,8 @@ import { Route, Router } from '@angular/router';
 import { ProductService } from '../Services/product.service';
 import { ViewCustomerOrderComponent } from '../view-customer-order/view-customer-order.component';
 import { MatDialog } from '@angular/material/dialog';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { ReviewComponent } from '../review/review.component';
 
 declare let paypal:any;  
 
@@ -42,7 +44,27 @@ customerOrders:any
   products:any
   inventories:any
 inProgressOrders:any
+form:any
 supplierOrders:any
+statusResults:any = [
+  {
+    status_ID: 1,
+    Name: 'In Progress'
+  },
+ 
+  {
+    status_ID: 2,
+    Name: 'Done'
+  },
+  {
+    status_ID: 3,
+    Name: 'Cancelled'
+  },
+  {
+    status_ID: 4,
+    Name: 'All'
+  }
+]
 filteredCustomerOrders:any = of([{}])
 //script: HTMLScriptElement = new HTMLScriptElement;
   constructor(private loginservice: LoginService,private orderservice: OrdersService, private customerService:CustomerService
@@ -51,12 +73,15 @@ filteredCustomerOrders:any = of([{}])
     //,private renderer2: Renderer2, @Inject(DOCUMENT) private document: Document) { }
 
   ngOnInit(): void {
+    // this.form = new FormGroup({
+    //   review : new FormControl("",[Validators.required, Validators.min(1)]),
+    // })
     this.orderservice.orderVM.subscribe(()=>{
       this.GetCustomerOrders().then((res) => {
         this.GetCustomerOrdersLine().then((res) => {
           
           this.customerOrders$ = of(this.filteredCustomerOrders)
-          this.filteredCustomerOrders = of(this.filteredCustomerOrders)
+          //this.filteredCustomerOrders = of(this.filteredCustomerOrders)
           this.GetCustomer()
           this.ReadProducts()
           console.log(this.customerOrders$)
@@ -78,6 +103,54 @@ filteredCustomerOrders:any = of([{}])
   
     
   }
+  ReturnType(item:any){
+    if(item.orderStatus_ID == 1){
+      if(item.transaction_ID){
+        return "Paid Online and pending"
+      }else{
+        return "Pending"
+      }
+    }else if(item.orderStatus_ID == 2){
+      if(item.transaction_ID){
+        return "Done and Paid Online"
+      }else{
+        return "Done instore"
+      }
+    }else if(item.orderStatus_ID == 3){
+      if(item.transaction_ID){
+        return "Cancelled and Refunded"
+      }else{
+        return "Cancelled"
+      }
+      
+    }
+    return
+  }
+  FilterOrders(){
+    if(this.selectedStatus == 4){
+      this.filteredCustomerOrders = of(this.customerOrders)
+      return
+    }
+    this.filteredCustomerOrders = of(this.customerOrders.filter((item:CustomerOrder)=> (item.orderStatus_ID == this.selectedStatus)))
+    console.log(this.filteredCustomerOrders)
+    return
+  }
+  closeDialog(){
+
+  }
+  SubmitReview(item:any){
+   const dialogRef = this.matDialog.open(ReviewComponent,{
+      data:item
+    })
+    dialogRef.afterClosed().subscribe((res:any) => {
+      if(res){ 
+       // this.ShowSnackBar("Review successfully submitted", "success");
+        this.GetCustomerOrders()
+      }else if(res == false){
+        //this.ShowSnackBar("Review could not be submitted", "error");
+      }
+    })
+  }
   ConvertDate(date:any){
     //return 
     //console.log(date)
@@ -94,7 +167,7 @@ filteredCustomerOrders:any = of([{}])
       this.loginservice.getCustomerOrders().subscribe((res) => {
         console.log(res)
         this.customerOrders = res
-        this.filteredCustomerOrders = this.customerOrders.filter((item:CustomerOrder)=> (item.orderStatus_ID == 1 && item.transaction_ID == null))
+        this.filteredCustomerOrders = of(this.customerOrders) //of(this.customerOrders.filter((item:CustomerOrder)=> (item.orderStatus_ID == 1 && item.transaction_ID == null)))
         console.log(this.filteredCustomerOrders)
         console.log(this.filteredCustomerOrders)
         console.log(typeof(this.filteredCustomerOrders))

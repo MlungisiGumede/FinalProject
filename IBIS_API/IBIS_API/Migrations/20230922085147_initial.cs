@@ -100,7 +100,8 @@ namespace IBIS_API.Migrations
                     Date_Created = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     OrderStatus_ID = table.Column<int>(type: "int", nullable: true),
                     PaymentType_ID = table.Column<int>(type: "int", nullable: true),
-                    Transaction_ID = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Transaction_ID = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Review = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {

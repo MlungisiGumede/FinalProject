@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace IBIS_API.Migrations
 {
     [DbContext(typeof(DataContextcs))]
-    [Migration("20230920082700_initial")]
+    [Migration("20230922085147_initial")]
     partial class initial
     {
         /// <inheritdoc />
@@ -204,6 +204,9 @@ namespace IBIS_API.Migrations
 
                     b.Property<int?>("PaymentType_ID")
                         .HasColumnType("int");
+
+                    b.Property<string>("Review")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Transaction_ID")
                         .HasColumnType("nvarchar(max)");
