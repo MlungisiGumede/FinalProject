@@ -1,4 +1,4 @@
-import { Component, OnInit,Inject } from '@angular/core';
+import { Component, OnInit,Inject, ViewChild } from '@angular/core';
 import { Product } from '../Models/Product';
 import { ProductService } from '../Services/product.service';
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
@@ -6,6 +6,8 @@ import { Router } from '@angular/router';
 import { ToastController } from '@ionic/angular';
 import { catchError, map, throwError } from 'rxjs';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { BarcodeScannerLivestreamComponent } from 'ngx-barcode-scanner/public-api';
+
 
 @Component({
   selector: 'app-add-product',
@@ -13,6 +15,8 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
   styleUrls: ['./add-product.component.css']
 })
 export class AddProductComponent implements OnInit {
+  @ViewChild('scanner', { static: false }) scanner!: BarcodeScannerLivestreamComponent;
+  barcode: any;
 
 //data:any;
 prod!: Product;
@@ -55,6 +59,11 @@ selectedCategory: string | null = null;
 
     
   }
+  onValueChanges(result: any) {
+    console.log("change")
+    this.barcode = result.codeResult.code;
+    alert(this.barcode)
+  }
 
   minExpiryDateValidator(control: any): { [key: string]: boolean } | null {
     const selectedDate = new Date(control.value);
@@ -75,6 +84,7 @@ selectedCategory: string | null = null;
       expiryDateControl.updateValueAndValidity();
     }
   }
+  
 
  
 

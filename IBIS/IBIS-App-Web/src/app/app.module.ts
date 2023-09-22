@@ -74,6 +74,9 @@ import { NgQrScannerModule } from 'angular2-qrscanner';
 import { InventoryHelpComponent } from './inventory-help/inventory-help.component';
 import { RegisterHelpComponent } from './register-help/register-help.component';
 import { ReviewComponent } from './review/review.component';
+import { BarcodeScannerLivestreamModule } from 'ngx-barcode-scanner';
+
+
 
 
 @NgModule({
@@ -143,6 +146,7 @@ import { ReviewComponent } from './review/review.component';
     MatButtonModule,
     QRCodeModule,
     NgQrScannerModule,
+    BarcodeScannerLivestreamModule,
     RouterModule.forRoot([
       {path: '', redirectTo: '/Login', pathMatch: 'full'},
       {path: 'Login', component: LoginComponent, canActivate : [AuthGuardService] },

@@ -5,7 +5,7 @@ import { DataSource } from '@angular/cdk/table';
 import { Product } from '../Models/Product';
 import { ProductService } from '../Services/product.service';
 import { Router } from '@angular/router';
-import { IonicModule, ModalController, ToastController } from '@ionic/angular';
+import { AlertController, IonicModule, ModalController, ToastController } from '@ionic/angular';
 import { ChartDataset, ChartType, ChartOptions } from 'chart.js';
 import { Chart } from 'chart.js';
 import jsPDF from 'jspdf';
@@ -22,6 +22,9 @@ import { WriteOff } from '../Models/writeOff';
 import { WriteOffService } from '../Services/write-off.service';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ProductsHelpComponent } from '../products-help/products-help.component';
+import { BarcodeScannerLivestreamComponent } from 'ngx-barcode-scanner/lib/barcode-scanner-livestream';
+import { Barcode, BarcodeScanner } from '@capacitor-mlkit/barcode-scanning';
+import {Html5QrcodeScanner} from 'html5-qrcode'
 
 var pdfMake = require('pdfmake/build/pdfmake');
 var pdfFonts = require('pdfmake/build/vfs_fonts');
@@ -37,6 +40,8 @@ declare var myChart: any;
  // changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProductsComponent implements OnInit {
+  @ViewChild('scanner', { static: false }) scanner!: BarcodeScannerLivestreamComponent;
+barcode: any;
   data:Observable<any> = new Observable();
   data2: Product[] = [];
   reportData:any
@@ -55,19 +60,80 @@ export class ProductsComponent implements OnInit {
   price:any
   title:any = "Products"
   form:any
-  
+  isSupported = true;
 
-
+  barcodes: Barcode[] = [];
   combinedData: { Name: string, Quantity: number , Price: number}[] = [];
 
   constructor(private productService: ProductService,public router: Router,private toastController: ToastController
-    ,private matDialog:MatDialog,private _snackbar: MatSnackBar,private writeOffService:WriteOffService,public helpModal: ModalController) {
+    ,private matDialog:MatDialog,private _snackbar: MatSnackBar,private writeOffService:WriteOffService,public helpModal: ModalController
+    ,private alertController: AlertController) {
       
     
     productService = {} as ProductService;
   }
+  onValueChanges(result: any) {
+    console.log("change")
+    this.barcode = result.codeResult.code;
+    alert(this.barcode)
+  }
+  startScan() {
+    var html5QrcodeScanner = new Html5QrcodeScanner(
+      'reader',
+      { fps: 10, qrbox: 250 },
+      false
+    );
+    html5QrcodeScanner.render(this.onScanSuccess,this.onScanFailure);
+  }
+  
+  onScanSuccess(decodedText:any) {
+    // handle the scanned code as you like, for example:
+    alert(decodedText)
+    console.log(`Code matched = ${decodedText}`);
+  }
+
+  onScanFailure(error:any) {
+    // handle scan failure, usually better to ignore and keep scanning.
+    // for example:
+    console.warn(`Code scan error = ${error}`);
+  }
+ 
+
+
+  async scan(): Promise<void> {
+    console.log("hi")
+    //const granted = await this.requestPermissions();
+    // if (!granted) {
+    //   this.presentAlert();
+    //   return;
+    // }
+    const { barcodes } = await BarcodeScanner.scan();
+    this.barcodes.push(...barcodes);
+  }
+
+  
+
+  async presentAlert(): Promise<void> {
+    const alert = await this.alertController.create({
+      header: 'Permission denied',
+      message: 'Please grant camera permission to use the barcode scanner.',
+      buttons: ['OK'],
+    });
+    await alert.present();
+  }
+  // ngAfterViewInit() {
+  //   this.scanner.start();
+  //   this.scanner._valueChanges.subscribe(res => {
+  //     alert(res)
+  //   })
+    //this.scanner.
+ // }
 
   ngOnInit() {
+   
+    BarcodeScanner.isSupported().then((result) => {
+      this.isSupported = result.supported;
+    });
     this.form = new FormGroup({
      
       price: new FormControl("",[Validators.required, Validators.min(1)]),

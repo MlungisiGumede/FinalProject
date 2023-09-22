@@ -1,4 +1,12 @@
 <ion-content class="ion-margin" id="htmlData">
+  < <barcode-scanner-livestream #scanner  (valueChanges)="onValueChanges($event)">
+  </barcode-scanner-livestream>
+  <input type="file" capture="camera" accept="image/*">
+    <ion-button (click)="startScan()" [disabled]="!isSupported">
+      Scan
+    </ion-button>
+    <div style="width: 250px;height: 50px;float: right;" id="reader"></div>
+  
   <div class="contents">
     <ion-icon id="helpIcon" name="help-circle" style="color: #002850;" (click)="showHelp()"></ion-icon>
     <ion-title><h1>{{title}}</h1></ion-title>
