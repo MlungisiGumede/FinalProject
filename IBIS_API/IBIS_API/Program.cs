@@ -9,6 +9,10 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Newtonsoft.Json;
+using Microsoft.ML;
+using Microsoft.ML.Data;
+using Microsoft.ML.OnnxRuntime;
+using Microsoft.ML.Transforms.Onnx;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -67,6 +71,17 @@ builder.Services.AddAuthentication()
                         ClockSkew = TimeSpan.Zero
                     };
                 });
+
+builder.Services.AddSingleton<PredictionEngine<ModelInput, ModelOutput>>(service =>
+{
+    MLContext mlContext = new MLContext();
+    ModelInput mI = new ModelInput();
+    var model = mI.ModelStartup();
+    var engine = mlContext.Model.CreatePredictionEngine<ModelInput, ModelOutput>(model);
+    return engine;
+
+
+});
 
 //builder.Services.AddCors(options => options.AddDefaultPolicy(
 //    include =>

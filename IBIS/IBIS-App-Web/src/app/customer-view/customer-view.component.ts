@@ -140,7 +140,8 @@ filteredCustomerOrders:any = of([{}])
   }
   SubmitReview(item:any){
    const dialogRef = this.matDialog.open(ReviewComponent,{
-      data:item
+      data:item,
+      disableClose:true
     })
     dialogRef.afterClosed().subscribe((res:any) => {
       if(res){ 

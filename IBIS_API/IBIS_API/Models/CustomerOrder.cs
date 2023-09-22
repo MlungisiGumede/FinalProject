@@ -21,6 +21,8 @@ namespace IBIS_API.Models {
 
         public String? Review { get; set; }
 
+        public int? ReviewClassification_ID { get; set; }
+
         public virtual ICollection<Product>? Product { get; set; }
         //public List<CustomerOrderLine> CustomerOrderLines { get; set; }
     }

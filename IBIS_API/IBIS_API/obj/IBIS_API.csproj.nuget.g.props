@@ -12,9 +12,79 @@
   <ItemGroup Condition=" '$(ExcludeRestorePackageImports)' != 'true' ">
     <SourceRoot Include="C:\Users\27768\.nuget\packages\" />
   </ItemGroup>
+  <ItemGroup Condition=" '$(ExcludeRestorePackageImports)' != 'true' ">
+    <Content Include="$(NuGetPackageRoot)berttokenizers\1.2.0\contentFiles\any\net6.0\Vocabularies\base_cased.txt" Condition="Exists('$(NuGetPackageRoot)berttokenizers\1.2.0\contentFiles\any\net6.0\Vocabularies\base_cased.txt')">
+      <NuGetPackageId>BERTTokenizers</NuGetPackageId>
+      <NuGetPackageVersion>1.2.0</NuGetPackageVersion>
+      <NuGetItemType>Content</NuGetItemType>
+      <Pack>false</Pack>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>Vocabularies\base_cased.txt</TargetPath>
+      <DestinationSubDirectory>Vocabularies\</DestinationSubDirectory>
+      <Private>True</Private>
+      <Link>Vocabularies\base_cased.txt</Link>
+    </Content>
+    <Content Include="$(NuGetPackageRoot)berttokenizers\1.2.0\contentFiles\any\net6.0\Vocabularies\base_cased_german.txt" Condition="Exists('$(NuGetPackageRoot)berttokenizers\1.2.0\contentFiles\any\net6.0\Vocabularies\base_cased_german.txt')">
+      <NuGetPackageId>BERTTokenizers</NuGetPackageId>
+      <NuGetPackageVersion>1.2.0</NuGetPackageVersion>
+      <NuGetItemType>Content</NuGetItemType>
+      <Pack>false</Pack>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>Vocabularies\base_cased_german.txt</TargetPath>
+      <DestinationSubDirectory>Vocabularies\</DestinationSubDirectory>
+      <Private>True</Private>
+      <Link>Vocabularies\base_cased_german.txt</Link>
+    </Content>
+    <Content Include="$(NuGetPackageRoot)berttokenizers\1.2.0\contentFiles\any\net6.0\Vocabularies\base_cased_large.txt" Condition="Exists('$(NuGetPackageRoot)berttokenizers\1.2.0\contentFiles\any\net6.0\Vocabularies\base_cased_large.txt')">
+      <NuGetPackageId>BERTTokenizers</NuGetPackageId>
+      <NuGetPackageVersion>1.2.0</NuGetPackageVersion>
+      <NuGetItemType>Content</NuGetItemType>
+      <Pack>false</Pack>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>Vocabularies\base_cased_large.txt</TargetPath>
+      <DestinationSubDirectory>Vocabularies\</DestinationSubDirectory>
+      <Private>True</Private>
+      <Link>Vocabularies\base_cased_large.txt</Link>
+    </Content>
+    <Content Include="$(NuGetPackageRoot)berttokenizers\1.2.0\contentFiles\any\net6.0\Vocabularies\base_cased_multilingual.txt" Condition="Exists('$(NuGetPackageRoot)berttokenizers\1.2.0\contentFiles\any\net6.0\Vocabularies\base_cased_multilingual.txt')">
+      <NuGetPackageId>BERTTokenizers</NuGetPackageId>
+      <NuGetPackageVersion>1.2.0</NuGetPackageVersion>
+      <NuGetItemType>Content</NuGetItemType>
+      <Pack>false</Pack>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>Vocabularies\base_cased_multilingual.txt</TargetPath>
+      <DestinationSubDirectory>Vocabularies\</DestinationSubDirectory>
+      <Private>True</Private>
+      <Link>Vocabularies\base_cased_multilingual.txt</Link>
+    </Content>
+    <Content Include="$(NuGetPackageRoot)berttokenizers\1.2.0\contentFiles\any\net6.0\Vocabularies\base_uncased.txt" Condition="Exists('$(NuGetPackageRoot)berttokenizers\1.2.0\contentFiles\any\net6.0\Vocabularies\base_uncased.txt')">
+      <NuGetPackageId>BERTTokenizers</NuGetPackageId>
+      <NuGetPackageVersion>1.2.0</NuGetPackageVersion>
+      <NuGetItemType>Content</NuGetItemType>
+      <Pack>false</Pack>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>Vocabularies\base_uncased.txt</TargetPath>
+      <DestinationSubDirectory>Vocabularies\</DestinationSubDirectory>
+      <Private>True</Private>
+      <Link>Vocabularies\base_uncased.txt</Link>
+    </Content>
+    <Content Include="$(NuGetPackageRoot)berttokenizers\1.2.0\contentFiles\any\net6.0\Vocabularies\base_uncased_large.txt" Condition="Exists('$(NuGetPackageRoot)berttokenizers\1.2.0\contentFiles\any\net6.0\Vocabularies\base_uncased_large.txt')">
+      <NuGetPackageId>BERTTokenizers</NuGetPackageId>
+      <NuGetPackageVersion>1.2.0</NuGetPackageVersion>
+      <NuGetItemType>Content</NuGetItemType>
+      <Pack>false</Pack>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>Vocabularies\base_uncased_large.txt</TargetPath>
+      <DestinationSubDirectory>Vocabularies\</DestinationSubDirectory>
+      <Private>True</Private>
+      <Link>Vocabularies\base_uncased_large.txt</Link>
+    </Content>
+  </ItemGroup>
   <ImportGroup Condition=" '$(ExcludeRestorePackageImports)' != 'true' ">
     <Import Project="$(NuGetPackageRoot)microsoft.extensions.apidescription.server\3.0.0\build\Microsoft.Extensions.ApiDescription.Server.props" Condition="Exists('$(NuGetPackageRoot)microsoft.extensions.apidescription.server\3.0.0\build\Microsoft.Extensions.ApiDescription.Server.props')" />
     <Import Project="$(NuGetPackageRoot)swashbuckle.aspnetcore\6.2.3\build\Swashbuckle.AspNetCore.props" Condition="Exists('$(NuGetPackageRoot)swashbuckle.aspnetcore\6.2.3\build\Swashbuckle.AspNetCore.props')" />
+    <Import Project="$(NuGetPackageRoot)microsoft.ml\2.0.1\build\netstandard2.0\Microsoft.ML.props" Condition="Exists('$(NuGetPackageRoot)microsoft.ml\2.0.1\build\netstandard2.0\Microsoft.ML.props')" />
+    <Import Project="$(NuGetPackageRoot)microsoft.ml.onnxruntime\1.16.0\build\netstandard2.0\Microsoft.ML.OnnxRuntime.props" Condition="Exists('$(NuGetPackageRoot)microsoft.ml.onnxruntime\1.16.0\build\netstandard2.0\Microsoft.ML.OnnxRuntime.props')" />
     <Import Project="$(NuGetPackageRoot)microsoft.entityframeworkcore\7.0.5\buildTransitive\net6.0\Microsoft.EntityFrameworkCore.props" Condition="Exists('$(NuGetPackageRoot)microsoft.entityframeworkcore\7.0.5\buildTransitive\net6.0\Microsoft.EntityFrameworkCore.props')" />
     <Import Project="$(NuGetPackageRoot)microsoft.entityframeworkcore.design\7.0.5\build\net6.0\Microsoft.EntityFrameworkCore.Design.props" Condition="Exists('$(NuGetPackageRoot)microsoft.entityframeworkcore.design\7.0.5\build\net6.0\Microsoft.EntityFrameworkCore.Design.props')" />
     <Import Project="$(NuGetPackageRoot)entityframework\6.4.4\buildTransitive\netcoreapp3.0\EntityFramework.props" Condition="Exists('$(NuGetPackageRoot)entityframework\6.4.4\buildTransitive\netcoreapp3.0\EntityFramework.props')" />

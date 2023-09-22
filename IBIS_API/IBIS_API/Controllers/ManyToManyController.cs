@@ -28,6 +28,15 @@ using Spire.Pdf.Conversion;
 using System;
 using Spire.Pdf;
 using Spire.Xls.Core;
+using Microsoft.ML;
+using Microsoft.ML.OnnxRuntime;
+using Microsoft.ML.Transforms.Onnx;
+using IBIS_API.Models;
+using BERTTokenizers;
+using Google.Protobuf.WellKnownTypes;
+using BERTTokenizers.Extensions;
+using Microsoft.ML.Data;
+using DocumentFormat.OpenXml.Drawing.Charts;
 
 
 namespace IBIS_API.Controllers
@@ -47,11 +56,13 @@ namespace IBIS_API.Controllers
 
 
         private readonly DataContextcs _context;
-        public ManyToManyController(DataContextcs context)
+        private static PredictionEngine<ModelInput, ModelOutput> _predengine;
+        public ManyToManyController(DataContextcs context, PredictionEngine<ModelInput, ModelOutput> predictionengine)
         {
             _context = context;
+            _predengine = predictionengine;
         }
-     
+
         [HttpGet]
         [Route("getCustomerOrders")]
         public async Task<ActionResult<IEnumerable<CustomerOrder>>> GetCustomerOrders()
@@ -63,38 +74,38 @@ namespace IBIS_API.Controllers
             }
             return Ok();
         }
-     
+
         [HttpPost]
-[Route("PostCustomerOrder")]
-public async Task<ActionResult> PostCustomerOrder(CustomerOrderViewModel? ord)
-{
+        [Route("PostCustomerOrder")]
+        public async Task<ActionResult> PostCustomerOrder(CustomerOrderViewModel? ord)
+        {
             var order = ord.CustomerOrder;
             order.OrderStatus_ID = 1;
             var orderLine = ord.CustomerOrderLines;
             _context.CustomerOrders.Add(order);
-          
-               
-                    foreach (var line in orderLine)
-                    {
-                        var product = _context.Products.Find(line.Product_ID);
-                        var addLine = new CustomerOrderLine
-                        {
-                            CustomerOrder = order,
-                            Product = product
-                        ,
-                            Quantity = line.Quantity,
-                            Price = line.Price
-                        };
 
-                        _context.CustomerOrdersLine.Add(addLine);
-                    }
-                    //_context.Database.ExecuteSqlRaw("Set IDENTITY_INSERT dbo.CustomerOrdersLine ON");
-                    await _context.SaveChangesAsync();
-                
-            
 
-    return Ok();
-}
+            foreach (var line in orderLine)
+            {
+                var product = _context.Products.Find(line.Product_ID);
+                var addLine = new CustomerOrderLine
+                {
+                    CustomerOrder = order,
+                    Product = product
+                ,
+                    Quantity = line.Quantity,
+                    Price = line.Price
+                };
+
+                _context.CustomerOrdersLine.Add(addLine);
+            }
+            //_context.Database.ExecuteSqlRaw("Set IDENTITY_INSERT dbo.CustomerOrdersLine ON");
+            await _context.SaveChangesAsync();
+
+
+
+            return Ok();
+        }
 
         [HttpPost]
         [Route("PostSupplierOrder")]
@@ -268,16 +279,16 @@ public async Task<ActionResult> PostCustomerOrder(CustomerOrderViewModel? ord)
                     worksheet.Cell(i, 1).Value = "Product Name";
                     worksheet.Cell(i, 2).Value = "Stock on Hand";
                     worksheet.Cell(i, 1).Style.Fill.SetBackgroundColor(XLColor.Pink);
-                    worksheet.Cell(i,2).Style.Fill.SetBackgroundColor(XLColor.Pink);
+                    worksheet.Cell(i, 2).Style.Fill.SetBackgroundColor(XLColor.Pink);
                     // worksheet.Cell(2, i+1).Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center); // set border maybe...
                     // worksheet.Cell(2, i).Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center);
                     double? subTotal = 0;
-                   
+
                     i++;
                     if (_context.Products.Where(c => c.SubCategory_ID == subCategory.SubCategory_ID).Any())
                     {
                         var products = _context.Products.Where(c => c.SubCategory_ID == subCategory.SubCategory_ID).ToList(); // product per the category
-                       
+
                         foreach (var product in products)
                         {
                             worksheet.Cell(i, 1).Value = product.Name;
@@ -288,7 +299,7 @@ public async Task<ActionResult> PostCustomerOrder(CustomerOrderViewModel? ord)
                         }
                         worksheet.Cell(i, 1).Value = "Total";
                         worksheet.Cell(i, 2).Value = subTotal;
-                        
+
                         subTotal = 0;
                     }
                     else
@@ -302,8 +313,8 @@ public async Task<ActionResult> PostCustomerOrder(CustomerOrderViewModel? ord)
                 worksheet.Cell(i, 1).Value = "Total";
                 worksheet.Cell(i, 1).Style.Fill.SetBackgroundColor(XLColor.Green);
                 worksheet.Range(worksheet.Cell(i, 1), worksheet.Cell(i, 2)).Merge();
-                worksheet.Cell(i+1, 1).Value = "Total products";
-                worksheet.Cell(i+1, 2).Value = total;
+                worksheet.Cell(i + 1, 1).Value = "Total products";
+                worksheet.Cell(i + 1, 2).Value = total;
 
 
 
@@ -502,14 +513,14 @@ public async Task<ActionResult> PostCustomerOrder(CustomerOrderViewModel? ord)
         {
             var categories = _context.Categories.ToList();
             System.Data.DataTable dt = new System.Data.DataTable("Grid");
-           
-           
+
+
             using (XLWorkbook wb = new XLWorkbook())
             {
                 var worksheet = wb.Worksheets.Add("CustomerOrders");
                 worksheet.ColumnWidth = 25; // can maybe try select index of the column...
                 worksheet.Cell(2, 1).InsertTable(dt);                     //wb2.SaveToFile("excel.xlsx");
-                
+
                 //worksheet.Cell(1, 1).InsertTable(dt);
                 int i = 1;
                 var j = 3;
@@ -518,25 +529,25 @@ public async Task<ActionResult> PostCustomerOrder(CustomerOrderViewModel? ord)
                 foreach (var category in categories) // change to for loop...
                 {
                     worksheet.Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center);
-                    worksheet.Cell(1,i).Value = category.Name; // try to set a header maybe...
+                    worksheet.Cell(1, i).Value = category.Name; // try to set a header maybe...
                     //worksheet.Cell(1, i).Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center);
                     worksheet.Cell(1, i).Style.Fill.SetBackgroundColor(XLColor.BabyBlue);
-                    worksheet.Range(worksheet.Cell(1, i), worksheet.Cell(1, i+1)).Merge();
+                    worksheet.Range(worksheet.Cell(1, i), worksheet.Cell(1, i + 1)).Merge();
                     worksheet.Cell(2, i).Value = "Product Name";
-                    worksheet.Cell(2, i+1).Value = "Stock on Hand";
+                    worksheet.Cell(2, i + 1).Value = "Stock on Hand";
                     worksheet.Cell(2, i).Style.Fill.SetBackgroundColor(XLColor.Pink);
-                    worksheet.Cell(2, i+1).Style.Fill.SetBackgroundColor(XLColor.Pink);
-                   // worksheet.Cell(2, i+1).Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center); // set border maybe...
-                   // worksheet.Cell(2, i).Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center);
+                    worksheet.Cell(2, i + 1).Style.Fill.SetBackgroundColor(XLColor.Pink);
+                    // worksheet.Cell(2, i+1).Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center); // set border maybe...
+                    // worksheet.Cell(2, i).Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center);
                     double? subTotal = 0;
                     if (_context.Products.Where(c => c.Category_ID == category.Category_ID).Any())
                     {
                         var products = _context.Products.Where(c => c.Category_ID == category.Category_ID).ToList(); // product per the category
-                       
-                        foreach(var product in products)
+
+                        foreach (var product in products)
                         {
                             worksheet.Cell(j, i).Value = product.Name;
-                            worksheet.Cell(j, i+1).Value = product.Quantity;
+                            worksheet.Cell(j, i + 1).Value = product.Quantity;
                             subTotal = subTotal + product.Quantity;
                             j++;
                         }
@@ -551,14 +562,14 @@ public async Task<ActionResult> PostCustomerOrder(CustomerOrderViewModel? ord)
                     // display totals next to each other...
                     // worksheet.Cell(j, i).Value = "Total";
                     //worksheet.Cell(j, i + 1).Value = total;
-                   
+
                     i = i + 2;
-                    if(j > maxLength)
+                    if (j > maxLength)
                     {
                         maxLength = j;
                     }
-                    j = 3;    
-                    
+                    j = 3;
+
                 }
                 double? total = 0;
                 int rowIndex = 1;
@@ -566,18 +577,18 @@ public async Task<ActionResult> PostCustomerOrder(CustomerOrderViewModel? ord)
                 var totals = totalsList.ToArray();
                 foreach (var category in categories)
                 {
-                    
-                    
-                    
-                    
+
+
+
+
                     total = total + totals[k];
                     worksheet.Cell(maxLength, rowIndex).Value = "Total";
-                    worksheet.Cell(maxLength, rowIndex+1).Value = "" + totals[k];
+                    worksheet.Cell(maxLength, rowIndex + 1).Value = "" + totals[k];
 
-                    k= k+1;
+                    k = k + 1;
                     rowIndex = rowIndex + 2;
                 }
-                worksheet.Cell(maxLength, rowIndex).Value = ""+total;
+                worksheet.Cell(maxLength, rowIndex).Value = "" + total;
 
 
 
@@ -610,10 +621,10 @@ public async Task<ActionResult> PostCustomerOrder(CustomerOrderViewModel? ord)
 
             return Ok();
         }
-      
+
         [HttpGet]
         [Route("convertCustomerOrders")]
-        public  ActionResult ConvertCustomerOrders()
+        public ActionResult ConvertCustomerOrders()
         {
 
             System.Data.DataTable dt = new System.Data.DataTable("Grid");
@@ -636,11 +647,11 @@ public async Task<ActionResult> PostCustomerOrder(CustomerOrderViewModel? ord)
                         var product = _context.Products.Where(c => c.Product_ID == orderLine.Product_ID).First(); // referential thingy...
                         var customer = _context.Customers.Where(c => c.Customer_ID == order.Customer_ID).First();
                         // find order and find product
-                       
+
                         //var date = DateTime.Parse(order.Date_Created);
                         var split = order.Date_Created.Split(' ');
                         var date = new DateTime();
-                        if(split.Length > 1)
+                        if (split.Length > 1)
                         {
                             var year = split[3];
                             var month = split[1];
@@ -651,29 +662,29 @@ public async Task<ActionResult> PostCustomerOrder(CustomerOrderViewModel? ord)
                         else
                         {
                             DateTime start = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
-                             date = start.AddMilliseconds(long.Parse(order.Date_Created)).ToLocalTime();
+                            date = start.AddMilliseconds(long.Parse(order.Date_Created)).ToLocalTime();
                         }
-                        
+
                         ;
-                        
+
                         var shortDate = date.ToString("yyyy-MM-dd");
-                        dt.Rows.Add(order.CustomerOrder_ID, customer.Customer_FirstName + " " + customer.Customer_Surname,shortDate, product.Name,orderLine.Price,orderLine.Quantity);
+                        dt.Rows.Add(order.CustomerOrder_ID, customer.Customer_FirstName + " " + customer.Customer_Surname, shortDate, product.Name, orderLine.Price, orderLine.Quantity);
                     }
-                   
+
                 }
             }
-               
-            
+
+
 
 
             using (XLWorkbook wb = new XLWorkbook())
             {
-                var worksheet = wb.Worksheets.Add( "CustomerOrders");
+                var worksheet = wb.Worksheets.Add("CustomerOrders");
                 worksheet.ColumnWidth = 25; // can maybe try select index of the column...
                                             //wb2.SaveToFile("excel.xlsx");
                 worksheet.Cell(1, 1).Value = "Customer Orders Report";
                 worksheet.Cell(2, 1).InsertTable(dt);
-                
+
                 using (MemoryStream ms = new MemoryStream())
                 using (var Writer = new StreamWriter(ms))
                 using (SmtpClient smtp = new SmtpClient(smtpAddress, portNumber)) // where are the brackets...
@@ -703,7 +714,7 @@ public async Task<ActionResult> PostCustomerOrder(CustomerOrderViewModel? ord)
             return Ok();
         }
 
-    
+
 
 
         [HttpGet]
@@ -750,7 +761,7 @@ public async Task<ActionResult> PostCustomerOrder(CustomerOrderViewModel? ord)
                         ;
 
                         var shortDate = date.ToString("yyyy-MM-dd");
-                       
+
                         dt.Rows.Add(order.SupplierOrder_ID, supplier.Name, shortDate, inventory.Name, orderLine.Price, orderLine.Quantity);
                     }
 
@@ -762,7 +773,7 @@ public async Task<ActionResult> PostCustomerOrder(CustomerOrderViewModel? ord)
 
             using (XLWorkbook wb = new XLWorkbook())
             {
-               
+
                 var worksheet = wb.Worksheets.Add("SupplierOrders");
                 worksheet.ColumnWidth = 25; // can maybe try select index of the column...
                                             //wb2.SaveToFile("excel.xlsx");
@@ -799,6 +810,143 @@ public async Task<ActionResult> PostCustomerOrder(CustomerOrderViewModel? ord)
             }
             return Ok();
         }
+        [HttpGet]
+        [Route("ClassifyReviews")]
+        public void GenerateReviews(CustomerOrder ord)
+        {
+
+
+            MLContext mlContext = new MLContext();
+            
+
+            ModelInput modelInput = new ModelInput();
+          
+            BertUncasedLargeTokenizer token = new BertUncasedLargeTokenizer();
+           // var customerOrders = _context.CustomerOrders.ToList();
+            var tokenizer = new BertUncasedLargeTokenizer();
+            List<string> reviewList = new List<string>();
+           
+
+
+                var input = ord.Review;
+             //var arr = review.ToArray();
+              
+                var tokens = tokenizer.Tokenize();
+                var encoded = tokenizer.Encode(512, input);
+                // var encoded = token.Encode(32,input); // previous 32...
+
+
+                var bertInput = new ModelInput()
+                {
+                    InputIds = encoded.Select(t => t.InputIds).ToArray(),
+                    AttentionMask = encoded.Select(t => t.AttentionMask).ToArray(),
+
+                };
+                ModelInput ml = new ModelInput();
+                var model = ml.ModelStartup2(tokens.Count());
+
+                var output = _predengine.Predict(bertInput);
+                var lastHiddenState = output.output0;
+                string sentiment = "your mood is ";
+                if (lastHiddenState[0] > lastHiddenState[1])
+                {
+                    ord.ReviewClassification_ID = 0;
+                    reviewList.Add("negative");
+                }
+                else
+                {
+                    ord.ReviewClassification_ID = 1;
+                    reviewList.Add("Positive");
+                }
+                //Bad 4.6,-3.7
+                //Good - 4,4.4
+                //Excellent - 4.2,4.5
+                //Trash 4.5,-3.6
+
+                // Define the sentiment labels and map the index to the corresponding label
+
+                // var sentiment = sentimentLabels[maxIndex];
+                //token.Untokenize(val);
+                //output.
+                //engine.Predict()
+            
+           
+        }
+
+        [HttpPost]
+        [Route("RecordReview")]
+        public async Task<ActionResult> RecordReview(CustomerOrder ord)
+        {
+            GenerateReviews(ord);
+            
+            _context.CustomerOrders.Update(ord);
+            await _context.SaveChangesAsync();
+            return Ok();
+        }
+        [HttpGet]
+        [Route("GenerateReviewsReport")]
+        public async Task<ActionResult> GenerateReviewsReport()
+        {
+            var customerOrders = _context.CustomerOrders.Where(c => c.Review != null).ToList();
+
+            System.Data.DataTable dt = new System.Data.DataTable("Review");
+            dt.Columns.AddRange(new DataColumn[2] { new DataColumn("Review"),
+            new DataColumn("Classification")});
+
+            foreach (var customerOrder in customerOrders)
+            {                            //worksheet.Cell(2, 1).InsertTable(dt);                     //wb2.SaveToFile("excel.xlsx");
+                if (customerOrder.ReviewClassification_ID == 0)
+                {
+                    dt.Rows.Add(customerOrder.Review, "Negative");
+                }
+                else
+                {
+                    dt.Rows.Add(customerOrder.Review, "Positive");
+                }
+
+
+
+               
+
+            using (XLWorkbook wb = new XLWorkbook())
+                    {
+                        var worksheet = wb.Worksheets.Add("Reviews");
+                        worksheet.ColumnWidth = 25; // can maybe try select index of the column...
+                    worksheet.Cell(1, 1).InsertTable(dt);
+                    //wb.Worksheets.Add(dt, "Reviews");
+
+
+
+
+                    using (MemoryStream ms = new MemoryStream())
+                        using (var Writer = new StreamWriter(ms))
+                        using (SmtpClient smtp = new SmtpClient(smtpAddress, portNumber)) // where are the brackets...
+                        using (var message = new MailMessage(emailFromAddress, emailToAddress))
+                        {
+
+                            //sheet
+                            ms.Position = 0;
+                            wb.SaveAs(ms);
+                            Writer.Flush();
+                            ms.Position = 0;
+                            message.Attachments.Add(new Attachment(ms, "Reviews.xlsx", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"));
+                            //message.Attachments.Add(new Attachment(ms, "SubCategories.pdf", "application/pdf"));
+                            smtp.Credentials = new NetworkCredential(emailFromAddress, "sxkbtjguspnshajt");
+                            smtp.UseDefaultCredentials = false;
+                            smtp.EnableSsl = enableSSL;
+                            smtp.Send(message);
+                            // ms.WriteTo(fs);
+                            //fs.Close();
+                            // ms.Close();
+                            //File(ms.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "ExcelFile.xlsx");
+                        }
+                    }
+
+                    
+                }
+
+            return Ok();
+        }
 
         [HttpPut]
         [Route("putCustomerOrderStatus")]
@@ -816,15 +964,7 @@ public async Task<ActionResult> PostCustomerOrder(CustomerOrderViewModel? ord)
 
                 return NoContent();
             }
-            if (ord.Review != null)
-            {
-
-                order.Review = ord.Review;
-                _context.CustomerOrders.Update(order);
-                await _context.SaveChangesAsync();
-
-                return NoContent();
-            }
+           
             var products = _context.Products.ToList();
             if (ord.OrderStatus_ID == 2)
             {

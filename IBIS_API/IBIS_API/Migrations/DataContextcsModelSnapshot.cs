@@ -205,6 +205,9 @@ namespace IBIS_API.Migrations
                     b.Property<string>("Review")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("ReviewClassification_ID")
+                        .HasColumnType("int");
+
                     b.Property<string>("Transaction_ID")
                         .HasColumnType("nvarchar(max)");
 
@@ -394,6 +397,23 @@ namespace IBIS_API.Migrations
                     b.HasKey("Recipe_ID");
 
                     b.ToTable("Recipes");
+                });
+
+            modelBuilder.Entity("IBIS_API.Models.ReviewClassification", b =>
+                {
+                    b.Property<int?>("ReviewClassification_ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int?>("ReviewClassification_ID"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("ReviewClassification_ID");
+
+                    b.ToTable("ReviewClassifications");
                 });
 
             modelBuilder.Entity("IBIS_API.Models.SubCategory", b =>

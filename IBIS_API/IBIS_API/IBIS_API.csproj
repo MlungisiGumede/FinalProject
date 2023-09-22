@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="BERTTokenizers" Version="1.2.0" />
     <PackageReference Include="ClosedXML" Version="0.102.1" />
     <PackageReference Include="EntityFramework" Version="6.4.4" />
     <PackageReference Include="Finance" Version="1.0.5" />
@@ -24,6 +25,9 @@
     </PackageReference>
     <PackageReference Include="Microsoft.Extensions.Identity.Core" Version="7.0.10" />
     <PackageReference Include="Microsoft.Extensions.Identity.Stores" Version="6.0.16" />
+    <PackageReference Include="Microsoft.ML" Version="2.0.1" />
+    <PackageReference Include="Microsoft.ML.OnnxRuntime" Version="1.16.0" />
+    <PackageReference Include="Microsoft.ML.OnnxTransformer" Version="2.0.1" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.16" />
     <PackageReference Include="Spire.XLS" Version="13.9.1" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />

@@ -222,8 +222,13 @@ this.CheckOrderStatus()
     let supplier = this.suppliers.find((supplier:any) => supplier.supplier_ID == id)
     return supplier.name
   }
-  ClassifyReviews(){
-    
+  GenerateReviews(){
+    this.orderservice.GenerateReviewsReport().subscribe((res)=>{
+      alert("success")
+    })
+    // this.orderservice.ClassifyReviews().subscribe((res)=>{
+    //   alert("success")
+    // })
   }
   ToSupplier(){
     // edit records to standardize... then whatever is true is sent to API...

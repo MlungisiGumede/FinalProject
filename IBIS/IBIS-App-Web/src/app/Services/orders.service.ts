@@ -61,6 +61,10 @@ export class OrdersService {
       let url = 'https://api.currencybeacon.com/v1/latest?api_key=FrWo45q23NJqHOVAbqny7GsgCvnJAZNN'
       return this.httpClient.get(url);
      }
+     GenerateReviewsReport(){
+      return this.httpClient.get(this.manytoManyAPIUrl + '/generateReviewsReport')
+       
+     }
     UpdateCustomerOrderStatus(item:CustomerOrder){
       return this.httpClient.put(this.manytoManyAPIUrl + '/putCustomerOrderStatus', item, this.httpOptions)
     }
@@ -102,6 +106,15 @@ export class OrdersService {
        getSupplierOrderList(): Observable<SupplierOrder[]> {
         return this.httpClient
           .get<SupplierOrder[]>(this.apiUrl + '/getSupplierOrder')
+          .pipe(
+            retry(2),
+            catchError(this.handleError)
+          )
+        
+      }
+      RecordReview(order:CustomerOrder): Observable<any[]> {
+        return this.httpClient
+          .post<any>(this.manytoManyAPIUrl + '/RecordReview',order)
           .pipe(
             retry(2),
             catchError(this.handleError)
