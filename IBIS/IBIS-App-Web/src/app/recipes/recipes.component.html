@@ -18,6 +18,7 @@
       </ion-content>
     </ion-button>
   <div class="contents">
+    <ion-icon id="helpIcon" name="help-circle" style="color: #002850;" (click)="showHelp()"></ion-icon>
     <ion-title><h1>Recipes</h1></ion-title>
     <ion-searchbar class="isb" placeholder="Search Recipes..." showCancelButton="focus" [(ngModel)]="filterTerm" animated></ion-searchbar><br/>
       <ion-grid class="ion-margin" class="ion-grid-padding">
