@@ -76,6 +76,7 @@ import { RegisterHelpComponent } from './register-help/register-help.component';
 import { ReviewComponent } from './review/review.component';
 import { BarcodeScannerLivestreamModule } from 'ngx-barcode-scanner';
 import { Home2Component } from './home2/home2.component';
+import { HelpMeComponent } from './help-me/help-me.component';
 
 
 
@@ -133,7 +134,8 @@ import { Home2Component } from './home2/home2.component';
     InventoryHelpComponent,
     RegisterHelpComponent,
     ReviewComponent,
-    Home2Component
+    Home2Component,
+    HelpMeComponent
    
     
   

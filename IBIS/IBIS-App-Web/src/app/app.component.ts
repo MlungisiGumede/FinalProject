@@ -80,6 +80,7 @@ constructor(private loginService : LoginService, public router: Router,
     {value: 'user-0', viewValue: 'Display Settings',route: 'Dashboard'},
     {value: 'user-1', viewValue: 'Profile',route: 'profile'},
     {value: 'user-2', viewValue: 'Logout',route: 'Login'},
+    {value: 'user-3', viewValue: 'Help',route: 'help-me'},
   ];
   tabs: TabItem[] = [
     {
