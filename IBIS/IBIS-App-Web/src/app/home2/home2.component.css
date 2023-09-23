@@ -1,0 +1,27 @@
+.advanced__background {
+    background-image: url('../../assets/butchery.jpg');
+    height: 100%;
+    width: 100%;
+    background-size: cover;
+  }
+  .advanced__backgroundBody {
+    position:  relative;
+     height: 100%;
+    width: 100%;
+     backdrop-filter: blur(5px); 
+    transition: 100ms backdrop-filter linear; 
+    /* https://joshfrankel.me/blog/creating-blurred-background-images-with-overlay-text-in-css/ */
+  }
+  .advanced__backgroundBody:hover {
+    /* backdrop-filter: none; */
+  }
+  .advanced__backgroundBody h1 {
+    color: yellow;
+    /* background: #ccc; */
+    /* position: absolute; */
+   
+    
+  }
+
+    
+   

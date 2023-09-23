@@ -75,6 +75,7 @@ import { InventoryHelpComponent } from './inventory-help/inventory-help.componen
 import { RegisterHelpComponent } from './register-help/register-help.component';
 import { ReviewComponent } from './review/review.component';
 import { BarcodeScannerLivestreamModule } from 'ngx-barcode-scanner';
+import { Home2Component } from './home2/home2.component';
 
 
 
@@ -131,7 +132,8 @@ import { BarcodeScannerLivestreamModule } from 'ngx-barcode-scanner';
     ProfileComponent,
     InventoryHelpComponent,
     RegisterHelpComponent,
-    ReviewComponent
+    ReviewComponent,
+    Home2Component
    
     
   
@@ -177,6 +179,7 @@ import { BarcodeScannerLivestreamModule } from 'ngx-barcode-scanner';
       {path: 'Products', component: ProductsComponent, canActivate : [AuthGuardService]},
       {path: 'Suppliers', component: SuppliersComponent, canActivate : [AuthGuardService]},
       {path: 'home', component:HomeComponent, canActivate : [AuthGuardService]},
+      {path: 'home2', component:Home2Component},
       {path: 'product-report', component: ProductReportComponent},
       {path: 'customer', component: CustomersComponent,canActivate : [AuthGuardService]},
     {path: 'otp', component: OtpComponent, canActivate : [AuthGuardService]},

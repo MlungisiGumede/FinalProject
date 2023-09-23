@@ -21,6 +21,12 @@ using System.Reflection.Emit;
 using System;
 using DocumentFormat.OpenXml.Wordprocessing;
 using System.Configuration;
+using Twilio;
+using Twilio.Types;
+using Twilio.Rest.Api.V2010.Account;
+using Twilio.TwiML.Voice;
+using Microsoft.Identity.Client;
+using Twilio.Clients;
 
 namespace IBIS_API.Controllers
 {
@@ -470,6 +476,30 @@ namespace IBIS_API.Controllers
             return Ok(ordersList);
 
         }
+        [HttpGet]
+        [Route("SendSms")]
+        public async Task<IActionResult> SendSms()
+        {
+            const string accountSid = "ACeb14bbf63263e7318c7f8971ea94df55";
+            const string authToken = "089031f565b379487bbba7f4ab196e73";
+            TwilioClient.Init(accountSid, authToken);
+
+            //TwilioRestClient client = new TwilioRestClient(ACCOUNT_SID, AUTH_TOKEN);
+            //client.
+            //client.SendMessage("(502) 276-8990", ToNumber.Text, Message.Text)
+            var to = new PhoneNumber("+18035423230");
+            //var message = MessageResource.Create(
+            //    to,
+            //    from: new PhoneNumber("+27828558028"), //  From number, must be an SMS-enabled Twilio number ( This will send sms from ur "To" numbers ).  
+            //    body: $"Hello !! Welcome to Asp.Net Core With Twilio SMS API !!");
+            
+            MessageResource.Create(
+      to: to,
+      messagingServiceSid: "MG54aee30786d986ca151639e0f838cf63",
+      body: "Hello from your Alpha sender 👏");
+            return Ok();
+        }
+     
 
 
         [HttpGet]
