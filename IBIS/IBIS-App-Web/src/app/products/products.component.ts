@@ -22,7 +22,7 @@ import { WriteOff } from '../Models/writeOff';
 import { WriteOffService } from '../Services/write-off.service';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ProductsHelpComponent } from '../products-help/products-help.component';
-import { BarcodeScannerLivestreamComponent } from 'ngx-barcode-scanner/lib/barcode-scanner-livestream';
+//import { BarcodeScannerLivestreamComponent } from 'ngx-barcode-scanner/lib/barcode-scanner-livestream';
 import { Barcode, BarcodeScanner } from '@capacitor-mlkit/barcode-scanning';
 import {Html5QrcodeScanner} from 'html5-qrcode'
 
@@ -40,7 +40,7 @@ declare var myChart: any;
  // changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProductsComponent implements OnInit {
-  @ViewChild('scanner', { static: false }) scanner!: BarcodeScannerLivestreamComponent;
+  //@ViewChild('scanner', { static: false }) scanner!: BarcodeScannerLivestreamComponent;
 barcode: any;
   data:Observable<any> = new Observable();
   data2: Product[] = [];
