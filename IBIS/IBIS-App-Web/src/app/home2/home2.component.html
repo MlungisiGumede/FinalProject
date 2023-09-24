@@ -3,7 +3,7 @@
     
 
 >
-<div class="advanced__background">
+<div *ngIf="!request" class="advanced__background">
     <div style="text-align: center;" class="advanced__backgroundBody">
         
       <h1 >Welcome Michael Gait-Smith </h1>
@@ -11,11 +11,63 @@
         <source src = "assets/INF370progress.mp4" type="video/mp4">
         Your browser does not support HTML5 video.
     </video>
-      <ion-button>View Users</ion-button>
+      <ion-button (click)="request =1">Control Users</ion-button>
       <ion-button>View Audit trail</ion-button>
     </div>
 
   </div>
+  <ion-content *ngIf="request==1" class="ion-margin" id="htmlData">
+    <div class="contents">
+      <ion-title><h1>Users</h1></ion-title>
+      <ion-searchbar class="isb" placeholder="Search User..." showCancelButton="focus" [(ngModel)]="filterTerm" animated></ion-searchbar><br/>
+        <ion-grid class="ion-margin" class="ion-grid-padding">
+          <ion-row>
+            <ion-col>Username?...</ion-col>
+            <ion-col>Role</ion-col>
+            <ion-col>Email</ion-col>
+            <!-- <ion-col>Phone*</ion-col> -->
+            <ion-col>Permissions</ion-col>
+            
+            <ion-col></ion-col>
+          </ion-row>
+          <ion-item-divider></ion-item-divider>
+          <ion-row *ngFor="let item of data | async | filter: filterTerm">
+            <ion-col>
+              <ion-label>{{item.userName}}</ion-label>
+            </ion-col>
+            <ion-col>
+              <ion-label>{{item.role}}</ion-label>
+            </ion-col>
+            <ion-col>
+              <ion-label>{{item.email}}</ion-label>
+            </ion-col>
+            <!-- <ion-col>
+              <ion-label>{{item.phone}}</ion-label>
+            </ion-col> -->
+            <ion-col>
+              <ion-label>{{item.permissions}}</ion-label>
+            </ion-col>
+           
+            <ion-col>
+              <ion-button (click)="View(item)" class="light-Btn">View</ion-button>
+              
+            </ion-col>
+            <ion-col>
+              <ion-button class="light-Btn" >Remove</ion-button>
+            </ion-col>
+            <ion-col>
+              <ion-button (click)="UpdateRole(item)" class="light-Btn" >Update Permissions</ion-button>
+            </ion-col>
+           
+          </ion-row>
+          <ion-item-divider></ion-item-divider>
+        </ion-grid>
+        <ion-button class="light-Btn" >Add</ion-button>
+        <ion-button class="light-Btn" (click)="request=false"  >Back</ion-button>
+        <!-- <ion-button class="red-Btn" (click)="generPDF()">Generate Report</ion-button> -->
+    </div>
+  
+
    
 
 

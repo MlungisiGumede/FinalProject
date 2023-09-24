@@ -2,11 +2,11 @@
   <!-- < <barcode-scanner-livestream #scanner  (valueChanges)="onValueChanges($event)">
   </barcode-scanner-livestream> -->
   <input type="file" capture="camera" accept="image/*">
-    <ion-button (click)="startScan()" [disabled]="!isSupported">
+    <!-- <ion-button (click)="startScan()" [disabled]="!isSupported">
       Scan
-    </ion-button>
-    <div style="width: 250px;height: 50px;float: right;" id="reader"></div>
-  
+    </ion-button> -->
+
+
   <div class="contents">
     <ion-icon id="helpIcon" name="help-circle" style="color: #002850;" (click)="showHelp()"></ion-icon>
     <ion-title><h1>{{title}}</h1></ion-title>
@@ -46,7 +46,7 @@
             <ion-label *ngIf="request!='price'">{{item.price}}</ion-label>
           </ion-col>
             <div [formGroup]="form" *ngIf="edited">
-          
+
           <ion-col *ngIf="request=='price'">
             <input mat-input type="number" formControlName="price" [(ngModel)]="price">
           </ion-col>
@@ -68,14 +68,14 @@
             <ion-button class="light-Btn" *ngIf="!edited" (click)="ViewProduct(item)">View</ion-button>
             <ion-button class="red-Btn" *ngIf="!edited" (click)="delete(item.product_ID)">Remove</ion-button>
           </ion-col>
-        
+
           <ion-col>
             <ion-button class="green-Btn" [disabled]="!form.valid" *ngIf="edited && request == 'price'" (click)="OnDone(item)">Done</ion-button>
           </ion-col>
           <ion-col>
             <ion-button class="green-Btn" *ngIf="request == 'write-off' || request == 'write-up'" (click)="WriteOffScreen(item)">Select</ion-button>
           </ion-col>
-          
+
           <ion-col>
             <ion-button class="green-Btn" *ngIf="edited" (click)="Cancel()">Cancel</ion-button>
           </ion-col>
@@ -89,6 +89,6 @@
       <ion-button class="light-Btn"  [routerLink]="['/view-write-off']">view write offs</ion-button>
         <ion-button class="light-Btn" (click)="request = 'write-off'; edited = 'true';title = 'Select Product to write off'" >Write off</ion-button>
         <ion-button class="light-Btn" (click)="request = 'write-up';edited = 'true';title = 'Select Product to write up'" >Write Up</ion-button>
-        
+
   </div>
 

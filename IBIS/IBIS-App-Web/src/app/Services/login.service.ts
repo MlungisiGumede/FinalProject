@@ -4,6 +4,7 @@ import { HttpClient, HttpHeaders, HttpErrorResponse, HttpInterceptor} from '@ang
 import { retry, catchError } from 'rxjs/operators';
 import { User } from '../Models/User';
 import { environment } from 'src/environments/environment';
+import { UserVM } from '../Models/UserVM';
 
 @Injectable({
   providedIn: 'root'
@@ -25,12 +26,18 @@ export class LoginService  {
   public SetNewPassWord(user:User){
     return this.httpClient.post<User>(`${this.apiUrl}setNewPassWord`,user)
   }
+  getAllUsers(){
+    return this.httpClient.get<UserVM[]>(`${this.apiUrl}getAllUsers`)
+  }
   // GetWeatherForeCast(){
    
   //   return this.httpClient.get(`https://inf370team62023.azurewebsites.net/WeatherForeCast`);
   // }
 public GetUserRole(){
   return this.httpClient.get<any>(`${this.apiUrl}getUserRole`)
+}
+public UpdateUserRole(userVM:UserVM){
+  return this.httpClient.post<any>(`${this.apiUrl}updateUserRole`,userVM)
 }
 public getCustomerOrders(){
   return this.httpClient.get<any>(`${this.apiUrl}getCustomerOrders`)

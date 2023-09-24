@@ -116,6 +116,10 @@
               "target": "Package",
               "version": "[6.2.3, )"
             },
+            "Twilio": {
+              "target": "Package",
+              "version": "[6.14.0, )"
+            },
             "Vse.Web.Serialization.ControlledSerializationJsonConverter": {
               "target": "Package",
               "version": "[1.0.2, )"

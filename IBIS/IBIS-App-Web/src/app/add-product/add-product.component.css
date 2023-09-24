@@ -6,7 +6,7 @@
   font-family: 'Poppins',sans-serif;
 }
 body{
-  height: 65vh;
+  height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -30,12 +30,12 @@ body{
   position: relative;
   color: black;
   padding-left: 25px;
-  margin-bottom: 20px;
+  /* margin-bottom: 20px; */
 }
 .container .cancelAdd{
   padding-left: 90%;
   width: 40%;
-  height: 35%;
+ 
 }
 .container .title::before{
   content: "";
@@ -182,7 +182,7 @@ form .input-box span.details{
    display: none;
  } */
  form .button{
-   height: 45px;
+   
    margin: 35px 0;
    
  
@@ -248,7 +248,7 @@ form .submitButton {
   max-width: 100%;
 }
 form .user-details .input-box{
-    margin-bottom: 15px;
+    
     width: 100%;
     color: yellow;
   }

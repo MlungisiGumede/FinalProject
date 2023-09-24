@@ -4,32 +4,41 @@
 <div class="container" aria-readonly="true">
  <div class="title">View User</div>
  <div class="content">
-   <form   action="#">
+   <form [formGroup]="form"  action="#">
      <div class="user-details">
-       <div class="input-box">
+       <!-- <div class="input-box">
          <span class="details">Full Name</span>
          <input type="text" placeholder="David" readonly>
-       </div>
+       </div> -->
        <div class="input-box">
          <span class="details">Username</span>
-         <input type="text" placeholder="Spider" readonly>
+         <input [readonly]="isDisabled" formControlName="userName" type="text" placeholder="Spider" >
        </div>
        <div class="input-box">
          <span class="details">Email</span>
-         <input  type="text" placeholder="David@gmail.com" readonly>
+         <input [readonly]="isDisabled" formControlName="email"  type="text" placeholder="David@gmail.com" >
        </div>
-       <div class="input-box">
+       <!-- <div class="input-box">
          <span class="details">Phone Number</span>
-         <input  type="text" placeholder="0837647843" readonly>
-       </div>
+         <input formControlName="phone"  type="text" placeholder="0837647843" readonly>
+       </div> -->
+      
+      
        <div class="input-box">
-         <span class="details">Password</span>
-         <input  type="text" placeholder="12345678" readonly>
-       </div>
-       <div class="input-box">
-         <span class="details">Enter surname</span>
-         <input  type="text" placeholder="Janine" readonly>
-       </div>
+        <span class="details">Enter Role</span>
+        <input formControlName="role"  type="text" placeholder="Janine" >
+      </div>
+      <div class="input-box">
+        <span class="details">Enable Permissions</span>
+      <mat-form-field >
+        <mat-label>Enable Premisiions</mat-label>
+        <mat-select formControlName="permissions">
+          <mat-option *ngFor="let permission of dropDown" [value]="permission.permission_ID">
+            {{permission.name}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      </div>
      </div>
    </form>
  </div>

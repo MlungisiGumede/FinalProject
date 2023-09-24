@@ -175,7 +175,7 @@ namespace IBIS_API.Controllers
         [HttpGet]
         [Route("getUserRole")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)] // authorize thingy makes it work...
-        public async Task<ActionResult> CheckAuthentication2()
+        public async Task<ActionResult> GetUserRole()
         {
             //var userClaims = User.Claims; // this works...
             // authorize makes all of it work...
@@ -183,16 +183,18 @@ namespace IBIS_API.Controllers
             var userName = HttpContext.User.Identity.Name; // works as well
             var currentUser = _httpContextAccessor.HttpContext.User; // works
             var userClaims = User;
+            UserRoleVM uRVM = new UserRoleVM();
             var username = userClaims.FindFirstValue(ClaimTypes.Name);
             var user = await _userManager.FindByNameAsync(username);
             var roles = await _userManager.GetRolesAsync(user);
             string roleName = roles.FirstOrDefault().ToString();
-
-
-            return Created("", new
-            {
-                roleName = roleName
-            });
+            uRVM.Role = roleName;
+            uRVM.Permissions = user.Permissions;
+            return Ok(uRVM);
+            //return Created("", new
+            //{
+            //    roleName = roleName
+            //});
 
         }
         [HttpPost]
@@ -440,6 +442,55 @@ namespace IBIS_API.Controllers
             return Ok(file);
         }
         [HttpGet]
+        [Route("getAllUsers")]
+        public async Task<IActionResult> GetAllUsers()
+        {
+            var users = await _userManager.Users.ToListAsync();
+            List<UserVM> usersVM = new List<UserVM>();
+            foreach(var user in users)
+            {
+                UserVM userVM = new UserVM();
+               var roles = await _userManager.GetRolesAsync(user);
+                var role = roles[0]; 
+                userVM.Role = role;
+                userVM.Permissions = user.Permissions;
+                userVM.UserName = user.UserName; 
+                userVM.Email = user.Email;
+                userVM.Name = user.FullName;
+                usersVM.Add(userVM);
+            }
+            return Ok(usersVM);
+        }
+        [HttpGet]
+        [Route("insertRoles")]
+        public async Task<IActionResult> InsertUserRoles()
+        {
+            await _roleManager.CreateAsync(new IdentityRole("manager"));
+            await _roleManager.CreateAsync(new IdentityRole("employee"));
+            await _roleManager.CreateAsync(new IdentityRole("enabledEmployee"));
+            await _roleManager.CreateAsync(new IdentityRole("guest"));
+            await _roleManager.CreateAsync(new IdentityRole("enabledGuest"));
+            await _context.SaveChangesAsync();
+            return Ok();
+        }
+
+        [HttpPost]
+        [Route("updateUserRole")]
+        public async Task<IActionResult> UpdateUserRole(UserVM userVm)
+        {
+            // could you pass through app user....
+            var user = await _userManager.FindByNameAsync(userVm.UserName);
+            user.Permissions = userVm.Permissions;
+           await _userManager.UpdateAsync(user);
+            await _context.SaveChangesAsync();
+            //_userManager.RemoveFromRoleAsync(user,role);
+            //_userManager.AddToRoleAsync(user,userVm.Role)
+            return Ok();
+        }
+
+      
+
+        [HttpGet]
         [Route("getFile")]
         public async Task<IActionResult> GetFile()
         {
@@ -517,7 +568,7 @@ namespace IBIS_API.Controllers
                     Id = Guid.NewGuid().ToString(),
                     UserName = username,
                     Email = email,
-
+                    Permissions = true
                 };
                 if (!(await _roleManager.RoleExistsAsync("manager"))) // got from microsoft...
                 {
@@ -574,6 +625,7 @@ namespace IBIS_API.Controllers
                     Id = Guid.NewGuid().ToString(),
                     UserName = uvm.Username,
                     Email = uvm.Email,
+                    Permissions = false
 
                 };
                 if (!(await _roleManager.RoleExistsAsync("guest"))) // got from microsoft...

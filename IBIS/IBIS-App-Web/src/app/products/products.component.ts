@@ -61,6 +61,11 @@ barcode: any;
   title:any = "Products"
   form:any
   isSupported = true;
+  radioList:any = [{
+    'id':1,
+    'value':1,
+
+  }]
 
   barcodes: Barcode[] = [];
   combinedData: { Name: string, Quantity: number , Price: number}[] = [];
@@ -78,25 +83,25 @@ barcode: any;
     alert(this.barcode)
   }
   startScan() {
-    var html5QrcodeScanner = new Html5QrcodeScanner(
-      'reader',
-      { fps: 10, qrbox: 250 },
-      false
-    );
-    html5QrcodeScanner.render(this.onScanSuccess,this.onScanFailure);
+    // var html5QrcodeScanner = new Html5QrcodeScanner(
+    //   'reader',
+    //   { fps: 10, qrbox: 250 },
+    //   false
+    // );
+    // html5QrcodeScanner.render(this.onScanSuccess,this.onScanFailure);
   }
   
-  onScanSuccess(decodedText:any) {
-    // handle the scanned code as you like, for example:
-    alert(decodedText)
-    console.log(`Code matched = ${decodedText}`);
-  }
+  // onScanSuccess(decodedText:any) {
+  //   // handle the scanned code as you like, for example:
+  //   alert(decodedText)
+  //   console.log(`Code matched = ${decodedText}`);
+  // }
 
-  onScanFailure(error:any) {
-    // handle scan failure, usually better to ignore and keep scanning.
-    // for example:
-    console.warn(`Code scan error = ${error}`);
-  }
+  // onScanFailure(error:any) {
+  //   // handle scan failure, usually better to ignore and keep scanning.
+  //   // for example:
+  //   console.warn(`Code scan error = ${error}`);
+  // }
  
 
 
@@ -344,7 +349,9 @@ OnDone(item:Product){
     let dialogRef:any = []
     if(this.categories && this.subCategories){
       dialogRef = this.matDialog.open(AddProductComponent,{
-        data:{'categories':this.categories,'subCategories':this.subCategories}
+        data:{'categories':this.categories,'subCategories':this.subCategories},
+        width:'100%',
+        height:'100%'
       });
     }
 

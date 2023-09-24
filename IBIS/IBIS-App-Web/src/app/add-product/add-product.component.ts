@@ -4,9 +4,10 @@ import { ProductService } from '../Services/product.service';
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ToastController } from '@ionic/angular';
-import { catchError, map, throwError } from 'rxjs';
+import { catchError, map, of, throwError } from 'rxjs';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { BarcodeScannerLivestreamComponent } from 'ngx-barcode-scanner/public-api';
+import {Html5QrcodeScanner} from 'html5-qrcode'
+//import { BarcodeScannerLivestreamComponent } from 'ngx-barcode-scanner/public-api';
 
 
 @Component({
@@ -15,7 +16,7 @@ import { BarcodeScannerLivestreamComponent } from 'ngx-barcode-scanner/public-ap
   styleUrls: ['./add-product.component.css']
 })
 export class AddProductComponent implements OnInit {
-  @ViewChild('scanner', { static: false }) scanner!: BarcodeScannerLivestreamComponent;
+  //@ViewChild('scanner', { static: false }) scanner!: BarcodeScannerLivestreamComponent;
   barcode: any;
 
 //data:any;
@@ -23,7 +24,23 @@ prod!: Product;
 categories:any
 subCategories:any
 form!: FormGroup;
+selectedPage:any = 1
+value:any
+title:any = "Step 1: Add Product"
 
+radioList:any = [
+  {
+    value: 1,
+    checked: false
+  },
+  {
+    
+    value: 2,
+    checked: false
+  }
+ 
+]
+radioList$:any = of(this.radioList)
 selectedCategory: string | null = null;
 
 // categories: string[] = ['Meat', 'Vegetables', 'Sides'];
@@ -40,30 +57,69 @@ selectedCategory: string | null = null;
      private dialogRef:MatDialogRef<AddProductComponent>,@Inject(MAT_DIALOG_DATA) public data: any){
     //this.data = new Product();
    this.categories = this.data.categories
+   
    console.log(this.categories)
    this.subCategories = this.data.subCategories
    console.log(this.subCategories)
   } 
+  ConsoleLog(){
+    console.log(this.value)
+    this.value = 1
+  }
+  startScan() {
+    var html5QrcodeScanner = new Html5QrcodeScanner(
+      'reader',
+      { fps: 10, qrbox: 250 },
+      false
+    );
+    html5QrcodeScanner.render(this.onScanSuccess,this.onScanFailure);
+  }
+  
+  onScanSuccess(decodedText:any) {
+    // handle the scanned code as you like, for example:
+    alert(decodedText)
+    console.log(`Code matched = ${decodedText}`);
+  }
 
+  onScanFailure(error:any) {
+    // handle scan failure, usually better to ignore and keep scanning.
+    // for example:
+    console.warn(`Code scan error = ${error}`);
+  }
+ 
+PageForward(){
+  let page = this.selectedPage
+  this.form.get('page')?.setValue(this.selectedPage+1)
+  this.selectedPage = this.selectedPage+1
+  this.title = "Step 2: Add Identifier (optional)"
+  
+}
+PageBackward(){
+  let page = this.selectedPage
+  this.form.get('page')?.setValue(this.selectedPage-1)
+  this.selectedPage = this.selectedPage-1
+  this.title = "Step 1: Add Product"
+}
   ngOnInit(): void {
-
+   
     this.form = this.fb.group({
       name: ['', Validators.required],
       price: [null, [Validators.required, Validators.min(1)]],
       expiry: [null, [Validators.required, this.minExpiryDateValidator.bind(this)]],
       quantity: [null, [Validators.required, Validators.min(1)]],
       subCategory_ID: [null, Validators.required],
-      category_ID: [null, Validators.required]
+      category_ID: [null, Validators.required],
+      page: [1],
     });
-
+  
 
     
   }
-  onValueChanges(result: any) {
-    console.log("change")
-    this.barcode = result.codeResult.code;
-    alert(this.barcode)
-  }
+  // onValueChanges(result: any) {
+  //   console.log("change")
+  //   this.barcode = result.codeResult.code;
+  //   alert(this.barcode)
+  // }
 
   minExpiryDateValidator(control: any): { [key: string]: boolean } | null {
     const selectedDate = new Date(control.value);

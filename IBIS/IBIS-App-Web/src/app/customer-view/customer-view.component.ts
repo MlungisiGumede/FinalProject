@@ -46,6 +46,8 @@ customerOrders:any
 inProgressOrders:any
 form:any
 supplierOrders:any
+role:any
+permissions:any
 statusResults:any = [
   {
     status_ID: 1,
@@ -76,6 +78,9 @@ filteredCustomerOrders:any = of([{}])
     // this.form = new FormGroup({
     //   review : new FormControl("",[Validators.required, Validators.min(1)]),
     // })
+    this.GetUserRole().then((res) => {
+      
+    })
     this.orderservice.orderVM.subscribe(()=>{
       this.GetCustomerOrders().then((res) => {
         this.GetCustomerOrdersLine().then((res) => {
@@ -102,6 +107,20 @@ filteredCustomerOrders:any = of([{}])
      
   
     
+  }
+  async GetUserRole(){
+    let value = new Promise((resolve, reject) => {
+      this.loginservice.GetUserRole().subscribe((res) => {
+        this.permissions = res.permissions
+        console.log(res)
+        console.log(this.permissions)
+        resolve(res)
+      }), (error: any) => {
+        reject(error)
+      }
+    })
+    await value
+    return value
   }
   ReturnType(item:any){
     if(item.orderStatus_ID == 1){

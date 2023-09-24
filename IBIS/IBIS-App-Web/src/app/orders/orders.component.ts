@@ -15,6 +15,7 @@ import { DatePipe } from '@angular/common';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { catchError, map, throwError } from 'rxjs';
 import { OrdersHelpComponent } from '../orders-help/orders-help.component';
+import { LoginService } from '../Services/login.service';
 var pdfMake = require('pdfmake/build/pdfmake');
 var pdfFonts = require('pdfmake/build/vfs_fonts');
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
@@ -39,6 +40,7 @@ export class OrdersComponent implements OnInit {
   supplierOrderLine:any
   products:any
   inventories:any
+  permissions:any
   // supplierOrders:any
   // customerOrders:any
   isCustomerOrder:boolean=false
@@ -114,14 +116,15 @@ export class OrdersComponent implements OnInit {
 
   constructor(public router: Router, private orderservice : OrdersService,
     private matDialog: MatDialog,public cdr:ChangeDetectorRef,
-    private productservice: ProductService,private _snackbar: MatSnackBar,public helpModal: ModalController) {
+    private productservice: ProductService,private _snackbar: MatSnackBar,public helpModal: ModalController,
+    private loginService:LoginService) {
       
     }
       // this.data = this.supplierOrders
     
 
   async ngOnInit(): Promise<void> {
-   
+   this.GetUserRole()
  await this.ReadOrders()
 this.orderservice.addedOrder.subscribe((result:any)=>{
   this.ReadOrders()
@@ -224,11 +227,25 @@ this.CheckOrderStatus()
   }
   GenerateReviews(){
     this.orderservice.GenerateReviewsReport().subscribe((res)=>{
-      alert("success")
+      //alert("success")
     })
     // this.orderservice.ClassifyReviews().subscribe((res)=>{
     //   alert("success")
     // })
+  }
+  async GetUserRole(){
+    let value = new Promise((resolve, reject) => {
+      this.loginService.GetUserRole().subscribe((res) => {
+        this.permissions = res.permissions
+        console.log(res)
+       //alert(this.permissions)
+        resolve(res)
+      }), (error: any) => {
+        reject(error)
+      }
+    })
+    await value
+    return value
   }
   ToSupplier(){
     // edit records to standardize... then whatever is true is sent to API...
@@ -397,7 +414,8 @@ CheckOrderStatus(){
     await this.ReadOrders()
     await this.ReadProducts()
     let edit = true
-    if(element.orderStatus_ID == 2 || element.orderStatus_ID == 3 || element.transaction_ID != null){
+
+    if(element.orderStatus_ID == 2 || element.orderStatus_ID == 3 || element.transaction_ID != null || !this.permissions){
       edit = false
     }
     if(this.customersOrderLine && this.products){
@@ -423,7 +441,7 @@ CheckOrderStatus(){
         this.ShowSnackBar("Customer order successfuly edited", "success")
       }else if(result == false){
         this.ShowSnackBar("failed to edit customer order", "error")
-        alert("error")
+        //alert("error")
       }
     })
   }
@@ -448,7 +466,7 @@ CheckOrderStatus(){
         this.ShowSnackBar("supplier order succcessfully edited", "success")
       }else if(result == false){
         this.ShowSnackBar("Failed to edit supplier order", "error")
-        alert("error")
+        //alert("error")
       }
     })
   }

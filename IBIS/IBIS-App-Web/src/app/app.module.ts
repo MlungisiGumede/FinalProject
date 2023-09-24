@@ -74,9 +74,10 @@ import { NgQrScannerModule } from 'angular2-qrscanner';
 import { InventoryHelpComponent } from './inventory-help/inventory-help.component';
 import { RegisterHelpComponent } from './register-help/register-help.component';
 import { ReviewComponent } from './review/review.component';
-import { BarcodeScannerLivestreamModule } from 'ngx-barcode-scanner';
+//import { BarcodeScannerLivestreamModule } from 'ngx-barcode-scanner';
 import { Home2Component } from './home2/home2.component';
 import { HelpMeComponent } from './help-me/help-me.component';
+import {MatRadioModule} from '@angular/material/radio';
 
 
 
@@ -135,7 +136,8 @@ import { HelpMeComponent } from './help-me/help-me.component';
     RegisterHelpComponent,
     ReviewComponent,
     Home2Component,
-    HelpMeComponent
+    HelpMeComponent,
+    ViewUserComponent
    
     
   
@@ -150,7 +152,8 @@ import { HelpMeComponent } from './help-me/help-me.component';
     MatButtonModule,
     QRCodeModule,
     NgQrScannerModule,
-    BarcodeScannerLivestreamModule,
+    //BarcodeScannerLivestreamModule,
+    MatRadioModule, //https://webartdevelopers.com/blog/pure-css-radio-button-dot-slider/ for idea of slideshow buttons....
     RouterModule.forRoot([
       {path: '', redirectTo: '/Login', pathMatch: 'full'},
       {path: 'Login', component: LoginComponent, canActivate : [AuthGuardService] },
@@ -220,7 +223,8 @@ import { HelpMeComponent } from './help-me/help-me.component';
   entryComponents: [AddCustomerComponent,ViewCustomerComponent,AddCustomerOrderComponent,
   ViewImageComponent,AddSupplierComponent,ViewCustomerOrderComponent,ViewSupplierOrderComponent,
   AddSupplierOrderComponent,AddInventoryItemComponent,ViewInventoryItemComponent,ViewSupplierComponent,
-AddProductComponent,AddSubCategoryComponent,AddCategoryComponent,ReviewComponent],
+AddProductComponent,AddSubCategoryComponent,AddCategoryComponent,ReviewComponent,
+ViewUserComponent],
   providers: [{provide:HTTP_INTERCEPTORS,useClass:AuthenticationService,multi:true}
   ,AuthGuardService],
   bootstrap: [AppComponent]

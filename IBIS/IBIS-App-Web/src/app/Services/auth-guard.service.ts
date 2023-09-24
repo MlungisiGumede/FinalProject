@@ -218,7 +218,7 @@ ValidRequest(){
    async GetUserRole(){
     let value =  new Promise((resolve, reject) => {
     this.loginService.GetUserRole().subscribe((success)=>{
-      resolve(success.roleName)
+      resolve(success.role)
     }),(error:any)=>{
       console.log("error with user")
       reject(error)
