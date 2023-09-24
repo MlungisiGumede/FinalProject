@@ -192,7 +192,7 @@ import { HelpMeComponent } from './help-me/help-me.component';
       {path: 'customer-view', component: CustomerViewComponent,canActivate : [AuthGuardService]},
       {path: 'payment', component: PaymentComponent,canActivate : [AuthGuardService]},
       {path:'profile',component:ProfileComponent,canActivate : [AuthGuardService]},
-      {path:'help-me',component:HelpMeComponent}
+      {path:'help-me',component:HelpMeComponent,canActivate : [AuthGuardService]}
       
 
 
