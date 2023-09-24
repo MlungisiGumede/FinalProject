@@ -42,17 +42,23 @@
           <ion-col>
             <ion-button class="red-Btn" [routerLink]="['/view-recipe', item.recipe_ID]">Edit</ion-button>
             <ion-button class="light-Btn"  (click)="delete(item.recipe_ID)">Remove</ion-button>
+            <ion-button class="light-Btn"  (click)="generateImage(item.recipe_Name)">A.I</ion-button>
           </ion-col>
         </ion-row>
         <ion-item-divider></ion-item-divider>
       </ion-grid>
       <ion-button class="light-Btn" (click)="addRecipe()">Add</ion-button>
       <ion-button class="red-Btn">Generate Report</ion-button>
-      <div>
-        <ion-button (click)="generateImage()">Generate Image</ion-button>
-        <img *ngIf="imageUrl" [src]="imageUrl" alt="Generated Image">
-      </div>
+      <img *ngIf="imageUrl" [src]="imageUrl" alt="Generated Image">
   </div>
+
+
+
+
+  <!-- <div>
+    <ion-button (click)="generateImage(item.recipe_Name)">Generate Image</ion-button>
+    <img *ngIf="imageUrl" [src]="imageUrl" alt="Generated Image">
+  </div> -->
 
   
  

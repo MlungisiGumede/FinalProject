@@ -40,9 +40,9 @@ export class RecipesComponent implements OnInit {
     this.isModalOpen = isOpen;
   }
 
-  generateImage() {
+  async generateImage(promtImage: string) {
     //const currentToken = localStorage.getItem('temp')
-    const prompt = 'a Lion sitting on a couch';
+    const prompt = promtImage;
     const model = 'image-alpha-001';
     this.aiService.generateImage(prompt, model).subscribe((data:any) => {
       let token:any = localStorage.getItem('temp')

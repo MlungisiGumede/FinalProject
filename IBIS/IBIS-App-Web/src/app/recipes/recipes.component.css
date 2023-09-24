@@ -123,3 +123,8 @@ ion-grid {
         font-size: 0.8125em !important;
       }
     }
+
+    img {
+      height: auto; 
+      max-width: 20%;
+      }
