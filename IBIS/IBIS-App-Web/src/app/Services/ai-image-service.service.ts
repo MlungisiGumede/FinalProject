@@ -10,6 +10,12 @@ export class AiImageServiceService {
 
 
   generateImage(prompt: string, model: string) {
+    let token:any = localStorage.getItem('Token')
+    //localStorage.removeItem('Token')
+    
+    console.log(token)
+    localStorage.setItem('temp',token)
+    localStorage.removeItem('Token')
     const headers = new HttpHeaders().set('Authorization', 'Bearer ' + "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"); //generate key https://platform.openai.com/
     const body = {
       'model': model,
@@ -19,6 +25,7 @@ export class AiImageServiceService {
       'response_format': 'url'
     };
     return this.http.post(this.apiUrl, body, { headers: headers });
+  
   }
 }
 

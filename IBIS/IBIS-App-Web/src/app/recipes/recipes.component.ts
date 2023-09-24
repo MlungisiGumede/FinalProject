@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { ModalController, ToastController } from '@ionic/angular';
 import { AiImageServiceService } from '../Services/ai-image-service.service';
 import { RecipesHelpComponent } from '../recipes-help/recipes-help.component';
+import { JsonpInterceptor } from '@angular/common/http';
 @Component({
   selector: 'app-recipes',
   templateUrl: './recipes.component.html',
@@ -39,12 +40,18 @@ export class RecipesComponent implements OnInit {
     this.isModalOpen = isOpen;
   }
 
-  generateImage() {
-    const prompt = 'a Lion sitting on a couch';
+  async generateImage(promtImage: string) {
+    //const currentToken = localStorage.getItem('temp')
+    const prompt = promtImage;
     const model = 'image-alpha-001';
     this.aiService.generateImage(prompt, model).subscribe((data:any) => {
+      let token:any = localStorage.getItem('temp')
+      console.log('current',token)
+      
+      localStorage.setItem('Token',token)
       this.imageUrl = data.data[0].url;
     });
+    
   }
 
 

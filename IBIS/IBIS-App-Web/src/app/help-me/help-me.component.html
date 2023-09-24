@@ -1,9 +1,39 @@
-<p>help-me works!</p>
-<ion-searchbar class="isb" placeholder="Search Help..."></ion-searchbar><br/>
-<ion-button (click)="showOrdersHelp">orders help</ion-button>
-<ion-button (click)="showRecipeHelp">Recipe help</ion-button>
-<ion-button (click)="showInventoryHelp">Inventroy help</ion-button>
-<ion-button (click)="showSuppliersHelp">Supplier help</ion-button>
-<ion-button (click)="showCustomerHelp">customer help</ion-button>
-<ion-button (click)="showProductHelp">Products help</ion-button>
-
+<div class="contents">
+<ion-title><h1>Need some help?</h1></ion-title>
+    <ion-searchbar class="isb" placeholder="Search for help..." showCancelButton="focus" [(ngModel)]="filterTerm" animated></ion-searchbar><br/>
+      <ion-grid class="ion-margin" class="ion-grid-padding" >
+        <ion-row>
+          <ion-col>help</ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            <ion-label><ion-button (click)="showOrdersHelp()">orders help</ion-button></ion-label>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+            <ion-col>
+              <ion-label><ion-button (click)="showInventoryHelp()">Inventroy help</ion-button></ion-label>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col>
+              <ion-label><ion-button (click)="showSuppliersHelp()">Supplier help</ion-button></ion-label>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col>
+              <ion-label><ion-button (click)="showCustomerHelp()">customer help</ion-button></ion-label>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col>
+              <ion-label><ion-button (click)="showProductHelp()">Products help</ion-button></ion-label>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col>
+              <ion-label><ion-button (click)="showOrdersHelp()">orders help</ion-button></ion-label>
+            </ion-col>
+          </ion-row>
+      </ion-grid>
+  </div>

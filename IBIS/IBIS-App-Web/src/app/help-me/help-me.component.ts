@@ -12,6 +12,7 @@ import { ProductsHelpComponent } from '../products-help/products-help.component'
   styleUrls: ['./help-me.component.css']
 })
 export class HelpMeComponent implements OnInit {
+  filterTerm!: string;
 
   constructor(public helpModal: ModalController) { }
 
