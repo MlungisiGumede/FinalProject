@@ -53,7 +53,7 @@
               
             </ion-col>
             <ion-col>
-              <ion-button class="light-Btn" >Remove</ion-button>
+              <ion-button (click)="DeleteUser(item.id)" class="light-Btn" >Remove</ion-button>
             </ion-col>
             <ion-col>
               <ion-button (click)="UpdateRole(item)" class="light-Btn" >Update Permissions</ion-button>
@@ -62,7 +62,7 @@
           </ion-row>
           <ion-item-divider></ion-item-divider>
         </ion-grid>
-        <ion-button class="light-Btn" >Add</ion-button>
+        <ion-button class="light-Btn" (click)="Add()" >Add</ion-button>
         <ion-button class="light-Btn" (click)="request=false"  >Back</ion-button>
         <!-- <ion-button class="red-Btn" (click)="generPDF()">Generate Report</ion-button> -->
     </div>

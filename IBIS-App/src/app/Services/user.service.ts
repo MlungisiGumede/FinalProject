@@ -18,4 +18,11 @@ export class UserService {
 public getUsersList(): Observable<User[]> {
   return this.httpClient.get<User[]>(this.apiUrl)
 }
+DeleteCustomer(id: any): Observable<any> {
+  console.log(id)
+   return this.httpClient.delete<any>(`${this.apiUrl}/${id}` , )
+     .pipe(
+       
+     );
+ }
 }

@@ -53,6 +53,8 @@ namespace IBIS_API.Data
 
         public DbSet<FileUpload> Files { get; set; }
 
+        public DbSet<Employee> Employees { get; set; }
+
         public DbSet<ReviewClassification> ReviewClassifications { get; set; }
         /*
         public DbSet<Equipment> Equipment { get; set; } 

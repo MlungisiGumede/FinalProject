@@ -194,7 +194,12 @@ this.CheckOrderStatus()
   }
   getCustomerName(id:any){
     let customer = this.customers.find((customer:any) => customer.customer_ID == id)
-    return customer.customer_FirstName + " " + customer.customer_Surname
+    if(customer){
+      return customer.customer_FirstName + " " + customer.customer_Surname
+    }else{
+      return "Deleted"+ id
+    }
+    
   }
   ReturnType(item:any){
     if(item.orderStatus_ID == 1){

@@ -78,6 +78,7 @@ import { ReviewComponent } from './review/review.component';
 import { Home2Component } from './home2/home2.component';
 import { HelpMeComponent } from './help-me/help-me.component';
 import {MatRadioModule} from '@angular/material/radio';
+import { AddUserComponent } from './add-user/add-user.component';
 
 
 
@@ -137,7 +138,8 @@ import {MatRadioModule} from '@angular/material/radio';
     ReviewComponent,
     Home2Component,
     HelpMeComponent,
-    ViewUserComponent
+    ViewUserComponent,
+    AddUserComponent
    
     
   
@@ -224,7 +226,7 @@ import {MatRadioModule} from '@angular/material/radio';
   ViewImageComponent,AddSupplierComponent,ViewCustomerOrderComponent,ViewSupplierOrderComponent,
   AddSupplierOrderComponent,AddInventoryItemComponent,ViewInventoryItemComponent,ViewSupplierComponent,
 AddProductComponent,AddSubCategoryComponent,AddCategoryComponent,ReviewComponent,
-ViewUserComponent],
+ViewUserComponent,AddUserComponent],
   providers: [{provide:HTTP_INTERCEPTORS,useClass:AuthenticationService,multi:true}
   ,AuthGuardService],
   bootstrap: [AppComponent]

@@ -108,16 +108,20 @@ namespace IBIS_API.Controllers
                 }
             var orders = _context.Supplier_Orders.Where(c => c.Supplier_ID == id).ToList();
             var orderLines = _context.Supplier_Orders.ToList();
-            foreach (var order in orders)
+            if(orders.Count > 0)
             {
-                foreach (var orderLine in orderLines)
-                {
-                    if (order.SupplierOrder_ID == orderLine.SupplierOrder_ID)
-                    {
-                        _context.Remove(orderLine);
-                    }
-                }
+                return BadRequest("Cant Delete Supplier with orders");
             }
+            //foreach (var order in orders)
+            //{
+            //    foreach (var orderLine in orderLines)
+            //    {
+            //        if (order.SupplierOrder_ID == orderLine.SupplierOrder_ID)
+            //        {
+            //            _context.Remove(orderLine);
+            //        }
+            //    }
+            //}
 
             _context.Suppliers.Remove(sup);
                 await _context.SaveChangesAsync();

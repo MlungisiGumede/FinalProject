@@ -257,7 +257,12 @@ dialogRef.afterClosed().subscribe((res:any) => {
     }),
     catchError((err) =>{
       console.log(err)
-      this.ShowSnackBar("failed to remove product", "error");
+      if(err.status == 400){
+        this.ShowSnackBar(err.error, "error");
+      }else{
+        this.ShowSnackBar("failed to remove product", "error");
+      }
+      
       return throwError(err)
     })).subscribe(() => {
       

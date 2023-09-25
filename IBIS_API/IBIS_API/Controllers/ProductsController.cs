@@ -139,10 +139,17 @@ namespace IBIS_API.Controllers
                     return NotFound();
                 }
                var orderLines = _context.CustomerOrdersLine.Where(c => c.Product_ID == prod.Product_ID).ToList();
-            _context.RemoveRange(orderLines);
-
+            if(orderLines.Count > 0)
+            {
+                return BadRequest("Cant delete product that appears on orders");
+            }
+            else
+            {
                 _context.Products.Remove(prod);
                 await _context.SaveChangesAsync();
+            }
+
+               
 
                 return NoContent();
             }

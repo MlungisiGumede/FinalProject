@@ -245,6 +245,28 @@ namespace IBIS_API.Migrations
                     b.ToTable("CustomerOrdersLine");
                 });
 
+            modelBuilder.Entity("IBIS_API.Models.Employee", b =>
+                {
+                    b.Property<int?>("Employee_ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int?>("Employee_ID"));
+
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FullName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Phone")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Employee_ID");
+
+                    b.ToTable("Employees");
+                });
+
             modelBuilder.Entity("IBIS_API.Models.FileUpload", b =>
                 {
                     b.Property<int?>("FileUpload_ID")

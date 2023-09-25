@@ -1,0 +1,33 @@
+
+
+<body>
+    <div class="container" aria-readonly="true">
+     <div class="title">View User</div>
+     <div class="content">
+       <form [formGroup]="form"  action="#">
+         <div class="user-details">
+           <!-- <div class="input-box">
+             <span class="details">Full Name</span>
+             <input type="text" placeholder="David" readonly>
+           </div> -->
+           <div class="input-box">
+             <span class="details">Full Name</span>
+             <input  formControlName="fullName" type="text" placeholder="Spider" >
+           </div>
+           <div class="input-box">
+             <span class="details">Email</span>
+             <input formControlName="email"  type="text" placeholder="David@gmail.com" >
+           </div>
+           <div class="input-box">
+             <span class="details">Phone Number</span>
+             <input formControlName="phone"  type="text" placeholder="0837647843" >
+           </div>
+          
+          
+           
+         </div>
+       </form>
+     </div>
+     <ion-button (click)="AddUser()" >Submit</ion-button>
+    </div>
+    </body>

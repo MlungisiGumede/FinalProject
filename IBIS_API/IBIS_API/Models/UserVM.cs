@@ -2,6 +2,7 @@
 {
     public class UserVM
     {
+        public String? Id { get; set; }
         public String? UserName { get; set; }
         public String? Role { get; set; }
 

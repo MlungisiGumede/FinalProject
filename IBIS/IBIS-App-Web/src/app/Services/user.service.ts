@@ -32,9 +32,10 @@ public UploadProfile(file: any){
 }
 DeleteCustomer(id: any): Observable<any> {
   console.log(id)
-   return this.httpClient.delete<Customer>(`${this.apiUrl}${id}` , )
+   return this.httpClient.delete<any>(`${this.apiUrl}/DeleteCustomer/${id}` , )
      .pipe(
        
      );
  }
+
 }

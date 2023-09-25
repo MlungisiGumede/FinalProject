@@ -27,6 +27,7 @@ using Twilio.Rest.Api.V2010.Account;
 using Twilio.TwiML.Voice;
 using Microsoft.Identity.Client;
 using Twilio.Clients;
+using System.Data.Entity.Infrastructure.Design;
 
 namespace IBIS_API.Controllers
 {
@@ -200,7 +201,8 @@ namespace IBIS_API.Controllers
         [HttpPost]
         [Route("SendOTP")]
 
-        public async Task<IActionResult> SendOTP(User_Account uvm) { // if failiure with otp then just log in...
+        public async Task<IActionResult> SendOTP(User_Account uvm)
+        { // if failiure with otp then just log in...
             int otp = 4;
             String Message = "hi";
             try
@@ -272,62 +274,167 @@ namespace IBIS_API.Controllers
 
         }
 
-        [HttpDelete("{id}")]
+       
+        [HttpDelete]
+        [Route("DeleteCustomer/{id:int}")]
         public async Task<IActionResult> DeleteCustomer(int id)
         {
+
             var cus = await _context.Customers.FindAsync(id);
             if (cus == null)
             {
                 return NotFound();
             }
-            var user = await _userManager.FindByEmailAsync(cus.Email);
-            var claims = await _userManager.GetClaimsAsync(user);
-            _context.Customers.Remove(cus);
-            var result1 = await _userManager.RemoveFromRoleAsync(user, "guest");
-
-
-            if (result1.Succeeded)
+            else
             {
-                var result = await _userManager.RemoveClaimsAsync(user, claims);
-                if (result.Succeeded)
+                using (var context = _context.Database.BeginTransaction())
                 {
-                    var res = await _userManager.DeleteAsync(user);
-                    if (res.Succeeded)
+                    try
                     {
-                        var orders = _context.CustomerOrders.Where(c => c.Customer_ID == id).ToList();
-                        var orderLines = _context.CustomerOrdersLine.ToList();
-                        foreach (var order in orders)
+                        var user = await _userManager.FindByEmailAsync(cus.Email);
+                        if (user != null)
                         {
-                            foreach (var orderLine in orderLines)
+                            var claims = await _userManager.GetClaimsAsync(user);
+                           
+                           var result1 = await _userManager.RemoveFromRoleAsync(user, "guest");
+                           var result2 = await _userManager.RemoveClaimsAsync(user, claims);
+                            var result3 = await _userManager.DeleteAsync(user);
+                            if(result1.Succeeded && result2.Succeeded && result3.Succeeded)
                             {
-                                if (order.CustomerOrder_ID == orderLine.CustomerOrder_ID)
-                                {
-                                    _context.Remove(orderLine);
-                                }
+
+
+                                _context.Customers.Remove(cus);
+                                await _context.SaveChangesAsync();
+                                context.Commit();
+
+                            }
+                            else
+                            {
+                                context.Rollback();
+                                return BadRequest("Customer could not be deleted");
                             }
                         }
-                        _context.RemoveRange(orders);
-                        await _context.SaveChangesAsync();
+                        else
+                        {
+                           var customerOrders = _context.CustomerOrders.Where(c => c.Customer_ID == cus.Customer_ID).ToList();
+                            if(customerOrders.Count > 0)
+                            {
+                                return BadRequest("Cant Delete a Customer with orders");
+                            }
+                            _context.Customers.Remove(cus);
+                            await _context.SaveChangesAsync();
+                            context.Commit();
+                        }
+                       
                     }
-                    else
+                    catch (Exception ex)
                     {
-                        return BadRequest("Failed to remove customer ");
+                        context.Rollback();
+                        return BadRequest("Customer could not be deleted");
                     }
-                }
-                else
+                  }
+                
+            }
+
+            return NoContent();
+       }
+
+        [HttpDelete]
+        [Route("DeleteUser/{id}")]
+        public async Task<IActionResult> DeleteUser(string id) // this is userID...
+        {
+            
+           
+            var user = await _userManager.FindByIdAsync(id);
+            var employee = _context.Employees.Where(c => c.Email == user.Email).FirstOrDefault();
+            if (user != null)
+            {
+                using (var context = _context.Database.BeginTransaction())
                 {
-                    return BadRequest("Failed to remove customer ");
+                    
+                    try
+                    {
+                        var claims = await _userManager.GetClaimsAsync(user);
+
+                        var result1 = await _userManager.RemoveFromRoleAsync(user, "guest");
+                        var result2 = await _userManager.RemoveClaimsAsync(user, claims);
+                        var result3 = await _userManager.DeleteAsync(user);
+                        if(result1.Succeeded && result2.Succeeded && result3.Succeeded)
+                        {
+                            if(employee == null)
+                            {
+                                context.Commit();
+                            }
+                            else
+                            {
+                                _context.Employees.Remove(employee);
+                                await _context.SaveChangesAsync();
+                                context.Commit();
+                            }
+                           
+                        }
+                        else
+                        {
+                            context.Rollback();
+                            return BadRequest("Failed to delete user");
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        return BadRequest("Failed to delete user");
+                    }
                 }
             }
             else
             {
-                return BadRequest("Failed to remove customer ");
+                return BadRequest("No user account for particular customer");
             }
-           
-            
-
             return NoContent();
         }
+
+        [HttpDelete]
+        [Route("DeleteEmployee/{id:int}")]
+        public async Task<IActionResult> DeleteEmployee(int id)
+        {
+            var employee = await _context.Employees.FindAsync(id);
+
+            var user = await _userManager.FindByEmailAsync(employee.Email);
+            if (user != null)
+            {
+                using (var context = _context.Database.BeginTransaction())
+                {
+                    try
+                    {
+                        var claims = await _userManager.GetClaimsAsync(user);
+
+                        var result1 = await _userManager.RemoveFromRoleAsync(user, "guest");
+                        var result2 = await _userManager.RemoveClaimsAsync(user, claims);
+                        var result3 = await _userManager.DeleteAsync(user);
+                        if (result1.Succeeded && result2.Succeeded && result3.Succeeded)
+                        {
+                            _context.Employees.Remove(employee);
+                            context.Commit();
+                        }
+                        else
+                        {
+                            context.Rollback();
+                            return BadRequest("Failed to delete user");
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        return BadRequest("Failed to delete user");
+                    }
+                }
+            }
+            else
+            {
+                return BadRequest("No user account for particular customer");
+            }
+            return NoContent();
+        }
+
+
         [HttpPost]
         [Route("Authenticate")]
         public async Task<ActionResult> Authenticate(User_Account uvm)
@@ -447,16 +554,17 @@ namespace IBIS_API.Controllers
         {
             var users = await _userManager.Users.ToListAsync();
             List<UserVM> usersVM = new List<UserVM>();
-            foreach(var user in users)
+            foreach (var user in users)
             {
                 UserVM userVM = new UserVM();
-               var roles = await _userManager.GetRolesAsync(user);
-                var role = roles[0]; 
+                var roles = await _userManager.GetRolesAsync(user);
+                var role = roles[0];
                 userVM.Role = role;
                 userVM.Permissions = user.Permissions;
-                userVM.UserName = user.UserName; 
+                userVM.UserName = user.UserName;
                 userVM.Email = user.Email;
                 userVM.Name = user.FullName;
+                userVM.Id = user.Id;
                 usersVM.Add(userVM);
             }
             return Ok(usersVM);
@@ -481,14 +589,28 @@ namespace IBIS_API.Controllers
             // could you pass through app user....
             var user = await _userManager.FindByNameAsync(userVm.UserName);
             user.Permissions = userVm.Permissions;
-           await _userManager.UpdateAsync(user);
+            await _userManager.UpdateAsync(user);
+            await _context.SaveChangesAsync();
+            //_userManager.RemoveFromRoleAsync(user,role);
+            //_userManager.AddToRoleAsync(user,userVm.Role)
+            return Ok();
+        }
+        [HttpPost]
+        [Route("addUser")]
+        public async Task<IActionResult> AddEmployee(Employee emp)
+        {
+            // could you pass through app user....
+            // Employee emp = new Employee();
+            //var customer = _context.Customers.Where(c => c.Email == emp.Email); this logic...
+            _context.Employees.Add(emp);
+
+
             await _context.SaveChangesAsync();
             //_userManager.RemoveFromRoleAsync(user,role);
             //_userManager.AddToRoleAsync(user,userVm.Role)
             return Ok();
         }
 
-      
 
         [HttpGet]
         [Route("getFile")]
@@ -501,7 +623,7 @@ namespace IBIS_API.Controllers
             FileList.Add(pdfFound);
             if (FileList.Count == 0)
             {
-               return BadRequest("No File Found");
+                return BadRequest("No File Found");
             }
             return Ok(FileList);
 
@@ -517,9 +639,9 @@ namespace IBIS_API.Controllers
             var user = await _userManager.FindByNameAsync(username);
             var customer = _context.Customers.Where(c => c.Email == user.Email).First();
             var ordersList = new List<CustomerOrder>();
-            foreach(var customerOrder in _context.CustomerOrders)
+            foreach (var customerOrder in _context.CustomerOrders)
             {
-                if(customerOrder.Customer_ID == customer.Customer_ID)
+                if (customerOrder.Customer_ID == customer.Customer_ID)
                 {
                     ordersList.Add(customerOrder);
                 }
@@ -543,14 +665,14 @@ namespace IBIS_API.Controllers
             //    to,
             //    from: new PhoneNumber("+27828558028"), //  From number, must be an SMS-enabled Twilio number ( This will send sms from ur "To" numbers ).  
             //    body: $"Hello !! Welcome to Asp.Net Core With Twilio SMS API !!");
-            
+
             MessageResource.Create(
       to: to,
       messagingServiceSid: "MG54aee30786d986ca151639e0f838cf63",
       body: "Hello from your Alpha sender 👏");
             return Ok();
         }
-     
+
 
 
         [HttpGet]
@@ -598,7 +720,7 @@ namespace IBIS_API.Controllers
             }
             return Ok();
         }
-        
+
 
         [HttpPost]
         [Route("Register")]
@@ -607,56 +729,76 @@ namespace IBIS_API.Controllers
             var user = await _userManager.FindByIdAsync(uvm.Username);
             var statusText = "Account already exists";
             var customers = _context.Customers.ToList();
-            if (customers.Count == 0)
+            var employees = _context.Employees.ToList();
+            if (customers.Count == 0 && employees.Count == 0)
             {
                 return BadRequest("Not registerd on the system");
-                
+
             }
-            var customer =  _context.Customers.Where(c => c.Email == uvm.Email).FirstOrDefault();
-            if(customer == null)
+            var customer = _context.Customers.Where(c => c.Email == uvm.Email).FirstOrDefault();
+            var employee = _context.Employees.Where(c => c.Email == uvm.Email).FirstOrDefault();
+            if (customer == null && employee == null)
             {
                 return Forbid("Not registerd on the system");
             }
-           
+
             if (user == null)
             {
-                user = new AppUser
+                using (var context = _context.Database.BeginTransaction())
                 {
-                    Id = Guid.NewGuid().ToString(),
-                    UserName = uvm.Username,
-                    Email = uvm.Email,
-                    Permissions = false
-
-                };
-                if (!(await _roleManager.RoleExistsAsync("guest"))) // got from microsoft...
-                {
-                    await _roleManager.CreateAsync(new IdentityRole("guest"));
-                }
-                var role = _roleManager.FindByNameAsync("manager").Result;
-                var result = await _userManager.CreateAsync(user, uvm.Password);
-                //var roleResult = _userManager.AddToRoleAsync(user, role.Name);
-                // https://learn.microsoft.com/en-us/answers/questions/623030/assign-user-to-role-during-registration
-                if (result.Succeeded)
-                {
-                    var defaultrole = _roleManager.FindByNameAsync("guest").Result;
-
-                    if (defaultrole != null)
+                    user = new AppUser
                     {
-                        IdentityResult roleresult = await _userManager.AddToRoleAsync(user, defaultrole.Name);
+                        Id = Guid.NewGuid().ToString(),
+                        UserName = uvm.Username,
+                        Email = uvm.Email,
+                        Permissions = false
+
+                    };
+                    var result = await _userManager.CreateAsync(user, uvm.Password);
+                    if (result.Succeeded)
+                    {
+                        IdentityResult roleresult = new IdentityResult();
+                        if (customer != null) {
+                             roleresult = await _userManager.AddToRoleAsync(user, "guest");
+                        }else if(employee != null)
+                        {
+                             roleresult = await _userManager.AddToRoleAsync(user, "employee");
+                        }
+                        if (roleresult.Succeeded)
+                        {
+                            
+                            context.Commit();
+                            
+                        }
+                        else
+                        {
+                            context.Rollback();
+                            return StatusCode(StatusCodes.Status500InternalServerError, "Internal Server Error. Please contact support.");
+                        }
                     }
-
-
-                    if (result.Errors.Count() > 0) return StatusCode(StatusCodes.Status500InternalServerError, "Internal Server Error. Please contact support.");
+                    else
+                    {
+                        context.Rollback();
+                        return StatusCode(StatusCodes.Status500InternalServerError, "Internal Server Error. Please contact support.");
+                    }
+                   
                 }
-                else
-                {
-                    return Forbid("Account already exists.");
-                }
 
-               
+
+              
             }
             return Ok();
+
+            //var roleResult = _userManager.AddToRoleAsync(user, role.Name);
+            // https://learn.microsoft.com/en-us/answers/questions/623030/assign-user-to-role-during-registration
+
+
+
         }
+    }
+}
+           
+        
 
 
 
@@ -687,28 +829,4 @@ namespace IBIS_API.Controllers
         //}
 
 
-        [HttpPost("registerUser")]
-        public async Task<IActionResult> RegisterUser([FromBody] User_Account userobj)
-        {
 
-            if (userobj == null)
-
-                return BadRequest();
-
-           // await _context.User_Accounts.AddAsync(userobj);
-            await _context.SaveChangesAsync();
-            return Ok(new
-            {
-
-                Message = "User Registered!"
-            });
-
-        }
-
-
-    
-
-     
-    }
-    
-}

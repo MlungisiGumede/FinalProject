@@ -5,6 +5,7 @@ import { retry, catchError } from 'rxjs/operators';
 import { User } from '../Models/User';
 import { environment } from 'src/environments/environment';
 import { UserVM } from '../Models/UserVM';
+import { Customer } from '../Models/Customer';
 
 @Injectable({
   providedIn: 'root'
@@ -42,6 +43,29 @@ public UpdateUserRole(userVM:UserVM){
 public getCustomerOrders(){
   return this.httpClient.get<any>(`${this.apiUrl}getCustomerOrders`)
 }
+public AddUser(user:UserVM){
+  return this.httpClient.post<any>(`${this.apiUrl}AddUser`,user)
+}
+DeleteCustomer(id: any): Observable<any> {
+  console.log(id)
+   return this.httpClient.delete<any>(`${this.apiUrl}/${id}` , )
+     .pipe(
+       
+     );
+ }
+ DeleteUser(id:any): Observable<any> {
+  return this.httpClient.delete<any>(`${this.apiUrl}DeleteUser/${id}` , )
+     .pipe(
+       
+     );
+ }
+ DeleteEmployee(id:any): Observable<any> {
+  return this.httpClient.delete<any>(`${this.apiUrl}/DeleteEmployee/${id}` , )
+     .pipe(
+       
+     );
+ }
+
   
 
   httpOptions = {

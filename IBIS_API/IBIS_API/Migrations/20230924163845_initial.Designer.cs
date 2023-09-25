@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace IBIS_API.Migrations
 {
     [DbContext(typeof(DataContextcs))]
-    [Migration("20230924061402_initial")]
+    [Migration("20230924163845_initial")]
     partial class initial
     {
         /// <inheritdoc />
@@ -246,6 +246,28 @@ namespace IBIS_API.Migrations
                     b.HasIndex("Product_ID");
 
                     b.ToTable("CustomerOrdersLine");
+                });
+
+            modelBuilder.Entity("IBIS_API.Models.Employee", b =>
+                {
+                    b.Property<int?>("Employee_ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int?>("Employee_ID"));
+
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FullName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Phone")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Employee_ID");
+
+                    b.ToTable("Employees");
                 });
 
             modelBuilder.Entity("IBIS_API.Models.FileUpload", b =>

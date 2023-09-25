@@ -90,7 +90,12 @@ this.userService.DeleteCustomer(id).pipe(map(
 catchError((err) =>{
   
   console.log(err)
-  this.ShowSnackBar("failed to remove customer", "error");
+  if(err.status == 400){
+    this.ShowSnackBar(err.error,"error")
+  }else{
+    this.ShowSnackBar("failed to remove customer", "error");
+  }
+  
   return throwError(err)
 })).subscribe(Response => {
   console.log(Response);
@@ -99,7 +104,7 @@ this.getCustomers();
 this.ShowSnackBar("Customer successfully deleted","success")
  
 } ,err=>{
-  this.ShowSnackBar("Customer could not be deleted","error")
+  //this.ShowSnackBar("Customer could not be deleted","error")
 })
   }
 

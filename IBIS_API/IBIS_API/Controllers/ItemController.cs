@@ -126,7 +126,11 @@ namespace IBIS_API.Controllers
             {
                 return NotFound();
             }
-
+          var orderlines =  _context.SupplierOrderLines.Where(c => c.Inventory_ID == id).ToList();
+            if(orderlines.Count() > 0) // any suggested by AI...
+            {
+                return BadRequest("Cant Remove Inventories that appear on orders");
+            }
             _context.Inventories.Remove(sup);
             await _context.SaveChangesAsync();
 

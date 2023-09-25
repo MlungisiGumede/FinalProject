@@ -129,8 +129,13 @@ const dialogRef = this.matDialog.open(AddSupplierComponent);
 
   }),
   catchError((err) =>{
+    if(err.status == 400){
+      this.ShowSnackBar(err.error, "error");
+    }else{
+      this.ShowSnackBar("failed to remove supplier", "error");
+    }
     console.log(err)
-    this.ShowSnackBar("failed to remove supplier", "error");
+   
     return throwError(err)
   })).subscribe(Response => {
     

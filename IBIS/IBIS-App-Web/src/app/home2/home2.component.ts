@@ -3,6 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { of } from 'rxjs';
 import { ViewUserComponent } from '../view-user/view-user.component';
 import { LoginService } from '../Services/login.service';
+import { AddUserComponent } from '../add-user/add-user.component';
 
 @Component({
   selector: 'app-home2',
@@ -25,6 +26,18 @@ filterTerm!: string
    const dialogRef = this.matDialog.open(ViewUserComponent,{
     data:{'user':user,'disable':false}
    })
+  }
+  Add(){
+    const dialogRef = this.matDialog.open(AddUserComponent,{
+      
+     })
+  }
+  DeleteUser(item:any){
+  
+    this.logInService.DeleteUser(item).subscribe(res=>{
+      console.log(res)
+    })
+  
   }
   UpdateRole(user:any){
     const dialogRef = this.matDialog.open(ViewUserComponent,{

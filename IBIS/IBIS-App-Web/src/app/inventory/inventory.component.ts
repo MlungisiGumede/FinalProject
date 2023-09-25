@@ -122,8 +122,13 @@ this.inv.delete(this.idtodelete).pipe(map(
 
 }),
 catchError((err) =>{
+  if(err.status == 400){
+    this.ShowSnackBar(err.error, "error");
+  }else{
+    this.ShowSnackBar("failed to remove inventory", "error");
+  }
   console.log(err)
-  this.ShowSnackBar("failed to delete inventory", "error");
+  
   return throwError(err)
 })).
 subscribe(Response => {
