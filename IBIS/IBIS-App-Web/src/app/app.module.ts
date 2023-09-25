@@ -79,6 +79,8 @@ import { Home2Component } from './home2/home2.component';
 import { HelpMeComponent } from './help-me/help-me.component';
 import {MatRadioModule} from '@angular/material/radio';
 import { AddUserComponent } from './add-user/add-user.component';
+import { CalendarComponent } from './calendar/calendar.component';
+import { CalendarModalComponent } from './calendar-modal/calendar-modal.component';
 
 
 
@@ -139,7 +141,9 @@ import { AddUserComponent } from './add-user/add-user.component';
     Home2Component,
     HelpMeComponent,
     ViewUserComponent,
-    AddUserComponent
+    AddUserComponent,
+    CalendarComponent,
+    CalendarModalComponent
    
     
   
@@ -197,7 +201,8 @@ import { AddUserComponent } from './add-user/add-user.component';
       {path: 'customer-view', component: CustomerViewComponent,canActivate : [AuthGuardService]},
       {path: 'payment', component: PaymentComponent,canActivate : [AuthGuardService]},
       {path:'profile',component:ProfileComponent,canActivate : [AuthGuardService]},
-      {path:'help-me',component:HelpMeComponent,canActivate : [AuthGuardService]}
+      {path:'help-me',component:HelpMeComponent,canActivate : [AuthGuardService]},
+      {path: 'calendar', component: CalendarComponent}
       
 
 

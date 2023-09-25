@@ -1,0 +1,34 @@
+.date-value:hover{
+    color:blue;
+}
+
+.addEvent{
+    height: 1cm;
+    width: 2.5cm;
+    display: block;
+    margin-right: 10px;
+    margin: 0 auto; /* Center horizontally */
+    text-align: center; /* Center the text horizontally */
+    display: flex;
+    justify-content: center; /* Center horizontally within the container */
+    align-items: center; 
+    background-color: black;
+    color:yellow;
+    border-radius: 5px;
+}
+
+.custom-calendar .datetime-text {
+    font-weight: bold;
+    color: #333;
+  }
+  
+  .custom-calendar .datetime-calendar .item-selected {
+    background-color: #f8f8f8;
+    border-radius: 50%;
+  }
+  
+  .custom-calendar .datetime-calendar .event-day {
+    background-color: #ffcc00; /* Customize the highlight color */
+    border-radius: 50%;
+    color: white;
+  }
