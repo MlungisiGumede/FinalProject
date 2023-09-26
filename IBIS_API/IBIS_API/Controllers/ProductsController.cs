@@ -11,6 +11,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using Microsoft.EntityFrameworkCore;
+using DocumentFormat.OpenXml.Office2010.Excel;
 
 namespace IBIS_API.Controllers
 {
@@ -54,12 +55,23 @@ namespace IBIS_API.Controllers
             // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
             [HttpPut]
         [Route("putProduct")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<IActionResult> PutProduct(Product prod)
             {
-              
-
-                _context.Entry(prod).State = EntityState.Modified;
-
+            var userClaims = User;
+            UserRoleVM uRVM = new UserRoleVM();
+            var username = userClaims.FindFirstValue(ClaimTypes.Name);
+            //var user = await _userManager.FindByNameAsync(username);
+            AuditTrail audit = new AuditTrail();
+          var categories =   _context.Categories.Where(c => c.Category_ID == prod.Category_ID).First();
+            var subCategories = _context.SubCategories.Where(c => c.SubCategory_ID == prod.SubCategory_ID).First();
+            audit.User = username;
+            audit.Date = DateTime.Now;
+            audit.Name = "Edit Product";
+            audit.Description = "Edit Product Details:" + Environment.NewLine + prod.Product_ID + Environment.NewLine + prod.Name + Environment.NewLine + categories.Name + Environment.NewLine + subCategories.Name + Environment.NewLine + prod.Price + Environment.NewLine + prod.Quantity + Environment.NewLine;
+            _context.AuditTrail.Add(audit);
+            _context.Entry(prod).State = EntityState.Modified;
+            
                 try
                 {
                     await _context.SaveChangesAsync();
@@ -81,8 +93,20 @@ namespace IBIS_API.Controllers
             }
         [HttpPost]
         [Route("postCategory")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<ActionResult<Category>> PostCategory(Category category)
         {
+            var userClaims = User;
+            UserRoleVM uRVM = new UserRoleVM();
+            var username = userClaims.FindFirstValue(ClaimTypes.Name);
+            //var user = await _userManager.FindByNameAsync(username);
+            AuditTrail audit = new AuditTrail();
+            audit.User = username;
+            audit.Date = DateTime.Now;
+            audit.Name = "Add Subcategory";
+            //var categories = _context.Categories.Where(c => c.Category_ID == subCategory.Category_ID).First();
+            audit.Description = "Add Category Details:" + Environment.NewLine + category.Category_ID + Environment.NewLine + category.Name;
+            _context.AuditTrail.Add(audit);
             _context.Categories.Add(category);
             await _context.SaveChangesAsync();
 
@@ -90,8 +114,20 @@ namespace IBIS_API.Controllers
         }
         [HttpPost]
         [Route("postSubCategory")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<ActionResult<SubCategory>> PostSubCategory(SubCategory subCategory)
         {
+            var userClaims = User;
+            UserRoleVM uRVM = new UserRoleVM();
+            var username = userClaims.FindFirstValue(ClaimTypes.Name);
+            //var user = await _userManager.FindByNameAsync(username);
+            AuditTrail audit = new AuditTrail();
+            audit.User = username;
+            audit.Date = DateTime.Now;
+            audit.Name = "Add Subcategory";
+            var categories = _context.Categories.Where(c => c.Category_ID == subCategory.Category_ID).First();
+            audit.Description = "Add SubCategory Details:" + Environment.NewLine + subCategory.SubCategory_ID + Environment.NewLine + subCategory.Name + Environment.NewLine + categories.Name + Environment.NewLine + subCategory.Name;
+            _context.AuditTrail.Add(audit);
             _context.SubCategories.Add(subCategory);
             await _context.SaveChangesAsync();
 
@@ -119,10 +155,22 @@ namespace IBIS_API.Controllers
         // POST: api/Addresses
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-       // [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<ActionResult<Product>> PostProduct(Product prod)
             {
-                _context.Products.Add(prod);
+            var userClaims = User;
+            UserRoleVM uRVM = new UserRoleVM();
+            var username = userClaims.FindFirstValue(ClaimTypes.Name);
+            //var user = await _userManager.FindByNameAsync(username);
+            AuditTrail audit = new AuditTrail();
+            var categories = _context.Categories.Where(c => c.Category_ID == prod.Category_ID).First();
+            var subCategories = _context.SubCategories.Where(c => c.SubCategory_ID == prod.SubCategory_ID).First();
+            audit.User = username;
+            audit.Date = DateTime.Now;
+            audit.Name = "Add Product";
+            audit.Description = "Add Product Details:" + Environment.NewLine + prod.Product_ID + Environment.NewLine + prod.Name + Environment.NewLine + categories.Name + Environment.NewLine + subCategories.Name + Environment.NewLine + prod.Price + Environment.NewLine + prod.Quantity + Environment.NewLine;
+            _context.AuditTrail.Add(audit);
+            _context.Products.Add(prod);
                 await _context.SaveChangesAsync();
 
                 return CreatedAtAction("GetProduct", new { id = prod.Product_ID }, prod);
@@ -145,6 +193,18 @@ namespace IBIS_API.Controllers
             }
             else
             {
+                var userClaims = User;
+                UserRoleVM uRVM = new UserRoleVM();
+                var username = userClaims.FindFirstValue(ClaimTypes.Name);
+                //var user = await _userManager.FindByNameAsync(username);
+                AuditTrail audit = new AuditTrail();
+                var categories = _context.Categories.Where(c => c.Category_ID == prod.Category_ID).First();
+                var subCategories = _context.SubCategories.Where(c => c.SubCategory_ID == prod.SubCategory_ID).First();
+                audit.User = username;
+                audit.Date = DateTime.Now;
+                audit.Name = "Delete Product";
+                audit.Description = "Delete Product Details:" + Environment.NewLine + prod.Product_ID + Environment.NewLine + prod.Name + Environment.NewLine + categories.Name + Environment.NewLine + subCategories.Name + Environment.NewLine + prod.Price + Environment.NewLine + prod.Quantity + Environment.NewLine;
+                _context.AuditTrail.Add(audit);
                 _context.Products.Remove(prod);
                 await _context.SaveChangesAsync();
             }

@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
+using Twilio.TwiML.Voice;
 
 
 namespace IBIS_API.Controllers
@@ -26,7 +28,8 @@ namespace IBIS_API.Controllers
 
         [HttpGet]
         [Route("getAll")]
-      //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<ActionResult<IEnumerable<Customer>>> GetCustomer()
         {
             return await _context.Customers.ToListAsync();
@@ -35,6 +38,7 @@ namespace IBIS_API.Controllers
 
         // GET: api/Addresses/5
         [HttpGet("{id}")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<ActionResult<Customer>> GetCustomer(int id)
         {
             var cus = await _context.Customers.FindAsync(id);
@@ -50,13 +54,21 @@ namespace IBIS_API.Controllers
         // PUT: api/Addresses/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutOrder(Customer cus)
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        public async Task<IActionResult> PutCustomer(Customer cus)
         {
-            // if (id != cus.Customer_ID)
-            // {
-            //     return BadRequest();
-            // }
-
+            var userClaims = User;
+            var username = userClaims.FindFirstValue(ClaimTypes.Name);
+            UserRoleVM uRVM = new UserRoleVM();
+           
+          
+            AuditTrail audit = new AuditTrail();
+           
+            audit.User = username;
+            audit.Date = DateTime.Now;
+            audit.Name = "Edit Customer";
+            //var supplier = _context.Inventories.Where(c => c.Supplier_ID == sup.Supplier_ID).First();
+            audit.Description = "Edit Customer Details:" + Environment.NewLine + cus.Customer_ID + Environment.NewLine + cus.Customer_FirstName + " " + cus.Customer_Surname + Environment.NewLine + cus.Phone + Environment.NewLine + cus.Email + Environment.NewLine + cus.Address; ;
             _context.Entry(cus).State = EntityState.Modified;
 
             try
@@ -81,8 +93,21 @@ namespace IBIS_API.Controllers
         // POST: api/Addresses
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<ActionResult<Customer>> PostCustomer(Customer cus)
         {
+            var userClaims = User;
+            var username = userClaims.FindFirstValue(ClaimTypes.Name);
+            UserRoleVM uRVM = new UserRoleVM();
+
+
+            AuditTrail audit = new AuditTrail();
+
+            audit.User = username;
+            audit.Date = DateTime.Now;
+            audit.Name = "Edit Customer";
+            //var supplier = _context.Inventories.Where(c => c.Supplier_ID == sup.Supplier_ID).First();
+            audit.Description = "Edit Customer Details:" + Environment.NewLine + cus.Customer_ID + Environment.NewLine + cus.Customer_FirstName + " " + cus.Customer_Surname + Environment.NewLine + cus.Phone + Environment.NewLine + cus.Email + Environment.NewLine + cus.Address; ;
             //var user = await _userManager.FindByNameAsync(username);
             _context.Customers.Add(cus);
             await _context.SaveChangesAsync();

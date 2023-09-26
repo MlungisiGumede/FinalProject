@@ -56,6 +56,8 @@ namespace IBIS_API.Data
         public DbSet<Employee> Employees { get; set; }
 
         public DbSet<ReviewClassification> ReviewClassifications { get; set; }
+
+        public DbSet<AuditTrail> AuditTrail { get; set; }
         /*
         public DbSet<Equipment> Equipment { get; set; } 
         public  DbSet<Equipment_Category> Equipment_Categories { get; set; } 

@@ -12,6 +12,7 @@ using System.Security.Claims;
 using System.Text;
 using Microsoft.EntityFrameworkCore;
 using Humanizer;
+using Twilio.TwiML.Voice;
 
 namespace IBIS_API.Controllers
 {
@@ -55,9 +56,23 @@ namespace IBIS_API.Controllers
         // PUT: api/Addresses/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<IActionResult> Putinv(int id, Inventory sup)
         {
-           
+            var userClaims = User;
+            UserRoleVM uRVM = new UserRoleVM();
+            var username = userClaims.FindFirstValue(ClaimTypes.Name);
+            //var user = await _userManager.FindByNameAsync(username);
+            AuditTrail audit = new AuditTrail();
+           // var categories = _context.Categories.Where(c => c.Category_ID == prod.Category_ID).First();
+            //var subCategories = _context.SubCategories.Where(c => c.SubCategory_ID == prod.SubCategory_ID).First();
+            audit.User = username;
+            audit.Date = DateTime.Now;
+            audit.Name = "Edit Inventory";
+            var supplier = _context.Inventories.Where(c => c.Supplier_ID == sup.Supplier_ID).First();
+            audit.Description = "Edit Inventory Details:" + Environment.NewLine + sup.Inventory_ID + Environment.NewLine + sup.Sku + Environment.NewLine + sup.Name + Environment.NewLine + supplier.Name;
+            _context.AuditTrail.Add(audit);
+
             if (id != sup.Inventory_ID)
             {
                 return BadRequest();
@@ -87,8 +102,22 @@ namespace IBIS_API.Controllers
         // POST: api/Addresses
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<ActionResult<Inventory>> PostInv(Inventory inventory)
         {
+            var userClaims = User;
+            UserRoleVM uRVM = new UserRoleVM();
+            var username = userClaims.FindFirstValue(ClaimTypes.Name);
+            //var user = await _userManager.FindByNameAsync(username);
+            AuditTrail audit = new AuditTrail();
+           // var categories = _context.Categories.Where(c => c.Category_ID == prod.Category_ID).First();
+            //var subCategories = _context.SubCategories.Where(c => c.SubCategory_ID == prod.SubCategory_ID).First();
+            audit.User = username;
+            audit.Date = DateTime.Now;
+            audit.Name = "Add Inventory";
+            var supplier = _context.Inventories.Where(c => c.Supplier_ID == sup.Supplier_ID).First();
+            audit.Description = "Add Inventory Details:" + Environment.NewLine + inventory.Inventory_ID + Environment.NewLine + inventory.Sku + Environment.NewLine + inventory.Name + Environment.NewLine + supplier.Name;
+            _context.AuditTrail.Add(audit);
             var inventoryItem = _context.Inventories.Where(c => c.Sku == inventory.Sku).FirstOrDefault();
             if (inventoryItem == null)
             {
@@ -97,7 +126,6 @@ namespace IBIS_API.Controllers
             }
             else
             {
-
             }
           ;
 
@@ -119,6 +147,7 @@ namespace IBIS_API.Controllers
 
         // DELETE: api/Addresses/5
         [HttpDelete("{id}")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<IActionResult> DeleteInv(int id)
         {
             var sup = await _context.Inventories.FindAsync(id);
@@ -131,6 +160,18 @@ namespace IBIS_API.Controllers
             {
                 return BadRequest("Cant Remove Inventories that appear on orders");
             }
+            var userClaims = User;
+            UserRoleVM uRVM = new UserRoleVM();
+            var username = userClaims.FindFirstValue(ClaimTypes.Name);
+            //var user = await _userManager.FindByNameAsync(username);
+            AuditTrail audit = new AuditTrail();
+            // var categories = _context.Categories.Where(c => c.Category_ID == prod.Category_ID).First();
+            //var subCategories = _context.SubCategories.Where(c => c.SubCategory_ID == prod.SubCategory_ID).First();
+            audit.User = username;
+            audit.Date = DateTime.Now;
+            audit.Name = "Edit Inventory";
+            var supplier = _context.Inventories.Where(c => c.Supplier_ID == sup.Supplier_ID).First();
+            audit.Description = "Delete Inventory Details:" + Environment.NewLine + sup.Inventory_ID + Environment.NewLine + sup.Sku + Environment.NewLine + sup.Name + Environment.NewLine + supplier.Name;
             _context.Inventories.Remove(sup);
             await _context.SaveChangesAsync();
 

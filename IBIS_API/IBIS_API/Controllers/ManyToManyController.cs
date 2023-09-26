@@ -37,6 +37,9 @@ using Google.Protobuf.WellKnownTypes;
 using BERTTokenizers.Extensions;
 using Microsoft.ML.Data;
 using DocumentFormat.OpenXml.Drawing.Charts;
+using DocumentFormat.OpenXml.Office2010.Excel;
+using DocumentFormat.OpenXml.Vml;
+using DocumentFormat.OpenXml.Wordprocessing;
 
 
 namespace IBIS_API.Controllers
@@ -77,14 +80,32 @@ namespace IBIS_API.Controllers
 
         [HttpPost]
         [Route("PostCustomerOrder")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<ActionResult> PostCustomerOrder(CustomerOrderViewModel? ord)
         {
+            var userClaims = User;
+            var username = userClaims.FindFirstValue(ClaimTypes.Name);
+            UserRoleVM uRVM = new UserRoleVM();
+
+
+            AuditTrail audit = new AuditTrail();
+
+            audit.User = username;
+            audit.Date = DateTime.Now;
+            audit.Name = "Add Customer Order"; ;
+            //var supplier = _context.Inventories.Where(c => c.Supplier_ID == sup.Supplier_ID).First();
+            var id = ord.CustomerOrder.CustomerOrder_ID;
             var order = ord.CustomerOrder;
+            var cus = _context.Customers.Where(c => c.Customer_ID == id).First();
+            
+            var ordLines = _context.CustomerOrdersLine.Where(c => c.CustomerOrder_ID == id).ToList();
+            
+            
             order.OrderStatus_ID = 1;
             var orderLine = ord.CustomerOrderLines;
             _context.CustomerOrders.Add(order);
 
-
+            double total = 0;
             foreach (var line in orderLine)
             {
                 var product = _context.Products.Find(line.Product_ID);
@@ -96,9 +117,11 @@ namespace IBIS_API.Controllers
                     Quantity = line.Quantity,
                     Price = line.Price
                 };
-
+                total = total + (line.Quantity * line.Price);
                 _context.CustomerOrdersLine.Add(addLine);
             }
+            audit.Description = "Add Customer Order:" + Environment.NewLine + order.CustomerOrder_ID + Environment.NewLine + cus.Customer_FirstName + " " + cus.Customer_Surname + Environment.NewLine + order.Date_Created + Environment.NewLine + total;
+
             //_context.Database.ExecuteSqlRaw("Set IDENTITY_INSERT dbo.CustomerOrdersLine ON");
             await _context.SaveChangesAsync();
 
@@ -109,6 +132,7 @@ namespace IBIS_API.Controllers
 
         [HttpPost]
         [Route("PostSupplierOrder")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<ActionResult> PostSupplierOrder(SupplierOrderViewModel? ord)
         {
             var order = ord.SupplierOrder;
@@ -131,6 +155,28 @@ namespace IBIS_API.Controllers
 
                 _context.SupplierOrderLines.Add(addLine);
             }
+            var userClaims = User;
+            var username = userClaims.FindFirstValue(ClaimTypes.Name);
+            UserRoleVM uRVM = new UserRoleVM();
+
+
+            AuditTrail audit = new AuditTrail();
+
+            audit.User = username;
+            audit.Date = DateTime.Now;
+            audit.Name = "Add Supplier Order";
+            var supplier = _context.Suppliers.Where(c => c.Supplier_ID == ord.SupplierOrder.Supplier_ID).First();
+
+
+            double? total = 0;
+
+            var ordLines = _context.SupplierOrderLines.Where(c => c.SupplierOrder_ID == ord.SupplierOrder.SupplierOrder_ID).ToList();
+            //await _context.SaveChangesAsync();
+            foreach (var ordline in ordLines)
+            {
+                total = total + (ordline.Quantity * ordline.Price);
+            }
+            audit.Description = "Add Supplier Order:" + Environment.NewLine + ord.SupplierOrder.SupplierOrder_ID + Environment.NewLine + supplier.Name + Environment.NewLine + ord.SupplierOrder.Date_Created + Environment.NewLine + ord.SupplierOrder.OrderStatus_ID + Environment.NewLine + total;
             //_context.Database.ExecuteSqlRaw("Set IDENTITY_INSERT dbo.CustomerOrdersLine ON");
             await _context.SaveChangesAsync();
 
@@ -140,6 +186,7 @@ namespace IBIS_API.Controllers
         }
         [HttpGet]
         [Route("GenerateSubCategoriesReportExcel")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public ActionResult GenerateSubCategoriesReport()
         {
             var subCategories = _context.SubCategories.ToList();
@@ -251,6 +298,7 @@ namespace IBIS_API.Controllers
         }
         [HttpGet]
         [Route("GenerateSubCategoriesReportPDF")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public ActionResult GenerateSubCategoriesReport2()
         {
             var subCategories = _context.SubCategories.ToList();
@@ -371,6 +419,7 @@ namespace IBIS_API.Controllers
 
         [HttpGet]
         [Route("GenerateCategoriesReportPDF")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public ActionResult GenerateCatgeoriesReport2()
         {
             var categories = _context.Categories.ToList();
@@ -509,6 +558,7 @@ namespace IBIS_API.Controllers
 
         [HttpGet]
         [Route("GenerateCategoriesReportExcel")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public ActionResult GenerateCategoriesReport()
         {
             var categories = _context.Categories.ToList();
@@ -624,6 +674,7 @@ namespace IBIS_API.Controllers
 
         [HttpGet]
         [Route("convertCustomerOrders")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public ActionResult ConvertCustomerOrders()
         {
 
@@ -719,6 +770,7 @@ namespace IBIS_API.Controllers
 
         [HttpGet]
         [Route("convertSupplierOrders")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public ActionResult ConvertSupplierOrders()
         {
             System.Data.DataTable dt = new System.Data.DataTable("Grid");
@@ -875,6 +927,7 @@ namespace IBIS_API.Controllers
 
         [HttpPost]
         [Route("RecordReview")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<ActionResult> RecordReview(CustomerOrder ord)
         {
             //GenerateReviews(ord);
@@ -887,6 +940,7 @@ namespace IBIS_API.Controllers
 
         [HttpGet]
         [Route("GenerateReviewsReport")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<ActionResult> GenerateReviewsReport()
         {
             var customerOrders = _context.CustomerOrders.Where(c => c.Review != null).ToList();
@@ -952,15 +1006,36 @@ namespace IBIS_API.Controllers
 
         [HttpPut]
         [Route("putCustomerOrderStatus")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<ActionResult> PutCustomerOrderStatus(CustomerOrder ord)
         {
             // dont send primary key of order lines through...
             var order = _context.CustomerOrders.Where(c => c.CustomerOrder_ID == ord.CustomerOrder_ID).First();
             _context.ChangeTracker.Clear();
+            var userClaims = User;
+            var username = userClaims.FindFirstValue(ClaimTypes.Name);
+            UserRoleVM uRVM = new UserRoleVM();
+
+
+            AuditTrail audit = new AuditTrail();
+
+            audit.User = username;
+            audit.Date = DateTime.Now;
+            audit.Name = "Edit Customer Order Status";
             if (ord.Transaction_ID != null && order.Transaction_ID == null)
             {
-                   
+                var customerOrdersLine = _context.CustomerOrdersLine.Where(c => c.CustomerOrder_ID == order.CustomerOrder_ID).ToList();
+                var cus1 = _context.Customers.Where(c => c.Customer_ID == order.Customer_ID).First();
+                _context.ChangeTracker.Clear();
+                double total1 = 0;
+                audit.Name = "Payment For Order";
+                foreach(var line in customerOrdersLine)
+                {
+                    total1 = total1 + (line.Quantity * line.Price);
+                }
                  order.Transaction_ID = ord.Transaction_ID;
+                audit.Description = "Payment For Order:" + Environment.NewLine + ord.CustomerOrder_ID + Environment.NewLine + cus1.Customer_FirstName + " " + cus1.Customer_Surname + Environment.NewLine + ord.Date_Created + Environment.NewLine + ord.Transaction_ID + Environment.NewLine + ord.OrderStatus_ID + Environment.NewLine + total1;
+                _context.AuditTrail.Add(audit);
                 _context.CustomerOrders.Update(order);
                 await _context.SaveChangesAsync();
 
@@ -1010,6 +1085,16 @@ namespace IBIS_API.Controllers
 
             // _context.Custom
             ord.Date_Created = order.Date_Created;
+            var cus = _context.Customers.Where(c => c.Customer_ID == order.Customer_ID).First();
+            double total = 0;
+            
+            var ordLines = _context.CustomerOrdersLine.Where(c => c.CustomerOrder_ID == ord.Customer_ID).ToList();
+            foreach (var ordline in ordLines)
+            {
+                total = total + (ordline.Quantity * ordline.Price);
+            }
+            audit.Description = "Edit Customer Order Status:" + Environment.NewLine + ord.CustomerOrder_ID + Environment.NewLine + cus.Customer_FirstName + " " + cus.Customer_Surname + Environment.NewLine + ord.Date_Created + Environment.NewLine + ord.Transaction_ID + Environment.NewLine + ord.OrderStatus_ID + Environment.NewLine + total;
+            _context.AuditTrail.Add(audit);
             _context.CustomerOrders.Update(ord);
             await _context.SaveChangesAsync();
 
@@ -1017,12 +1102,31 @@ namespace IBIS_API.Controllers
         }
         [HttpPut]
         [Route("putSupplierOrderStatus")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<ActionResult> PutSupplierOrderStatus(SupplierOrder ord)
         {
             // dont send primary key of order lines through...
-           
-            _context.Entry(ord).State = EntityState.Modified; // nah do the whole attaching thing...
+            var userClaims = User;
+            var username = userClaims.FindFirstValue(ClaimTypes.Name);
+            UserRoleVM uRVM = new UserRoleVM();
 
+
+            AuditTrail audit = new AuditTrail();
+
+            audit.User = username;
+            audit.Date = DateTime.Now;
+            audit.Name = "Edit Supplier Order Status";
+            var supplier = _context.Suppliers.Where(c => c.Supplier_ID == ord.Supplier_ID).First();
+            double? total = 0;
+
+            var ordLines = _context.SupplierOrderLines.Where(c => c.SupplierOrder_ID == ord.SupplierOrder_ID).ToList();
+            foreach (var ordline in ordLines)
+            {
+                total = total + (ordline.Quantity * ordline.Price);
+            }
+            audit.Description = "Edit Supplier Order Status:" + Environment.NewLine + ord.SupplierOrder_ID + Environment.NewLine + supplier.Name  + Environment.NewLine + ord.Date_Created + Environment.NewLine + ord.OrderStatus_ID + Environment.NewLine + total;
+            _context.Entry(ord).State = EntityState.Modified; // nah do the whole attaching thing...
+            _context.Add(audit);
             await _context.SaveChangesAsync();
 
             return NoContent();
@@ -1053,8 +1157,30 @@ namespace IBIS_API.Controllers
 
                 _context.SupplierOrderLines.Add(addLine);
             }
-            //await _context.SaveChangesAsync();
+            var userClaims = User;
+            var username = userClaims.FindFirstValue(ClaimTypes.Name);
+            UserRoleVM uRVM = new UserRoleVM();
 
+
+            AuditTrail audit = new AuditTrail();
+
+            audit.User = username;
+            audit.Date = DateTime.Now;
+            audit.Name = "Edit Supplier Order";
+            var supplier = _context.Suppliers.Where(c => c.Supplier_ID == ord.SupplierOrder.Supplier_ID).First();
+            
+           
+            double? total = 0;
+
+            var ordLines = _context.SupplierOrderLines.Where(c => c.SupplierOrder_ID == ord.SupplierOrder.SupplierOrder_ID).ToList();
+            //await _context.SaveChangesAsync();
+            foreach (var ordline in ordLines)
+            {
+                total = total + (ordline.Quantity * ordline.Price);
+            }
+            audit.Description = "Edit Supplier Order:" + Environment.NewLine + ord.SupplierOrder.SupplierOrder_ID + Environment.NewLine + supplier.Name + Environment.NewLine + ord.SupplierOrder.Date_Created + Environment.NewLine + ord.SupplierOrder.OrderStatus_ID + Environment.NewLine + total;
+             // nah do the whole attaching thing...
+            _context.Add(audit);
             await _context.SaveChangesAsync();
 
 
@@ -1144,11 +1270,35 @@ namespace IBIS_API.Controllers
 
         [HttpPut]
         [Route("PutCustomerOrder")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<ActionResult> PutCustomerOrder(CustomerOrderViewModel? ord)
         {
             // dont send primary key of order lines through...
             _context.Entry(ord.CustomerOrder).State = EntityState.Modified; // nah do the whole attaching thing...
             var orderLines = _context.CustomerOrdersLine.Where(c => c.CustomerOrder_ID == ord.CustomerOrder.CustomerOrder_ID).Select(c => c).ToList();
+
+            var userClaims = User;
+            var username = userClaims.FindFirstValue(ClaimTypes.Name);
+            UserRoleVM uRVM = new UserRoleVM();
+
+
+            AuditTrail audit = new AuditTrail();
+
+            audit.User = username;
+            audit.Date = DateTime.Now;
+            audit.Name = "Edit Customer Order"; ;
+            //var supplier = _context.Inventories.Where(c => c.Supplier_ID == sup.Supplier_ID).First();
+            var id = ord.CustomerOrder.CustomerOrder_ID;
+            var order = await _context.CustomerOrders.FindAsync(id);
+            var cus = _context.Customers.Where(c => c.Customer_ID == id).First();
+            double total = 0;
+            var ordLines = _context.CustomerOrdersLine.Where(c => c.CustomerOrder_ID == id).ToList();
+            foreach (var ordline in ordLines)
+            {
+                total = total + (ordline.Quantity * ordline.Price);
+            }
+            audit.Description = "Edit Customer Order:" + Environment.NewLine + order.CustomerOrder_ID + Environment.NewLine + cus.Customer_FirstName + " " + cus.Customer_Surname + Environment.NewLine + order.Date_Created + Environment.NewLine + total;
+            _context.Add(audit);
             _context.CustomerOrdersLine.RemoveRange(orderLines);
             var orderLine = ord.CustomerOrderLines;
             foreach (var line in orderLine)
@@ -1179,9 +1329,30 @@ namespace IBIS_API.Controllers
 
         [HttpDelete]
         [Route("deleteCustomerOrder/{id:int}")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<IActionResult> DeleteCustomerOrder(int id)
         {
+            var userClaims = User;
+            var username = userClaims.FindFirstValue(ClaimTypes.Name);
+            UserRoleVM uRVM = new UserRoleVM();
+
+
+            AuditTrail audit = new AuditTrail();
+
+            audit.User = username;
+            audit.Date = DateTime.Now;
+            audit.Name = "Delete Customer Order"; ;
+            //var supplier = _context.Inventories.Where(c => c.Supplier_ID == sup.Supplier_ID).First();
             var order = await _context.CustomerOrders.FindAsync(id);
+            var cus = _context.Customers.Where(c => c.Customer_ID == id).First();
+            double total = 0;
+            var ordLines = _context.CustomerOrdersLine.Where(c => c.CustomerOrder_ID == id).ToList();
+            foreach(var ord in ordLines)
+            {
+                total = total + (ord.Quantity * ord.Price);
+            }
+            audit.Description = "Delete Customer Order:" + Environment.NewLine + order.CustomerOrder_ID + Environment.NewLine + cus.Customer_FirstName + " " + cus.Customer_Surname + Environment.NewLine + order.Date_Created + Environment.NewLine + total;
+            _context.Add(audit);
             _context.Remove(order);
 
             var orderLines = _context.CustomerOrdersLine.Where(c => c.CustomerOrder_ID == id).Select(c => c).ToList();
@@ -1192,12 +1363,34 @@ namespace IBIS_API.Controllers
 
         [HttpDelete]
         [Route("deleteSupplierOrder/{id:int}")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<IActionResult> DeleteSupplierOrder(int id)
         {
             var order = await _context.Supplier_Orders.FindAsync(id);
+            var userClaims = User;
+            var username = userClaims.FindFirstValue(ClaimTypes.Name);
+            UserRoleVM uRVM = new UserRoleVM();
+
+
+            AuditTrail audit = new AuditTrail();
+
+            audit.User = username;
+            audit.Date = DateTime.Now;
+            audit.Name = "Delete Supplier Order"; ;
+            //var supplier = _context.Inventories.Where(c => c.Supplier_ID == sup.Supplier_ID).First();
+            
+            var supplier = _context.Suppliers.Where(c => c.Supplier_ID == id).First();
+            double? total = 0;
+            var ordLines = _context.CustomerOrdersLine.Where(c => c.CustomerOrder_ID == id).ToList();
+            var orderLines = _context.SupplierOrderLines.Where(c => c.SupplierOrder_ID == id).Select(c => c).ToList();
+            foreach (var ord in orderLines)
+            {
+                total = total + (ord.Quantity * ord.Price);
+            }
+            audit.Description = "Delete Supplier Order Details:" + Environment.NewLine + order.SupplierOrder_ID + Environment.NewLine + supplier.Name  + Environment.NewLine + order.Date_Created + Environment.NewLine + total;
             _context.Remove(order);
 
-            var orderLines = _context.SupplierOrderLines.Where(c => c.SupplierOrder_ID == id).Select(c => c).ToList();
+           ;
             _context.SupplierOrderLines.RemoveRange(orderLines);
             await _context.SaveChangesAsync();
             return NoContent();

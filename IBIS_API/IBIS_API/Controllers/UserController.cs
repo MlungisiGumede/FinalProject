@@ -28,6 +28,8 @@ using Twilio.TwiML.Voice;
 using Microsoft.Identity.Client;
 using Twilio.Clients;
 using System.Data.Entity.Infrastructure.Design;
+using System.Security.Cryptography;
+using Microsoft.CodeAnalysis.Differencing;
 
 namespace IBIS_API.Controllers
 {
@@ -277,6 +279,7 @@ namespace IBIS_API.Controllers
        
         [HttpDelete]
         [Route("DeleteCustomer/{id:int}")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<IActionResult> DeleteCustomer(int id)
         {
 
@@ -341,6 +344,7 @@ namespace IBIS_API.Controllers
 
         [HttpDelete]
         [Route("DeleteUser/{id}")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<IActionResult> DeleteUser(string id) // this is userID...
         {
             
@@ -351,6 +355,13 @@ namespace IBIS_API.Controllers
             {
                 using (var context = _context.Database.BeginTransaction())
                 {
+                    var userClaims = User;
+                    var username = userClaims.FindFirstValue(ClaimTypes.Name);
+                  
+                    AuditTrail audit = new AuditTrail();
+                    audit.User = user.UserName;
+                    audit.Date = DateTime.Now;
+                    audit.Name = "Deleted Employee";
                     
                     try
                     {
@@ -363,10 +374,13 @@ namespace IBIS_API.Controllers
                         {
                             if(employee == null)
                             {
+                                audit.Name = "Deleted Customer User Account";
+                                audit.Description = "Deleted Customer User Account Details:" + Environment.NewLine + user.UserName + user.Email + Environment.NewLine + user.Permissions;
                                 context.Commit();
                             }
                             else
                             {
+                                audit.Description = "Deleted Employee" + Environment.NewLine + employee.Email + Environment.NewLine + user.Permissions + employee.FullName  + employee.Employee_ID + employee.Phone;
                                 _context.Employees.Remove(employee);
                                 await _context.SaveChangesAsync();
                                 context.Commit();
@@ -394,6 +408,7 @@ namespace IBIS_API.Controllers
 
         [HttpDelete]
         [Route("DeleteEmployee/{id:int}")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<IActionResult> DeleteEmployee(int id)
         {
             var employee = await _context.Employees.FindAsync(id);
@@ -494,7 +509,12 @@ namespace IBIS_API.Controllers
                 // var n = user.Roles.FirstOrDefault();
                 var roles = await _userManager.GetRolesAsync(user);
                 string roleName = roles.FirstOrDefault().ToString();
-
+                
+                AuditTrail audit = new AuditTrail();
+                audit.User = uvm.Username;
+                audit.Date = DateTime.Now;
+                audit.Name = "Log In";
+                audit.Description = "Logged in Details:" + Environment.NewLine + uvm.Username + Environment.NewLine + uvm.FullName + uvm.Email;
                 //return Ok(roleName);
                 return Created("", new
                 {
@@ -509,6 +529,7 @@ namespace IBIS_API.Controllers
 
         [HttpPost]
         [Route("fileUpload")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<IActionResult> PostFile(FileUpload file)
         {
             FileUpload fileFound = null;
@@ -538,13 +559,21 @@ namespace IBIS_API.Controllers
                 {
                     _context.Add(file);
                 }
-
+                
 
 
 
 
 
             }
+            var userClaims = User;
+            var username = userClaims.FindFirstValue(ClaimTypes.Name);
+            var user = await _userManager.FindByNameAsync(username);
+            AuditTrail audit = new AuditTrail();
+            audit.User = username;
+            audit.Date = DateTime.Now;
+            audit.Name = "File Uploaded";
+            audit.Description = "File Uploaded Details:"+ Environment.NewLine + file.Name;
             await _context.SaveChangesAsync();
             return Ok(file);
         }
@@ -591,20 +620,35 @@ namespace IBIS_API.Controllers
             user.Permissions = userVm.Permissions;
             await _userManager.UpdateAsync(user);
             await _context.SaveChangesAsync();
+            var userClaims = User;
+            var username = userClaims.FindFirstValue(ClaimTypes.Name);
+            var user = await _userManager.FindByNameAsync(username);
+            AuditTrail audit = new AuditTrail();
+            audit.User = username;
+            audit.Date = DateTime.Now;
+            audit.Name = "Permissions";
+            audit.Description = "Permissions for user" + userVm.UserName + userVm.Permissions;
             //_userManager.RemoveFromRoleAsync(user,role);
             //_userManager.AddToRoleAsync(user,userVm.Role)
             return Ok();
         }
         [HttpPost]
         [Route("addUser")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<IActionResult> AddEmployee(Employee emp)
         {
             // could you pass through app user....
             // Employee emp = new Employee();
             //var customer = _context.Customers.Where(c => c.Email == emp.Email); this logic...
             _context.Employees.Add(emp);
-
-
+            var userClaims = User;
+            var username = userClaims.FindFirstValue(ClaimTypes.Name);
+            var user = await _userManager.FindByNameAsync(username);
+            AuditTrail audit = new AuditTrail();
+            audit.User = username;
+            audit.Date = DateTime.Now;
+            audit.Name = "Employee Created:";
+            audit.Description = "Employee Created Details:" + Environment.NewLine + emp.Employee_ID + Environment.NewLine + emp.FullName + Environment.NewLine + emp.Email + Environment.NewLine + emp.Phone; 
             await _context.SaveChangesAsync();
             //_userManager.RemoveFromRoleAsync(user,role);
             //_userManager.AddToRoleAsync(user,userVm.Role)
@@ -746,27 +790,43 @@ namespace IBIS_API.Controllers
             {
                 using (var context = _context.Database.BeginTransaction())
                 {
+                    var userClaims = User;
+                    var username = userClaims.FindFirstValue(ClaimTypes.Name);
+                    UserRoleVM uRVM = new UserRoleVM();
+
+
+                    AuditTrail audit = new AuditTrail();
+
+                    audit.User = username;
+                    audit.Date = DateTime.Now;
+                    audit.Name = "Register User";
+                    
+                    
+                   
                     user = new AppUser
                     {
                         Id = Guid.NewGuid().ToString(),
                         UserName = uvm.Username,
                         Email = uvm.Email,
                         Permissions = false
-
                     };
                     var result = await _userManager.CreateAsync(user, uvm.Password);
                     if (result.Succeeded)
                     {
                         IdentityResult roleresult = new IdentityResult();
                         if (customer != null) {
+                            audit.Name = "Register Customer";
+                            audit.Description = "Register Customer Details:" + user.Id + Environment.NewLine + user.UserName + Environment.NewLine + user.Email + Environment.NewLine + user.Permissions;
                              roleresult = await _userManager.AddToRoleAsync(user, "guest");
                         }else if(employee != null)
                         {
-                             roleresult = await _userManager.AddToRoleAsync(user, "employee");
+                            audit.Name = "Register Employee";
+                            audit.Description = "Register Employee Details:" + user.Id + Environment.NewLine + user.UserName + Environment.NewLine + user.Email + Environment.NewLine + user.Permissions;
+                            roleresult = await _userManager.AddToRoleAsync(user, "employee");
                         }
                         if (roleresult.Succeeded)
                         {
-                            
+                            _context.AuditTrail.Add(audit);
                             context.Commit();
                             
                         }

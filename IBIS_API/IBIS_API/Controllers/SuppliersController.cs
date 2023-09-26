@@ -59,7 +59,18 @@ namespace IBIS_API.Controllers
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<IActionResult> PutSupplier(int id, Supplier sup)
             {
-                if (id != sup.Supplier_ID)
+            var userClaims = User;
+           
+            UserRoleVM uRVM = new UserRoleVM();
+            var username = userClaims.FindFirstValue(ClaimTypes.Name);
+            //var user = await _userManager.FindByNameAsync(username);
+            AuditTrail audit = new AuditTrail();
+           
+            audit.User = username;
+            audit.Date = DateTime.Now;
+            audit.Name = "Edit Supplier";
+            audit.Description = "Supplier Edit Details:" + Environment.NewLine + sup.Supplier_ID + sup.Name + Environment.NewLine + sup.Email + Environment.NewLine + sup.Address + Environment.NewLine + sup.Phone;
+            if (id != sup.Supplier_ID)
                 {
                     return BadRequest();
                 }
@@ -88,9 +99,19 @@ namespace IBIS_API.Controllers
             // POST: api/Addresses
             // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
             [HttpPost]
-            public async Task<ActionResult<Supplier>> PostSupplier(Supplier sup)
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        public async Task<ActionResult<Supplier>> PostSupplier(Supplier sup)
             {
-                _context.Suppliers.Add(sup);
+            var userClaims = User;
+            UserRoleVM uRVM = new UserRoleVM();
+            var username = userClaims.FindFirstValue(ClaimTypes.Name);
+            //var user = await _userManager.FindByNameAsync(username);
+            AuditTrail audit = new AuditTrail();
+            audit.User = username;
+            audit.Date = DateTime.Now;
+            audit.Name = "Add Supplier";
+            audit.Description = "Supplier Added Details:" +  Environment.NewLine+sup.Supplier_ID + sup.Name + Environment.NewLine + sup.Email + Environment.NewLine + sup.Address + Environment.NewLine + sup.Phone;
+            _context.Suppliers.Add(sup);
                 await _context.SaveChangesAsync();
 
                 return CreatedAtAction("GetSupplier", new { id = sup.Supplier_ID }, sup);
@@ -101,7 +122,18 @@ namespace IBIS_API.Controllers
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<IActionResult> DeleteSupplier(int id)
             {
-                var sup = await _context.Suppliers.FindAsync(id);
+            var userClaims = User;
+            UserRoleVM uRVM = new UserRoleVM();
+            var username = userClaims.FindFirstValue(ClaimTypes.Name);
+            //var user = await _userManager.FindByNameAsync(username);
+            AuditTrail audit = new AuditTrail();
+            var sup = await _context.Suppliers.FindAsync(id);
+            audit.User = username;
+            audit.Date = DateTime.Now;
+            audit.Name = "Delete Supplier";
+            audit.Description = "Supplier Deleted Details:" + Environment.NewLine + sup.Supplier_ID + sup.Name + Environment.NewLine + sup.Email + Environment.NewLine + sup.Address + Environment.NewLine + sup.Phone;
+            //var user = await _userManager.FindByNameAsync(username);
+           
                 if (sup == null)
                 {
                     return NotFound();

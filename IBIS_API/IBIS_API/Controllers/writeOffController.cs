@@ -1,5 +1,7 @@
 ﻿using IBIS_API.Data;
 using IBIS_API.Models;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -75,6 +77,7 @@ namespace IBIS_API.Controllers
         // POST: api/Addresses
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<ActionResult<Write_Offs>> PostWriteOff(Write_Offs writeOff)
         {
             _context.Write_Offss.Add(writeOff);
@@ -106,6 +109,7 @@ namespace IBIS_API.Controllers
 
         // DELETE: api/Addresses/5
         [HttpDelete("{id}")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<IActionResult> DeletewriteOff(int id)
         {
             var sup = await _context.Write_Offss.FindAsync(id);
