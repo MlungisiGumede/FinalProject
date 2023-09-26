@@ -1,0 +1,35 @@
+<!-- <ion-content> -->
+    <!-- <ion-datetime [(ngModel)]="selectedDate" minuteValues="0,15,30,45" display-format="YYYY-MM-DD" placeholder="Select Date" class="date-value"></ion-datetime> -->
+    <!-- <ion-input type="date" [(ngModel)]="selectedDate"></ion-input>
+    <ion-input type="time" [(ngModel)]="selectedTime" minuteValues="0,15,30,45"></ion-input> -->
+    <!-- <ion-datetime [(ngModel)]="selectedTime" display-format="h:mm A" placeholder="Select Time"></ion-datetime> -->
+    
+    <!-- <div class="modal-footer">
+        <input type="button" class="addEvent" (click)="openEventModal()" value="Add Event">
+    </div> -->
+<!-- </ion-content> -->
+
+<ion-content>
+  
+    <ion-datetime [(ngModel)]="selectedDate" (ionChange)="loadEventsForSelectedDate()" presentation="date"
+    class="custom-calendar" [class.event-day]="isEventDay(selectedDate)" class="date-value"
+    ></ion-datetime>
+
+    <div class="modal-footer">
+        <input type="button" class="addEvent" (click)="openEventModal()" value="Add Event">
+    </div>
+    
+    <!-- Display events for the selected date -->
+    <div *ngIf="eventsForSelectedDate.length > 0">
+      <h2>Events for {{ selectedDate }}</h2>
+      <ion-list>
+        <ion-item *ngFor="let event of eventsForSelectedDate">
+          {{ event.description }}
+        </ion-item>
+      </ion-list>
+    </div>
+
+    
+</ion-content>
+
+

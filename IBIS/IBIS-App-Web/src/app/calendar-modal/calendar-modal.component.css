@@ -1,0 +1,64 @@
+/* Styles for the custom header */
+.custom-header {
+    background-color: black;
+    color: #fff;
+    padding: 10px;
+  }
+  
+  .custom-title {
+    font-size: 24px;
+  }
+  
+  /* Styles for the custom content */
+  .custom-content {
+    padding: 10px;
+  }
+  
+  .custom-list {
+    background-color: #f5f5f5;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+  }
+  
+  .custom-item {
+    margin-bottom: 10px;
+  }
+  
+  .custom-label {
+    font-size: 16px;
+  }
+  
+  textarea {
+    width: 100%;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  /* Styles for the custom footer */
+  .custom-footer {
+    background-color: white;
+    border: 1px solid white;
+    border-radius: 5px;
+    padding: 10px;
+  }
+  
+  .custom-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+  }
+  
+  .custom-button {
+    background-color:dimgrey;
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .custom-button:hover {
+    background-color: #0056b3;
+  }
+  

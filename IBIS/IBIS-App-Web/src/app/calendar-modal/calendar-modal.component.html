@@ -1,0 +1,27 @@
+<div class="custom-header">
+  <div class="custom-toolbar">
+    <div class="custom-title">
+      Add Event for {{ selectedDate }}
+    </div>
+  </div>
+</div>
+
+<div class="custom-content">
+  <label class="custom-label">Event Description</label>
+  <div class="custom-list">
+    
+    <div class="custom-item">
+      
+      <ion-input type="text" [(ngModel)]="eventDescription" placeholder="Enter event description"></ion-input>
+    </div>
+  </div>
+</div>
+
+<div class="custom-footer">
+  <div class="custom-toolbar">
+    <div class="custom-buttons">
+      <div class="custom-button" (click)="dismissModal()">Cancel</div>
+      <div class="custom-button" (click)="saveEvent()">Save</div>
+    </div>
+  </div>
+</div>
