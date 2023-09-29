@@ -1,14 +1,28 @@
-<ion-content class="ion-margin" id="htmlData">
-  <div class="contents">
+<!-- div *ngIf="!request" class="advanced__background">
+    <div style="text-align: center;" class="advanced__backgroundBody"> -->
+        <body >
+        <div class="blur" [style.background-image]="'url('+src+')'"></div>
+      <!-- <video width="800" controls>
+        <source src = "assets/INF370progress.mp4" type="video/mp4">
+        Your browser does not support HTML5 video.
+    </video>
+      <ion-button (click)="request =1">Control Users</ion-button>
+      <ion-button>View Audit trail</ion-button>
+    </div> -->
+
+  <!-- </div> -->
+<!-- <ion-content [style.background-image]="'url('+src+')'" no-repeat center cover   class="ion-margin" id="htmlData"> -->
+ 
+  <div  class="contents">
+    <ion-title><h1 style="padding-left: 275px;">Welcome Michael Gait-Smith </h1></ion-title>
     <ion-title><h1  style="padding-left: 350px;">View Business Profile</h1></ion-title>
       <ion-grid class="ion-margin" class="ion-grid-padding">
         <ion-row style="width: 100px;height: 50px;">
 
-          <ion-col style="display: flex;align-items: center;" >
-            <ion-label style="padding-left: 250px;"><img src="{{url}}" alt="error" ></ion-label>
-          </ion-col>
+         
         </ion-row>
         <ion-row>
+        
             <qrcode #qrcode qrdata
             ="https://u19074362.wixsite.com/kmjbutcherygroup6" [width]="200" elementType="canvas" [errorCorrectionLevel]="'M'"></qrcode>
             <qr-scanner
@@ -21,6 +35,10 @@
             (result)="OnResult($event)"
             >
             </qr-scanner>
+            <ion-col style="display: flex;align-items: center;" >
+              <!-- <ion-label style="padding-left: 250px;"><img src="{{url}}" alt="error" ></ion-label> -->
+              <!-- <ion-label style="width: 200px;"><img src="assets/butchery.jpg" style="width: 200px;" alt="error" ></ion-label> -->
+            </ion-col>
         </ion-row>
         <br>
         <ion-row>
@@ -30,25 +48,28 @@
             
             <br>
            
-            <ion-button *ngIf="request"  class="green-Btn" (click)="PostFile()" >Confirm  Upload</ion-button>
+            <ion-button *ngIf="request"   class="green-Btn" (click)="PostFile()" >Confirm  Upload</ion-button>
             <ion-button *ngIf="request"  class="green-Btn" (click)="fileName=undefined;request=undefined" >Cancel</ion-button>
-            <ion-button *ngIf="role != 'guest'"   class="green-Btn" (click)="fileUpload.click()" >Upload Business Brochure?</ion-button>
+            <ion-button style="margin-left: 250px;" *ngIf="role != 'guest'"   class="green-Btn" (click)="fileUpload.click()" >Upload Business Brochure?</ion-button>
             <ion-button *ngIf="role != 'guest'"   class="green-Btn" (click)="imageUpload.click()" >Upload Profile Picture</ion-button>
             <ion-button  class="green-Btn" (click)="Download()">Download Brochure</ion-button>
             </label>
 
-            <label for="image" >
+            
               <input type="file" id="image" style="display: none;" accept="image/*" [ngModel]="fileName" (change)="FileChoice($event,1)"  #imageUpload/>
             
             <span style="color: black;"> {{fileName}}</span>
-            </label>
+            
           </ion-col>
         </ion-row>
           
           
         
-        <ion-item-divider></ion-item-divider>
+        
       </ion-grid>
       
       
   </div>
+<!-- </ion-content> -->
+
+</body>

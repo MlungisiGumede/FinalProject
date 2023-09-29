@@ -30,6 +30,8 @@ using Twilio.Clients;
 using System.Data.Entity.Infrastructure.Design;
 using System.Security.Cryptography;
 using Microsoft.CodeAnalysis.Differencing;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace IBIS_API.Controllers
 {
@@ -295,6 +297,7 @@ namespace IBIS_API.Controllers
                     try
                     {
                         var user = await _userManager.FindByEmailAsync(cus.Email);
+                        AuditTrail audit = new AuditTrail();
                         if (user != null)
                         {
                             var claims = await _userManager.GetClaimsAsync(user);
@@ -302,11 +305,23 @@ namespace IBIS_API.Controllers
                            var result1 = await _userManager.RemoveFromRoleAsync(user, "guest");
                            var result2 = await _userManager.RemoveClaimsAsync(user, claims);
                             var result3 = await _userManager.DeleteAsync(user);
-                            if(result1.Succeeded && result2.Succeeded && result3.Succeeded)
+
+                           
+                            if (result1.Succeeded && result2.Succeeded && result3.Succeeded)
                             {
 
+                                
+                             audit.User = user.UserName;
+                    audit.Date = DateTime.Now;
+                    audit.Name = "Deleted Customer User";
+                             var config = new {id = user.Id,userName = user.UserName,email = user.Email,permissions = user.Permissions}; 
+                              var str = JsonSerializer.Serialize(config);
+                              audit.Description = str;
+                              
 
+                                //audit.Description = "Deleted Customer User Account Details:" + Environment.NewLine + user.UserName + user.Email + Environment.NewLine + user.Permissions;
                                 _context.Customers.Remove(cus);
+                                _context.Add(audit);
                                 await _context.SaveChangesAsync();
                                 context.Commit();
 
@@ -324,7 +339,10 @@ namespace IBIS_API.Controllers
                             {
                                 return BadRequest("Cant Delete a Customer with orders");
                             }
+                            audit.Description = JsonSerializer.Serialize(cus);
                             _context.Customers.Remove(cus);
+                             audit.Name = "Deleted; Customer User";
+                            _context.Add(audit);
                             await _context.SaveChangesAsync();
                             context.Commit();
                         }
@@ -359,65 +377,11 @@ namespace IBIS_API.Controllers
                     var username = userClaims.FindFirstValue(ClaimTypes.Name);
                   
                     AuditTrail audit = new AuditTrail();
+                   
                     audit.User = user.UserName;
                     audit.Date = DateTime.Now;
-                    audit.Name = "Deleted Employee";
-                    
-                    try
-                    {
-                        var claims = await _userManager.GetClaimsAsync(user);
+                    audit.Name = "Deleted Employee user";
 
-                        var result1 = await _userManager.RemoveFromRoleAsync(user, "guest");
-                        var result2 = await _userManager.RemoveClaimsAsync(user, claims);
-                        var result3 = await _userManager.DeleteAsync(user);
-                        if(result1.Succeeded && result2.Succeeded && result3.Succeeded)
-                        {
-                            if(employee == null)
-                            {
-                                audit.Name = "Deleted Customer User Account";
-                                audit.Description = "Deleted Customer User Account Details:" + Environment.NewLine + user.UserName + user.Email + Environment.NewLine + user.Permissions;
-                                context.Commit();
-                            }
-                            else
-                            {
-                                audit.Description = "Deleted Employee" + Environment.NewLine + employee.Email + Environment.NewLine + user.Permissions + employee.FullName  + employee.Employee_ID + employee.Phone;
-                                _context.Employees.Remove(employee);
-                                await _context.SaveChangesAsync();
-                                context.Commit();
-                            }
-                           
-                        }
-                        else
-                        {
-                            context.Rollback();
-                            return BadRequest("Failed to delete user");
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        return BadRequest("Failed to delete user");
-                    }
-                }
-            }
-            else
-            {
-                return BadRequest("No user account for particular customer");
-            }
-            return NoContent();
-        }
-
-        [HttpDelete]
-        [Route("DeleteEmployee/{id:int}")]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        public async Task<IActionResult> DeleteEmployee(int id)
-        {
-            var employee = await _context.Employees.FindAsync(id);
-
-            var user = await _userManager.FindByEmailAsync(employee.Email);
-            if (user != null)
-            {
-                using (var context = _context.Database.BeginTransaction())
-                {
                     try
                     {
                         var claims = await _userManager.GetClaimsAsync(user);
@@ -427,9 +391,31 @@ namespace IBIS_API.Controllers
                         var result3 = await _userManager.DeleteAsync(user);
                         if (result1.Succeeded && result2.Succeeded && result3.Succeeded)
                         {
-                            _context.Employees.Remove(employee);
-                            context.Commit();
+                            var config = new { id = user.Id, userName = user.UserName, email = user.Email, permissions = user.Permissions };
+                            var str = JsonSerializer.Serialize(config);
+                            audit.Description = str;
+                            if (employee == null)
+                            {
+                                audit.Name = "Deleted Customer User";
+
+                                var str2 = JsonSerializer.Serialize(config);
+                                audit.Description = str2;
+
+                            }
+                            else
+                            {
+                                AuditTrail audit2 = new AuditTrail();
+                                audit2.Name = "Deleted Employee";
+                                var str2 = JsonSerializer.Serialize(employee);
+                                audit2.Description = str2;
+                                _context.Add(audit2);
+                                _context.Employees.Remove(employee);
+                                await _context.SaveChangesAsync();
+                                context.Commit();
+                            }
+                            _context.Add(audit);
                         }
+                    
                         else
                         {
                             context.Rollback();
@@ -448,6 +434,49 @@ namespace IBIS_API.Controllers
             }
             return NoContent();
         }
+
+        // [HttpDelete]
+        // [Route("DeleteEmployee/{id:int}")]
+        // [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        // public async Task<IActionResult> DeleteEmployee(int id)
+        // {
+        //     var employee = await _context.Employees.FindAsync(id);
+
+        //     var user = await _userManager.FindByEmailAsync(employee.Email);
+        //     if (user != null)
+        //     {
+        //         using (var context = _context.Database.BeginTransaction())
+        //         {
+        //             try
+        //             {
+        //                 var claims = await _userManager.GetClaimsAsync(user);
+
+        //                 var result1 = await _userManager.RemoveFromRoleAsync(user, "guest");
+        //                 var result2 = await _userManager.RemoveClaimsAsync(user, claims);
+        //                 var result3 = await _userManager.DeleteAsync(user);
+        //                 if (result1.Succeeded && result2.Succeeded && result3.Succeeded)
+        //                 {
+        //                     _context.Employees.Remove(employee);
+        //                     context.Commit();
+        //                 }
+        //                 else
+        //                 {
+        //                     context.Rollback();
+        //                     return BadRequest("Failed to delete user");
+        //                 }
+        //             }
+        //             catch (Exception ex)
+        //             {
+        //                 return BadRequest("Failed to delete user");
+        //             }
+        //         }
+        //     }
+        //     else
+        //     {
+        //         return BadRequest("No user account for particular customer");
+        //     }
+        //     return NoContent();
+        // }
 
 
         [HttpPost]
@@ -514,7 +543,8 @@ namespace IBIS_API.Controllers
                 audit.User = uvm.Username;
                 audit.Date = DateTime.Now;
                 audit.Name = "Log In";
-                audit.Description = "Logged in Details:" + Environment.NewLine + uvm.Username + Environment.NewLine + uvm.FullName + uvm.Email;
+                audit.Description = JsonSerializer.Serialize(uvm);
+                _context.Add(audit);
                 //return Ok(roleName);
                 return Created("", new
                 {
@@ -532,6 +562,7 @@ namespace IBIS_API.Controllers
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<IActionResult> PostFile(FileUpload file)
         {
+            
             FileUpload fileFound = null;
             if (file.type == 1)
             {
@@ -559,7 +590,7 @@ namespace IBIS_API.Controllers
                 {
                     _context.Add(file);
                 }
-                
+               
 
 
 
@@ -573,7 +604,7 @@ namespace IBIS_API.Controllers
             audit.User = username;
             audit.Date = DateTime.Now;
             audit.Name = "File Uploaded";
-            audit.Description = "File Uploaded Details:"+ Environment.NewLine + file.Name;
+            audit.Description = JsonSerializer.Serialize(file);
             await _context.SaveChangesAsync();
             return Ok(file);
         }
@@ -622,12 +653,12 @@ namespace IBIS_API.Controllers
             await _context.SaveChangesAsync();
             var userClaims = User;
             var username = userClaims.FindFirstValue(ClaimTypes.Name);
-            var user = await _userManager.FindByNameAsync(username);
+            //var user = await _userManager.FindByNameAsync(username);
             AuditTrail audit = new AuditTrail();
-            audit.User = username;
+            audit.User = user.UserName;
             audit.Date = DateTime.Now;
             audit.Name = "Permissions";
-            audit.Description = "Permissions for user" + userVm.UserName + userVm.Permissions;
+            audit.Description = JsonSerializer.Serialize(user);
             //_userManager.RemoveFromRoleAsync(user,role);
             //_userManager.AddToRoleAsync(user,userVm.Role)
             return Ok();
@@ -648,7 +679,7 @@ namespace IBIS_API.Controllers
             audit.User = username;
             audit.Date = DateTime.Now;
             audit.Name = "Employee Created:";
-            audit.Description = "Employee Created Details:" + Environment.NewLine + emp.Employee_ID + Environment.NewLine + emp.FullName + Environment.NewLine + emp.Email + Environment.NewLine + emp.Phone; 
+            audit.Description = JsonSerializer.Serialize(emp);
             await _context.SaveChangesAsync();
             //_userManager.RemoveFromRoleAsync(user,role);
             //_userManager.AddToRoleAsync(user,userVm.Role)
@@ -815,13 +846,13 @@ namespace IBIS_API.Controllers
                     {
                         IdentityResult roleresult = new IdentityResult();
                         if (customer != null) {
-                            audit.Name = "Register Customer";
-                            audit.Description = "Register Customer Details:" + user.Id + Environment.NewLine + user.UserName + Environment.NewLine + user.Email + Environment.NewLine + user.Permissions;
+                            audit.Name = "Registered Customer";
+                            audit.Description = JsonSerializer.Serialize(user);
                              roleresult = await _userManager.AddToRoleAsync(user, "guest");
                         }else if(employee != null)
                         {
-                            audit.Name = "Register Employee";
-                            audit.Description = "Register Employee Details:" + user.Id + Environment.NewLine + user.UserName + Environment.NewLine + user.Email + Environment.NewLine + user.Permissions;
+                            audit.Name = "Registered Employee";
+                            audit.Description = JsonSerializer.Serialize(user);
                             roleresult = await _userManager.AddToRoleAsync(user, "employee");
                         }
                         if (roleresult.Succeeded)

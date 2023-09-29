@@ -32,7 +32,7 @@ export class CalendarComponent implements OnInit {
   loadEventsForSelectedDate() {
     this.eventsForSelectedDate = this.eventsService.getEventsForDate(this.selectedDate);
     console.log('Events for this date: ', this.eventsForSelectedDate);
-    
+
   }
 
   ngOnInit(): void {

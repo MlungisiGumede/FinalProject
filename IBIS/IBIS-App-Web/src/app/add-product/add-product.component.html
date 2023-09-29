@@ -2,7 +2,7 @@
   <form  [formGroup]="form">
     <div class="container">
       <ion-button color="danger" shape="round" fill="outline" class="cancelAdd" [routerLink]="['/Products']">X</ion-button>
-     <div class="title">{{title}}</div>
+     <div style="margin-left: 30px;" class="title">{{title}}</div>
      <div class="content">
 
         <div *ngIf="selectedPage==1" class="user-details">
@@ -63,10 +63,16 @@
       <!-- <section *ngIf="page==2"> -->
         <div *ngIf="selectedPage==2" class="user-details">
           <div style="display: flex;flex-direction: column;">
-          <ion-button (click)="startScan()">
-            Scan
-          </ion-button>
-          <div style="width: 20px;height: 20px;float: right;" id="reader"></div>
+            <input type="file" id="file" style="display: none;" accept="image/*" formControlName="image" (change)="ScanFile($event)" #fileUpload/>
+            
+            
+            <ion-button style="margin-left: 250px;width: 250px;" (click)="fileUpload.click()" class="formElement" >Scan Image</ion-button>
+            <br>
+            <img class="formElement" style="height: 100px;width: 100px;" src="{{url}}" alt="no Identifier">
+            <br>
+            <br>
+            <input type="text" class="formElement" formControlName="identifier" readonly placeholder="No identifier" >
+          <div style="width: 20px;height: 20px;float: right;display: none;" id="reader"></div>
         </div>
 
 
@@ -76,17 +82,19 @@
 
 
       <!-- </section> -->
-      <div style="display: flex;flex-direction: column;">
-        <ion-button type="submit" (click)="AddProduct()" class="submitButton" [disabled]="!form.valid">Submit<ion-ripple-effect></ion-ripple-effect></ion-button>
-
-        
-      </div>
+      <!-- <div style="display: flex;flex-direction: row;">
+        <button type="submit" >Submit<ion-ripple-effect></ion-ripple-effect></button> -->
+      <!-- </div> -->
         </div>
-        <ion-button *ngIf="selectedPage<2" (click)="PageForward()">Next</ion-button>
-        <ion-button  *ngIf="selectedPage>1" (click)="PageBackward();">Back</ion-button>
+        <button *ngIf="selectedPage<2" (click)="PageForward()" class="NextButt">Next</button>
+        <div style="display: flex;">
+         
+        <button  *ngIf="selectedPage>1" (click)="PageBackward();" class="NextButt">Back</button>
+        <button  *ngIf="selectedPage>1" class="SubmitButt" (click)="AddProduct()"  [disabled]="!form.valid" >Submit</button>
+        </div>
         <mat-radio-group #radioGroup  formControlName="page">
           
-          <mat-radio-button disabled   *ngFor="let radio of radioList$ | async let i=index" [value]="radio.value" ></mat-radio-button>
+          <mat-radio-button disabled   *ngFor="let radio of radioList$ | async let i=index" class="radio" [value]="i+1" ></mat-radio-button>
          
         </mat-radio-group>
           

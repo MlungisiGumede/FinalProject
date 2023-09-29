@@ -13,7 +13,9 @@ using System.Text;
 using Microsoft.EntityFrameworkCore;
 using Humanizer;
 using Twilio.TwiML.Voice;
-
+//using Newtonsoft.Json;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 namespace IBIS_API.Controllers
 {
     [Route("api/[controller]")]
@@ -64,13 +66,17 @@ namespace IBIS_API.Controllers
             var username = userClaims.FindFirstValue(ClaimTypes.Name);
             //var user = await _userManager.FindByNameAsync(username);
             AuditTrail audit = new AuditTrail();
-           // var categories = _context.Categories.Where(c => c.Category_ID == prod.Category_ID).First();
+            // var categories = _context.Categories.Where(c => c.Category_ID == prod.Category_ID).First();
             //var subCategories = _context.SubCategories.Where(c => c.SubCategory_ID == prod.SubCategory_ID).First();
             audit.User = username;
             audit.Date = DateTime.Now;
             audit.Name = "Edit Inventory";
             var supplier = _context.Inventories.Where(c => c.Supplier_ID == sup.Supplier_ID).First();
-            audit.Description = "Edit Inventory Details:" + Environment.NewLine + sup.Inventory_ID + Environment.NewLine + sup.Sku + Environment.NewLine + sup.Name + Environment.NewLine + supplier.Name;
+            var config = new { Inventory_ID = sup.Inventory_ID,sku = sup.Sku, Name = sup.Name, SupplierName = supplier.Name };
+            var str = JsonSerializer.Serialize(config);
+            audit.Description = str;
+
+            //audit.Description = "Edit Inventory Details:" + Environment.NewLine + sup.Inventory_ID + Environment.NewLine + sup.Sku + Environment.NewLine + sup.Name + Environment.NewLine + supplier.Name;
             _context.AuditTrail.Add(audit);
 
             if (id != sup.Inventory_ID)
@@ -115,8 +121,10 @@ namespace IBIS_API.Controllers
             audit.User = username;
             audit.Date = DateTime.Now;
             audit.Name = "Add Inventory";
-            var supplier = _context.Inventories.Where(c => c.Supplier_ID == sup.Supplier_ID).First();
-            audit.Description = "Add Inventory Details:" + Environment.NewLine + inventory.Inventory_ID + Environment.NewLine + inventory.Sku + Environment.NewLine + inventory.Name + Environment.NewLine + supplier.Name;
+            var supplier = _context.Inventories.Where(c => c.Supplier_ID == inventory.Supplier_ID).First();
+            var config = new { Inventory_ID = inventory.Inventory_ID,sku = inventory.Sku, Name = inventory.Name, SupplierName = supplier.Name };
+            var str = JsonSerializer.Serialize(config);
+            audit.Description = str;
             _context.AuditTrail.Add(audit);
             var inventoryItem = _context.Inventories.Where(c => c.Sku == inventory.Sku).FirstOrDefault();
             if (inventoryItem == null)
@@ -171,7 +179,10 @@ namespace IBIS_API.Controllers
             audit.Date = DateTime.Now;
             audit.Name = "Edit Inventory";
             var supplier = _context.Inventories.Where(c => c.Supplier_ID == sup.Supplier_ID).First();
-            audit.Description = "Delete Inventory Details:" + Environment.NewLine + sup.Inventory_ID + Environment.NewLine + sup.Sku + Environment.NewLine + sup.Name + Environment.NewLine + supplier.Name;
+            var config = new { Inventory_ID = sup.Inventory_ID,sku = sup.Sku, Name = sup.Name, SupplierName = supplier.Name };
+            var str = JsonSerializer.Serialize(config);
+            audit.Description = str;
+           // audit.Description = "Delete Inventory Details:" + Environment.NewLine + sup.Inventory_ID + Environment.NewLine + sup.Sku + Environment.NewLine + sup.Name + Environment.NewLine + supplier.Name;
             _context.Inventories.Remove(sup);
             await _context.SaveChangesAsync();
 

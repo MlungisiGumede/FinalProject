@@ -10,7 +10,12 @@
 <!-- </ion-content> -->
 
 <ion-content>
-  
+    <ion-header>
+        <ion-toolbar>
+            <ion-title class="header">KMJ Monthly Events</ion-title>
+        </ion-toolbar>
+    </ion-header>
+    
     <ion-datetime [(ngModel)]="selectedDate" (ionChange)="loadEventsForSelectedDate()" presentation="date"
     class="custom-calendar" [class.event-day]="isEventDay(selectedDate)" class="date-value"
     ></ion-datetime>
@@ -21,7 +26,7 @@
     
     <!-- Display events for the selected date -->
     <div *ngIf="eventsForSelectedDate.length > 0">
-      <h2>Events for {{ selectedDate }}</h2>
+      <ion-title>Events for {{ selectedDate }}</ion-title>
       <ion-list>
         <ion-item *ngFor="let event of eventsForSelectedDate">
           {{ event.description }}

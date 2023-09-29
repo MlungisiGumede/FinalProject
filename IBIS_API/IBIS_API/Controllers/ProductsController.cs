@@ -12,6 +12,9 @@ using System.Security.Claims;
 using System.Text;
 using Microsoft.EntityFrameworkCore;
 using DocumentFormat.OpenXml.Office2010.Excel;
+using System.Text.Json;
+using System.Text.Json.Serialization;
+using DocumentFormat.OpenXml.Drawing.Charts;
 
 namespace IBIS_API.Controllers
 {
@@ -68,7 +71,10 @@ namespace IBIS_API.Controllers
             audit.User = username;
             audit.Date = DateTime.Now;
             audit.Name = "Edit Product";
-            audit.Description = "Edit Product Details:" + Environment.NewLine + prod.Product_ID + Environment.NewLine + prod.Name + Environment.NewLine + categories.Name + Environment.NewLine + subCategories.Name + Environment.NewLine + prod.Price + Environment.NewLine + prod.Quantity + Environment.NewLine;
+             var config = new { Product_ID = prod.Product_ID, Name = prod.Name, categoryName = categories.Name, subCategoryName = subCategories.Name, Price = prod.Price, Quantity = prod.Quantity };
+            var str = JsonSerializer.Serialize(config);
+            audit.Description = str;
+            //audit.Description = "Edit Product Details:" + Environment.NewLine + prod.Product_ID + Environment.NewLine + prod.Name + Environment.NewLine + categories.Name + Environment.NewLine + subCategories.Name + Environment.NewLine + prod.Price + Environment.NewLine + prod.Quantity + Environment.NewLine;
             _context.AuditTrail.Add(audit);
             _context.Entry(prod).State = EntityState.Modified;
             
@@ -103,11 +109,16 @@ namespace IBIS_API.Controllers
             AuditTrail audit = new AuditTrail();
             audit.User = username;
             audit.Date = DateTime.Now;
-            audit.Name = "Add Subcategory";
+            audit.Name = "Add Category";
             //var categories = _context.Categories.Where(c => c.Category_ID == subCategory.Category_ID).First();
-            audit.Description = "Add Category Details:" + Environment.NewLine + category.Category_ID + Environment.NewLine + category.Name;
-            _context.AuditTrail.Add(audit);
+            //var categories = _context.Categories.Where(c => c.Category_ID == category.Category_ID).First();
+            ;
             _context.Categories.Add(category);
+            var config = new { Category_ID = category.Category_ID, Category_Name = category.Name };
+            var str = JsonSerializer.Serialize(config);
+            audit.Description = str;
+            // audit.Description = "Add Category Details:" + Environment.NewLine + category.Category_ID + Environment.NewLine + category.Name;
+            _context.AuditTrail.Add(audit);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetProduct", new { id = category.Category_ID },category);
@@ -126,10 +137,20 @@ namespace IBIS_API.Controllers
             audit.Date = DateTime.Now;
             audit.Name = "Add Subcategory";
             var categories = _context.Categories.Where(c => c.Category_ID == subCategory.Category_ID).First();
-            audit.Description = "Add SubCategory Details:" + Environment.NewLine + subCategory.SubCategory_ID + Environment.NewLine + subCategory.Name + Environment.NewLine + categories.Name + Environment.NewLine + subCategory.Name;
-            _context.AuditTrail.Add(audit);
-            _context.SubCategories.Add(subCategory);
-            await _context.SaveChangesAsync();
+
+            // audit.Description = "Add SubCategory Details:" + Environment.NewLine + subCategory.SubCategory_ID + Environment.NewLine + subCategory.Name + Environment.NewLine + categories.Name + Environment.NewLine + subCategory.Name;
+            using (var context = _context.Database.BeginTransaction())
+            {
+                _context.SubCategories.Add(subCategory);
+                await _context.SaveChangesAsync();
+                var config = new { subCategory_ID = subCategory.SubCategory_ID, subCategory_Name = subCategory.Name, CategoryName = categories.Name };
+                var str = JsonSerializer.Serialize(config);
+                audit.Description = str;
+                _context.AuditTrail.Add(audit);
+                await _context.SaveChangesAsync();
+                context.Commit();
+            }
+                
 
             return CreatedAtAction("GetProduct", new { id = subCategory.Category_ID }, subCategory);
         }
@@ -168,7 +189,10 @@ namespace IBIS_API.Controllers
             audit.User = username;
             audit.Date = DateTime.Now;
             audit.Name = "Add Product";
-            audit.Description = "Add Product Details:" + Environment.NewLine + prod.Product_ID + Environment.NewLine + prod.Name + Environment.NewLine + categories.Name + Environment.NewLine + subCategories.Name + Environment.NewLine + prod.Price + Environment.NewLine + prod.Quantity + Environment.NewLine;
+            var config = new { Product_ID = prod.Product_ID, Name = prod.Name, categoryName = categories.Name, subCategoryName = subCategories.Name, Price = prod.Price, Quantity = prod.Quantity };
+            var str = JsonSerializer.Serialize(config);
+            audit.Description = str;
+            //audit.Description = "Add Product Details:" + Environment.NewLine + prod.Product_ID + Environment.NewLine + prod.Name + Environment.NewLine + categories.Name + Environment.NewLine + subCategories.Name + Environment.NewLine + prod.Price + Environment.NewLine + prod.Quantity + Environment.NewLine;
             _context.AuditTrail.Add(audit);
             _context.Products.Add(prod);
                 await _context.SaveChangesAsync();
@@ -203,7 +227,10 @@ namespace IBIS_API.Controllers
                 audit.User = username;
                 audit.Date = DateTime.Now;
                 audit.Name = "Delete Product";
-                audit.Description = "Delete Product Details:" + Environment.NewLine + prod.Product_ID + Environment.NewLine + prod.Name + Environment.NewLine + categories.Name + Environment.NewLine + subCategories.Name + Environment.NewLine + prod.Price + Environment.NewLine + prod.Quantity + Environment.NewLine;
+                 var config = new { Product_ID = prod.Product_ID, Name = prod.Name, categoryName = categories.Name, subCategoryName = subCategories.Name, Price = prod.Price, Quantity = prod.Quantity };
+            var str = JsonSerializer.Serialize(config);
+                audit.Description = str;
+                //audit.Description = "Delete Product Details:" + Environment.NewLine + prod.Product_ID + Environment.NewLine + prod.Name + Environment.NewLine + categories.Name + Environment.NewLine + subCategories.Name + Environment.NewLine + prod.Price + Environment.NewLine + prod.Quantity + Environment.NewLine;
                 _context.AuditTrail.Add(audit);
                 _context.Products.Remove(prod);
                 await _context.SaveChangesAsync();
