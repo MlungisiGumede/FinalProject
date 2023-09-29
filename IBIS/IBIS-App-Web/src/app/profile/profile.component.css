@@ -15,6 +15,11 @@
     padding-right: 0.5rem;
     border-radius: 0.5em 0 0 0;
   }
+  ion-content{
+    --background: #fff;
+    background-position: fixed;
+    background-size: cover;
+  }
   
   .active, .collapsible:hover {
     background-color: #1561ac;
@@ -31,16 +36,29 @@
     z-index: 10;
     transition: max-height 0.2s ease-out;
   }
+  body{
+    /* filter: blur(20px); */
+    
+    /* background-blend-mode: multiply; */
+  }
+  .blur{
+    filter: blur(5px);
+  filter: brightness(30%);
+  height: 100vh;
+  width: 100vw;
+
+  position: absolute;
+  }
   
   .contents{
-      width: 90%;
+      width: 100%;
       height: 100%;
       margin-left: 4vw;
       margin-bottom: 0px !important;
     }
     
     h1{
-      color: #FFD700;
+      color: yellow;
       font-size: 1.8em !important;
     }
   

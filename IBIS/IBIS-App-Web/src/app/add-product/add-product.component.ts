@@ -1,4 +1,4 @@
-import { Component, OnInit,Inject, ViewChild } from '@angular/core';
+import { Component, OnInit,Inject, ViewChild,ChangeDetectorRef } from '@angular/core';
 import { Product } from '../Models/Product';
 import { ProductService } from '../Services/product.service';
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
@@ -7,6 +7,7 @@ import { ToastController } from '@ionic/angular';
 import { catchError, map, of, throwError } from 'rxjs';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import {Html5Qrcode, Html5QrcodeScanner} from 'html5-qrcode'
+//import changedet
 //import { BarcodeScannerLivestreamComponent } from 'ngx-barcode-scanner/public-api';
 
 
@@ -26,8 +27,9 @@ subCategories:any
 form!: FormGroup;
 selectedPage:any = 1
 value:any
+result:any
 title:any = "Step 1: Add Product"
-
+url:any
 radioList:any = [
   {
     value: 1,
@@ -54,7 +56,8 @@ selectedCategory: string | null = null;
 
   constructor(private prodService: ProductService, public router:Router,
      private fb: FormBuilder, private toastController: ToastController,
-     private dialogRef:MatDialogRef<AddProductComponent>,@Inject(MAT_DIALOG_DATA) public data: any){
+     private dialogRef:MatDialogRef<AddProductComponent>,@Inject(MAT_DIALOG_DATA) public data: any,
+     private cd:ChangeDetectorRef){
     //this.data = new Product();
    this.categories = this.data.categories
    
@@ -81,16 +84,39 @@ selectedCategory: string | null = null;
     // get code type as well like 128...
     const imageFile = e.target.files[0];
     this.barcode = imageFile
-    const html5QrCode = new Html5Qrcode(/* element id */ "reader");
+    const html5QrCode = new Html5Qrcode(/* element id */ 'reader');
     html5QrCode.scanFile(this.barcode).then((result:any) => {
       console.log(result)
-      alert(result)
+      this.form.get('identifier')?.setValue(result)
+      this.FileChoice(e)
+      //alert(result)
+      //this.cd.detectChanges()
     }).catch((error:any) => {
+      
+      this.form.get('identifier')?.setValue("")
       alert("failiure to scan")
       //alert(error)
     });
     ;
   }
+  FileChoice(e:any){
+    console.log(this.form.value)
+    let file = e.target.files[0];
+    console.log(file)
+    let reader = new FileReader();
+   reader.readAsDataURL(file);
+   reader.onload = () => {
+     //me.modelvalue = reader.result;
+     console.log(reader.result);
+     this.url = reader.result
+     
+     // let val = (this.form.get('records') as FormArray).controls[rowIndex].get('isDone')?.setValue(false)
+   };
+   reader.onerror = function (error) {
+     console.log('Error: ', error);
+   };
+  }
+  
   
   onScanSuccess(decodedText:any) {
     // handle the scanned code as you like, for example:
@@ -109,7 +135,9 @@ PageForward(){
   this.form.get('page')?.setValue(this.selectedPage+1)
   this.selectedPage = this.selectedPage+1
   this.title = "Step 2: Add Identifier (optional)"
-  
+  this.cd.detectChanges()
+  console.log(this.form.get('page')?.value)
+  //this.radioList$ = of(...this.radioList)
 }
 PageBackward(){
   let page = this.selectedPage
@@ -124,6 +152,7 @@ PageBackward(){
       price: [null, [Validators.required, Validators.min(1)]],
       expiry: [null, [Validators.required, this.minExpiryDateValidator.bind(this)]],
       quantity: [null, [Validators.required, Validators.min(1)]],
+      identifier: ['', Validators.required],
       subCategory_ID: [null, Validators.required],
       category_ID: [null, Validators.required],
       page: [1],

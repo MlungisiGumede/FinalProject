@@ -267,6 +267,20 @@ form .submitButton {
   margin-right: 10px;
   margin-left: 230px;
  }
+ .SubmitButt{
+  flex-shrink: 0;
+  width: 165px;
+  height: 46px;
+  justify-content: center;
+  border-radius: 10px;
+  margin-right: 10px;
+ 
+ }
+ .formElement{
+  width: 165px;
+  height: 46px;
+  margin-left: 180px;
+ }
 
  /* form .submitButton:hover{
   /* transform: scale(0.99); */
