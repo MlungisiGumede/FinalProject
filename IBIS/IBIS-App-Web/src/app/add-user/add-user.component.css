@@ -6,23 +6,23 @@
   font-family: 'Poppins',sans-serif;
 }
 body{
-  height: 100vh;
+  height: 40vh;
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 0px;
-  background: grey;
+  background: white;
 }
 .container{
   max-width: 700px;
   width: 100%;
-  background-color: yellow;
-  border:yellow 10px;
-  padding-bottom:  5px;
+  background-color: white;
+  padding-bottom:  10px;
   padding-left: 25px;;
   border-radius: 5px;
   box-shadow: 0 5px 10px rgba(0,0,0,0.15);
   justify-content: center;
+  padding-top: 10px;
 }
 .container .title{
   font-size: 25px;
@@ -127,6 +127,15 @@ form .input-box span.details{
   border-radius: 5px;
  
 }
+.submitButt{
+  flex-shrink: 0;
+  width: 85px;
+  height: 36px;
+  justify-content: center;
+  border-radius: 10px;
+  margin-left: 30px;
+}
+
 
 .user-details .input-box input:focus,
 .user-details .input-box input:valid{
@@ -238,6 +247,8 @@ form .submitButton {
    transition: all 0.3s ease;
    background: yellow;
  }
+
+
  /* form .submitButton:hover{
   /* transform: scale(0.99); */
   /* background: linear-gradient(-135deg, #71b7e6, #9b59b6); */

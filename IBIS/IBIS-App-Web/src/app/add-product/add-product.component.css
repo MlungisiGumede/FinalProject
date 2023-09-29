@@ -6,15 +6,14 @@
   font-family: 'Poppins',sans-serif;
 }
 body{
-  height: 80vh;
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 0px;
-  background: white;
+  background-color: white ;
 }
 .container{
-  max-width: 700px;
+  
   width: 100%;
   background-color: grey;
   border:yellow 10px;
@@ -214,31 +213,7 @@ color: grey;
   justify-content: center;
  }
 
-form .submitButton {
-  height: 1cm;
-  width: 2.5cm;
-  display: block;
-  margin-right: 10px;
-  margin: 0 auto; /* Center horizontally */
-  text-align: center; /* Center the text horizontally */
-  display: flex;
-  justify-content: center; /* Center horizontally within the container */
-  align-items: center; 
-  color:yellow;
- }
- form .submitButton input{
-   height: 100%;
-   width: 50%;
-   border-radius: 5px;
-   border: none;
-   color: black;
-   font-size: 18px;
-   font-weight: 500;
-   letter-spacing: 1px;
-   cursor: pointer;
-   transition: all 0.3s ease;
-   background: yellow;
- }
+
 
  .mat-radio-group{
   display: flex;
@@ -269,17 +244,33 @@ form .submitButton {
  }
  .SubmitButt{
   flex-shrink: 0;
-  width: 165px;
+  width: 135px;
   height: 46px;
   justify-content: center;
   border-radius: 10px;
-  margin-right: 10px;
- 
+  
  }
  .formElement{
+  flex-shrink: 0;
   width: 165px;
   height: 46px;
-  margin-left: 180px;
+  margin-left: 205px;
+  justify-content: center;
+  border-radius: 10px;
+ }
+ .submitButt{
+  flex-shrink: 0;
+  width: 135px;
+  height: 46px;
+  justify-content: center;
+  border-radius: 10px;
+  display:inline-block;
+  margin-top: 20px;
+  margin-right: 10px;
+  margin-left: 220px;
+ }
+ .submitButt:hover{
+  background-color: darkgray;
  }
 
  /* form .submitButton:hover{

@@ -6,13 +6,16 @@
 <div *ngIf="!request" class="advanced__background">
     <div style="text-align: center;" class="advanced__backgroundBody">
         
-      <h1 >Welcome Michael Gait-Smith </h1>
-      <video width="800" controls>
-        <source src = "assets/INF370progress.mp4" type="video/mp4">
-        Your browser does not support HTML5 video.
-    </video>
-      <ion-button (click)="request =1">Control Users</ion-button>
-      <ion-button>View Audit trail</ion-button>
+      <h1 >Welcome </h1>
+      <div class="video-container">
+        <video width="800" controls class="sub-container">
+          <source src = "assets/INF370progress.mp4" type="video/mp4">
+          Your browser does not support HTML5 video.
+      </video>
+      </div>
+      
+      <button (click)="request =1" class="ctrl-btn">Control Users</button>
+      <button class="au-btn">View Audit trail</button>
     </div>
 
   </div>

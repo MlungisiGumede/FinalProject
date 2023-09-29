@@ -12,15 +12,45 @@
     transition: 100ms backdrop-filter linear; 
     /* https://joshfrankel.me/blog/creating-blurred-background-images-with-overlay-text-in-css/ */
   }
-  .advanced__backgroundBody:hover {
-    /* backdrop-filter: none; */
-  }
+  
   .advanced__backgroundBody h1 {
     color: yellow;
     /* background: #ccc; */
     /* position: absolute; */
    
     
+  }
+  .video-container{
+    align-items: center;
+    justify-content: center;
+  }
+  .sub-container{
+    border-radius: 10px;
+  }
+
+  .ctrl-btn{
+    flex-shrink: 0;
+    width: 165px;
+    height: 46px;
+    justify-content: center;
+    border-radius: 10px;
+    background-color:darkgrey;
+    font-size: medium;
+  }
+  .au-btn{
+    flex-shrink: 0;
+    width: 165px;
+    height: 46px;
+    justify-content: center;
+    border-radius: 10px;
+    background-color:darkgrey;
+    font-size: medium;
+  }
+  .au-btn:hover{
+    background-color:#585858;
+  }
+  .ctrl-btn:hover{
+    background-color:#585858;
   }
   .collapsible {
     position: fixed;
