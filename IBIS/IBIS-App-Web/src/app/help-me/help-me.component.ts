@@ -13,6 +13,10 @@ import { ProductsHelpComponent } from '../products-help/products-help.component'
 })
 export class HelpMeComponent implements OnInit {
   filterTerm!: string;
+  options: string[] = ['Orders Help', 'Suppliers Help', 'Inventory Help', 'Products Help', 'Recipes Help', 'Customers Help'];
+  selectedItem: string = '';
+  showDropdown: boolean = false;
+  filteredOptions: string[] = [];
 
   constructor(public helpModal: ModalController) { }
 
@@ -57,12 +61,53 @@ export class HelpMeComponent implements OnInit {
       return await modal.present();
   }
 
+  toggleDropdown() {
+    this.showDropdown = !this.showDropdown;
+    this.filteredOptions = [...this.options];
+  }
+
+  filterOptions() {
+    if (this.selectedItem) {
+      this.filteredOptions = this.options.filter(option =>
+        option.toLowerCase().includes(this.selectedItem.toLowerCase())
+      );
+    } else {
+      this.filteredOptions = [...this.options];
+    }
+  }
+
+  async selectOption(option: string) {
+    this.selectedItem = option;
 
 
+if(option == 'Orders Help'){
+  const modal = await this.helpModal.create({
+    component: OrdersHelpComponent});
+    return await modal.present();
 
+}
 
+if(option == 'Suppliers Help'){
+  const modal = await this.helpModal.create({
+    component: OrdersHelpComponent});
+    return await modal.present();
 
+}
+if(option == 'Inventory Help'){
+  const modal = await this.helpModal.create({
+    component: OrdersHelpComponent});
+    return await modal.present();
 
+}
 
+if(option == 'Recipes Help'){
+  const modal = await this.helpModal.create({
+    component: OrdersHelpComponent});
+    return await modal.present();
+
+}
+
+    this.showDropdown = false;
+  }
 
 }
