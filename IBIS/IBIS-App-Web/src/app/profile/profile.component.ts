@@ -2,8 +2,9 @@ import { Component, OnInit,ViewChild } from '@angular/core';
 import { UserService } from '../Services/user.service';
 import { FileUpload } from '../Models/FileUpload';
 import { QrScannerComponent } from 'angular2-qrscanner/qr-scanner.component';
-import { map } from 'rxjs';
+import { async, map } from 'rxjs';
 import { AuthGuardService } from '../Services/auth-guard.service';
+import { ActionSheetController } from '@ionic/angular';
 
 @Component({
   selector: 'app-profile',
@@ -19,7 +20,8 @@ role:any
 fileUpload = new FileUpload();
 files:any = []
 
-  constructor(public userService: UserService,public authGuardService: AuthGuardService) { }
+  constructor(public userService: UserService,public authGuardService: AuthGuardService, 
+    private actionSheetCtrl: ActionSheetController) { }
 
   ngOnInit(): void {
     this.GetFiles()
@@ -145,3 +147,5 @@ console.log(event)
       // }
 
 }
+
+

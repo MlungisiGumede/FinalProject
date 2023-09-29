@@ -66,7 +66,7 @@
             <input type="file" id="file" style="display: none;" accept="image/*" formControlName="image" (change)="ScanFile($event)" #fileUpload/>
             <br>
             
-            <ion-button (click)="fileUpload.click()" >Scan Image</ion-button>
+            <button (click)="fileUpload.click()" class="NextButt" >Scan Image</button>
           <div style="width: 20px;height: 20px;float: right;" id="reader"></div>
         </div>
 
@@ -78,16 +78,16 @@
 
       <!-- </section> -->
       <div style="display: flex;flex-direction: column;">
-        <ion-button type="submit" (click)="AddProduct()" class="submitButton" [disabled]="!form.valid">Submit<ion-ripple-effect></ion-ripple-effect></ion-button>
+        <button type="submit" (click)="AddProduct()" class="submitButton" [disabled]="!form.valid">Submit<ion-ripple-effect></ion-ripple-effect></button>
 
         
       </div>
         </div>
-        <ion-button *ngIf="selectedPage<2" (click)="PageForward()">Next</ion-button>
-        <ion-button  *ngIf="selectedPage>1" (click)="PageBackward();">Back</ion-button>
+        <button *ngIf="selectedPage<2" (click)="PageForward()" class="NextButt">Next</button>
+        <button  *ngIf="selectedPage>1" (click)="PageBackward();" class="NextButt">Back</button>
         <mat-radio-group #radioGroup  formControlName="page">
           
-          <mat-radio-button disabled   *ngFor="let radio of radioList$ | async let i=index" [value]="radio.value" ></mat-radio-button>
+          <mat-radio-button disabled   *ngFor="let radio of radioList$ | async let i=index" class="radio" [value]="radio.value" ></mat-radio-button>
          
         </mat-radio-group>
           
