@@ -35,8 +35,15 @@ src:any = "../../assets/butchery.jpg" // or whatever then do the api call...
   }
   GetFiles(){
     this.userService.GetFiles().subscribe(res=>{
-      this.files = []
+      this.files = res
       console.log(res)
+      if(res[0]){
+        this.src = res[0].base64
+        this.url = res[0].base64
+        //this.src = res[0].base64
+        console.log(res[0].base64)
+        //this.src = res[0].base64
+      }
       // this.url = res[0].base64
       // this.files.push(res[0]) // or this.files = res
       // this.files.push(res[1]) // or this.files = res
@@ -46,16 +53,20 @@ src:any = "../../assets/butchery.jpg" // or whatever then do the api call...
   Download() {
     // https://stackoverflow.com/questions/68255538/angular-download-base64-file-data
     this.userService.GetFiles().subscribe(res=>{
-      // const src = res[1].base64;
-      // //this.url = src
-      // console.log(res)
-      // console.log(src)
-      // const link = document.createElement("a")
-      // link.href = src
-      // link.download = res[1].name
-      // link.click()
+      if(res[1]){
+        //this.src = res[0].base64
+   const src = res[1].base64;
+      //this.url = src
+      console.log(res)
+      console.log(src)
+      const link = document.createElement("a")
+      link.href = src
+      link.download = res[1].name
+      link.click()
       
-      // link.remove()
+      link.remove()
+      }
+     
     })
    
   }

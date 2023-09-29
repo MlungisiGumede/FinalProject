@@ -31,6 +31,7 @@
     "angularx-qrcode": "^14.0.0",
     "chart.js": "^4.3.3",
     "jspdf": "^2.5.1",
+    "ng-multiselect-dropdown": "^1.0.0",
     "ng2-search-filter": "^0.5.1",
     "ngx-barcode-scanner": "^14.0.1",
     "pdfmake": "^0.2.7",

@@ -81,6 +81,7 @@ import {MatRadioModule} from '@angular/material/radio';
 import { AddUserComponent } from './add-user/add-user.component';
 import { CalendarComponent } from './calendar/calendar.component';
 import { CalendarModalComponent } from './calendar-modal/calendar-modal.component';
+//import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 
 
 
@@ -158,6 +159,7 @@ import { CalendarModalComponent } from './calendar-modal/calendar-modal.componen
     MatButtonModule,
     QRCodeModule,
     NgQrScannerModule,
+    
     //BarcodeScannerLivestreamModule,
     MatRadioModule, //https://webartdevelopers.com/blog/pure-css-radio-button-dot-slider/ for idea of slideshow buttons....
     RouterModule.forRoot([
