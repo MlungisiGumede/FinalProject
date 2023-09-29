@@ -15,26 +15,29 @@
             <ion-title class="header">KMJ Monthly Events</ion-title>
         </ion-toolbar>
     </ion-header>
-    
-    <ion-datetime [(ngModel)]="selectedDate" (ionChange)="loadEventsForSelectedDate()" presentation="date"
-    class="custom-calendar" [class.event-day]="isEventDay(selectedDate)" class="date-value"
+    <form >
+    <ion-datetime [highlightedDates]="highlightedDates" (ionChange)="SetValue($event)" presentation="date"
     ></ion-datetime>
+    {{selectedDate}}
+  </form>
+    <!-- <ion-datetime value="2023-09-01T00:00:00"
+    ></ion-datetime> -->
 
-    <div class="modal-footer">
+    <div class="modal-footer" style="display: flex;">
         <input type="button" class="addEvent" (click)="openEventModal()" value="Add Event">
+        <input type="button" class="addEvent" (click)="ViewEvents()" value="View Event">
     </div>
     
     <!-- Display events for the selected date -->
-    <div *ngIf="eventsForSelectedDate.length > 0">
-      <ion-title>Events for {{ selectedDate }}</ion-title>
-      <ion-list>
-        <ion-item *ngFor="let event of eventsForSelectedDate">
+    <div *ngIf="filteredEvents | async">
+        <tr *ngFor="let event of filteredEvents | async">
           {{ event.description }}
-        </ion-item>
-      </ion-list>
-    </div>
+        </tr>
+      </div>
+    
 
     
 </ion-content>
+
 
 

@@ -30,6 +30,12 @@ export class LoginService  {
   getAllUsers(){
     return this.httpClient.get<UserVM[]>(`${this.apiUrl}getAllUsers`)
   }
+  AddEvent(event:any){
+    return this.httpClient.post<any>(`${this.apiUrl}AddEvent`,event)
+  }
+  GetEvents(){
+    return this.httpClient.get<any>(`${this.apiUrl}GetEvents`)
+  }
   // GetWeatherForeCast(){
    
   //   return this.httpClient.get(`https://inf370team62023.azurewebsites.net/WeatherForeCast`);

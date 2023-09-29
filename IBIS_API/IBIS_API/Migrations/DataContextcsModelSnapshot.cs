@@ -292,6 +292,25 @@ namespace IBIS_API.Migrations
                     b.ToTable("Employees");
                 });
 
+            modelBuilder.Entity("IBIS_API.Models.Event", b =>
+                {
+                    b.Property<int?>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int?>("Id"));
+
+                    b.Property<string>("Date")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Events");
+                });
+
             modelBuilder.Entity("IBIS_API.Models.FileUpload", b =>
                 {
                     b.Property<int?>("FileUpload_ID")
@@ -415,6 +434,9 @@ namespace IBIS_API.Migrations
 
                     b.Property<double?>("Quantity")
                         .HasColumnType("float");
+
+                    b.Property<string>("Sku")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("SubCategory_ID")
                         .HasColumnType("int");

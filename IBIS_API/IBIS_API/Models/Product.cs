@@ -16,6 +16,8 @@ namespace IBIS_API.Models
         public double? Quantity { get; set; } = 0;
         public string? Expiry { get; set; }
 
+        public string? Sku { get; set; }
+
         public virtual ICollection<CustomerOrder>? CustomerOrder { get; set;}
 
         //public int? Write_Off_Id { get; set; }

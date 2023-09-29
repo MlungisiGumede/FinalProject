@@ -278,7 +278,7 @@ namespace IBIS_API.Controllers
 
         }
 
-       
+
         [HttpDelete]
         [Route("DeleteCustomer/{id:int}")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
@@ -301,23 +301,23 @@ namespace IBIS_API.Controllers
                         if (user != null)
                         {
                             var claims = await _userManager.GetClaimsAsync(user);
-                           
-                           var result1 = await _userManager.RemoveFromRoleAsync(user, "guest");
-                           var result2 = await _userManager.RemoveClaimsAsync(user, claims);
+
+                            var result1 = await _userManager.RemoveFromRoleAsync(user, "guest");
+                            var result2 = await _userManager.RemoveClaimsAsync(user, claims);
                             var result3 = await _userManager.DeleteAsync(user);
 
-                           
+
                             if (result1.Succeeded && result2.Succeeded && result3.Succeeded)
                             {
 
-                                
-                             audit.User = user.UserName;
-                    audit.Date = DateTime.Now;
-                    audit.Name = "Deleted Customer User";
-                             var config = new {id = user.Id,userName = user.UserName,email = user.Email,permissions = user.Permissions}; 
-                              var str = JsonSerializer.Serialize(config);
-                              audit.Description = str;
-                              
+
+                                audit.User = user.UserName;
+                                audit.Date = DateTime.Now;
+                                audit.Name = "Deleted Customer User";
+                                var config = new { id = user.Id, userName = user.UserName, email = user.Email, permissions = user.Permissions };
+                                var str = JsonSerializer.Serialize(config);
+                                audit.Description = str;
+
 
                                 //audit.Description = "Deleted Customer User Account Details:" + Environment.NewLine + user.UserName + user.Email + Environment.NewLine + user.Permissions;
                                 _context.Customers.Remove(cus);
@@ -334,39 +334,39 @@ namespace IBIS_API.Controllers
                         }
                         else
                         {
-                           var customerOrders = _context.CustomerOrders.Where(c => c.Customer_ID == cus.Customer_ID).ToList();
-                            if(customerOrders.Count > 0)
+                            var customerOrders = _context.CustomerOrders.Where(c => c.Customer_ID == cus.Customer_ID).ToList();
+                            if (customerOrders.Count > 0)
                             {
                                 return BadRequest("Cant Delete a Customer with orders");
                             }
                             audit.Description = JsonSerializer.Serialize(cus);
                             _context.Customers.Remove(cus);
-                             audit.Name = "Deleted; Customer User";
+                            audit.Name = "Deleted; Customer User";
                             _context.Add(audit);
                             await _context.SaveChangesAsync();
                             context.Commit();
                         }
-                       
+
                     }
                     catch (Exception ex)
                     {
                         context.Rollback();
                         return BadRequest("Customer could not be deleted");
                     }
-                  }
-                
+                }
+
             }
 
             return NoContent();
-       }
+        }
 
         [HttpDelete]
         [Route("DeleteUser/{id}")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<IActionResult> DeleteUser(string id) // this is userID...
         {
-            
-           
+
+
             var user = await _userManager.FindByIdAsync(id);
             var employee = _context.Employees.Where(c => c.Email == user.Email).FirstOrDefault();
             if (user != null)
@@ -375,9 +375,9 @@ namespace IBIS_API.Controllers
                 {
                     var userClaims = User;
                     var username = userClaims.FindFirstValue(ClaimTypes.Name);
-                  
+
                     AuditTrail audit = new AuditTrail();
-                   
+
                     audit.User = user.UserName;
                     audit.Date = DateTime.Now;
                     audit.Name = "Deleted Employee user";
@@ -415,7 +415,7 @@ namespace IBIS_API.Controllers
                             }
                             _context.Add(audit);
                         }
-                    
+
                         else
                         {
                             context.Rollback();
@@ -538,7 +538,7 @@ namespace IBIS_API.Controllers
                 // var n = user.Roles.FirstOrDefault();
                 var roles = await _userManager.GetRolesAsync(user);
                 string roleName = roles.FirstOrDefault().ToString();
-                
+
                 AuditTrail audit = new AuditTrail();
                 audit.User = uvm.Username;
                 audit.Date = DateTime.Now;
@@ -562,7 +562,7 @@ namespace IBIS_API.Controllers
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<IActionResult> PostFile(FileUpload file)
         {
-            
+
             FileUpload fileFound = null;
             if (file.type == 1)
             {
@@ -590,7 +590,7 @@ namespace IBIS_API.Controllers
                 {
                     _context.Add(file);
                 }
-               
+
 
 
 
@@ -810,6 +810,7 @@ namespace IBIS_API.Controllers
                 return BadRequest("Not registerd on the system");
 
             }
+
             var customer = _context.Customers.Where(c => c.Email == uvm.Email).FirstOrDefault();
             var employee = _context.Employees.Where(c => c.Email == uvm.Email).FirstOrDefault();
             if (customer == null && employee == null)
@@ -831,9 +832,9 @@ namespace IBIS_API.Controllers
                     audit.User = username;
                     audit.Date = DateTime.Now;
                     audit.Name = "Register User";
-                    
-                    
-                   
+
+
+
                     user = new AppUser
                     {
                         Id = Guid.NewGuid().ToString(),
@@ -845,11 +846,13 @@ namespace IBIS_API.Controllers
                     if (result.Succeeded)
                     {
                         IdentityResult roleresult = new IdentityResult();
-                        if (customer != null) {
+                        if (customer != null)
+                        {
                             audit.Name = "Registered Customer";
                             audit.Description = JsonSerializer.Serialize(user);
-                             roleresult = await _userManager.AddToRoleAsync(user, "guest");
-                        }else if(employee != null)
+                            roleresult = await _userManager.AddToRoleAsync(user, "guest");
+                        }
+                        else if (employee != null)
                         {
                             audit.Name = "Registered Employee";
                             audit.Description = JsonSerializer.Serialize(user);
@@ -859,7 +862,7 @@ namespace IBIS_API.Controllers
                         {
                             _context.AuditTrail.Add(audit);
                             context.Commit();
-                            
+
                         }
                         else
                         {
@@ -872,11 +875,11 @@ namespace IBIS_API.Controllers
                         context.Rollback();
                         return StatusCode(StatusCodes.Status500InternalServerError, "Internal Server Error. Please contact support.");
                     }
-                   
+
                 }
 
 
-              
+
             }
             return Ok();
 
@@ -886,8 +889,23 @@ namespace IBIS_API.Controllers
 
 
         }
+        [HttpPost]
+        [Route("AddEvent")]
+        public async Task<ActionResult> CreateEvent(Event ev)
+        {
+            _context.Events.Add(ev);
+            await _context.SaveChangesAsync();
+            return Ok();
+        }
+        [HttpGet]
+        [Route("GetEvents")]
+        public async Task<ActionResult<IEnumerable<Event>>> GetEvents()
+        {
+            return await _context.Events.ToListAsync();
+        }
     }
 }
+
            
         
 

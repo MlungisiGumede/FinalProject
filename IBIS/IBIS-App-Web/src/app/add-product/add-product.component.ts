@@ -87,7 +87,7 @@ selectedCategory: string | null = null;
     const html5QrCode = new Html5Qrcode(/* element id */ 'reader');
     html5QrCode.scanFile(this.barcode).then((result:any) => {
       console.log(result)
-      this.form.get('identifier')?.setValue(result)
+      this.form.get('sku')?.setValue(result)
       this.FileChoice(e)
       //alert(result)
       //this.cd.detectChanges()
@@ -152,7 +152,7 @@ PageBackward(){
       price: [null, [Validators.required, Validators.min(1)]],
       expiry: [null, [Validators.required, this.minExpiryDateValidator.bind(this)]],
       quantity: [null, [Validators.required, Validators.min(1)]],
-      identifier: ['', Validators.required],
+      sku: ['', ],
       subCategory_ID: [null, Validators.required],
       category_ID: [null, Validators.required],
       page: [1],

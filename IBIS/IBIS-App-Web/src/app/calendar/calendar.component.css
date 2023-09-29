@@ -1,4 +1,4 @@
-.date-value:hover{
+ .date-value:hover{
     color:blue;
 }
 
@@ -7,10 +7,10 @@
     width: 2.5cm;
     display: block;
     margin-right: 10px;
-    margin: 0 auto; /* Center horizontally */
-    text-align: center; /* Center the text horizontally */
+    margin: 0 auto; 
+    text-align: center; 
     display: flex;
-    justify-content: center; /* Center horizontally within the container */
+    justify-content: center; 
     align-items: center; 
     background-color: black;
     color:yellow;
@@ -28,7 +28,7 @@
   }
   
   .custom-calendar .datetime-calendar .event-day {
-    background-color: #ffcc00; /* Customize the highlight color */
+    background-color: #ffcc00; 
     border-radius: 50%;
     color: white;
   }
@@ -37,4 +37,4 @@
     justify-content: center;
     align-items: center;
     display: flex;
-}  
+}   

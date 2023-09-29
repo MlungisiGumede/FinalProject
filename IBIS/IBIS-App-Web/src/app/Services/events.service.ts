@@ -10,7 +10,7 @@ export interface Event {
 export class EventsService {
   private events: Event[] = [];
   private eventDates: string[] = [];
-
+ 
   addEvent(event: Event) {
     this.events.push(event);
     if (!this.eventDates.includes(event.date)) {
