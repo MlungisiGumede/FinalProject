@@ -66,7 +66,7 @@
             <input type="file" id="file" style="display: none;" accept="image/*" formControlName="image" (change)="ScanFile($event)" #fileUpload/>
             
             
-            <ion-button style="margin-left: 250px;width: 250px;" (click)="fileUpload.click()" class="formElement" >Scan Image</ion-button>
+            <button (click)="fileUpload.click()" class="formElement" >Scan Image</button>
             <br>
             <img class="formElement" style="height: 100px;width: 100px;" src="{{url}}" alt="no Identifier">
             <br>

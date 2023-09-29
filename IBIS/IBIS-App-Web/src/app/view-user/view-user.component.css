@@ -6,12 +6,12 @@
   font-family: 'Poppins',sans-serif;
 }
 body{
-  height: 100vh;
+  height: 46vh;
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 10px;
-  background: grey;
+  padding: 0px;
+  background: white;
 }
 .container{
   max-width: 700px;
