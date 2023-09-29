@@ -278,6 +278,7 @@ dialogRef.afterClosed().subscribe((res:any) => {
   }
 ViewProduct(item:any){
   let dialogRef:any = []
+  //this.categories = {"category_ID":item.category_ID,"name":item.category_Name}
   if(this.categories && this.subCategories){
   dialogRef = this.matDialog.open(ViewProductComponent,{
     data:{'product':item,'categories':this.categories,'subCategories':this.subCategories}
@@ -352,13 +353,13 @@ OnDone(item:Product){
 }
   addproduct(){
     let dialogRef:any = []
-    if(this.categories && this.subCategories){
+    //if(this.categories && this.subCategories){
       dialogRef = this.matDialog.open(AddProductComponent,{
         data:{'categories':this.categories,'subCategories':this.subCategories},
         width:'100%',
         height:'100%'
       });
-    }
+   // }
 
 
     //this.router.navigate(['/add-product']);

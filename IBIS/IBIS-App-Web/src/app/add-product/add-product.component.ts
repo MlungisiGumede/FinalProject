@@ -6,7 +6,7 @@ import { Router } from '@angular/router';
 import { ToastController } from '@ionic/angular';
 import { catchError, map, of, throwError } from 'rxjs';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import {Html5QrcodeScanner} from 'html5-qrcode'
+import {Html5Qrcode, Html5QrcodeScanner} from 'html5-qrcode'
 //import { BarcodeScannerLivestreamComponent } from 'ngx-barcode-scanner/public-api';
 
 
@@ -72,7 +72,24 @@ selectedCategory: string | null = null;
       { fps: 10, qrbox: 250 },
       false
     );
+   
+    //html5QrcodeScanner.s
     html5QrcodeScanner.render(this.onScanSuccess,this.onScanFailure);
+  }
+  ScanFile(e:any){ 
+    // input text with scanned image...
+    // get code type as well like 128...
+    const imageFile = e.target.files[0];
+    this.barcode = imageFile
+    const html5QrCode = new Html5Qrcode(/* element id */ "reader");
+    html5QrCode.scanFile(this.barcode).then((result:any) => {
+      console.log(result)
+      alert(result)
+    }).catch((error:any) => {
+      alert("failiure to scan")
+      //alert(error)
+    });
+    ;
   }
   
   onScanSuccess(decodedText:any) {

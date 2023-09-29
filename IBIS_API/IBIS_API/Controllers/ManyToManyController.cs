@@ -40,6 +40,8 @@ using DocumentFormat.OpenXml.Drawing.Charts;
 using DocumentFormat.OpenXml.Office2010.Excel;
 using DocumentFormat.OpenXml.Vml;
 using DocumentFormat.OpenXml.Wordprocessing;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 
 namespace IBIS_API.Controllers
@@ -120,8 +122,11 @@ namespace IBIS_API.Controllers
                 total = total + (line.Quantity * line.Price);
                 _context.CustomerOrdersLine.Add(addLine);
             }
-            audit.Description = "Add Customer Order:" + Environment.NewLine + order.CustomerOrder_ID + Environment.NewLine + cus.Customer_FirstName + " " + cus.Customer_Surname + Environment.NewLine + order.Date_Created + Environment.NewLine + total;
-
+            var config = new { CustomerOrder_ID = order.CustomerOrder_ID, CustomerName = cus.Customer_FirstName + " " + cus.Customer_Surname, OrderStatus_ID = order.OrderStatus_ID, Total = total };
+            var str = JsonSerializer.Serialize(config);
+            audit.Description = str;
+            //audit.Description = "Add Customer Order:" + Environment.NewLine + order.CustomerOrder_ID + Environment.NewLine + cus.Customer_FirstName + " " + cus.Customer_Surname + Environment.NewLine + order.Date_Created + Environment.NewLine + total;
+            _context.Add(audit);
             //_context.Database.ExecuteSqlRaw("Set IDENTITY_INSERT dbo.CustomerOrdersLine ON");
             await _context.SaveChangesAsync();
 
@@ -176,7 +181,11 @@ namespace IBIS_API.Controllers
             {
                 total = total + (ordline.Quantity * ordline.Price);
             }
-            audit.Description = "Add Supplier Order:" + Environment.NewLine + ord.SupplierOrder.SupplierOrder_ID + Environment.NewLine + supplier.Name + Environment.NewLine + ord.SupplierOrder.Date_Created + Environment.NewLine + ord.SupplierOrder.OrderStatus_ID + Environment.NewLine + total;
+            var config = new { SupplierOrder_ID = ord.SupplierOrder.SupplierOrder_ID, SupplierName = supplier.Name, OrderStatus_ID = ord.SupplierOrder.OrderStatus_ID, Total = total };
+            var str = JsonSerializer.Serialize(config);
+            audit.Description = str;
+            _context.Add(audit);
+            //audit.Description = "Add Supplier Order:" + Environment.NewLine + ord.SupplierOrder.SupplierOrder_ID + Environment.NewLine + supplier.Name + Environment.NewLine + ord.SupplierOrder.Date_Created + Environment.NewLine + ord.SupplierOrder.OrderStatus_ID + Environment.NewLine + total;
             //_context.Database.ExecuteSqlRaw("Set IDENTITY_INSERT dbo.CustomerOrdersLine ON");
             await _context.SaveChangesAsync();
 
@@ -1034,7 +1043,10 @@ namespace IBIS_API.Controllers
                     total1 = total1 + (line.Quantity * line.Price);
                 }
                  order.Transaction_ID = ord.Transaction_ID;
-                audit.Description = "Payment For Order:" + Environment.NewLine + ord.CustomerOrder_ID + Environment.NewLine + cus1.Customer_FirstName + " " + cus1.Customer_Surname + Environment.NewLine + ord.Date_Created + Environment.NewLine + ord.Transaction_ID + Environment.NewLine + ord.OrderStatus_ID + Environment.NewLine + total1;
+                 var config2 = new { CustomerOrder_ID = ord.CustomerOrder_ID, CustomerName = cus1.Customer_FirstName + " " + cus1.Customer_Surname, Transaction_ID = ord.Transaction_ID, OrderStatus_ID = ord.OrderStatus_ID, Total = total1 };
+                 var str2 = JsonSerializer.Serialize(config2);
+                audit.Description = str2;
+                //audit.Description = "Payment For Order:" + Environment.NewLine + ord.CustomerOrder_ID + Environment.NewLine + cus1.Customer_FirstName + " " + cus1.Customer_Surname + Environment.NewLine + ord.Date_Created + Environment.NewLine + ord.Transaction_ID + Environment.NewLine + ord.OrderStatus_ID + Environment.NewLine + total1;
                 _context.AuditTrail.Add(audit);
                 _context.CustomerOrders.Update(order);
                 await _context.SaveChangesAsync();
@@ -1093,7 +1105,10 @@ namespace IBIS_API.Controllers
             {
                 total = total + (ordline.Quantity * ordline.Price);
             }
-            audit.Description = "Edit Customer Order Status:" + Environment.NewLine + ord.CustomerOrder_ID + Environment.NewLine + cus.Customer_FirstName + " " + cus.Customer_Surname + Environment.NewLine + ord.Date_Created + Environment.NewLine + ord.Transaction_ID + Environment.NewLine + ord.OrderStatus_ID + Environment.NewLine + total;
+            var config = new { CustomerOrder_ID = ord.CustomerOrder_ID, CustomerName = cus.Customer_FirstName + " " + cus.Customer_Surname, OrderStatus_ID = ord.OrderStatus_ID, Total = total };
+            var str = JsonSerializer.Serialize(config);
+            audit.Description = str;
+            //audit.Description = "Edit Customer Order Status:" + Environment.NewLine + ord.CustomerOrder_ID + Environment.NewLine + cus.Customer_FirstName + " " + cus.Customer_Surname + Environment.NewLine + ord.Date_Created + Environment.NewLine + ord.Transaction_ID + Environment.NewLine + ord.OrderStatus_ID + Environment.NewLine + total;
             _context.AuditTrail.Add(audit);
             _context.CustomerOrders.Update(ord);
             await _context.SaveChangesAsync();
@@ -1116,6 +1131,7 @@ namespace IBIS_API.Controllers
             audit.User = username;
             audit.Date = DateTime.Now;
             audit.Name = "Edit Supplier Order Status";
+           
             var supplier = _context.Suppliers.Where(c => c.Supplier_ID == ord.Supplier_ID).First();
             double? total = 0;
 
@@ -1124,7 +1140,11 @@ namespace IBIS_API.Controllers
             {
                 total = total + (ordline.Quantity * ordline.Price);
             }
-            audit.Description = "Edit Supplier Order Status:" + Environment.NewLine + ord.SupplierOrder_ID + Environment.NewLine + supplier.Name  + Environment.NewLine + ord.Date_Created + Environment.NewLine + ord.OrderStatus_ID + Environment.NewLine + total;
+             var config = new { SupplierOrder_ID = ord.SupplierOrder_ID, SupplierName = supplier.Name, OrderStatus_ID = ord.OrderStatus_ID, Total = total };
+            var str = JsonSerializer.Serialize(config);
+            audit.Description = str;
+        
+            //audit.Description = "Edit Supplier Order Status:" + Environment.NewLine + ord.SupplierOrder_ID + Environment.NewLine + supplier.Name  + Environment.NewLine + ord.Date_Created + Environment.NewLine + ord.OrderStatus_ID + Environment.NewLine + total;
             _context.Entry(ord).State = EntityState.Modified; // nah do the whole attaching thing...
             _context.Add(audit);
             await _context.SaveChangesAsync();
@@ -1178,7 +1198,10 @@ namespace IBIS_API.Controllers
             {
                 total = total + (ordline.Quantity * ordline.Price);
             }
-            audit.Description = "Edit Supplier Order:" + Environment.NewLine + ord.SupplierOrder.SupplierOrder_ID + Environment.NewLine + supplier.Name + Environment.NewLine + ord.SupplierOrder.Date_Created + Environment.NewLine + ord.SupplierOrder.OrderStatus_ID + Environment.NewLine + total;
+            var config = new { SupplierOrder_ID = ord.SupplierOrder.SupplierOrder_ID, SupplierName = supplier.Name, OrderStatus_ID = ord.SupplierOrder.OrderStatus_ID, Total = total };
+            var str = JsonSerializer.Serialize(config);
+            audit.Description = str;
+            //audit.Description = "Edit Supplier Order:" + Environment.NewLine + ord.SupplierOrder.SupplierOrder_ID + Environment.NewLine + supplier.Name + Environment.NewLine + ord.SupplierOrder.Date_Created + Environment.NewLine + ord.SupplierOrder.OrderStatus_ID + Environment.NewLine + total;
              // nah do the whole attaching thing...
             _context.Add(audit);
             await _context.SaveChangesAsync();
@@ -1297,7 +1320,10 @@ namespace IBIS_API.Controllers
             {
                 total = total + (ordline.Quantity * ordline.Price);
             }
-            audit.Description = "Edit Customer Order:" + Environment.NewLine + order.CustomerOrder_ID + Environment.NewLine + cus.Customer_FirstName + " " + cus.Customer_Surname + Environment.NewLine + order.Date_Created + Environment.NewLine + total;
+            var config = new { CustomerOrder_ID = ord.CustomerOrder.CustomerOrder_ID, CustomerName = cus.Customer_FirstName + " " + cus.Customer_Surname, OrderStatus_ID = ord.CustomerOrder.OrderStatus_ID, Total = total };
+            var str = JsonSerializer.Serialize(config);
+            audit.Description = str;
+            //audit.Description = "Edit Customer Order:" + Environment.NewLine + order.CustomerOrder_ID + Environment.NewLine + cus.Customer_FirstName + " " + cus.Customer_Surname + Environment.NewLine + order.Date_Created + Environment.NewLine + total;
             _context.Add(audit);
             _context.CustomerOrdersLine.RemoveRange(orderLines);
             var orderLine = ord.CustomerOrderLines;
@@ -1351,7 +1377,10 @@ namespace IBIS_API.Controllers
             {
                 total = total + (ord.Quantity * ord.Price);
             }
-            audit.Description = "Delete Customer Order:" + Environment.NewLine + order.CustomerOrder_ID + Environment.NewLine + cus.Customer_FirstName + " " + cus.Customer_Surname + Environment.NewLine + order.Date_Created + Environment.NewLine + total;
+            var config = new { CustomerOrder_ID = order.CustomerOrder_ID, CustomerName = cus.Customer_FirstName + " " + cus.Customer_Surname, OrderStatus_ID = order.OrderStatus_ID, Total = total };
+            var str = JsonSerializer.Serialize(config);
+            audit.Description = str;
+            //audit.Description = "Delete Customer Order:" + Environment.NewLine + order.CustomerOrder_ID + Environment.NewLine + cus.Customer_FirstName + " " + cus.Customer_Surname + Environment.NewLine + order.Date_Created + Environment.NewLine + total;
             _context.Add(audit);
             _context.Remove(order);
 
@@ -1387,7 +1416,10 @@ namespace IBIS_API.Controllers
             {
                 total = total + (ord.Quantity * ord.Price);
             }
-            audit.Description = "Delete Supplier Order Details:" + Environment.NewLine + order.SupplierOrder_ID + Environment.NewLine + supplier.Name  + Environment.NewLine + order.Date_Created + Environment.NewLine + total;
+            var config = new { SupplierOrder_ID = order.SupplierOrder_ID, SupplierName = supplier.Name, OrderStatus_ID = order.OrderStatus_ID, Total = total };
+            var str = JsonSerializer.Serialize(config);
+            audit.Description = str;
+            //audit.Description = "Delete Supplier Order Details:" + Environment.NewLine + order.SupplierOrder_ID + Environment.NewLine + supplier.Name  + Environment.NewLine + order.Date_Created + Environment.NewLine + total;
             _context.Remove(order);
 
            ;

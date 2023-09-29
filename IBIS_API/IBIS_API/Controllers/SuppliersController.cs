@@ -12,6 +12,8 @@ using System.Security.Claims;
 using System.Text;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace IBIS_API.Controllers
 {
@@ -70,6 +72,10 @@ namespace IBIS_API.Controllers
             audit.Date = DateTime.Now;
             audit.Name = "Edit Supplier";
             audit.Description = "Supplier Edit Details:" + Environment.NewLine + sup.Supplier_ID + sup.Name + Environment.NewLine + sup.Email + Environment.NewLine + sup.Address + Environment.NewLine + sup.Phone;
+            
+            var str = JsonSerializer.Serialize(sup);
+            audit.Description = str;
+            _context.Add(audit);
             if (id != sup.Supplier_ID)
                 {
                     return BadRequest();
@@ -112,7 +118,10 @@ namespace IBIS_API.Controllers
             audit.Name = "Add Supplier";
             audit.Description = "Supplier Added Details:" +  Environment.NewLine+sup.Supplier_ID + sup.Name + Environment.NewLine + sup.Email + Environment.NewLine + sup.Address + Environment.NewLine + sup.Phone;
             _context.Suppliers.Add(sup);
-                await _context.SaveChangesAsync();
+            var str = JsonSerializer.Serialize(sup);
+            audit.Description = str;
+            _context.Add(audit);
+            await _context.SaveChangesAsync();
 
                 return CreatedAtAction("GetSupplier", new { id = sup.Supplier_ID }, sup);
             }
@@ -131,10 +140,13 @@ namespace IBIS_API.Controllers
             audit.User = username;
             audit.Date = DateTime.Now;
             audit.Name = "Delete Supplier";
-            audit.Description = "Supplier Deleted Details:" + Environment.NewLine + sup.Supplier_ID + sup.Name + Environment.NewLine + sup.Email + Environment.NewLine + sup.Address + Environment.NewLine + sup.Phone;
+            var str = JsonSerializer.Serialize(sup);
+            audit.Description = str;
+            _context.Add(audit);
+            // audit.Description = "Supplier Deleted Details:" + Environment.NewLine + sup.Supplier_ID + sup.Name + Environment.NewLine + sup.Email + Environment.NewLine + sup.Address + Environment.NewLine + sup.Phone;
             //var user = await _userManager.FindByNameAsync(username);
-           
-                if (sup == null)
+
+            if (sup == null)
                 {
                     return NotFound();
                 }

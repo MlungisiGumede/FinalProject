@@ -8,6 +8,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 using Twilio.TwiML.Voice;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 
 namespace IBIS_API.Controllers
@@ -67,6 +69,9 @@ namespace IBIS_API.Controllers
             audit.User = username;
             audit.Date = DateTime.Now;
             audit.Name = "Edit Customer";
+            var config = new { Customer_ID = cus.Customer_ID, Customer_FirstName = cus.Customer_FirstName, Customer_Surname = cus.Customer_Surname, Phone = cus.Phone, Email = cus.Email, Address = cus.Address };
+            var str = JsonSerializer.Serialize(config);
+            audit.Description = str;
             //var supplier = _context.Inventories.Where(c => c.Supplier_ID == sup.Supplier_ID).First();
             audit.Description = "Edit Customer Details:" + Environment.NewLine + cus.Customer_ID + Environment.NewLine + cus.Customer_FirstName + " " + cus.Customer_Surname + Environment.NewLine + cus.Phone + Environment.NewLine + cus.Email + Environment.NewLine + cus.Address; ;
             _context.Entry(cus).State = EntityState.Modified;
@@ -109,6 +114,9 @@ namespace IBIS_API.Controllers
             //var supplier = _context.Inventories.Where(c => c.Supplier_ID == sup.Supplier_ID).First();
             audit.Description = "Edit Customer Details:" + Environment.NewLine + cus.Customer_ID + Environment.NewLine + cus.Customer_FirstName + " " + cus.Customer_Surname + Environment.NewLine + cus.Phone + Environment.NewLine + cus.Email + Environment.NewLine + cus.Address; ;
             //var user = await _userManager.FindByNameAsync(username);
+            var config = new { Customer_ID = cus.Customer_ID, Customer_FirstName = cus.Customer_FirstName, Customer_Surname = cus.Customer_Surname, Phone = cus.Phone, Email = cus.Email, Address = cus.Address };
+            var str = JsonSerializer.Serialize(config);
+            audit.Description = str;
             _context.Customers.Add(cus);
             await _context.SaveChangesAsync();
 

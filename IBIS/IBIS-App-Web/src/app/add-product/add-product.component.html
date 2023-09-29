@@ -63,9 +63,10 @@
       <!-- <section *ngIf="page==2"> -->
         <div *ngIf="selectedPage==2" class="user-details">
           <div style="display: flex;flex-direction: column;">
-          <ion-button (click)="startScan()">
-            Scan
-          </ion-button>
+            <input type="file" id="file" style="display: none;" accept="image/*" formControlName="image" (change)="ScanFile($event)" #fileUpload/>
+            <br>
+            
+            <ion-button (click)="fileUpload.click()" >Scan Image</ion-button>
           <div style="width: 20px;height: 20px;float: right;" id="reader"></div>
         </div>
 
