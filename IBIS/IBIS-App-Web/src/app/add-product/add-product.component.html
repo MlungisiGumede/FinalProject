@@ -68,7 +68,11 @@
             
             <button (click)="fileUpload.click()" class="formElement" >Scan Image</button>
             <br>
-            <img class="formElement" style="height: 100px;width: 100px;" src="{{url}}" alt="no Identifier">
+            <span class="formElement2">
+              <img src="{{url}}" alt="no Identifier">
+            </span>
+            <br>
+            <br>
             <br>
             <br>
             <input type="text" class="formElement" formControlName="sku" readonly placeholder="No identifier" >
@@ -86,7 +90,7 @@
         <button type="submit" >Submit<ion-ripple-effect></ion-ripple-effect></button> -->
       <!-- </div> -->
         </div>
-        <button *ngIf="selectedPage<2" (click)="PageForward()" class="NextButt">Next</button>
+        <button *ngIf="selectedPage<2" (click)="PageForward()" class="NextButt2">Next</button>
         <div style="display: flex;">
          
         <button  *ngIf="selectedPage>1" (click)="PageBackward();" class="NextButt">Back</button>

@@ -12,6 +12,43 @@ import { ActionSheetController } from '@ionic/angular';
   styleUrls: ['./profile.component.css']
 })
 export class ProfileComponent implements OnInit {
+
+  async presentActionSheet() {
+    const actionSheet = await this.actionSheetCtrl.create({
+      header: 'Example Header',
+      subHeader: 'Example Subheader',
+      buttons: [
+        {
+          text: 'Upload Business Brochure',
+          handler: () => {
+            // Add the function for uploading business brochure here
+            //this.UploadBusinessBrochure();
+          }
+        },
+        {
+          text: 'Download Brochure',
+          handler: () => {
+            // Add the function for downloading brochure here
+            this.Download();
+          }
+        },
+        {
+          text: 'Upload Profile Picture',
+          handler: () => {
+            // Add the function for uploading profile picture here
+            //this.imageUpload();
+          }
+        },
+        {
+          text: 'Cancel',
+          role: 'cancel'
+        }
+      ]
+    });
+  
+    await actionSheet.present();
+  }
+
 uploadFile:any
 request:any
 url:any = ""

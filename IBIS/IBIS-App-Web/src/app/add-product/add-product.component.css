@@ -235,6 +235,15 @@ color: grey;
 
 .NextButt{
   flex-shrink: 0;
+  width: 135px;
+  height: 46px;
+  justify-content: center;
+  border-radius: 10px;
+  margin-right: 10px;
+  margin-left: 170px;
+ }
+ .NextButt2{
+  flex-shrink: 0;
   width: 165px;
   height: 46px;
   justify-content: center;
@@ -257,6 +266,16 @@ color: grey;
   margin-left: 205px;
   justify-content: center;
   border-radius: 10px;
+  margin-top: 10px;
+ }
+ .formElement2{
+  flex-shrink: 0;
+  width: 165px;
+  height: 46px;
+  margin-left: 205px;
+  justify-content: center;
+  border-radius: 10px;
+  margin-top: 10px;
  }
  .submitButt{
   flex-shrink: 0;
