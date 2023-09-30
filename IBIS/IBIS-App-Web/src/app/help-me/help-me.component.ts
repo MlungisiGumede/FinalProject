@@ -17,12 +17,17 @@ export class HelpMeComponent implements OnInit {
   selectedItem: string = '';
   showDropdown: boolean = false;
   filteredOptions: string[] = [];
+  helpClicked=false;
 
   constructor(public helpModal: ModalController) { }
 
   ngOnInit(): void {
+    console.log(this.helpClicked)
   }
 
+  clickedHelpDoc(){
+this.helpClicked=true;
+  }
 
 
   async showInventoryHelp(){
@@ -89,20 +94,20 @@ if(option == 'Orders Help'){
 
 if(option == 'Suppliers Help'){
   const modal = await this.helpModal.create({
-    component: OrdersHelpComponent});
+    component: SupplierHelpComponent});
     return await modal.present();
 
 }
 if(option == 'Inventory Help'){
   const modal = await this.helpModal.create({
-    component: OrdersHelpComponent});
+    component: InventoryHelpComponent});
     return await modal.present();
 
 }
 
 if(option == 'Recipes Help'){
   const modal = await this.helpModal.create({
-    component: OrdersHelpComponent});
+    component: RecipesHelpComponent});
     return await modal.present();
 
 }
