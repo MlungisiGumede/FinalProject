@@ -76,7 +76,8 @@ console.log(this.router.url)
     console.log("OTP method")
     this.loginservice.SendOTP(this.user.username).pipe(map(
       (res)=>{
-
+        this.otp = res
+    console.log(res)
     }),
     catchError((err) =>{
     {
@@ -85,13 +86,13 @@ console.log(this.router.url)
       
       return throwError(err)
     })).subscribe((res)=>{
-
+          console.log(res)
       this.ShowSnackBar("OTP sent successfully",'success');
      
         console.log(res)
         //this.presentToast('top')
         //alert(res.message)
-        this.otp = res
+        //this.otp = res
         this.title = this.title1
         //console.log(res['otpNumber'])
         //this.otp = res['otpNumber']

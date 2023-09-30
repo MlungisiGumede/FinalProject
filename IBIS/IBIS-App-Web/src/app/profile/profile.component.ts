@@ -15,30 +15,18 @@ export class ProfileComponent implements OnInit {
 
   async presentActionSheet() {
     const actionSheet = await this.actionSheetCtrl.create({
-      header: 'Example Header',
-      subHeader: 'Example Subheader',
+      header: 'Upload File',
+      subHeader: this.fileUpload.name,
       buttons: [
         {
-          text: 'Upload Business Brochure',
+          text: 'Confirm',
           handler: () => {
+            this.PostFile();
             // Add the function for uploading business brochure here
             //this.UploadBusinessBrochure();
           }
         },
-        {
-          text: 'Download Brochure',
-          handler: () => {
-            // Add the function for downloading brochure here
-            this.Download();
-          }
-        },
-        {
-          text: 'Upload Profile Picture',
-          handler: () => {
-            // Add the function for uploading profile picture here
-            //this.imageUpload();
-          }
-        },
+       
         {
           text: 'Cancel',
           role: 'cancel'
@@ -56,6 +44,7 @@ fileName:any
 role:any
 fileUpload = new FileUpload();
 files:any = []
+filedisplay:any
 src:any = "../../assets/butchery.jpg" // or whatever then do the api call...
   constructor(public userService: UserService,public authGuardService: AuthGuardService, 
     private actionSheetCtrl: ActionSheetController) { }
@@ -137,21 +126,24 @@ console.log(event)
    reader.onload = () => {
      //me.modelvalue = reader.result;
      console.log(reader.result);
+     //alert("hi")
      this.uploadFile = reader.result
      this.fileName = e.target.files[0].name // see if need to check if file exists once you get file from event
      console.log(this.fileName)
-     this.request = 
+     this.request = request
      this.fileUpload.base64 = this.uploadFile
      this.fileUpload.name = this.fileName
+     this.fileName = ""
      //this.fileName = undefined
           this.request = request
-   
+   this.presentActionSheet()
      
    
       
      // let val = (this.form.get('records') as FormArray).controls[rowIndex].get('isDone')?.setValue(false)
    };
    reader.onerror = function (error) {
+    alert(error);
      console.log('Error: ', error);
    };
   }
