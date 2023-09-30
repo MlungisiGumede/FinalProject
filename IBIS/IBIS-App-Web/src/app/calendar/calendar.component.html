@@ -32,7 +32,8 @@
 <div *ngIf="selectedDate">
     <div style="display: flex;flex-wrap: wrap;justify-content: center;">
         <input type="button" class="addEvent"  (click)="openEventModal()" value="Add Event">
-        <input type="button" class="addEvent" (click)="ViewEvents()" value="View Events">
+        <input type="button" *ngIf="!view" class="addEvent" (click)="ViewEvents();view = true" value="View Events">
+        <input type="button" *ngIf="view" class="addEvent" (click)="ViewEvents();view = false" value="Cancel">
     </div>
 </div>
     
@@ -40,19 +41,29 @@
     <div *ngIf="filteredEvents | async">
        <table style="width: 100px;">
         <tr style="width: 100%;">
-            <th style="width: 50%;">Event ID</th>
-            <th style="width: 50%;">Event Description</th>
+           
         </tr>
        </table>
+       <br>
+        <div *ngIf="view">
+            <ion-row>
+                <ion-col style="text-align: center;border: 1px solid black">Event Date</ion-col>
+                <ion-col style="text-align: center;;border: 1px solid black">Event Description</ion-col>
+                </ion-row>
+                <ion-row *ngFor="let event of filteredEvents | async">
+                    <ion-col style="text-align: center;;border: 1px solid black">{{ event.date}}</ion-col>
+                    <ion-col style="text-align: center;;border: 1px solid black">{{ event.description }}</ion-col>
+                    
+                  </ion-row>
+        </div>
        
-        
-        <tr *ngFor="let event of filteredEvents | async">
-          {{ event.description }}
-        </tr>
       </div>
     
 
-    
+    <ion-grid>
+       
+       
+    </ion-grid>
 </ion-content>
 
 

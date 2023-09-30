@@ -16,7 +16,7 @@ export class CalendarComponent implements OnInit {
   selectedDate: any;
   selectedTime!: string;
   events: Event[] = [];
-  
+  view = false
   form: FormGroup = new FormGroup({
     date: new FormControl("2023-09-02"),
   });
