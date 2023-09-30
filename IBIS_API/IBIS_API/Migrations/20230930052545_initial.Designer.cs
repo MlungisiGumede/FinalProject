@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace IBIS_API.Migrations
 {
     [DbContext(typeof(DataContextcs))]
-    [Migration("20230929171214_initial")]
+    [Migration("20230930052545_initial")]
     partial class initial
     {
         /// <inheritdoc />
@@ -24,6 +24,21 @@ namespace IBIS_API.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("AppUserPermission", b =>
+                {
+                    b.Property<string>("AppUserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("Permission_ID")
+                        .HasColumnType("int");
+
+                    b.HasKey("AppUserId", "Permission_ID");
+
+                    b.HasIndex("Permission_ID");
+
+                    b.ToTable("AppUserPermission");
+                });
 
             modelBuilder.Entity("CustomerOrderProduct", b =>
                 {
@@ -113,9 +128,6 @@ namespace IBIS_API.Migrations
 
                     b.Property<string>("PasswordHash")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool?>("Permissions")
-                        .HasColumnType("bit");
 
                     b.Property<string>("PhoneNumber")
                         .HasColumnType("nvarchar(max)");
@@ -415,6 +427,22 @@ namespace IBIS_API.Migrations
                     b.ToTable("PaymentTypes");
                 });
 
+            modelBuilder.Entity("IBIS_API.Models.Permission", b =>
+                {
+                    b.Property<int?>("Permission_ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int?>("Permission_ID"));
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Permission_ID");
+
+                    b.ToTable("Permissions");
+                });
+
             modelBuilder.Entity("IBIS_API.Models.Product", b =>
                 {
                     b.Property<int>("Product_ID")
@@ -587,6 +615,28 @@ namespace IBIS_API.Migrations
                     b.HasIndex("Inventory_ID");
 
                     b.ToTable("SupplierOrderLines");
+                });
+
+            modelBuilder.Entity("IBIS_API.Models.UserPermissions", b =>
+                {
+                    b.Property<string>("userName")
+                        .HasColumnType("nvarchar(450)")
+                        .HasColumnOrder(0);
+
+                    b.Property<int?>("Permission_Id")
+                        .HasColumnType("int")
+                        .HasColumnOrder(1);
+
+                    b.Property<string>("AppUserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("userName", "Permission_Id");
+
+                    b.HasIndex("AppUserId");
+
+                    b.HasIndex("Permission_Id");
+
+                    b.ToTable("UserPermissions");
                 });
 
             modelBuilder.Entity("IBIS_API.Models.User_Account", b =>
@@ -775,6 +825,21 @@ namespace IBIS_API.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("AppUserPermission", b =>
+                {
+                    b.HasOne("IBIS_API.Models.AppUser", null)
+                        .WithMany()
+                        .HasForeignKey("AppUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("IBIS_API.Models.Permission", null)
+                        .WithMany()
+                        .HasForeignKey("Permission_ID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("CustomerOrderProduct", b =>
                 {
                     b.HasOne("IBIS_API.Models.CustomerOrder", null)
@@ -826,6 +891,23 @@ namespace IBIS_API.Migrations
                     b.Navigation("Inventory");
 
                     b.Navigation("SupplierOrder");
+                });
+
+            modelBuilder.Entity("IBIS_API.Models.UserPermissions", b =>
+                {
+                    b.HasOne("IBIS_API.Models.AppUser", "AppUser")
+                        .WithMany()
+                        .HasForeignKey("AppUserId");
+
+                    b.HasOne("IBIS_API.Models.Permission", "Permission")
+                        .WithMany()
+                        .HasForeignKey("Permission_Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("AppUser");
+
+                    b.Navigation("Permission");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

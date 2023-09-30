@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Identity;
+using System.Security;
 
 namespace IBIS_API.Models
 {
@@ -6,6 +7,8 @@ namespace IBIS_API.Models
     {
         
          public String? FullName { get; set; }
-         public Boolean? Permissions { get; set; }
+        //public List<PermissionSet> Permissions { get; set; }
+
+        public virtual ICollection<Permission>? Permission { get; set; }
     }
 }

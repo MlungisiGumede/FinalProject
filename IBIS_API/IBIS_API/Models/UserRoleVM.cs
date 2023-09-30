@@ -3,6 +3,6 @@
     public class UserRoleVM
     {
      public String Role { get; set; }
-    public Boolean? Permissions { get; set; }
+    public List<Permission> Permissions { get; set; }
     }
 }

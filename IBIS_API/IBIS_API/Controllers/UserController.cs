@@ -189,12 +189,22 @@ namespace IBIS_API.Controllers
             var currentUser = _httpContextAccessor.HttpContext.User; // works
             var userClaims = User;
             UserRoleVM uRVM = new UserRoleVM();
+           
             var username = userClaims.FindFirstValue(ClaimTypes.Name);
+            var permissionIDs = _context.UserPermissions.Where(c => c.userName == username).Select(c => c.Permission_Id).ToList();
+            List<Permission> list = new List<Permission>();
+            foreach(var permissionID in permissionIDs)
+            {
+                var permission = _context.Permissions.Where(c => c.Permission_ID == permissionID).First();
+                list.Add(permission);
+                
+            }
+            uRVM.Permissions = list; // maybe not most efficient....
             var user = await _userManager.FindByNameAsync(username);
             var roles = await _userManager.GetRolesAsync(user);
             string roleName = roles.FirstOrDefault().ToString();
             uRVM.Role = roleName;
-            uRVM.Permissions = user.Permissions;
+          //  uRVM.Permissions = user.Permissions;
             return Ok(uRVM);
             //return Created("", new
             //{
@@ -314,9 +324,9 @@ namespace IBIS_API.Controllers
                                 audit.User = user.UserName;
                                 audit.Date = DateTime.Now;
                                 audit.Name = "Deleted Customer User";
-                                var config = new { id = user.Id, userName = user.UserName, email = user.Email, permissions = user.Permissions };
-                                var str = JsonSerializer.Serialize(config);
-                                audit.Description = str;
+                               // var config = new { id = user.Id, userName = user.UserName, email = user.Email, permissions = user.Permissions };
+                               // var str = JsonSerializer.Serialize(config);
+                                //audit.Description = str;
 
 
                                 //audit.Description = "Deleted Customer User Account Details:" + Environment.NewLine + user.UserName + user.Email + Environment.NewLine + user.Permissions;
@@ -391,15 +401,15 @@ namespace IBIS_API.Controllers
                         var result3 = await _userManager.DeleteAsync(user);
                         if (result1.Succeeded && result2.Succeeded && result3.Succeeded)
                         {
-                            var config = new { id = user.Id, userName = user.UserName, email = user.Email, permissions = user.Permissions };
-                            var str = JsonSerializer.Serialize(config);
-                            audit.Description = str;
+                            //var config = new { id = user.Id, userName = user.UserName, email = user.Email, permissions = user.Permissions };
+                           // var str = JsonSerializer.Serialize(config);
+                           // audit.Description = str;
                             if (employee == null)
                             {
                                 audit.Name = "Deleted Customer User";
 
-                                var str2 = JsonSerializer.Serialize(config);
-                                audit.Description = str2;
+                               // var str2 = JsonSerializer.Serialize(config);
+                               // audit.Description = str2;
 
                             }
                             else
@@ -620,7 +630,7 @@ namespace IBIS_API.Controllers
                 var roles = await _userManager.GetRolesAsync(user);
                 var role = roles[0];
                 userVM.Role = role;
-                userVM.Permissions = user.Permissions;
+                //userVM.Permissions = user.Permissions;
                 userVM.UserName = user.UserName;
                 userVM.Email = user.Email;
                 userVM.Name = user.FullName;
@@ -648,17 +658,43 @@ namespace IBIS_API.Controllers
         {
             // could you pass through app user....
             var user = await _userManager.FindByNameAsync(userVm.UserName);
-            user.Permissions = userVm.Permissions;
-            await _userManager.UpdateAsync(user);
-            await _context.SaveChangesAsync();
-            var userClaims = User;
-            var username = userClaims.FindFirstValue(ClaimTypes.Name);
-            //var user = await _userManager.FindByNameAsync(username);
-            AuditTrail audit = new AuditTrail();
-            audit.User = user.UserName;
-            audit.Date = DateTime.Now;
-            audit.Name = "Permissions";
-            audit.Description = JsonSerializer.Serialize(user);
+            // user.Permissions = userVm.Permissions;
+            using (var transaction = _context.Database.BeginTransaction())
+            {
+                foreach (var permission in userVm.Permissions)
+                {
+                    var perm = _context.Permissions.Where(c => c.Permission_ID == permission.Permission_ID).FirstOrDefault();
+                    if (perm == null)
+                    {
+                        _context.Database.ExecuteSqlRaw("SET IDENTITY_INSERT [dbo].[Permissions] ON");
+                        _context.Add(permission);
+                       
+                        // the audit stuff as well...
+                    }
+                   var currentPermissions = _context.UserPermissions.Where(c => c.userName == userVm.UserName).ToList();
+                    _context.RemoveRange(currentPermissions);
+                }
+                foreach(var permission in userVm.Permissions)
+                {
+                    var userPermission = new UserPermissions();
+                    userPermission.userName = userVm.UserName;
+                    userPermission.Permission_Id = permission.Permission_ID;
+                    _context.UserPermissions.Add(userPermission);
+                }
+               
+               await _userManager.UpdateAsync(user);// try figure this out later...
+                await _context.SaveChangesAsync();
+                _context.Database.ExecuteSqlRaw("SET IDENTITY_INSERT [dbo].[Permissions] OFF");
+                transaction.Commit();
+                var userClaims = User;
+                var username = userClaims.FindFirstValue(ClaimTypes.Name);
+                //var user = await _userManager.FindByNameAsync(username);
+                AuditTrail audit = new AuditTrail();
+                audit.User = user.UserName;
+                audit.Date = DateTime.Now;
+                audit.Name = "Permissions";
+                audit.Description = JsonSerializer.Serialize(user);
+            }
             //_userManager.RemoveFromRoleAsync(user,role);
             //_userManager.AddToRoleAsync(user,userVm.Role)
             return Ok();
@@ -765,7 +801,7 @@ namespace IBIS_API.Controllers
                     Id = Guid.NewGuid().ToString(),
                     UserName = username,
                     Email = email,
-                    Permissions = true
+                    //Permissions = true
                 };
                 if (!(await _roleManager.RoleExistsAsync("manager"))) // got from microsoft...
                 {
@@ -840,7 +876,7 @@ namespace IBIS_API.Controllers
                         Id = Guid.NewGuid().ToString(),
                         UserName = uvm.Username,
                         Email = uvm.Email,
-                        Permissions = false
+                        //Permissions = false
                     };
                     var result = await _userManager.CreateAsync(user, uvm.Password);
                     if (result.Succeeded)

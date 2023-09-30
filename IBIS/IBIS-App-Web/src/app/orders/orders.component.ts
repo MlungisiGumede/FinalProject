@@ -252,6 +252,28 @@ this.CheckOrderStatus()
     await value
     return value
   }
+  CheckPermission(){
+    if(this.isCustomerOrder){
+      console.log(this.permissions)
+        let index = this.permissions.findIndex((element:any) => element.permission_ID == 3)
+        console.log(index)
+      if(index > -1){
+        return true
+      }else{
+       
+        return false
+      }
+    }else if(this.permissions.permission_ID == 4){
+      let index = this.permissions.findIndex((element:any) => element.permission_ID == 4)
+      if(index > -1){
+
+      return true
+    }else{
+      return false
+    }
+  }
+  return
+}
   ToSupplier(){
     // edit records to standardize... then whatever is true is sent to API...
       console.log("supplier")

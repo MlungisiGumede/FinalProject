@@ -58,7 +58,6 @@ namespace IBIS_API.Migrations
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     FullName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Permissions = table.Column<bool>(type: "bit", nullable: true),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -243,6 +242,19 @@ namespace IBIS_API.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_PaymentTypes", x => x.PaymentType_ID);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Permissions",
+                columns: table => new
+                {
+                    Permission_ID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Permissions", x => x.Permission_ID);
                 });
 
             migrationBuilder.CreateTable(
@@ -481,6 +493,54 @@ namespace IBIS_API.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "AppUserPermission",
+                columns: table => new
+                {
+                    AppUserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Permission_ID = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AppUserPermission", x => new { x.AppUserId, x.Permission_ID });
+                    table.ForeignKey(
+                        name: "FK_AppUserPermission_AspNetUsers_AppUserId",
+                        column: x => x.AppUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_AppUserPermission_Permissions_Permission_ID",
+                        column: x => x.Permission_ID,
+                        principalTable: "Permissions",
+                        principalColumn: "Permission_ID",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "UserPermissions",
+                columns: table => new
+                {
+                    userName = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Permission_Id = table.Column<int>(type: "int", nullable: false),
+                    AppUserId = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserPermissions", x => new { x.userName, x.Permission_Id });
+                    table.ForeignKey(
+                        name: "FK_UserPermissions_AspNetUsers_AppUserId",
+                        column: x => x.AppUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_UserPermissions_Permissions_Permission_Id",
+                        column: x => x.Permission_Id,
+                        principalTable: "Permissions",
+                        principalColumn: "Permission_ID",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "CustomerOrderProduct",
                 columns: table => new
                 {
@@ -557,6 +617,11 @@ namespace IBIS_API.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_AppUserPermission_Permission_ID",
+                table: "AppUserPermission",
+                column: "Permission_ID");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
                 column: "RoleId");
@@ -609,6 +674,16 @@ namespace IBIS_API.Migrations
                 name: "IX_SupplierOrderLines_Inventory_ID",
                 table: "SupplierOrderLines",
                 column: "Inventory_ID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserPermissions_AppUserId",
+                table: "UserPermissions",
+                column: "AppUserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserPermissions_Permission_Id",
+                table: "UserPermissions",
+                column: "Permission_Id");
         }
 
         /// <inheritdoc />
@@ -619,6 +694,9 @@ namespace IBIS_API.Migrations
 
             migrationBuilder.DropTable(
                 name: "AdjustmentTypes");
+
+            migrationBuilder.DropTable(
+                name: "AppUserPermission");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");
@@ -687,13 +765,13 @@ namespace IBIS_API.Migrations
                 name: "User_Accounts");
 
             migrationBuilder.DropTable(
+                name: "UserPermissions");
+
+            migrationBuilder.DropTable(
                 name: "Write_Offss");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
-
-            migrationBuilder.DropTable(
-                name: "AspNetUsers");
 
             migrationBuilder.DropTable(
                 name: "CustomerOrders");
@@ -706,6 +784,12 @@ namespace IBIS_API.Migrations
 
             migrationBuilder.DropTable(
                 name: "Supplier_Orders");
+
+            migrationBuilder.DropTable(
+                name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "Permissions");
         }
     }
 }

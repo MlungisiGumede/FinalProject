@@ -32,7 +32,7 @@
         <span class="details">Enable Permissions</span>
       <mat-form-field >
         <mat-label>Enable Premisiions</mat-label>
-        <mat-select formControlName="permissions">
+        <mat-select (selectionChange)="OnSelect($event)" formControlName="permissions" multiple>
           <mat-option *ngFor="let permission of dropDown" [value]="permission.permission_ID">
             {{permission.name}}
           </mat-option>
@@ -42,6 +42,6 @@
      </div>
    </form>
  </div>
- <ion-button (click)="update()" class="but" >update</ion-button>
+ <ion-button (click)="Submit()" class="but" >update</ion-button>
 </div>
 </body>

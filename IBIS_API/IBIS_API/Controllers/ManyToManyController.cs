@@ -96,11 +96,11 @@ namespace IBIS_API.Controllers
             audit.Date = DateTime.Now;
             audit.Name = "Add Customer Order"; ;
             //var supplier = _context.Inventories.Where(c => c.Supplier_ID == sup.Supplier_ID).First();
-            var id = ord.CustomerOrder.CustomerOrder_ID;
+            var id = ord.CustomerOrder.Customer_ID;
             var order = ord.CustomerOrder;
             var cus = _context.Customers.Where(c => c.Customer_ID == id).First();
             
-            var ordLines = _context.CustomerOrdersLine.Where(c => c.CustomerOrder_ID == id).ToList();
+            //var ordLines = _context.CustomerOrdersLine.Where(c => c.CustomerOrder_ID == id).ToList();
             
             
             order.OrderStatus_ID = 1;

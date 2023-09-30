@@ -60,6 +60,12 @@ namespace IBIS_API.Data
         public DbSet<AuditTrail> AuditTrail { get; set; }
 
          public DbSet<Event> Events { get; set; }
+
+        public DbSet<Permission> Permissions { get; set; }
+
+        public DbSet<UserPermissions> UserPermissions  { get; set; }
+
+
         /*
         public DbSet<Equipment> Equipment { get; set; } 
         public  DbSet<Equipment_Category> Equipment_Categories { get; set; } 
