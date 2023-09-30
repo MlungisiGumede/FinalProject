@@ -14,11 +14,14 @@ export class Home2Component implements OnInit {
 request:any
 data:any = of([{}])
 filterTerm!: string
+permissions:any
+role:any
   constructor(public matDialog:MatDialog,public logInService:LoginService) { }
 
   ngOnInit(): void {
     this.logInService.getAllUsers().subscribe(res=>{
       this.data = of(res)
+      this.GetUserRole()
       console.log(res)
     })
   }
@@ -39,6 +42,38 @@ filterTerm!: string
     })
   
   }
+  async GetUserRole(){
+    let value = new Promise((resolve, reject) => {
+      this.logInService.GetUserRole().subscribe((res) => {
+        this.permissions = res.permissions
+        this.role = res.role
+        console.log(res)
+       //alert(this.permissions)
+        resolve(res)
+      }), (error: any) => {
+        reject(error)
+      }
+    })
+    await value
+    return value
+  }
+  CheckPermission(input:any){
+   
+      if(this.role == "manager"){
+        
+        return true
+       }
+    let index = this.permissions.findIndex((element:any) => element.permission_ID == input)
+        console.log(index)
+      if(index > -1){
+        return true
+      }else{
+       
+        return false
+      }
+   
+    
+}
   UpdateRole(user:any){
     const dialogRef = this.matDialog.open(ViewUserComponent,{
      data:{'user':user,'disable':true}

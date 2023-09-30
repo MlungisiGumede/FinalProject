@@ -63,6 +63,11 @@ export class ReportsComponent implements OnInit {
   success:any
   filteredCustomerOrderLines:any
   products:ProductViewModel[]|any
+  selectedFormat:any
+  formats = [
+    { format_ID: 1, name: 'PDF' },
+    { format_ID: 2, name: 'Excel' },
+  ]
   
   combinedData: { Name: string, Quantity: number, Price: number }[] = [];
   constructor(private productService: ProductService, private route: ActivatedRoute,
@@ -193,8 +198,14 @@ export class ReportsComponent implements OnInit {
       this.DatedOrdersReport()
     }else if(this.request == 'stock'){
       this.CreateStockTakeChart()
-    }else{
+    }else if(this.request == 'popular'){
       this.MostPopularProducts()
+    }else if(this.request == 'category'){
+      this.GenerateCategoriesReportPDF()
+      this.selectedFormat = ''
+    }else if(this.request == 'subCategory'){
+      this.GenerateSubCategoriesReportPDF()
+      this.selectedFormat = ''
     }
   }
   ConfirmPDF(){

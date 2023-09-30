@@ -51,14 +51,14 @@ employeeDropDown:any = [
   },
   {
     permission_ID:5,
-    name:"Supplier Orders"
+    name:"Control Users"
   },
   {
     permission_ID:6,
-    name:"Adjust Stock"
+    name:"Audit Trail"
   }, {
     permission_ID:7,
-    name:"Audit Trail"
+    name:"Adjust Stock"
   },
   // {
   //   permission_ID:8,

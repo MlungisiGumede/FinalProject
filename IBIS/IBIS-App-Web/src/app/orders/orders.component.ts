@@ -41,6 +41,7 @@ export class OrdersComponent implements OnInit {
   products:any
   inventories:any
   permissions:any
+  role:any
   // supplierOrders:any
   // customerOrders:any
   isCustomerOrder:boolean=false
@@ -178,6 +179,7 @@ return value
       }if(result[7]){
         this.inventories = result[7]
       }
+      this.CheckOrderStatus()
       resolve("true")
     },(err:any)=>{
       resolve("false")
@@ -189,7 +191,7 @@ return value
 
   })
   await val
-this.CheckOrderStatus()
+
   return val
   }
   getCustomerName(id:any){
@@ -242,6 +244,7 @@ this.CheckOrderStatus()
     let value = new Promise((resolve, reject) => {
       this.loginService.GetUserRole().subscribe((res) => {
         this.permissions = res.permissions
+        this.role = res.role
         console.log(res)
        //alert(this.permissions)
         resolve(res)
@@ -253,6 +256,10 @@ this.CheckOrderStatus()
     return value
   }
   CheckPermission(){
+    if(this.role == "manager"){
+        
+      return true
+     }
     if(this.isCustomerOrder){
       console.log(this.permissions)
         let index = this.permissions.findIndex((element:any) => element.permission_ID == 3)
@@ -523,6 +530,8 @@ CheckOrderStatus(){
 
   }
   UpdateOrderStatus(item:any,id:any){
+    let tempid = item.orderStatus_ID
+    let tempDate = item.date_Created
     item.orderStatus_ID = id
     let array:any = []
     let date = this.ConvertDate(item.Date_Created)
@@ -593,6 +602,8 @@ this.ShowSnackBar("Customer order status successfully updated", "success")
       console.log(Response)
     })
       }
+      item.orderStatus_ID = tempid
+      item.date_Created = tempDate
     }
 
 

@@ -9,13 +9,13 @@
       <h1 >Welcome </h1>
       <div class="video-container">
         <video width="800" controls class="sub-container">
-          <source src = "assets/INF370progress.mp4" type="video/mp4">
+          <source src = "assets/Recording16.mp4" type="video/mp4">
           Your browser does not support HTML5 video.
       </video>
       </div>
       
-      <button (click)="request =1" class="ctrl-btn">Control Users</button>
-      <button class="au-btn">View Audit trail</button>
+      <button *ngIf="CheckPermission(5)" (click)="request =1" class="ctrl-btn">Control Users</button>
+      <button *ngIf="CheckPermission(6)" class="au-btn">View Audit trail</button>
     </div>
 
   </div>
@@ -59,7 +59,7 @@
               <ion-button (click)="DeleteUser(item.id)" class="light-Btn" >Remove</ion-button>
             </ion-col>
             <ion-col>
-              <ion-button (click)="UpdateRole(item)" class="light-Btn" >Update Permissions</ion-button>
+              <ion-button *ngIf="item.role != 'manager'" (click)="UpdateRole(item)" class="light-Btn" >Update Permissions</ion-button>
             </ion-col>
            
           </ion-row>

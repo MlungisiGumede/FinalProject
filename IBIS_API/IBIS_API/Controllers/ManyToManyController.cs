@@ -42,6 +42,7 @@ using DocumentFormat.OpenXml.Vml;
 using DocumentFormat.OpenXml.Wordprocessing;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using DocumentFormat.OpenXml.InkML;
 
 
 namespace IBIS_API.Controllers
@@ -1258,7 +1259,9 @@ namespace IBIS_API.Controllers
                         ord.Order_Status = "Cancelled";
                     }
                 }
-                ord.Total = _context.CustomerOrdersLine.Where(c => c.CustomerOrder_ID == customerOrder.CustomerOrder_ID).Sum(c => c.Quantity * c.Price);
+               ord.Total = _context.CustomerOrdersLine.FromSql($"CalculateTotal  {customerOrder.CustomerOrder_ID}").Sum(c => c.Quantity * c.Price);
+                //var total = _context.CustomerOrdersLine.FromSql($"CalculateTotal  {customerOrder.CustomerOrder_ID}").First();
+                //ord.Total = _context.CustomerOrdersLine.Where(c => c.CustomerOrder_ID == customerOrder.CustomerOrder_ID).Sum(c => c.Quantity * c.Price);
                 customerOrdersList.Add(ord);
             }
             return Ok(customerOrdersList);

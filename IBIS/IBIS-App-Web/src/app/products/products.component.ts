@@ -174,6 +174,7 @@ this.router.navigate(['/write-off'])
   }
 
   async getProducts(){
+   
     let val = new Promise((resolve, reject) => {
       this.productService.getProductList().subscribe(response => {
         console.log(response);
