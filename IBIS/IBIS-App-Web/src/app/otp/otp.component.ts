@@ -9,6 +9,7 @@ import { AuthenticationService } from '../Services/authentication.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AuthGuardService } from '../Services/auth-guard.service';
 import { throwToolbarMixedModesError } from '@angular/material/toolbar';
+import { catchError, map, throwError } from 'rxjs';
 
 @Component({
   selector: 'app-otp',
@@ -73,7 +74,19 @@ console.log(this.router.url)
   SendOTP(){
     this.GetUser()
     console.log("OTP method")
-    this.loginservice.SendOTP(this.user.username).subscribe((res)=>{
+    this.loginservice.SendOTP(this.user.username).pipe(map(
+      (res)=>{
+
+    }),
+    catchError((err) =>{
+    {
+        this.ShowSnackBar("failed to send otp", "error");
+      }
+      
+      return throwError(err)
+    })).subscribe((res)=>{
+
+      this.ShowSnackBar("OTP sent successfully",'success');
      
         console.log(res)
         //this.presentToast('top')
@@ -84,11 +97,8 @@ console.log(this.router.url)
         //this.otp = res['otpNumber']
         //localStorage.setItem('OTP', res)
   })
-,(err:any)=>{
-  this.ShowSnackBar('Failed to send OTP: try again', 'error')
 }
-  }
-  
+
   SubmitOTP(){
     console.log(this.otpForm.value)
     let otp = this.otpForm.controls['otp'].value

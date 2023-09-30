@@ -17,5 +17,6 @@
       </li>
     </ul>
   </div>
-  <h1><li click="">View the full help document here</li></h1>
+  <embed *ngIf="helpClicked" src="assets/helpDocs.pdf" type="application/pdf" width="100%" height="600px"/>
+  <ion-button (click)="clickedHelpDoc()">View the full help document here</ion-button>
 </div>
