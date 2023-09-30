@@ -657,10 +657,11 @@ namespace IBIS_API.Controllers
         public async Task<IActionResult> UpdateUserRole(UserVM userVm)
         {
             // could you pass through app user....
-            var user = await _userManager.FindByNameAsync(userVm.UserName);
+            var user = await _userManager.FindByEmailAsync(userVm.Email);
             // user.Permissions = userVm.Permissions;
             using (var transaction = _context.Database.BeginTransaction())
             {
+                if(userVm.Permissions.First() != null) { 
                 foreach (var permission in userVm.Permissions)
                 {
                     var perm = _context.Permissions.Where(c => c.Permission_ID == permission.Permission_ID).FirstOrDefault();
@@ -680,11 +681,19 @@ namespace IBIS_API.Controllers
                     userPermission.userName = userVm.UserName;
                     userPermission.Permission_Id = permission.Permission_ID;
                     _context.UserPermissions.Add(userPermission);
+                        await _context.SaveChangesAsync();
+                        _context.Database.ExecuteSqlRaw("SET IDENTITY_INSERT [dbo].[Permissions] OFF");
+                    }
                 }
-               
-               await _userManager.UpdateAsync(user);// try figure this out later...
+                else
+                {
+                    user.UserName = userVm.UserName;
+                    user.Email = userVm.Email;
+                   
+                }
+                
+                await _userManager.UpdateAsync(user);// try figure this out later...
                 await _context.SaveChangesAsync();
-                _context.Database.ExecuteSqlRaw("SET IDENTITY_INSERT [dbo].[Permissions] OFF");
                 transaction.Commit();
                 var userClaims = User;
                 var username = userClaims.FindFirstValue(ClaimTypes.Name);

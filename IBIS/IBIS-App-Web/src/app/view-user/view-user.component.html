@@ -2,7 +2,7 @@
 
 <body>
 <div class="container" aria-readonly="true">
- <div class="title">View User</div>
+ <div class="title">{{title}}</div>
  <div class="content">
    <form [formGroup]="form"  action="#">
      <div class="user-details">
@@ -28,7 +28,7 @@
         <span class="details">Enter Role</span>
         <input formControlName="role"  type="text" placeholder="Janine" >
       </div>
-      <div class="input-box">
+      <div *ngIf="isDisabled" class="input-box">
         <span class="details">Enable Permissions</span>
       <mat-form-field >
         <mat-label>Enable Premisiions</mat-label>
@@ -42,6 +42,7 @@
      </div>
    </form>
  </div>
- <ion-button (click)="Submit()" class="but" >update</ion-button>
+ <ion-button *ngIf="isDisabled" (click)="update()" class="but" >Set Permissions</ion-button>
+ <ion-button *ngIf="!isDisabled" (click)="Submit()" class="but" >update</ion-button>
 </div>
 </body>

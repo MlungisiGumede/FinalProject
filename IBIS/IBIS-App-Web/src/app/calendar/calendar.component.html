@@ -15,21 +15,37 @@
             <ion-title class="header">KMJ Monthly Events</ion-title>
         </ion-toolbar>
     </ion-header>
-    <form >
+    <form style="display: flex;align-items: center;flex-direction: column;" >
     <ion-datetime [highlightedDates]="highlightedDates" (ionChange)="SetValue($event)" presentation="date"
     ></ion-datetime>
-    {{selectedDate}}
+    <div *ngIf="selectedDate">
+       Selected Date is: {{selectedDate}}
+    </div>
+    <div *ngIf="!selectedDate">
+        Select a Date
+     </div>
+    
   </form>
     <!-- <ion-datetime value="2023-09-01T00:00:00"
     ></ion-datetime> -->
-
-    <div class="modal-footer" style="display: flex;">
-        <input type="button" class="addEvent" (click)="openEventModal()" value="Add Event">
-        <input type="button" class="addEvent" (click)="ViewEvents()" value="View Event">
+<br>
+<div *ngIf="selectedDate">
+    <div style="display: flex;flex-wrap: wrap;justify-content: center;">
+        <input type="button" class="addEvent"  (click)="openEventModal()" value="Add Event">
+        <input type="button" class="addEvent" (click)="ViewEvents()" value="View Events">
     </div>
+</div>
     
     <!-- Display events for the selected date -->
     <div *ngIf="filteredEvents | async">
+       <table style="width: 100px;">
+        <tr style="width: 100%;">
+            <th style="width: 50%;">Event ID</th>
+            <th style="width: 50%;">Event Description</th>
+        </tr>
+       </table>
+       
+        
         <tr *ngFor="let event of filteredEvents | async">
           {{ event.description }}
         </tr>

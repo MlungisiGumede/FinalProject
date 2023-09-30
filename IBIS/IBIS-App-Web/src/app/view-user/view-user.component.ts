@@ -20,6 +20,7 @@ export class ViewUserComponent implements OnInit {
 data:any
 form:any
 isDisabled:any
+title:any
 // dropDown:any = [
 //   {
 //     permission_ID:true,
@@ -68,6 +69,11 @@ employeeDropDown:any = [
 dropDown:any
   ngOnInit(): void {
     this.isDisabled = this.item.disable // maybe change the name of the key...
+    if(this.isDisabled){
+this.title = "Select Permissions"
+    }else{
+      this.title = "View User"
+    }
     console.log(this.isDisabled)
     this.getUsers()
     this.form = new FormGroup({
@@ -92,7 +98,7 @@ dropDown:any
 
 
 update(){
-
+  this.form.get('permissions')?.setValue("")
   this.loginService.UpdateUserRole(this.form.value).subscribe(res =>{
 
   })
