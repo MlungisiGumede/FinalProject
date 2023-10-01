@@ -6,28 +6,28 @@
          <div class="user-details" [formGroup]=form>
            <div class="input-box">
              <span class="details">First Name</span>
-             <input type="text" placeholder="First Name" formControlName="Customer_FirstName">
+             <input type="text" placeholder="e.g Johnny" formControlName="Customer_FirstName">
              <ion-note class="error-message" *ngIf="form.get('Customer_FirstName')?.hasError('required')">
               First Name is required.
             </ion-note>
            </div>
            <div class="input-box">
              <span class="details">Surname</span>
-             <input type="text" placeholder="Surname" formControlName="Customer_Surname">
+             <input type="text" placeholder="e.g Hendrix" formControlName="Customer_Surname">
              <ion-note class="error-message" *ngIf="form.get('Customer_Surname')?.hasError('required')">
               Last Name is required.
             </ion-note>
            </div>
            <div class="input-box">
              <span class="details">Address</span>
-             <input type="text" placeholder="Address" formControlName="Address">
+             <input type="text" placeholder="e.g new jersey st" formControlName="Address">
              <ion-note class="error-message" *ngIf="form.get('Address')?.hasError('required')">
               Address is required.
             </ion-note>
            </div>
            <div class="input-box">
              <span class="details">Phone number</span>
-             <input type="tel" placeholder="Phone number" formControlName="Phone" >
+             <input type="tel" placeholder="e.g 0846738464" formControlName="Phone" >
             <ion-note class="error-message" *ngIf="form.get('Phone')?.hasError('minLength')">
               Phone number must have at least 10 digits.
             </ion-note>
@@ -40,14 +40,14 @@
            </div>
            <div class="input-box">
             <span class="details">Email</span>
-            <input type="text" (keyup)="display()" placeholder="Email" formControlName="Email" >
+            <input type="text" (keyup)="display()" placeholder="e.g james@gmail.com" formControlName="Email" >
             <ion-note class="error-message" *ngIf="form.get('Email')?.hasError('email')">
               Enter valid email.
             </ion-note>
           </div>
          </div>
          <div class="button">
-           <input type="submit"   value="Submit"  [disabled]="!form.valid" (click)="CreateCustomer()" matTooltip="submit"> 
+           <input type="submit"   value="Submit"  [disabled]="!form.valid" (click)="CreateCustomer()"> 
            <!-- do a conditional render -->
          </div>
        </form>

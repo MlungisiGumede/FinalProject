@@ -19,10 +19,7 @@
 .active, .collapsible:hover {
   background-color: #1561ac;
 }
-ion-col{
-  /* border: 2px solid black; */
-  
-}
+
 
 .inside{
   display: inline-block !important;
@@ -51,7 +48,7 @@ ion-col{
 .light-Btn{
     --background: #FFD700;
     --border-radius: 20em;
-    display: inline-block;
+    display: left;
 }
 .light-Btns{
   --background: #1976D2;
@@ -65,10 +62,16 @@ ion-col{
 float: right;
 }
 
+.red-Btn2{
+  --background: red;
+  --border-radius: 10em;
+float: right;
+}
+
 .red-Btn{
     --background: #E02828;
     --border-radius: 20em;
-    display: inline-block;
+    display: left;
 }
 
 .isb{
