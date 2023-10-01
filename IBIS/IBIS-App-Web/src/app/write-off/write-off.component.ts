@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { LoadingController, RangeCustomEvent } from '@ionic/angular';
+import { LoadingController, ModalController, RangeCustomEvent } from '@ionic/angular';
 import { RangeValue } from '@ionic/core';
 import { ProductService } from '../Services/product.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -12,6 +12,8 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { every, of } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { map,catchError, throwError } from 'rxjs';
+import { ProductsHelpComponent } from '../products-help/products-help.component';
+import { WriteOffHelpComponent } from '../write-off-help/write-off-help.component';
 
 
 
@@ -56,8 +58,9 @@ images: LocalFile[]=[];
 
   
 
-  constructor(private route : ActivatedRoute,private productService: ProductService,private fb : FormBuilder, private loadingCtrl: LoadingController,private writeoffservice: WriteOffService
-    ,private router: Router, private _snackBar: MatSnackBar) {
+  constructor(private route : ActivatedRoute,private productService: ProductService,private fb : FormBuilder, private loadingCtrl: LoadingController,
+    private writeoffservice: WriteOffService,public helpModal: ModalController,
+    private router: Router, private _snackBar: MatSnackBar) {
     
     
     this.datawr = new WriteOff();
@@ -243,6 +246,12 @@ if(this.type == 1){
     //   console.log("success", res);
     // })
    
+}
+
+async showHelp(){
+  const modal = await this.helpModal.create({
+    component: WriteOffHelpComponent});
+    return await modal.present();
 }
 private ShowSnackBar(message: string, panel: string){
   this._snackBar.open(message, "close", {

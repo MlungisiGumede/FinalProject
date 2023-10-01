@@ -9,6 +9,7 @@ import { ReportHelpComponent } from '../report-help/report-help.component';
 import { HomeHelpComponent } from '../home-help/home-help.component';
 import { CalenderHelpComponent } from '../calender-help/calender-help.component';
 import { CustomerHelpComponent } from '../customer-help/customer-help.component';
+import { WriteOffHelpComponent } from '../write-off-help/write-off-help.component';
 
 @Component({
   selector: 'app-help-me',
@@ -18,7 +19,7 @@ import { CustomerHelpComponent } from '../customer-help/customer-help.component'
 export class HelpMeComponent implements OnInit {
   filterTerm!: string;
   options: string[] = ['Orders Help', 'Suppliers Help', 'Inventory Help', 'Products Help', 'Recipes Help', 'Customers Help', 'Report Help',
-'Calender Help', 'Home Help'];
+'Calender Help', 'Home Help', 'Write Off Help'];
   selectedItem: string = '';
   showDropdown: boolean = false;
   filteredOptions: string[] = [];
@@ -159,6 +160,12 @@ if(option == 'Home Help'){
 if(option == 'Report Help'){
   const modal = await this.helpModal.create({
     component: ReportHelpComponent});
+    return await modal.present();
+
+}
+if(option == 'Write Off Help'){
+  const modal = await this.helpModal.create({
+    component: WriteOffHelpComponent});
     return await modal.present();
 
 }

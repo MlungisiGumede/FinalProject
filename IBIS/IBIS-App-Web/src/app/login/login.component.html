@@ -8,7 +8,7 @@
     <div class="form">
      
       <form [formGroup]="loginForm" class="login-form">
-        <ion-icon id="helpIcon" name="help-circle" style="color: #002850;" (click)="showHelp()"></ion-icon>
+        <ion-icon id="helpIcon" name="help-circle" style="color: #002850;" (click)="showHelp()" matTooltip="Help"></ion-icon>
         <h1>Login</h1>
         <input formControlName="username" type="text" [(ngModel)]="name" name="name"  placeholder="username" required/>
         <input formControlName="password" type="password" placeholder="password" required/>

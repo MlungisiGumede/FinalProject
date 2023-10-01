@@ -89,6 +89,7 @@ import { ProfileHelpComponent } from './profile-help/profile-help.component';
 import { HomeHelpComponent } from './home-help/home-help.component';
 import { CalenderHelpComponent } from './calender-help/calender-help.component';
 import { ReportHelpComponent } from './report-help/report-help.component';
+import { WriteOffHelpComponent } from './write-off-help/write-off-help.component';
 
 
 
@@ -157,7 +158,8 @@ import { ReportHelpComponent } from './report-help/report-help.component';
     ProfileHelpComponent,
     HomeHelpComponent,
     CalenderHelpComponent,
-    ReportHelpComponent
+    ReportHelpComponent,
+    WriteOffHelpComponent
    
     
   
