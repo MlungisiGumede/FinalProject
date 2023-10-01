@@ -5,6 +5,10 @@ import { RecipesHelpComponent } from '../recipes-help/recipes-help.component';
 import { OrdersHelpComponent } from '../orders-help/orders-help.component';
 import { SupplierHelpComponent } from '../supplier-help/supplier-help.component';
 import { ProductsHelpComponent } from '../products-help/products-help.component';
+import { ReportHelpComponent } from '../report-help/report-help.component';
+import { HomeHelpComponent } from '../home-help/home-help.component';
+import { CalenderHelpComponent } from '../calender-help/calender-help.component';
+import { CustomerHelpComponent } from '../customer-help/customer-help.component';
 
 @Component({
   selector: 'app-help-me',
@@ -13,7 +17,8 @@ import { ProductsHelpComponent } from '../products-help/products-help.component'
 })
 export class HelpMeComponent implements OnInit {
   filterTerm!: string;
-  options: string[] = ['Orders Help', 'Suppliers Help', 'Inventory Help', 'Products Help', 'Recipes Help', 'Customers Help'];
+  options: string[] = ['Orders Help', 'Suppliers Help', 'Inventory Help', 'Products Help', 'Recipes Help', 'Customers Help', 'Report Help',
+'Calender Help', 'Home Help'];
   selectedItem: string = '';
   showDropdown: boolean = false;
   filteredOptions: string[] = [];
@@ -66,6 +71,22 @@ this.helpClicked=true;
       return await modal.present();
   }
 
+  async showReportHelp(){
+    const modal = await this.helpModal.create({
+      component: ReportHelpComponent});
+      return await modal.present();
+  }
+  async showHomePageHelp(){
+    const modal = await this.helpModal.create({
+      component: HomeHelpComponent});
+      return await modal.present();
+  }
+  async showCalenderHelp(){
+    const modal = await this.helpModal.create({
+      component: CalenderHelpComponent});
+      return await modal.present();
+  }
+
   toggleDropdown() {
     this.showDropdown = !this.showDropdown;
     this.filteredOptions = [...this.options];
@@ -108,6 +129,36 @@ if(option == 'Inventory Help'){
 if(option == 'Recipes Help'){
   const modal = await this.helpModal.create({
     component: RecipesHelpComponent});
+    return await modal.present();
+
+}
+if(option == 'Customers Help'){
+  const modal = await this.helpModal.create({
+    component: CustomerHelpComponent});
+    return await modal.present();
+
+}
+if(option == 'Calender Help'){
+  const modal = await this.helpModal.create({
+    component: CalenderHelpComponent});
+    return await modal.present();
+
+}
+if(option == 'Products Help'){
+  const modal = await this.helpModal.create({
+    component: ProductsHelpComponent});
+    return await modal.present();
+
+}
+if(option == 'Home Help'){
+  const modal = await this.helpModal.create({
+    component: HomeHelpComponent});
+    return await modal.present();
+
+}
+if(option == 'Report Help'){
+  const modal = await this.helpModal.create({
+    component: ReportHelpComponent});
     return await modal.present();
 
 }

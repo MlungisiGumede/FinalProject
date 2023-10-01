@@ -88,6 +88,7 @@ import { PaymentHelpComponent } from './payment-help/payment-help.component';
 import { ProfileHelpComponent } from './profile-help/profile-help.component';
 import { HomeHelpComponent } from './home-help/home-help.component';
 import { CalenderHelpComponent } from './calender-help/calender-help.component';
+import { ReportHelpComponent } from './report-help/report-help.component';
 
 
 
@@ -155,7 +156,8 @@ import { CalenderHelpComponent } from './calender-help/calender-help.component';
     PaymentHelpComponent,
     ProfileHelpComponent,
     HomeHelpComponent,
-    CalenderHelpComponent
+    CalenderHelpComponent,
+    ReportHelpComponent
    
     
   

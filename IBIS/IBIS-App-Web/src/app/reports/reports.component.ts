@@ -15,6 +15,8 @@ import { CustomerOrderVM } from '../Models/CustomerOrderVM';
 import { ProductViewModel } from '../Models/ProductViewModel';
 import { catchError, map, throwError } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { ReportHelpComponent } from '../report-help/report-help.component';
+import { ModalController } from '@ionic/angular';
 var pdfMake = require('pdfmake/build/pdfmake');
 var pdfFonts = require('pdfmake/build/vfs_fonts');
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
@@ -70,7 +72,7 @@ export class ReportsComponent implements OnInit {
   ]
   
   combinedData: { Name: string, Quantity: number, Price: number }[] = [];
-  constructor(private productService: ProductService, private route: ActivatedRoute,
+  constructor(private productService: ProductService, private route: ActivatedRoute,public helpModal: ModalController,
      private inv : InventoryService,private supply: SupplierService,private orderservice : OrdersService, private writeOffService : WriteOffService
      ,public orderService:OrdersService,private _snackBar: MatSnackBar,
      ) {
@@ -460,6 +462,12 @@ this.ShowSnackBar('SubCategores Export Successfully Exported to Excel Check Your
           
    
 
+  }
+
+  async showHelp(){
+    const modal = await this.helpModal.create({
+      component: ReportHelpComponent});
+      return await modal.present();
   }
 CreateSupplierOrdersChart(){
 
