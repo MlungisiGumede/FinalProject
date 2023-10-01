@@ -82,6 +82,7 @@ import { AddUserComponent } from './add-user/add-user.component';
 import { CalendarComponent } from './calendar/calendar.component';
 import { CalendarModalComponent } from './calendar-modal/calendar-modal.component';
 //import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
+import { MatTooltipModule, matTooltipAnimations } from '@angular/material/tooltip';
 
 
 
@@ -151,6 +152,7 @@ import { CalendarModalComponent } from './calendar-modal/calendar-modal.componen
   ],
   imports: [
     BrowserModule,
+    MatTooltipModule,
     ReactiveFormsModule,
     CanvasJSAngularChartsModule,
     Ng2SearchPipeModule,
