@@ -4,7 +4,7 @@
     
     <h2>{{title}}</h2>
 
-    <button class="button-add-row" [disabled]="edited" mat-button (click)="addRow()">Add Row</button>
+    <button class="button-add-row" [disabled]="edited" mat-button (click)="addRow()" matTooltip="add row">Add Row</button>
    
   </article>
   <form action="" [formGroup]="form">
@@ -46,7 +46,7 @@
        
           <div *ngSwitchCase="'isDelete'">
             
-              <button mat-button (click)="DeleteRow(rowIndex)" >Delete</button>
+              <button mat-button (click)="DeleteRow(rowIndex)" matTooltip="Delete">Delete</button>
               
             </div>
             <span *ngSwitchCase="'total'">

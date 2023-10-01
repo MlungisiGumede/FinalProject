@@ -82,6 +82,14 @@ import { AddUserComponent } from './add-user/add-user.component';
 import { CalendarComponent } from './calendar/calendar.component';
 import { CalendarModalComponent } from './calendar-modal/calendar-modal.component';
 //import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
+import { MatTooltipModule, matTooltipAnimations } from '@angular/material/tooltip';
+import { CustomerHelpComponent } from './customer-help/customer-help.component';
+import { PaymentHelpComponent } from './payment-help/payment-help.component';
+import { ProfileHelpComponent } from './profile-help/profile-help.component';
+import { HomeHelpComponent } from './home-help/home-help.component';
+import { CalenderHelpComponent } from './calender-help/calender-help.component';
+import { ReportHelpComponent } from './report-help/report-help.component';
+import { WriteOffHelpComponent } from './write-off-help/write-off-help.component';
 
 
 
@@ -144,13 +152,21 @@ import { CalendarModalComponent } from './calendar-modal/calendar-modal.componen
     ViewUserComponent,
     AddUserComponent,
     CalendarComponent,
-    CalendarModalComponent
+    CalendarModalComponent,
+    CustomerHelpComponent,
+    PaymentHelpComponent,
+    ProfileHelpComponent,
+    HomeHelpComponent,
+    CalenderHelpComponent,
+    ReportHelpComponent,
+    WriteOffHelpComponent
    
     
   
   ],
   imports: [
     BrowserModule,
+    MatTooltipModule,
     ReactiveFormsModule,
     CanvasJSAngularChartsModule,
     Ng2SearchPipeModule,

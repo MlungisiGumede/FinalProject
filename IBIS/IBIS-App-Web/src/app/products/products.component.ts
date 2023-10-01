@@ -382,7 +382,7 @@ OnDone(item:Product){
     }))
 .subscribe(()=>{
       this.request = ""
-      this.ShowSnackBar("successfully updated price", "error");
+      this.ShowSnackBar("successfully updated price", "success");
       this.getProducts()
     })
   }
@@ -570,8 +570,6 @@ OnDone(item:Product){
          
        )
   
-         
-      // 
       
       console.log(body)
       console.log(body)

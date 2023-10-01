@@ -52,16 +52,16 @@
 
                 <div *ngSwitchCase="1">
               <ion-button (click)="ViewOrder(item)" class="red-btn" >View</ion-button>
-              <ion-button *ngIf="!item.transaction_ID" class="red-btn" (click)="Check(item)">Checkout</ion-button>
+              <ion-button *ngIf="!item.transaction_ID" class="red-btn" (click)="Check(item)" matTooltip="checkout">Checkout</ion-button>
               
                 </div>
               
               <div *ngSwitchCase="2">
-                <ion-button (click)="ViewOrder(item)" class="red-btn" >View</ion-button>
-                <ion-button *ngIf="permissions" (click)="SubmitReview(item)" >Leave Review</ion-button>
+                <ion-button (click)="ViewOrder(item)" class="red-btn" matTooltip="View">View</ion-button>
+                <ion-button *ngIf="permissions" (click)="SubmitReview(item)" matTooltip="review">Leave Review</ion-button>
               </div>
               <div *ngSwitchCase="3">
-                <ion-button (click)="ViewOrder(item)" class="red-btn" >View</ion-button>
+                <ion-button (click)="ViewOrder(item)" class="red-btn" matTooltip="View" >View</ion-button>
                 
               </div>
             </div>

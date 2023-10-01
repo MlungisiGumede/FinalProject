@@ -1,24 +1,7 @@
 <ion-content class="ion-margin" id="htmlData">
   <ion-content class="ion-margin" id="htmlData">
-    <ion-button (click)="setOpen(true)">
-      <ion-icon name="help-circle"></ion-icon>
-      <ion-content class="ion-padding">
-        <ion-modal [isOpen]="isModalOpen">
-          <ng-template>
-            <ion-header>
-              <ion-toolbar>
-                <ion-title>Modal</ion-title>
-                <ion-buttons slot="end">
-                  <ion-button (click)="setOpen(false)">Close</ion-button>
-                </ion-buttons>
-              </ion-toolbar>
-            </ion-header>
-          </ng-template>
-        </ion-modal>
-      </ion-content>
-    </ion-button>
   <div class="contents">
-    <ion-icon id="helpIcon" name="help-circle" style="color: #002850;" (click)="showHelp()"></ion-icon>
+    <ion-icon id="helpIcon" name="help-circle" style="color: #002850;" (click)="showHelp()" matTooltip="Help"></ion-icon>
     <ion-title><h1>Recipes</h1></ion-title>
     <ion-searchbar class="isb" placeholder="Search Recipes..." showCancelButton="focus" [(ngModel)]="filterTerm" animated></ion-searchbar><br/>
       <ion-grid class="ion-margin" class="ion-grid-padding">

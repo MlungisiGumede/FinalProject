@@ -1,5 +1,6 @@
 <ion-content class="ion-margin" id="htmlData">
     <div class="contents">
+      <ion-icon id="helpIcon" name="help-circle" style="color: #002850;" (click)="showHelp()"></ion-icon>
       <ion-title><h1>Customer</h1></ion-title>
       <ion-searchbar class="isb" placeholder="Search Customer..." showCancelButton="focus" [(ngModel)]="filterTerm" animated></ion-searchbar><br/>
         <ion-grid class="ion-margin" class="ion-grid-padding">
@@ -10,6 +11,7 @@
             <ion-col>Phone</ion-col>
             <ion-col>Email</ion-col>
             <ion-col></ion-col>
+            
           </ion-row>
           <ion-item-divider></ion-item-divider>
           <ion-row *ngFor="let item of data | async | filter: filterTerm">
@@ -30,12 +32,7 @@
             </ion-col>
             <ion-col>
               <ion-button class="red-Btn" (click)="OnEdit(item)">View</ion-button>
-              
-            </ion-col>
-            <ion-col>
               <ion-button class="light-Btn" (click)="DeleteCustomer(item.customer_ID)">Remove</ion-button>
-            </ion-col>
-            <ion-col>
               <ion-button class="light-Btn" (click)="AddCustomerOrder(item)">Add Customer Order</ion-button>
             </ion-col>
           </ion-row>
