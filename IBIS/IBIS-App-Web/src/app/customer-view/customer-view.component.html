@@ -29,8 +29,8 @@
             <ion-col>Order ID</ion-col>
             <ion-col>Date Placed</ion-col>
             <ion-col>Total</ion-col>
-            <ion-col></ion-col>
             <ion-col >Description</ion-col>
+            <ion-col></ion-col>
           </ion-row>
           <ion-item-divider></ion-item-divider>
           <ion-row *ngFor="let item of filteredCustomerOrders | async | filter: filterTerm">
