@@ -14,29 +14,27 @@
       </mat-select>
       
     </mat-form-field>
-      <ion-grid class="ion-margin" class="ion-grid-padding">
+    <ion-item-divider></ion-item-divider>
+      <ion-grid class="ion-margin" class="ion-grid-padding" *ngIf="isCustomerOrder" >
         
         <ion-row>
           <ion-col>Order ID</ion-col>
-          <ion-col *ngIf="isCustomerOrder">Customer</ion-col>
-          <ion-col  *ngIf="!isCustomerOrder">Supplier</ion-col>
+          <ion-col>Customer</ion-col>
           <ion-col>Date Created</ion-col>
           <ion-col>Total</ion-col>
-          <ion-col *ngIf="isCustomerOrder">Description</ion-col>
-          
+          <ion-col>Description</ion-col>
+          <ion-col></ion-col>
          
         </ion-row>
-      </ion-grid>
          <ion-item-divider></ion-item-divider>
-        <ion-grid>
         <ion-row *ngFor="let item of data;let rowIndex = index;">
-        <div  *ngIf="isCustomerOrder">
+      
         
-          <ion-col size="5">
+          <ion-col >
             <ion-label>{{item.customerOrder_ID}}</ion-label>
           </ion-col>
         
-          <ion-col size="1">
+          <ion-col>
             <ion-label>{{getCustomerName(item.customer_ID)}}</ion-label>
           </ion-col>
 
@@ -49,29 +47,95 @@
           <ion-col>
             <ion-label>{{ReturnType(item)}}</ion-label>
           </ion-col>
+        <ion-col>
+          <div *ngIf="CheckPermission()" [ngSwitch]="selectedStatus">
+           
+            <div >
+            <div  *ngSwitchCase="1">
+              
+              
+              
+              <mat-icon class="light-Btn" *ngIf="!item.transaction_ID " (click)="delete(item)" matTooltip="Delete">delete</mat-icon>
+              <mat-icon class="light-Btn"  (click)="View(item)" matTooltip="edit">edit</mat-icon>
+              <mat-icon *ngIf="CheckPermission()" class="red-Btn" id="1" (click)="UpdateOrderStatus(item,3)" matTooltip="cancel">cancel</mat-icon>
+              <mat-icon *ngIf="CheckPermission()" class="light-Btn" (click)="UpdateOrderStatus(item,2)" matTooltip="check">check</mat-icon>
+            </div>
+             
+              
+              <div *ngSwitchCase="2">
+                 <mat-icon class="light-Btn"  *ngIf="!item.transaction_ID && permissions" (click)="delete(item)"  matTooltip="Delete">delete</mat-icon> 
+                <mat-icon  class="red-Btn" (click)="View(item)"  matTooltip="edit">edit</mat-icon>
+                <mat-icon *ngIf="permissions" class="red-Btn" id="1" (click)="UpdateOrderStatus(item,3)" matTooltip="cancel">cancel</mat-icon>
+              <mat-icon *ngIf="permissions" class="light-Btn" id="1" (click)="UpdateOrderStatus(item,1)" matTooltip="pending">pending</mat-icon>
+            </div>
+              
+             
+               
+               
+               
+              
+
+            <div *ngSwitchCase="3">
+              <mat-icon  class="light-Btn"  *ngIf="!item.transaction_ID && permissions" (click)="delete(item)" matTooltip="delete">delete</mat-icon>
+              <mat-icon class="red-Btn" (click)="View(item)" matTooltip="edit">edit</mat-icon>
+              <mat-icon *ngIf="permissions" class="red-Btn" id="1" (click)="UpdateOrderStatus(item,3)" matTooltip="cancel">cancel</mat-icon>
+            <mat-icon *ngIf="permissions" class="light-Btn" id="1" (click)="UpdateOrderStatus(item,1)" matTooltip="pending">pending</mat-icon>
+           
+            
+           
+             
+             
+             
+            </div>
+
+            
+              
+            
+                <div *ngSwitchCase="4">
+                  
+                  <mat-icon  class="light-Btn"   (click)="View(item)" matTooltip="edit">edit</mat-icon>
+                  <mat-icon class="light-Btn" *ngIf="!item.transaction_ID && permissions" (click)="delete(item)" matTooltip="delete">delete</mat-icon>
+                  
+                  </div>
+                </div>
+                  </div>
+                  <div *ngIf="!CheckPermission()">
+                    <mat-icon class="red-Btn" (click)="View(item)" matTooltip="edit">edit</mat-icon>
+                  </div> 
+                </ion-col>
+        </ion-row>
+        <ion-item-divider></ion-item-divider>
+      </ion-grid>
+      <ion-grid class="ion-margin" class="ion-grid-padding" *ngIf="!isCustomerOrder" >
         
-        </div>
-      <div *ngIf="!isCustomerOrder">
+        <ion-row>
+          <ion-col>Order ID</ion-col>
+          <ion-col>Supplier</ion-col>
+          <ion-col>Date Created</ion-col>
+          <ion-col>Total</ion-col>
+          <ion-col></ion-col>
+         
+        </ion-row>
+         <ion-item-divider></ion-item-divider>
+        <ion-row *ngFor="let item of data;let rowIndex = index;">
+      
         
           <ion-col>
             <ion-label>{{item.supplierOrder_ID}}</ion-label>
           </ion-col>
 
-          <ion-col>
+          <ion-col >
             <ion-label>{{getSupplierName(item.supplier_ID)}}</ion-label>
           </ion-col>
 
-          <ion-col>
+          <ion-col >
             <ion-label>{{ConvertDate(item.date_Created)}}</ion-label>
           </ion-col>
 
           <ion-col>
             <ion-label>R{{CalculateTotal(item.supplierOrder_ID)}}</ion-label>
           </ion-col>
-     
-        
-          </div>
-       <ion-col>
+        <ion-col>
           <div *ngIf="CheckPermission()" [ngSwitch]="selectedStatus">
            
             <div >
@@ -142,6 +206,12 @@
         
 
 </ion-content>
+
+
+
+
+
+
 
 
 
