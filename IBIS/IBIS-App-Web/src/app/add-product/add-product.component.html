@@ -50,15 +50,20 @@
             </ion-note>
           </div>
 
-          <div class="input-box">
+          <!-- <div class="input-box">
             <span class="details">Expiry</span>
               <ion-input type="date"  formControlName="expiry" class="priceBox" (ionChange)="validateExpiryDate()"></ion-input>
               <ion-note class="error-message" *ngIf="form.get('expiryDate')?.hasError('minExpiryDate')">
                 Expiry date must at least be 10 days from now.
               </ion-note>
-          </div>
+          </div> -->
+       
+        <div class="input-box">
+          <span class="details">SKU</span>
+          <ion-input type="text" readonly placeholder="Try to upload Barcode" formControlName="sku" class="priceBox"></ion-input>
+          
         </div>
-
+      </div>
       <!-- </section> -->
       <!-- <section *ngIf="page==2"> -->
         <div *ngIf="selectedPage==2" class="user-details">

@@ -6,6 +6,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { UserVM } from '../Models/UserVM';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { LoginService } from '../Services/login.service';
+import { catchError, map, throwError } from 'rxjs';
 
 @Component({
   selector: 'app-view-user',
@@ -44,11 +45,11 @@ guestDropDown:any = [
 employeeDropDown:any = [
   {
     permission_ID:3,
-    name:"Customer Orders"
+    name:"Customer Order Staus"
   },
   {
     permission_ID:4,
-    name:"Supplier Orders"
+    name:"Supplier Order Status"
   },
   {
     permission_ID:5,
@@ -99,7 +100,18 @@ this.title = "Select Permissions"
 
 update(){
   this.form.get('permissions')?.setValue("")
-  this.loginService.UpdateUserRole(this.form.value).subscribe(res =>{
+  this.loginService.UpdateUserRole(this.form.value).pipe(map(
+    (res)=>{
+
+  }),
+  catchError((err) =>{
+    console.log(err)
+  
+      this.matDialogRef.close(false)
+    
+    
+    return throwError(err)
+  })).subscribe(res =>{
 
   })
 
@@ -124,8 +136,19 @@ Submit(){
   this.form.get('permissions')?.setValue("")
   this.form.get('permissions')?.setValue(submitArr)
   console.log(submitArr)
-  this.loginService.UpdateUserRole(this.form.value).subscribe(res =>{
+  this.loginService.UpdateUserRole(this.form.value).pipe(map(
+    (res)=>{
 
+  }),
+  catchError((err) =>{
+    console.log(err)
+  
+      this.matDialogRef.close(false)
+    
+    
+    return throwError(err)
+  })).subscribe(res =>{
+  this.matDialogRef.close(true)
   })
 
 }

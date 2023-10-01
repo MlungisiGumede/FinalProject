@@ -5,6 +5,7 @@ import { EventsService, Event } from '../Services/events.service';
 import { FormControl, FormGroup } from '@angular/forms';
 import { LoginService } from '../Services/login.service';
 import { of } from 'rxjs';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -46,7 +47,8 @@ export class CalendarComponent implements OnInit {
   eventsForSelectedDate: Event[] = [];
 
   constructor(private modalController: ModalController, private eventsService: EventsService,
-    private changeDetectorRef: ChangeDetectorRef,private loginService: LoginService) { }
+    private changeDetectorRef: ChangeDetectorRef,private loginService: LoginService,
+    public router: Router) { }
 SetValue(e:any){
   console.log(e)
   console.log(e.target.value)
@@ -76,6 +78,9 @@ console.log(this.highlightedDates)
       }
       
     })
+  }
+  Navigate(){
+    this.router.navigate(['/home'])
   }
 
   loadEventsForSelectedDate() {

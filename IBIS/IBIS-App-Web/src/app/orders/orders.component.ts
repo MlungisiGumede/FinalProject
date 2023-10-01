@@ -448,7 +448,9 @@ CheckOrderStatus(){
     await this.ReadOrders()
     await this.ReadProducts()
     let edit = true
-
+if(!this.CheckPermission()){
+  edit = false
+}
     if(element.orderStatus_ID == 2 || element.orderStatus_ID == 3 || element.transaction_ID != null || !this.permissions){
       edit = false
     }

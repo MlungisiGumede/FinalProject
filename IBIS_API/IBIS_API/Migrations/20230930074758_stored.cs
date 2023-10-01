@@ -19,8 +19,16 @@ namespace IBIS_API.Migrations
                     SET NOCOUNT ON;
                     select * from CustomerOrdersLine where CustomerOrder_ID = @CustomerOrder_ID
                 END";
+
+            var sp2 = @"CREATE PROCEDURE [dbo].[CalculateTotal]
+                    @SupplierOrder_ID varchar(50)
+                AS
+                BEGIN
+                    SET NOCOUNT ON;
+                    select * from SupplierOrderLines where SupplierOrder_ID = @SupplierOrder_ID
+                END";
             //ord.Total = _context.CustomerOrdersLine.Where(c => c.CustomerOrder_ID == customerOrder.CustomerOrder_ID).Sum(c => c.Quantity * c.Price);
-         
+
 
             migrationBuilder.Sql(sp);
         }

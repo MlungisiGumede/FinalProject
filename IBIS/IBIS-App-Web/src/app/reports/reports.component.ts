@@ -72,7 +72,8 @@ export class ReportsComponent implements OnInit {
   combinedData: { Name: string, Quantity: number, Price: number }[] = [];
   constructor(private productService: ProductService, private route: ActivatedRoute,
      private inv : InventoryService,private supply: SupplierService,private orderservice : OrdersService, private writeOffService : WriteOffService
-     ,public orderService:OrdersService,private _snackBar: MatSnackBar) {
+     ,public orderService:OrdersService,private _snackBar: MatSnackBar,
+     ) {
       Chart.register(...registerables);
       }
 
@@ -109,42 +110,100 @@ export class ReportsComponent implements OnInit {
     });
   }
   GenerateSubCategoriesReportPDF(){
-    this.productService.GenerateSubCategoryReportPDF().subscribe((res)=>{
+    this.productService.GenerateSubCategoryReportPDF().pipe(map(
+      (res)=>{
+        const link = document.createElement("a")
+        link.href = "data:application/pdf;base64,"+res.base64
+        link.download = "SubCategories.pdf"
+        link.click()
+        
+        link.remove()
+this.ShowSnackBar('SubCategores PDF Report successful', 'success')
+
+
+
+
+    }),
+    catchError((err) =>{
+      console.log(err)
+      this.ShowSnackBar('SUbcategories PDF Report failed ', 'error')
+     
+      return throwError(err)
+    })).subscribe((res)=>{
       console.log(res)
-      const link = document.createElement("a")
-      link.href = "data:application/pdf;base64,"+res.base64
-      link.download = "SubCategories.pdf"
-      link.click()
       
-      link.remove()
     })
   }
   GenerateCategoriesReportPDF(){
-    this.productService.GenerateCategoryReportPDF().subscribe((res)=>{
-      console.log(res)
+    this.productService.GenerateCategoryReportPDF().pipe(map(
+      (res)=>{
+ console.log(res)
+  this.ShowSnackBar('Categories PDF Report success ', 'success')
       const link = document.createElement("a")
       link.href = "data:application/pdf;base64,"+res.base64
       link.download = "Categories.pdf"
       link.click()
       
       link.remove()
+
+
+
+
+
+    }),
+    catchError((err) =>{
+      console.log(err)
+       this.ShowSnackBar('Categories PDF Report failed ', 'error')
+     
+      return throwError(err)
+    })).subscribe((res)=>{
+     
     })
   }
   GenerateCategoriesReportExcel(){
-    this.productService.GenerateCategoryReportExcel().subscribe((res)=>{
+    this.productService.GenerateCategoryReportExcel().pipe(map(
+      (res)=>{
+
+this.ShowSnackBar('SubCategores Export Successfully Exported to Excel Check Your email', 'success')
+
+
+
+
+    }),
+    catchError((err) =>{
+      console.log(err)
+      this.ShowSnackBar('Failed to convert SubCategories to excel or send it or both', 'error')
+     
+      return throwError(err)
+    })).subscribe((res)=>{
       console.log(res)
-      alert("success")
+     
     })
   }
   GenerateSubCategoriesReportExcel(){
-    this.productService.GenerateSubCategoryReportExcel().subscribe((res)=>{
+    this.productService.GenerateSubCategoryReportExcel().pipe(map(
+      (res)=>{
+
+this.ShowSnackBar('SubCategores Export Successfully Exported to Excel Check Your email', 'success')
+
+
+
+
+    }),
+    catchError((err) =>{
+      console.log(err)
+      this.ShowSnackBar('Failed to convert SubCategories to excel or send it or both', 'error')
+     
+      return throwError(err)
+    })).subscribe((res)=>{
       console.log(res)
-      alert("success")
+      
       
       
      
     })
   }
+ 
   ExportToExcel(){
     if(this.isCustomerOrder){
       this.orderService.ConvertCustomerOrdersToExcel().pipe(map(
@@ -201,12 +260,21 @@ export class ReportsComponent implements OnInit {
     }else if(this.request == 'popular'){
       this.MostPopularProducts()
     }else if(this.request == 'category'){
-      this.GenerateCategoriesReportPDF()
-      this.selectedFormat = ''
+      if(this.selectedFormat == 1){
+        this.GenerateCategoriesReportPDF()
+      }else if(this.selectedFormat == 2){
+        this.GenerateCategoriesReportExcel()
+      }
+     
     }else if(this.request == 'subCategory'){
-      this.GenerateSubCategoriesReportPDF()
-      this.selectedFormat = ''
+      if(this.selectedFormat == 1){
+        this.GenerateSubCategoriesReportPDF()
+      }else if(this.selectedFormat == 2){
+        this.GenerateSubCategoriesReportExcel()
+      }
+      
     }
+    this.selectedFormat = ''
   }
   ConfirmPDF(){
     if(this.request =='category'){

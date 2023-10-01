@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { MatDialogRef } from '@angular/material/dialog';
 import { LoginService } from '../Services/login.service';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { catchError, map, throwError } from 'rxjs';
 
 @Component({
   selector: 'app-add-user',
@@ -24,7 +25,20 @@ form:any
     })
   }
   AddUser(){
-    this.loginService.AddUser(this.form.value).subscribe()
+    this.loginService.AddUser(this.form.value).pipe(map(
+      (res)=>{
+
+    }),
+    catchError((err) =>{
+      console.log(err)
+    
+        this.matDialogRef.close(false)
+      
+      
+      return throwError(err)
+    })).subscribe(res=>{
+      this.matDialogRef.close(true)
+    })
   }
 
 }

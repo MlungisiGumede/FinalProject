@@ -84,8 +84,8 @@ constructor(private loginService : LoginService, public router: Router,
   ];
   tabs: TabItem[] = [
     {
-      label: 'Dashboard',
-      icon: 'dashboard',
+      label: 'Home',
+      icon: 'home',
       route: 'home',
     },
     {

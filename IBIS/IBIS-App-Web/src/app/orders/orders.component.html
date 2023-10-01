@@ -24,19 +24,19 @@
           <ion-col>Total</ion-col>
           <ion-col *ngIf="isCustomerOrder">Description</ion-col>
           
-          <ion-col></ion-col>
+         
         </ion-row>
       </ion-grid>
-        <ion-item-divider></ion-item-divider>
+         <ion-item-divider></ion-item-divider>
         <ion-grid>
         <ion-row *ngFor="let item of data;let rowIndex = index;">
         <div  *ngIf="isCustomerOrder">
-         
-          <ion-col>
+        
+          <ion-col size="5">
             <ion-label>{{item.customerOrder_ID}}</ion-label>
           </ion-col>
-
-          <ion-col>
+        
+          <ion-col size="1">
             <ion-label>{{getCustomerName(item.customer_ID)}}</ion-label>
           </ion-col>
 
@@ -49,7 +49,7 @@
           <ion-col>
             <ion-label>{{ReturnType(item)}}</ion-label>
           </ion-col>
- 
+        
         </div>
       <div *ngIf="!isCustomerOrder">
         
@@ -72,32 +72,32 @@
         
           </div>
        <ion-col>
-          <div [ngSwitch]="selectedStatus">
+          <div *ngIf="CheckPermission()" [ngSwitch]="selectedStatus">
            
-
-            <div *ngSwitchCase="1">
+            <div >
+            <div  *ngSwitchCase="1">
               
               
               
-              <mat-icon class="light-Btn" *ngIf="!item.transaction_ID && permissions" (click)="delete(item)">delete</mat-icon>
+              <mat-icon class="light-Btn" *ngIf="!item.transaction_ID " (click)="delete(item)">delete</mat-icon>
               <mat-icon class="light-Btn"  (click)="View(item)">edit</mat-icon>
               <mat-icon *ngIf="CheckPermission()" class="red-Btn" id="1" (click)="UpdateOrderStatus(item,3)">cancel</mat-icon>
-              <mat-icon *ngIf="permissions" class="light-Btn" (click)="UpdateOrderStatus(item,2)">check</mat-icon>
-
+              <mat-icon *ngIf="CheckPermission()" class="light-Btn" (click)="UpdateOrderStatus(item,2)">check</mat-icon>
+            </div>
              
-              </div>
+              
               <div *ngSwitchCase="2">
                  <mat-icon class="light-Btn"  *ngIf="!item.transaction_ID && permissions" (click)="delete(item)">delete</mat-icon> 
                 <mat-icon  class="red-Btn" (click)="View(item)">edit</mat-icon>
                 <mat-icon *ngIf="permissions" class="red-Btn" id="1" (click)="UpdateOrderStatus(item,3)">cancel</mat-icon>
               <mat-icon *ngIf="permissions" class="light-Btn" id="1" (click)="UpdateOrderStatus(item,1)">pending</mat-icon>
-             
+            </div>
               
              
                
                
                
-              </div>
+              
 
             <div *ngSwitchCase="3">
               <mat-icon  class="light-Btn"  *ngIf="!item.transaction_ID && permissions" (click)="delete(item)">delete</mat-icon>
@@ -121,7 +121,11 @@
                   <mat-icon class="light-Btn" *ngIf="!item.transaction_ID && permissions" (click)="delete(item)">delete</mat-icon>
                   
                   </div>
+                </div>
                   </div>
+                  <div *ngIf="!CheckPermission()">
+                    <mat-icon class="red-Btn" (click)="View(item)">edit</mat-icon>
+                  </div> 
                 </ion-col>
         </ion-row>
         <ion-item-divider></ion-item-divider>

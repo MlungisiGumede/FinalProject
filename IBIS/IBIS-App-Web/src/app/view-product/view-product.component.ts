@@ -40,7 +40,8 @@ export class ViewProductComponent implements OnInit {
       price : [this.item.product.price, Validators.required],
      // phone : ['', Validators.required],
       quantity : [this.item.product.quantity, Validators.required],
-      expiry :  [this.item.product.expiry, Validators.required]
+      sku : [this.item.product.sku],
+      //expiry :  [this.item.product.expiry, Validators.required]
     })
    
 

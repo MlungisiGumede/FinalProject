@@ -115,10 +115,22 @@ console.log(this.router.url)
      
     })
       }else{
-        this.loginservice.SetNewPassWord(this.user).subscribe((res)=>{
+        this.loginservice.SetNewPassWord(this.user).pipe(map(
+          (res)=>{
+            
+       
+        }),
+        catchError((err) =>{
+        {
+          this.ShowSnackBar("failed to update password", "error");
+          }
+          
+          return throwError(err)
+        })).subscribe((res)=>{
+          this.ShowSnackBar("password successfully updated", "success");
           this.router.navigate(['/Login'])
         }), (error:any) => {
-          this.ShowSnackBar("failed to update password", "error");
+          
         }
       }
   }

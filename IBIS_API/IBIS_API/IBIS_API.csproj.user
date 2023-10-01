@@ -11,6 +11,6 @@
     <WebStackScaffolding_DbContextTypeFullName>IBIS_API.Data.DataContextcs</WebStackScaffolding_DbContextTypeFullName>
     <WebStackScaffolding_IsAsyncSelected>False</WebStackScaffolding_IsAsyncSelected>
     <WebStackScaffolding_IsViewGenerationSelected>True</WebStackScaffolding_IsViewGenerationSelected>
-    <NameOfLastUsedPublishProfile>C:\Users\27768\Documents\GitHub\inf370-team6\IBIS_API\IBIS_API\Properties\PublishProfiles\inf370team62023 - Web Deploy.pubxml</NameOfLastUsedPublishProfile>
+    <NameOfLastUsedPublishProfile>C:\Users\27768\Documents\GitHub\inf370-team6\.github\workflows\inf370team62023.yml</NameOfLastUsedPublishProfile>
   </PropertyGroup>
 </Project>

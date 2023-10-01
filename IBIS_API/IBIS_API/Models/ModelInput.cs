@@ -1,6 +1,6 @@
 ﻿using Microsoft.ML;
 using Microsoft.ML.Data;
-using Microsoft.ML.OnnxRuntime;
+//using Microsoft.ML.OnnxRuntime;
 using Microsoft.ML.Transforms.Onnx;
 
 namespace IBIS_API.Models

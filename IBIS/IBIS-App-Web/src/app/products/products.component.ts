@@ -25,6 +25,7 @@ import { ProductsHelpComponent } from '../products-help/products-help.component'
 //import { BarcodeScannerLivestreamComponent } from 'ngx-barcode-scanner/lib/barcode-scanner-livestream';
 import { Barcode, BarcodeScanner } from '@capacitor-mlkit/barcode-scanning';
 import {Html5QrcodeScanner} from 'html5-qrcode'
+import { LoginService } from '../Services/login.service';
 
 var pdfMake = require('pdfmake/build/pdfmake');
 var pdfFonts = require('pdfmake/build/vfs_fonts');
@@ -60,6 +61,8 @@ barcode: any;
   price:any
   title:any = "Products"
   form:any
+  permissions:any
+  role:any
   isSupported = true;
   radioList:any = [{
     'id':1,
@@ -72,7 +75,7 @@ barcode: any;
 
   constructor(private productService: ProductService,public router: Router,private toastController: ToastController
     ,private matDialog:MatDialog,private _snackbar: MatSnackBar,private writeOffService:WriteOffService,public helpModal: ModalController
-    ,private alertController: AlertController) {
+    ,private alertController: AlertController,private loginService:LoginService) {
       
     
     productService = {} as ProductService;
@@ -115,6 +118,7 @@ barcode: any;
     const { barcodes } = await BarcodeScanner.scan();
     this.barcodes.push(...barcodes);
   }
+  
 
   
 
@@ -135,7 +139,7 @@ barcode: any;
  // }
 
   ngOnInit() {
-   
+    this.GetUserRole()
     BarcodeScanner.isSupported().then((result) => {
       this.isSupported = result.supported;
     });
@@ -162,6 +166,39 @@ barcode: any;
     //   { product_ID: 5, product_Name: 'Product E', quantity: 5, price: 30 }
     // ];
 
+  }
+  CheckPermission(){
+    if(this.role == "manager"){
+        
+      return true
+     }
+   
+      console.log(this.permissions)
+        let index = this.permissions.findIndex((element:any) => element.permission_ID == 7)
+        console.log(index)
+      if(index > -1){
+        return true
+      }else{
+       
+        return false
+      
+      }
+  return
+}
+  async GetUserRole(){
+    let value = new Promise((resolve, reject) => {
+      this.loginService.GetUserRole().subscribe((res) => {
+        this.permissions = res.permissions
+        this.role = res.role
+        console.log(res)
+       //alert(this.permissions)
+        resolve(res)
+      }), (error: any) => {
+        reject(error)
+      }
+    })
+    await value
+    return value
   }
   WriteOffScreen(item:any){
 if(this.request == "write-off"){
@@ -510,7 +547,7 @@ OnDone(item:Product){
   FormBody(data:any, columns:any) { // https://stackoverflow.com/questions/26658535/building-table-dynamically-with-pdfmake
     var body = [];
   console.log(data)
-  let displayedColumns = ['Product ID','Name','Category Name','SubCategory Name','Price','Quantity','Expiry Date']
+  let displayedColumns = ['Product ID','Name','Category Name','SubCategory Name','Price','Quantity','SKU']
   console.log(columns)
       body.push(displayedColumns);
       //this.reportData.map()
@@ -571,7 +608,7 @@ OnDone(item:Product){
           table: {
             headerRows: 1,
             // widths: ['*', 'auto', 'auto', 'auto'],
-            body: this.FormBody(this.reportData, ['product_ID','name','category_ID','subCategory_ID','price','quantity','expiry'])
+            body: this.FormBody(this.reportData, ['product_ID','name','category_ID','subCategory_ID','price','quantity','sku'])
           }
         },
         {

@@ -7,6 +7,7 @@ import { ToastController } from '@ionic/angular';
 import { catchError, map, of, throwError } from 'rxjs';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import {Html5Qrcode, Html5QrcodeScanner} from 'html5-qrcode'
+import { MatSnackBar } from '@angular/material/snack-bar';
 //import changedet
 //import { BarcodeScannerLivestreamComponent } from 'ngx-barcode-scanner/public-api';
 
@@ -57,7 +58,7 @@ selectedCategory: string | null = null;
   constructor(private prodService: ProductService, public router:Router,
      private fb: FormBuilder, private toastController: ToastController,
      private dialogRef:MatDialogRef<AddProductComponent>,@Inject(MAT_DIALOG_DATA) public data: any,
-     private cd:ChangeDetectorRef){
+     private cd:ChangeDetectorRef,private _snackbar: MatSnackBar) {
     //this.data = new Product();
    this.categories = this.data.categories
    
@@ -92,12 +93,19 @@ selectedCategory: string | null = null;
       //alert(result)
       //this.cd.detectChanges()
     }).catch((error:any) => {
-      
-      this.form.get('identifier')?.setValue("")
-      alert("failiure to scan")
+      this.url = ""
+      this.form.get('sku')?.setValue("")
+      this.ShowSnackBar("Failiure to scan", "error")
       //alert(error)
     });
     ;
+  }
+  ShowSnackBar(message: string, panel: string) {
+    this._snackbar.open(message, "close", {
+      duration: 5000,
+      panelClass: [panel]
+      
+    });
   }
   FileChoice(e:any){
     console.log(this.form.value)
@@ -150,7 +158,7 @@ PageBackward(){
     this.form = this.fb.group({
       name: ['', Validators.required],
       price: [null, [Validators.required, Validators.min(1)]],
-      expiry: [null, [Validators.required, this.minExpiryDateValidator.bind(this)]],
+      //expiry: [null, [Validators.required, this.minExpiryDateValidator.bind(this)]],
       quantity: [null, [Validators.required, Validators.min(1)]],
       sku: ['', ],
       subCategory_ID: [null, Validators.required],

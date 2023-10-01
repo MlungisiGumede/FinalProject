@@ -19,6 +19,10 @@
 .active, .collapsible:hover {
   background-color: #1561ac;
 }
+ion-col{
+  /* border: 2px solid black; */
+  
+}
 
 .inside{
   display: inline-block !important;

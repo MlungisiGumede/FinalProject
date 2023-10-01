@@ -29,7 +29,7 @@ using System;
 using Spire.Pdf;
 using Spire.Xls.Core;
 using Microsoft.ML;
-using Microsoft.ML.OnnxRuntime;
+//using Microsoft.ML.OnnxRuntime;
 using Microsoft.ML.Transforms.Onnx;
 using IBIS_API.Models;
 using BERTTokenizers;
@@ -1313,7 +1313,7 @@ namespace IBIS_API.Controllers
             audit.User = username;
             audit.Date = DateTime.Now;
             audit.Name = "Edit Customer Order"; ;
-            //var supplier = _context.Inventories.Where(c => c.Supplier_ID == sup.Supplier_ID).First();
+            //var supplier = _context.Inventories.Where(c => c.Supplier_ID sup.Supplier_ID).First();
             var id = ord.CustomerOrder.CustomerOrder_ID;
             var order = await _context.CustomerOrders.FindAsync(id);
             var cus = _context.Customers.Where(c => c.Customer_ID == id).First();

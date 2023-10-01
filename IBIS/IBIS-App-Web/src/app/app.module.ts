@@ -191,8 +191,8 @@ import { CalendarModalComponent } from './calendar-modal/calendar-modal.componen
       {path: 'Recipes', component: RecipesComponent, canActivate : [AuthGuardService]},
       {path: 'Products', component: ProductsComponent, canActivate : [AuthGuardService]},
       {path: 'Suppliers', component: SuppliersComponent, canActivate : [AuthGuardService]},
-      {path: 'home', component:HomeComponent, canActivate : [AuthGuardService]},
-      {path: 'home2', component:Home2Component},
+      //{path: 'home', component:HomeComponent, canActivate : [AuthGuardService]},
+      {path: 'home', component:Home2Component, canActivate : [AuthGuardService]},
       {path: 'product-report', component: ProductReportComponent},
       {path: 'customer', component: CustomersComponent,canActivate : [AuthGuardService]},
     {path: 'otp', component: OtpComponent, canActivate : [AuthGuardService]},
@@ -204,7 +204,7 @@ import { CalendarModalComponent } from './calendar-modal/calendar-modal.componen
       {path: 'payment', component: PaymentComponent,canActivate : [AuthGuardService]},
       {path:'profile',component:ProfileComponent,canActivate : [AuthGuardService]},
       {path:'help-me',component:HelpMeComponent,canActivate : [AuthGuardService]},
-      {path: 'calendar', component: CalendarComponent}
+      {path: 'calendar', component: CalendarComponent,canActivate : [AuthGuardService]}
       
 
 

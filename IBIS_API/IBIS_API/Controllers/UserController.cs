@@ -395,8 +395,9 @@ namespace IBIS_API.Controllers
                     try
                     {
                         var claims = await _userManager.GetClaimsAsync(user);
-
-                        var result1 = await _userManager.RemoveFromRoleAsync(user, "guest");
+                        var roles = await _userManager.GetRolesAsync(user);
+                        string roleName = roles.FirstOrDefault().ToString();
+                        var result1 = await _userManager.RemoveFromRoleAsync(user, roleName);
                         var result2 = await _userManager.RemoveClaimsAsync(user, claims);
                         var result3 = await _userManager.DeleteAsync(user);
                         if (result1.Succeeded && result2.Succeeded && result3.Succeeded)

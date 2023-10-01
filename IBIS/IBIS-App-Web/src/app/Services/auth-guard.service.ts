@@ -221,6 +221,7 @@ ValidRequest(){
       resolve(success.role)
     }),(error:any)=>{
       console.log("error with user")
+      localStorage.removeItem('Token') // just check if this functions nicely...
       reject(error)
     }
     
