@@ -32,6 +32,9 @@ using System.Security.Cryptography;
 using Microsoft.CodeAnalysis.Differencing;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using DocumentFormat.OpenXml.Presentation;
+using DocumentFormat.OpenXml.Spreadsheet;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace IBIS_API.Controllers
 {
@@ -162,10 +165,24 @@ namespace IBIS_API.Controllers
             // var result = _userManager.ChangePassword(_User.Id, userNewPassword, userView.Password);
             // _userManager.ChangePasswordAsync()
             var user = await _userManager.FindByNameAsync(uvm.Username);
+            var userClaims = User;
+            var username = userClaims.FindFirstValue(ClaimTypes.Name);
+            AuditTrail audit = new AuditTrail();
+            audit.User = username;
+            audit.Date = DateTime.Now;
+            audit.Name = "File Uploaded";
+            audit.Description = JsonSerializer.Serialize(user);
             //string resetToken = await _userManager.GeneratePasswordResetTokenAsync(user);
             //IdentityResult passwordChangeResult = await _userManager.ResetPasswordAsync(user, resetToken, uvm.Password);
             user.PasswordHash = _userManager.PasswordHasher.HashPassword(user, uvm.Password);
             var result = await _userManager.UpdateAsync(user);
+            if (result.Succeeded)
+            {
+                await _context.SaveChangesAsync();
+                _context.Add(audit);
+
+                await _context.SaveChangesAsync();
+            }
             return Ok();
         }
 
@@ -294,7 +311,13 @@ namespace IBIS_API.Controllers
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<IActionResult> DeleteCustomer(int id)
         {
-
+            var userClaims = User;
+            UserRoleVM uRVM = new UserRoleVM();
+            var username = userClaims.FindFirstValue(ClaimTypes.Name);
+            AuditTrail audit = new AuditTrail();
+            audit.User = username;
+           
+            audit.Date = DateTime.Now;
             var cus = await _context.Customers.FindAsync(id);
             if (cus == null)
             {
@@ -307,7 +330,7 @@ namespace IBIS_API.Controllers
                     try
                     {
                         var user = await _userManager.FindByEmailAsync(cus.Email);
-                        AuditTrail audit = new AuditTrail();
+                        
                         if (user != null)
                         {
                             var claims = await _userManager.GetClaimsAsync(user);
@@ -321,8 +344,7 @@ namespace IBIS_API.Controllers
                             {
 
 
-                                audit.User = user.UserName;
-                                audit.Date = DateTime.Now;
+                                
                                 audit.Name = "Deleted Customer User";
                                // var config = new { id = user.Id, userName = user.UserName, email = user.Email, permissions = user.Permissions };
                                // var str = JsonSerializer.Serialize(config);
@@ -333,7 +355,7 @@ namespace IBIS_API.Controllers
                                 _context.Customers.Remove(cus);
                                 _context.Add(audit);
                                 await _context.SaveChangesAsync();
-                                context.Commit();
+                                
 
                             }
                             else
@@ -376,7 +398,7 @@ namespace IBIS_API.Controllers
         public async Task<IActionResult> DeleteUser(string id) // this is userID...
         {
 
-
+          
             var user = await _userManager.FindByIdAsync(id);
             var employee = _context.Employees.Where(c => c.Email == user.Email).FirstOrDefault();
             if (user != null)
@@ -402,9 +424,10 @@ namespace IBIS_API.Controllers
                         var result3 = await _userManager.DeleteAsync(user);
                         if (result1.Succeeded && result2.Succeeded && result3.Succeeded)
                         {
+                            _context.Add(audit);
                             //var config = new { id = user.Id, userName = user.UserName, email = user.Email, permissions = user.Permissions };
-                           // var str = JsonSerializer.Serialize(config);
-                           // audit.Description = str;
+                            // var str = JsonSerializer.Serialize(config);
+                            // audit.Description = str;
                             if (employee == null)
                             {
                                 audit.Name = "Deleted Customer User";
@@ -416,6 +439,9 @@ namespace IBIS_API.Controllers
                             else
                             {
                                 AuditTrail audit2 = new AuditTrail();
+
+                                audit2.User = user.UserName;
+                                audit2.Date = DateTime.Now;
                                 audit2.Name = "Deleted Employee";
                                 var str2 = JsonSerializer.Serialize(employee);
                                 audit2.Description = str2;
@@ -424,7 +450,7 @@ namespace IBIS_API.Controllers
                                 await _context.SaveChangesAsync();
                                 context.Commit();
                             }
-                            _context.Add(audit);
+                            
                         }
 
                         else
@@ -446,48 +472,7 @@ namespace IBIS_API.Controllers
             return NoContent();
         }
 
-        // [HttpDelete]
-        // [Route("DeleteEmployee/{id:int}")]
-        // [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        // public async Task<IActionResult> DeleteEmployee(int id)
-        // {
-        //     var employee = await _context.Employees.FindAsync(id);
-
-        //     var user = await _userManager.FindByEmailAsync(employee.Email);
-        //     if (user != null)
-        //     {
-        //         using (var context = _context.Database.BeginTransaction())
-        //         {
-        //             try
-        //             {
-        //                 var claims = await _userManager.GetClaimsAsync(user);
-
-        //                 var result1 = await _userManager.RemoveFromRoleAsync(user, "guest");
-        //                 var result2 = await _userManager.RemoveClaimsAsync(user, claims);
-        //                 var result3 = await _userManager.DeleteAsync(user);
-        //                 if (result1.Succeeded && result2.Succeeded && result3.Succeeded)
-        //                 {
-        //                     _context.Employees.Remove(employee);
-        //                     context.Commit();
-        //                 }
-        //                 else
-        //                 {
-        //                     context.Rollback();
-        //                     return BadRequest("Failed to delete user");
-        //                 }
-        //             }
-        //             catch (Exception ex)
-        //             {
-        //                 return BadRequest("Failed to delete user");
-        //             }
-        //         }
-        //     }
-        //     else
-        //     {
-        //         return BadRequest("No user account for particular customer");
-        //     }
-        //     return NoContent();
-        // }
+        
 
 
         [HttpPost]
@@ -540,11 +525,14 @@ namespace IBIS_API.Controllers
 
             if (user != null && await _userManager.CheckPasswordAsync(user, uvm.Password))
             {
-                var role = _userManager.GetRolesAsync(user);
+                //var role = _userManager.GetRolesAsync(user);
                 // var name = _roleManager.FindByIdAsync(int32(role.Id));
                 //var roleId = (String)role.Id;
                 // var r =  role.Id
-                _roleManager.FindByNameAsync(uvm.Username);
+                //RoleManager<IdentityRole> _roleManager = new RoleManager<IdentityRole>;
+                //RoleManager<IdentityRole> _roleManager = new RoleManager<IdentityRole>();
+                //var roleManager = new RoleManager<ApplicationRole, int>(roleStore);
+                //roleManager.FindByNameAsync(uvm.Username);
                 // _roleManager.FindByIdAsync(roleId);
                 // var n = user.Roles.FirstOrDefault();
                 var roles = await _userManager.GetRolesAsync(user);
@@ -556,6 +544,7 @@ namespace IBIS_API.Controllers
                 audit.Name = "Log In";
                 audit.Description = JsonSerializer.Serialize(uvm);
                 _context.Add(audit);
+                await _context.SaveChangesAsync();
                 //return Ok(roleName);
                 return Created("", new
                 {
@@ -573,50 +562,55 @@ namespace IBIS_API.Controllers
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<IActionResult> PostFile(FileUpload file)
         {
-
-            FileUpload fileFound = null;
-            if (file.type == 1)
+            using (var context = _context.Database.BeginTransaction())
             {
-                fileFound = _context.Files.Where(c => c.type == 1).FirstOrDefault();
-                if (fileFound != null)
+                FileUpload fileFound = null;
+                if (file.type == 1)
                 {
-                    _context.Remove(fileFound);
-                    _context.Add(file);
+                    fileFound = _context.Files.Where(c => c.type == 1).FirstOrDefault();
+                    if (fileFound != null)
+                    {
+                        _context.Remove(fileFound);
+                        _context.Add(file);
+                    }
+                    else
+                    {
+                        _context.Add(file);
+                    }
+                    
                 }
                 else
                 {
-                    _context.Add(file);
-                }
+                    fileFound = _context.Files.Where(c => c.type == 2).FirstOrDefault();
+                    if (fileFound != null)
+                    {
+                        _context.Remove(fileFound);
+                        _context.Add(file);
+                       
+                    }
+                    else
+                    {
+                        _context.Add(file);
+                      
+                    }
+                    await _context.SaveChangesAsync();
+                   
 
+
+
+
+                }
+                var userClaims = User;
+                var username = userClaims.FindFirstValue(ClaimTypes.Name);
+                var user = await _userManager.FindByNameAsync(username);
+                AuditTrail audit = new AuditTrail();
+                audit.User = username;
+                audit.Date = DateTime.Now;
+                audit.Name = "File Uploaded";
+                audit.Description = JsonSerializer.Serialize(file);
+                await _context.SaveChangesAsync();
+                context.Commit();
             }
-            else
-            {
-                fileFound = _context.Files.Where(c => c.type == 2).FirstOrDefault();
-                if (fileFound != null)
-                {
-                    _context.Remove(fileFound);
-                    _context.Add(file);
-                }
-                else
-                {
-                    _context.Add(file);
-                }
-
-
-
-
-
-
-            }
-            var userClaims = User;
-            var username = userClaims.FindFirstValue(ClaimTypes.Name);
-            var user = await _userManager.FindByNameAsync(username);
-            AuditTrail audit = new AuditTrail();
-            audit.User = username;
-            audit.Date = DateTime.Now;
-            audit.Name = "File Uploaded";
-            audit.Description = JsonSerializer.Serialize(file);
-            await _context.SaveChangesAsync();
             return Ok(file);
         }
         [HttpGet]
@@ -658,7 +652,8 @@ namespace IBIS_API.Controllers
         public async Task<IActionResult> UpdateUserRole(UserVM userVm)
         {
             // could you pass through app user....
-            var user = await _userManager.FindByEmailAsync(userVm.Email);
+            var user = await _userManager.FindByNameAsync(userVm.UserName);
+            
             // user.Permissions = userVm.Permissions;
             using (var transaction = _context.Database.BeginTransaction())
             {
@@ -683,6 +678,15 @@ namespace IBIS_API.Controllers
                     userPermission.Permission_Id = permission.Permission_ID;
                     _context.UserPermissions.Add(userPermission);
                         await _context.SaveChangesAsync();
+                        AuditTrail audit = new AuditTrail();
+                        audit.User = user.UserName;
+                        audit.Date = DateTime.Now;
+                        audit.Name = "User Permissions";
+                        //var str = 
+                        audit.Description = JsonSerializer.Serialize(user); // check the permissions... maybe get the names for them...
+                        _context.Add(audit);
+                        await _context.SaveChangesAsync();
+                        transaction.Commit();
                         _context.Database.ExecuteSqlRaw("SET IDENTITY_INSERT [dbo].[Permissions] OFF");
                     }
                 }
@@ -699,11 +703,8 @@ namespace IBIS_API.Controllers
                 var userClaims = User;
                 var username = userClaims.FindFirstValue(ClaimTypes.Name);
                 //var user = await _userManager.FindByNameAsync(username);
-                AuditTrail audit = new AuditTrail();
-                audit.User = user.UserName;
-                audit.Date = DateTime.Now;
-                audit.Name = "Permissions";
-                audit.Description = JsonSerializer.Serialize(user);
+                
+
             }
             //_userManager.RemoveFromRoleAsync(user,role);
             //_userManager.AddToRoleAsync(user,userVm.Role)
@@ -717,16 +718,23 @@ namespace IBIS_API.Controllers
             // could you pass through app user....
             // Employee emp = new Employee();
             //var customer = _context.Customers.Where(c => c.Email == emp.Email); this logic...
-            _context.Employees.Add(emp);
-            var userClaims = User;
-            var username = userClaims.FindFirstValue(ClaimTypes.Name);
-            var user = await _userManager.FindByNameAsync(username);
-            AuditTrail audit = new AuditTrail();
-            audit.User = username;
-            audit.Date = DateTime.Now;
-            audit.Name = "Employee Created:";
-            audit.Description = JsonSerializer.Serialize(emp);
-            await _context.SaveChangesAsync();
+            using (var transaction = _context.Database.BeginTransaction())
+            {
+                _context.Employees.Add(emp);
+                await _context.SaveChangesAsync();
+                var userClaims = User;
+                var username = userClaims.FindFirstValue(ClaimTypes.Name);
+                var user = await _userManager.FindByNameAsync(username);
+                AuditTrail audit = new AuditTrail();
+                audit.User = username;
+                audit.Date = DateTime.Now;
+                audit.Name = "Employee Created:";
+                audit.Description = JsonSerializer.Serialize(emp);
+                _context.Add(audit);
+                await _context.SaveChangesAsync();
+                transaction.Commit();
+            }
+               
             //_userManager.RemoveFromRoleAsync(user,role);
             //_userManager.AddToRoleAsync(user,userVm.Role)
             return Ok();
@@ -868,14 +876,12 @@ namespace IBIS_API.Controllers
             {
                 using (var context = _context.Database.BeginTransaction())
                 {
-                    var userClaims = User;
-                    var username = userClaims.FindFirstValue(ClaimTypes.Name);
-                    UserRoleVM uRVM = new UserRoleVM();
+                    
 
 
                     AuditTrail audit = new AuditTrail();
 
-                    audit.User = username;
+                    audit.User = uvm.Username;
                     audit.Date = DateTime.Now;
                     audit.Name = "Register User";
 
@@ -937,10 +943,28 @@ namespace IBIS_API.Controllers
         }
         [HttpPost]
         [Route("AddEvent")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<ActionResult> CreateEvent(Event ev)
         {
-            _context.Events.Add(ev);
-            await _context.SaveChangesAsync();
+            var userClaims = User;
+            var username = userClaims.FindFirstValue(ClaimTypes.Name);
+            var user = await _userManager.FindByNameAsync(username);
+            AuditTrail audit = new AuditTrail();
+            audit.Name = "Add Event";
+            audit.Date = DateTime.Now;
+            using (var context = _context.Database.BeginTransaction())
+            {
+               
+               
+               
+                _context.Events.Add(ev);
+                await _context.SaveChangesAsync();
+                audit.Description = JsonSerializer.Serialize(ev);
+                _context.Add(audit);
+                await _context.SaveChangesAsync();
+
+            }
+          
             return Ok();
         }
         [HttpGet]

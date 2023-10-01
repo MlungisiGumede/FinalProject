@@ -4,6 +4,8 @@
     <TargetFramework>net6.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <ApplicationInsightsResourceId>/subscriptions/61564374-4d32-4d13-82f5-4dbec0cff51e/resourceGroups/DefaultResourceGroup-JNB/providers/microsoft.insights/components/inf370team6</ApplicationInsightsResourceId>
+    <UserSecretsId>0e03c6dc-de43-4451-bf05-c4d4737ff10a</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
@@ -11,6 +13,7 @@
     <PackageReference Include="ClosedXML" Version="0.102.1" />
     <PackageReference Include="EntityFramework" Version="6.4.4" />
     <PackageReference Include="Finance" Version="1.0.5" />
+    <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.15.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.16" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.16" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.5" />

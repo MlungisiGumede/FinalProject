@@ -29,7 +29,7 @@ using System;
 using Spire.Pdf;
 using Spire.Xls.Core;
 using Microsoft.ML;
-//using Microsoft.ML.OnnxRuntime;
+using Microsoft.ML.OnnxRuntime;
 using Microsoft.ML.Transforms.Onnx;
 using IBIS_API.Models;
 using BERTTokenizers;
@@ -62,11 +62,11 @@ namespace IBIS_API.Controllers
 
 
         private readonly DataContextcs _context;
-        //private static PredictionEngine<ModelInput, ModelOutput> _predengine;
-        public ManyToManyController(DataContextcs context)//, PredictionEngine<ModelInput), ModelOutput> predictionengine)
+        private static PredictionEngine<ModelInput, ModelOutput> _predengine;
+        public ManyToManyController(DataContextcs context, PredictionEngine<ModelInput, ModelOutput> predictionengine)
         {
             _context = context;
-           // _predengine = predictionengine;
+            _predengine = predictionengine;
         }
 
         [HttpGet]
@@ -99,37 +99,45 @@ namespace IBIS_API.Controllers
             //var supplier = _context.Inventories.Where(c => c.Supplier_ID == sup.Supplier_ID).First();
             var id = ord.CustomerOrder.Customer_ID;
             var order = ord.CustomerOrder;
-            var cus = _context.Customers.Where(c => c.Customer_ID == id).First();
+            var cus = _context.Customers.Where(c => c.Customer_ID == ord.CustomerOrder.Customer_ID).First();
             
             //var ordLines = _context.CustomerOrdersLine.Where(c => c.CustomerOrder_ID == id).ToList();
             
             
             order.OrderStatus_ID = 1;
             var orderLine = ord.CustomerOrderLines;
-            _context.CustomerOrders.Add(order);
+           
 
             double total = 0;
-            foreach (var line in orderLine)
+           
+            using (var context = _context.Database.BeginTransaction())
             {
-                var product = _context.Products.Find(line.Product_ID);
-                var addLine = new CustomerOrderLine
+                foreach (var line in orderLine)
                 {
-                    CustomerOrder = order,
-                    Product = product
-                ,
-                    Quantity = line.Quantity,
-                    Price = line.Price
-                };
-                total = total + (line.Quantity * line.Price);
-                _context.CustomerOrdersLine.Add(addLine);
+                    var product = _context.Products.Find(line.Product_ID);
+                    var addLine = new CustomerOrderLine
+                    {
+                        CustomerOrder = order,
+                        Product = product
+                    ,
+                        Quantity = line.Quantity,
+                        Price = line.Price
+                    };
+                    total = total + (line.Quantity * line.Price);
+                    _context.CustomerOrdersLine.Add(addLine);
+                }
+                _context.CustomerOrders.Add(order);
+                await _context.SaveChangesAsync();
+                var config = new { CustomerOrder_ID = order.CustomerOrder_ID, CustomerName = cus.Customer_FirstName + " " + cus.Customer_Surname, OrderStatus_ID = order.OrderStatus_ID, Total = total };
+                var str = JsonSerializer.Serialize(config);
+                audit.Description = str;
+                //audit.Description = "Add Customer Order:" + Environment.NewLine + order.CustomerOrder_ID + Environment.NewLine + cus.Customer_FirstName + " " + cus.Customer_Surname + Environment.NewLine + order.Date_Created + Environment.NewLine + total;
+                _context.Add(audit);
+                //_context.Database.ExecuteSqlRaw("Set IDENTITY_INSERT dbo.CustomerOrdersLine ON");
+                await _context.SaveChangesAsync();
+                context.Commit();
             }
-            var config = new { CustomerOrder_ID = order.CustomerOrder_ID, CustomerName = cus.Customer_FirstName + " " + cus.Customer_Surname, OrderStatus_ID = order.OrderStatus_ID, Total = total };
-            var str = JsonSerializer.Serialize(config);
-            audit.Description = str;
-            //audit.Description = "Add Customer Order:" + Environment.NewLine + order.CustomerOrder_ID + Environment.NewLine + cus.Customer_FirstName + " " + cus.Customer_Surname + Environment.NewLine + order.Date_Created + Environment.NewLine + total;
-            _context.Add(audit);
-            //_context.Database.ExecuteSqlRaw("Set IDENTITY_INSERT dbo.CustomerOrdersLine ON");
-            await _context.SaveChangesAsync();
+                
 
 
 
@@ -144,23 +152,10 @@ namespace IBIS_API.Controllers
             var order = ord.SupplierOrder;
             order.OrderStatus_ID = 1;
             var orderLine = ord.SupplierOrderLines;
-            _context.Supplier_Orders.Add(order);
+            //_context.Supplier_Orders.Add(order);
 
 
-            foreach (var line in orderLine)
-            {
-                var inventory = _context.Inventories.Find(line.Inventory_ID);
-                var addLine = new SupplierOrderLine
-                {
-                    SupplierOrder = ord.SupplierOrder,
-                    Inventory = inventory
-                ,
-                    Quantity = line.Quantity,
-                    Price = line.Price
-                };
-
-                _context.SupplierOrderLines.Add(addLine);
-            }
+            
             var userClaims = User;
             var username = userClaims.FindFirstValue(ClaimTypes.Name);
             UserRoleVM uRVM = new UserRoleVM();
@@ -182,13 +177,34 @@ namespace IBIS_API.Controllers
             {
                 total = total + (ordline.Quantity * ordline.Price);
             }
-            var config = new { SupplierOrder_ID = ord.SupplierOrder.SupplierOrder_ID, SupplierName = supplier.Name, OrderStatus_ID = ord.SupplierOrder.OrderStatus_ID, Total = total };
-            var str = JsonSerializer.Serialize(config);
-            audit.Description = str;
-            _context.Add(audit);
-            //audit.Description = "Add Supplier Order:" + Environment.NewLine + ord.SupplierOrder.SupplierOrder_ID + Environment.NewLine + supplier.Name + Environment.NewLine + ord.SupplierOrder.Date_Created + Environment.NewLine + ord.SupplierOrder.OrderStatus_ID + Environment.NewLine + total;
-            //_context.Database.ExecuteSqlRaw("Set IDENTITY_INSERT dbo.CustomerOrdersLine ON");
-            await _context.SaveChangesAsync();
+            using (var context = _context.Database.BeginTransaction())
+            {
+                foreach (var line in orderLine)
+                {
+                    var inventory = _context.Inventories.Find(line.Inventory_ID);
+                    var addLine = new SupplierOrderLine
+                    {
+                        SupplierOrder = ord.SupplierOrder,
+                        Inventory = inventory
+                    ,
+                        Quantity = line.Quantity,
+                        Price = line.Price
+                    };
+
+                    _context.SupplierOrderLines.Add(addLine);
+                }
+                _context.Supplier_Orders.Add(order);
+                await _context.SaveChangesAsync();
+                var config = new { SupplierOrder_ID = ord.SupplierOrder.SupplierOrder_ID, SupplierName = supplier.Name, OrderStatus_ID = ord.SupplierOrder.OrderStatus_ID, Total = total };
+                var str = JsonSerializer.Serialize(config);
+                audit.Description = str;
+                _context.Add(audit);
+                //audit.Description = "Add Supplier Order:" + Environment.NewLine + ord.SupplierOrder.SupplierOrder_ID + Environment.NewLine + supplier.Name + Environment.NewLine + ord.SupplierOrder.Date_Created + Environment.NewLine + ord.SupplierOrder.OrderStatus_ID + Environment.NewLine + total;
+                //_context.Database.ExecuteSqlRaw("Set IDENTITY_INSERT dbo.CustomerOrdersLine ON");
+                await _context.SaveChangesAsync();
+                context.Commit();
+            }
+               
 
 
 
@@ -872,75 +888,75 @@ namespace IBIS_API.Controllers
             }
             return Ok();
         }
-        //[HttpGet]
-        //[Route("ClassifyReviews")]
-        //public void GenerateReviews(CustomerOrder ord)
-        //{
+        [HttpGet]
+        [Route("ClassifyReviews")]
+        public void GenerateReviews(CustomerOrder ord)
+        {
 
 
-        //    MLContext mlContext = new MLContext();
-            
-
-        //    ModelInput modelInput = new ModelInput();
-          
-        //    BertUncasedLargeTokenizer token = new BertUncasedLargeTokenizer();
-        //   // var customerOrders = _context.CustomerOrders.ToList();
-        //    var tokenizer = new BertUncasedLargeTokenizer();
-        //    List<string> reviewList = new List<string>();
-           
+            MLContext mlContext = new MLContext();
 
 
-        //        var input = ord.Review;
-        //     //var arr = review.ToArray();
-              
-        //        var tokens = tokenizer.Tokenize();
-        //        var encoded = tokenizer.Encode(512, input);
-        //        // var encoded = token.Encode(32,input); // previous 32...
+            ModelInput modelInput = new ModelInput();
+
+            BertUncasedLargeTokenizer token = new BertUncasedLargeTokenizer();
+            // var customerOrders = _context.CustomerOrders.ToList();
+            var tokenizer = new BertUncasedLargeTokenizer();
+            List<string> reviewList = new List<string>();
 
 
-        //        var bertInput = new ModelInput()
-        //        {
-        //            InputIds = encoded.Select(t => t.InputIds).ToArray(),
-        //            AttentionMask = encoded.Select(t => t.AttentionMask).ToArray(),
 
-        //        };
-        //        ModelInput ml = new ModelInput();
-        //        var model = ml.ModelStartup2(tokens.Count());
+            var input = ord.Review;
+            //var arr = review.ToArray();
 
-        //        var output = _predengine.Predict(bertInput);
-        //        var lastHiddenState = output.output0;
-        //        string sentiment = "your mood is ";
-        //        if (lastHiddenState[0] > lastHiddenState[1])
-        //        {
-        //            ord.ReviewClassification_ID = 0;
-        //            reviewList.Add("negative");
-        //        }
-        //        else
-        //        {
-        //            ord.ReviewClassification_ID = 1;
-        //            reviewList.Add("Positive");
-        //        }
-        //        //Bad 4.6,-3.7
-        //        //Good - 4,4.4
-        //        //Excellent - 4.2,4.5
-        //        //Trash 4.5,-3.6
+            var tokens = tokenizer.Tokenize();
+            var encoded = tokenizer.Encode(512, input);
+            // var encoded = token.Encode(32,input); // previous 32...
 
-        //        // Define the sentiment labels and map the index to the corresponding label
 
-        //        // var sentiment = sentimentLabels[maxIndex];
-        //        //token.Untokenize(val);
-        //        //output.
-        //        //engine.Predict()
-            
-           
-        //}
+            var bertInput = new ModelInput()
+            {
+                InputIds = encoded.Select(t => t.InputIds).ToArray(),
+                AttentionMask = encoded.Select(t => t.AttentionMask).ToArray(),
+
+            };
+            ModelInput ml = new ModelInput();
+            var model = ml.ModelStartup2(tokens.Count());
+
+            var output = _predengine.Predict(bertInput);
+            var lastHiddenState = output.output0;
+            string sentiment = "your mood is ";
+            if (lastHiddenState[0] > lastHiddenState[1])
+            {
+                ord.ReviewClassification_ID = 0;
+                reviewList.Add("negative");
+            }
+            else
+            {
+                ord.ReviewClassification_ID = 1;
+                reviewList.Add("Positive");
+            }
+            //Bad 4.6,-3.7
+            //Good - 4,4.4
+            //Excellent - 4.2,4.5
+            //Trash 4.5,-3.6
+
+            // Define the sentiment labels and map the index to the corresponding label
+
+            // var sentiment = sentimentLabels[maxIndex];
+            //token.Untokenize(val);
+            //output.
+            //engine.Predict()
+
+
+        }
 
         [HttpPost]
         [Route("RecordReview")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<ActionResult> RecordReview(CustomerOrder ord)
         {
-            //GenerateReviews(ord);
+            GenerateReviews(ord);
             
             _context.CustomerOrders.Update(ord);
             await _context.SaveChangesAsync();
@@ -1259,9 +1275,9 @@ namespace IBIS_API.Controllers
                         ord.Order_Status = "Cancelled";
                     }
                 }
-               ord.Total = _context.CustomerOrdersLine.FromSql($"CalculateTotal  {customerOrder.CustomerOrder_ID}").Sum(c => c.Quantity * c.Price);
+                var orders = _context.CustomerOrdersLine.FromSql($"CalculateTotal  {customerOrder.CustomerOrder_ID}").ToList();
                 //var total = _context.CustomerOrdersLine.FromSql($"CalculateTotal  {customerOrder.CustomerOrder_ID}").First();
-                //ord.Total = _context.CustomerOrdersLine.Where(c => c.CustomerOrder_ID == customerOrder.CustomerOrder_ID).Sum(c => c.Quantity * c.Price);
+                ord.Total = orders.Sum(c => c.Quantity * c.Price);
                 customerOrdersList.Add(ord);
             }
             return Ok(customerOrdersList);
@@ -1316,7 +1332,7 @@ namespace IBIS_API.Controllers
             //var supplier = _context.Inventories.Where(c => c.Supplier_ID sup.Supplier_ID).First();
             var id = ord.CustomerOrder.CustomerOrder_ID;
             var order = await _context.CustomerOrders.FindAsync(id);
-            var cus = _context.Customers.Where(c => c.Customer_ID == id).First();
+            var cus = _context.Customers.Where(c => c.Customer_ID == ord.CustomerOrder.CustomerOrder_ID).First();
             double total = 0;
             var ordLines = _context.CustomerOrdersLine.Where(c => c.CustomerOrder_ID == id).ToList();
             foreach (var ordline in ordLines)
@@ -1373,7 +1389,7 @@ namespace IBIS_API.Controllers
             audit.Name = "Delete Customer Order"; ;
             //var supplier = _context.Inventories.Where(c => c.Supplier_ID == sup.Supplier_ID).First();
             var order = await _context.CustomerOrders.FindAsync(id);
-            var cus = _context.Customers.Where(c => c.Customer_ID == id).First();
+            var cus = _context.Customers.Where(c => c.Customer_ID == order.Customer_ID).First();
             double total = 0;
             var ordLines = _context.CustomerOrdersLine.Where(c => c.CustomerOrder_ID == id).ToList();
             foreach(var ord in ordLines)
@@ -1411,7 +1427,7 @@ namespace IBIS_API.Controllers
             audit.Name = "Delete Supplier Order"; ;
             //var supplier = _context.Inventories.Where(c => c.Supplier_ID == sup.Supplier_ID).First();
             
-            var supplier = _context.Suppliers.Where(c => c.Supplier_ID == id).First();
+            var supplier = _context.Suppliers.Where(c => c.Supplier_ID == order.Supplier_ID).First();
             double? total = 0;
             var ordLines = _context.CustomerOrdersLine.Where(c => c.CustomerOrder_ID == id).ToList();
             var orderLines = _context.SupplierOrderLines.Where(c => c.SupplierOrder_ID == id).Select(c => c).ToList();
@@ -1424,8 +1440,8 @@ namespace IBIS_API.Controllers
             audit.Description = str;
             //audit.Description = "Delete Supplier Order Details:" + Environment.NewLine + order.SupplierOrder_ID + Environment.NewLine + supplier.Name  + Environment.NewLine + order.Date_Created + Environment.NewLine + total;
             _context.Remove(order);
-
-           ;
+            _context.Add(audit);
+            ;
             _context.SupplierOrderLines.RemoveRange(orderLines);
             await _context.SaveChangesAsync();
             return NoContent();

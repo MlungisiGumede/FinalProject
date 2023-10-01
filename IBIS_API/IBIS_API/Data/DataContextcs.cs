@@ -7,10 +7,14 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 //using System.Data.Entity;
 using System.Linq;
+using Microsoft.AspNetCore.Identity;
 
 namespace IBIS_API.Data
 {
-    public class DataContextcs : IdentityDbContext<AppUser>
+    public class DataContextcs : IdentityDbContext<AppUser, IdentityRole, string,
+  IdentityUserClaim<string>, IdentityUserRole<string>, IdentityUserLogin<string>,
+  IdentityRoleClaim<string>, IdentityUserToken<string>>
+    //IdentityDbContext<AppUser, IdentityRole>
     {
 
         public DataContextcs(DbContextOptions<DataContextcs> options) : base(options)

@@ -11,8 +11,10 @@ using System.Text;
 using Newtonsoft.Json;
 using Microsoft.ML;
 using Microsoft.ML.Data;
-//using Microsoft.ML.OnnxRuntime;
+using Microsoft.ML.OnnxRuntime;
 using Microsoft.ML.Transforms.Onnx;
+//using Microsoft.AspNet.Identity.Owin;
+//using Microsoft.Owin;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -53,8 +55,8 @@ builder.Services.AddControllersWithViews()
     .AddJsonOptions(options => options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 builder.Services.AddDbContext<DataContextcs>(options =>
 {
-     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
-    //options.UseSqlServer(builder.Configuration.GetConnectionString("MyDbConnection"));
+     //options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("MyDbConnection"));
 });
 
 builder.Services.AddAuthentication()
@@ -73,24 +75,25 @@ builder.Services.AddAuthentication()
                     };
                 });
 
-//builder.Services.AddSingleton<PredictionEngine<ModelInput, ModelOutput>>(service =>
-//{
-//    MLContext mlContext = new MLContext();
-//    ModelInput mI = new ModelInput();
-//    var model = mI.ModelStartup();
-//    var engine = mlContext.Model.CreatePredictionEngine<ModelInput, ModelOutput>(model);
-//    return engine;
+builder.Services.AddSingleton<PredictionEngine<ModelInput, ModelOutput>>(service =>
+{
+    MLContext mlContext = new MLContext();
+    ModelInput mI = new ModelInput();
+    var model = mI.ModelStartup();
+    var engine = mlContext.Model.CreatePredictionEngine<ModelInput, ModelOutput>(model);
+    return engine;
 
 
-//});
+});
 
-//builder.Services.AddCors(options => options.AddDefaultPolicy(
-//    include =>
-//    {
-//        include.AllowAnyHeader();
-//        include.AllowAnyMethod();
-//        include.AllowAnyOrigin();
-//    }));
+
+builder.Services.AddCors(options => options.AddDefaultPolicy(
+    include =>
+    {
+        include.AllowAnyHeader();
+        include.AllowAnyMethod();
+        include.AllowAnyOrigin();
+    }));
 // with origins before 
 
 builder.Services.Configure<FormOptions>(o =>
@@ -99,6 +102,7 @@ builder.Services.Configure<FormOptions>(o =>
     o.MultipartBodyLengthLimit = int.MaxValue;
     o.MemoryBufferThreshold = int.MaxValue;
 });
+builder.Services.AddApplicationInsightsTelemetry(builder.Configuration["APPLICATIONINSIGHTS_CONNECTION_STRING"]);
 
 //builder.Services.Configure<DataProtectionTokenProviderOptions>(options => options.TokenLifespan = TimeSpan.FromSeconds(30));
 var app = builder.Build();
@@ -115,7 +119,7 @@ if (app.Environment.IsDevelopment())
 
 //builder.Services.AddControllers();
 app.UseHttpsRedirection();
-
+//app.CreatePerOwinContext(AppUser.Create);
 app.UseAuthorization();
 //app.UseAuthorization();
 app.UseAuthentication();

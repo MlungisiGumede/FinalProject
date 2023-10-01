@@ -117,11 +117,19 @@ namespace IBIS_API.Controllers
             audit.Date = DateTime.Now;
             audit.Name = "Add Supplier";
             audit.Description = "Supplier Added Details:" +  Environment.NewLine+sup.Supplier_ID + sup.Name + Environment.NewLine + sup.Email + Environment.NewLine + sup.Address + Environment.NewLine + sup.Phone;
-            _context.Suppliers.Add(sup);
-            var str = JsonSerializer.Serialize(sup);
-            audit.Description = str;
-            _context.Add(audit);
-            await _context.SaveChangesAsync();
+            
+           
+            using (var context = _context.Database.BeginTransaction())
+            {
+                _context.Suppliers.Add(sup);
+                await _context.SaveChangesAsync();
+                var str = JsonSerializer.Serialize(sup);
+                audit.Description = str;
+                _context.Add(audit);
+                await _context.SaveChangesAsync();
+                context.Commit();
+            }
+              
 
                 return CreatedAtAction("GetSupplier", new { id = sup.Supplier_ID }, sup);
             }

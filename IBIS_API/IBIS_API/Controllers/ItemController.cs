@@ -71,7 +71,7 @@ namespace IBIS_API.Controllers
             audit.User = username;
             audit.Date = DateTime.Now;
             audit.Name = "Edit Inventory";
-            var supplier = _context.Inventories.Where(c => c.Supplier_ID == sup.Supplier_ID).First();
+            var supplier = _context.Suppliers.Where(c => c.Supplier_ID == sup.Supplier_ID).First();
             var config = new { Inventory_ID = sup.Inventory_ID,sku = sup.Sku, Name = sup.Name, SupplierName = supplier.Name };
             var str = JsonSerializer.Serialize(config);
             audit.Description = str;
@@ -121,20 +121,23 @@ namespace IBIS_API.Controllers
             audit.User = username;
             audit.Date = DateTime.Now;
             audit.Name = "Add Inventory";
-            var supplier = _context.Inventories.Where(c => c.Supplier_ID == inventory.Supplier_ID).First();
-            var config = new { Inventory_ID = inventory.Inventory_ID,sku = inventory.Sku, Name = inventory.Name, SupplierName = supplier.Name };
-            var str = JsonSerializer.Serialize(config);
-            audit.Description = str;
-            _context.AuditTrail.Add(audit);
-            var inventoryItem = _context.Inventories.Where(c => c.Sku == inventory.Sku).FirstOrDefault();
-            if (inventoryItem == null)
+            var supplier = _context.Suppliers.Where(c => c.Supplier_ID == inventory.Supplier_ID).First();
+            using (var context = _context.Database.BeginTransaction())
             {
                 _context.Inventories.Add(inventory);
                 await _context.SaveChangesAsync();
+                var config = new { Inventory_ID = inventory.Inventory_ID, sku = inventory.Sku, Name = inventory.Name, SupplierName = supplier.Name };
+                var str = JsonSerializer.Serialize(config);
+                audit.Description = str;
+                _context.AuditTrail.Add(audit);
+                await _context.SaveChangesAsync();
+                context.Commit();
             }
-            else
-            {
-            }
+        
+
+              
+            
+  
           ;
 
             return CreatedAtAction("GetInv", new { id = inventory.Inventory_ID }, inventory);
@@ -177,13 +180,14 @@ namespace IBIS_API.Controllers
             //var subCategories = _context.SubCategories.Where(c => c.SubCategory_ID == prod.SubCategory_ID).First();
             audit.User = username;
             audit.Date = DateTime.Now;
-            audit.Name = "Edit Inventory";
-            var supplier = _context.Inventories.Where(c => c.Supplier_ID == sup.Supplier_ID).First();
+            audit.Name = "Delete Inventory";
+            var supplier = _context.Suppliers.Where(c => c.Supplier_ID == sup.Supplier_ID).First();
             var config = new { Inventory_ID = sup.Inventory_ID,sku = sup.Sku, Name = sup.Name, SupplierName = supplier.Name };
             var str = JsonSerializer.Serialize(config);
             audit.Description = str;
            // audit.Description = "Delete Inventory Details:" + Environment.NewLine + sup.Inventory_ID + Environment.NewLine + sup.Sku + Environment.NewLine + sup.Name + Environment.NewLine + supplier.Name;
             _context.Inventories.Remove(sup);
+            _context.Add(audit);
             await _context.SaveChangesAsync();
 
             return NoContent();

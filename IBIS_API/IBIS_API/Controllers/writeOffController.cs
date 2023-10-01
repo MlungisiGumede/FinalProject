@@ -82,29 +82,38 @@ namespace IBIS_API.Controllers
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<ActionResult<Write_Offs>> PostWriteOff(Write_Offs writeOff)
         {
-            _context.Write_Offss.Add(writeOff);
-            var adjustment = _context.AdjustmentTypes.FirstOrDefault();
-            if (adjustment != null) {
-                var adjustment1 = new Adjustment();
-                var adjustment2 = new Adjustment();
-                adjustment1.Name = "Write Off";
-                adjustment2.Name = "Write Up";
-                _context.Add(adjustment1);
-                _context.Add(adjustment2);
-            }
-            var product = _context.Products.Where(c => c.Product_ID == writeOff.Product_ID).FirstOrDefault();
-            if (writeOff.Adjustment_ID == 1)
+            using (var context = _context.Database.BeginTransaction())
             {
-                product.Quantity = product.Quantity - writeOff.Quantity;
-            }
-            else
-            {
-                product.Quantity = product.Quantity + writeOff.Quantity;
-            }
+                
+                var adjustment = _context.AdjustmentTypes.FirstOrDefault();
+                if (adjustment != null)
+                {
+                    var adjustment1 = new Adjustment();
+                    var adjustment2 = new Adjustment();
+                    adjustment1.Name = "Write Off";
+                    adjustment2.Name = "Write Up";
+                    _context.Add(adjustment1);
+                    _context.Add(adjustment2);
+                }
+                var product = _context.Products.Where(c => c.Product_ID == writeOff.Product_ID).FirstOrDefault();
+                if (writeOff.Adjustment_ID == 1)
+                {
+                    product.Quantity = product.Quantity - writeOff.Quantity;
+                }
+                else
+                {
+                    product.Quantity = product.Quantity + writeOff.Quantity;
+                }
 
-           
-            _context.Entry(product).State = EntityState.Modified;
-            await _context.SaveChangesAsync();
+                _context.Write_Offss.Add(writeOff);
+
+                await _context.SaveChangesAsync();
+                _context.Entry(product).State = EntityState.Modified;
+
+                await _context.SaveChangesAsync();
+                context.Commit();
+            }
+            
 
             return CreatedAtAction("GetwriteOff", new { id = writeOff.Write_Off_Id }, writeOff);
         }
