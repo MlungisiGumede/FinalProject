@@ -6,6 +6,8 @@ import { LoginService } from '../Services/login.service';
 import { AddUserComponent } from '../add-user/add-user.component';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { HomeHelpComponent } from '../home-help/home-help.component';
+import { ModalController } from '@ionic/angular';
 
 @Component({
   selector: 'app-home2',
@@ -18,11 +20,16 @@ data:any = of([{}])
 filterTerm!: string
 permissions:any
 role:any
-  constructor(public matDialog:MatDialog,public logInService:LoginService,
+  constructor(public matDialog:MatDialog,public logInService:LoginService, public helpModal: ModalController,
     public router:Router,private _snackbar: MatSnackBar) { }
 
   ngOnInit(): void {
    this.GetUsers()
+  }
+  async showHelp(){
+    const modal = await this.helpModal.create({
+      component: HomeHelpComponent});
+      return await modal.present();
   }
   View(user:any){
    const dialogRef = this.matDialog.open(ViewUserComponent,{

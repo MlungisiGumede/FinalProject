@@ -6,6 +6,7 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { LoginService } from '../Services/login.service';
 import { of } from 'rxjs';
 import { Router } from '@angular/router';
+import { CalenderHelpComponent } from '../calender-help/calender-help.component';
 
 
 @Component({
@@ -47,7 +48,7 @@ export class CalendarComponent implements OnInit {
   eventsForSelectedDate: Event[] = [];
 
   constructor(private modalController: ModalController, private eventsService: EventsService,
-    private changeDetectorRef: ChangeDetectorRef,private loginService: LoginService,
+    private changeDetectorRef: ChangeDetectorRef,private loginService: LoginService, public helpModal: ModalController,
     public router: Router) { }
 SetValue(e:any){
   console.log(e)
@@ -123,6 +124,11 @@ ViewEvents(){
   let events:any[] = this.events.filter((event) => event.date === this.selectedDate);
   console.log(events)
   this.filteredEvents = of(events);
+}
+async showHelp(){
+  const modal = await this.helpModal.create({
+    component: CalenderHelpComponent});
+    return await modal.present();
 }
 
   

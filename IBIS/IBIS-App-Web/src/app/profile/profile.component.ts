@@ -4,7 +4,8 @@ import { FileUpload } from '../Models/FileUpload';
 import { QrScannerComponent } from 'angular2-qrscanner/qr-scanner.component';
 import { async, map } from 'rxjs';
 import { AuthGuardService } from '../Services/auth-guard.service';
-import { ActionSheetController } from '@ionic/angular';
+import { ActionSheetController, ModalController } from '@ionic/angular';
+import { ProfileHelpComponent } from '../profile-help/profile-help.component';
 
 @Component({
   selector: 'app-profile',
@@ -46,7 +47,7 @@ fileUpload = new FileUpload();
 files:any = []
 filedisplay:any
 src:any = "../../assets/butchery.jpg" // or whatever then do the api call...
-  constructor(public userService: UserService,public authGuardService: AuthGuardService, 
+  constructor(public userService: UserService,public authGuardService: AuthGuardService,public helpModal: ModalController,
     private actionSheetCtrl: ActionSheetController) { }
 
   ngOnInit(): void {
@@ -108,6 +109,11 @@ console.log(event)
   
       return false
     
+  }
+  async showHelp(){
+    const modal = await this.helpModal.create({
+      component: ProfileHelpComponent});
+      return await modal.present();
   }
   CheckPdf(){
     if(this.fileName){

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ToastController } from '@ionic/angular';
+import { ModalController, ToastController } from '@ionic/angular';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 import { Ng2SearchPipe } from 'ng2-search-filter/src/ng2-filter.pipe';
@@ -13,6 +13,7 @@ import { AddCustomerOrderComponent } from '../add-customer-order/add-customer-or
 import { Observable, catchError, map, of, throwError } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { UserService } from '../Services/user.service';
+import { CustomerHelpComponent } from '../customer-help/customer-help.component';
 @Component({
   selector: 'app-customers',
   templateUrl: './customers.component.html',
@@ -22,7 +23,7 @@ export class CustomersComponent implements OnInit {
 data:Observable<any> = new Observable();
 filterTerm!:string;
   constructor(public matDialog:MatDialog,private customerSerivce : CustomerService ,public toastController: ToastController
-    ,public cdr:ChangeDetectorRef,private _snackbar: MatSnackBar,
+    ,public cdr:ChangeDetectorRef,private _snackbar: MatSnackBar, public helpModal: ModalController,
     private userService:UserService) { }
 
   ngOnInit() {
@@ -35,6 +36,11 @@ filterTerm!:string;
 
 
     this.getCustomers()
+  }
+  async showHelp(){
+    const modal = await this.helpModal.create({
+      component: CustomerHelpComponent});
+      return await modal.present();
   }
 
   getCustomers(){

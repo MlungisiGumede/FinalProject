@@ -2,6 +2,8 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { OrdersService } from '../Services/orders.service';
 import { CustomerOrder } from '../Models/CustomerOrder';
+import { ModalController } from '@ionic/angular';
+import { PaymentHelpComponent } from '../payment-help/payment-help.component';
 //declare let paypal:any
 @Component({
   selector: 'app-payment',
@@ -21,7 +23,7 @@ export class PaymentComponent implements OnInit {
  
   @ViewChild('paymentRef', {static: true}) paymentRef!: ElementRef;
 
-  constructor(private router: Router,private orderService:OrdersService) {
+  constructor(private router: Router,private orderService:OrdersService,public helpModal: ModalController,) {
     //let a = Math.round(this.total$^2)/10^2
    }
 
@@ -59,6 +61,11 @@ export class PaymentComponent implements OnInit {
       
     )
     
+  }
+  async showHelp(){
+    const modal = await this.helpModal.create({
+      component: PaymentHelpComponent});
+      return await modal.present();
   }
  public RenderPayPal(){
   //console.log(window.paypal)

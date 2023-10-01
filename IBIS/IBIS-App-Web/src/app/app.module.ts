@@ -83,6 +83,11 @@ import { CalendarComponent } from './calendar/calendar.component';
 import { CalendarModalComponent } from './calendar-modal/calendar-modal.component';
 //import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import { MatTooltipModule, matTooltipAnimations } from '@angular/material/tooltip';
+import { CustomerHelpComponent } from './customer-help/customer-help.component';
+import { PaymentHelpComponent } from './payment-help/payment-help.component';
+import { ProfileHelpComponent } from './profile-help/profile-help.component';
+import { HomeHelpComponent } from './home-help/home-help.component';
+import { CalenderHelpComponent } from './calender-help/calender-help.component';
 
 
 
@@ -145,7 +150,12 @@ import { MatTooltipModule, matTooltipAnimations } from '@angular/material/toolti
     ViewUserComponent,
     AddUserComponent,
     CalendarComponent,
-    CalendarModalComponent
+    CalendarModalComponent,
+    CustomerHelpComponent,
+    PaymentHelpComponent,
+    ProfileHelpComponent,
+    HomeHelpComponent,
+    CalenderHelpComponent
    
     
   
