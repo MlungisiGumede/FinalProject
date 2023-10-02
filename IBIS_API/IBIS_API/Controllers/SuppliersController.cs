@@ -36,7 +36,9 @@ namespace IBIS_API.Controllers
        // [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<ActionResult<IEnumerable<Supplier>>> GetSuppliers()
             {
-                return await _context.Suppliers.ToListAsync();
+            //var order = _context.CustomerOrdersLine.FromSql($"CalculateTotal  {customerOrder.CustomerOrder_ID}").ToList();
+            
+            return await _context.Suppliers.ToListAsync();
             }
 
 

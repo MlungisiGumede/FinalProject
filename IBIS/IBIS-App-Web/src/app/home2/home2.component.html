@@ -52,14 +52,14 @@
             </ion-col>
            
             <ion-col>
-              <ion-button (click)="View(item)" class="light-Btn">View</ion-button>
+              <ion-button *ngIf="item.role != 'manager'" (click)="View(item)" class="light-Btn">View</ion-button>
               
             </ion-col>
             <ion-col>
-              <ion-button (click)="DeleteUser(item.id)" class="light-Btn" >Remove</ion-button>
+              <ion-button *ngIf="item.role != 'manager'" (click)="DeleteUser(item.id)" class="light-Btn" >Remove</ion-button>
             </ion-col>
             <ion-col>
-              <ion-button *ngIf="item.role != 'manager'" (click)="UpdateRole(item)" class="light-Btn" >Update Permissions</ion-button>
+              <ion-button *ngIf="item.role != 'manager' && item.role != 'guest'" (click)="UpdateRole(item)" class="light-Btn" >Update Permissions</ion-button>
             </ion-col>
            
           </ion-row>

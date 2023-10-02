@@ -4,6 +4,7 @@ import { OrdersService } from '../Services/orders.service';
 import { CustomerOrder } from '../Models/CustomerOrder';
 import { ModalController } from '@ionic/angular';
 import { PaymentHelpComponent } from '../payment-help/payment-help.component';
+import { MatSnackBar } from '@angular/material/snack-bar';
 //declare let paypal:any
 @Component({
   selector: 'app-payment',
@@ -23,7 +24,8 @@ export class PaymentComponent implements OnInit {
  
   @ViewChild('paymentRef', {static: true}) paymentRef!: ElementRef;
 
-  constructor(private router: Router,private orderService:OrdersService,public helpModal: ModalController,) {
+  constructor(private router: Router,private orderService:OrdersService,public helpModal: ModalController,
+    private _snackbar: MatSnackBar) {
     //let a = Math.round(this.total$^2)/10^2
    }
 
@@ -98,6 +100,7 @@ export class PaymentComponent implements OnInit {
               alert(this.transactionID)
               console.log(details)
               this.customerOrder.transaction_ID = this.transactionID
+              this.ShowSnackBar("Payment Successful with transaction ID"+this.transactionID, "success")
               this.orderService.UpdateCustomerOrderStatus(this.customerOrder).subscribe()
               this.orderService.orderVM.next("yeah")
               this.router.navigate(['customer-view']);
@@ -106,6 +109,7 @@ export class PaymentComponent implements OnInit {
           });
         },
         onError: (error: any) => {
+          this.ShowSnackBar("Transactiion failed"+this.transactionID, "error")
           console.log(error);
         }
       }
@@ -114,6 +118,13 @@ export class PaymentComponent implements OnInit {
 
   cancel() {
     this.router.navigate(['customer-view']);
+  }
+  ShowSnackBar(message: string, panel: string) {
+    this._snackbar.open(message, "close", {
+      duration: 5000,
+      panelClass: [panel]
+      
+    });
   }
 
 

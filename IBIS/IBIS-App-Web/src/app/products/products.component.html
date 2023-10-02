@@ -20,7 +20,6 @@
           <ion-col *ngIf="request!='price'" size="1"><ion-label></ion-label>Price</ion-col>
           <ion-col *ngIf="request=='price'" size="2"><ion-label></ion-label>Price per category</ion-col>
           <ion-col size="1"><ion-label></ion-label>Quantity</ion-col>
-          <ion-col size="1"><ion-label></ion-label>Expiry Date</ion-col>
           <ion-col size="1"><ion-label></ion-label>SKU</ion-col>
          
           <!-- <ion-col></ion-col>
@@ -61,9 +60,7 @@
           <ion-col *ngIf="request=='quantity'">
             <input mat-input type="number" min="1" [(ngModel)]="quantity">
           </ion-col> -->
-          <ion-col size="1">
-            <ion-label>{{item.expiry}}</ion-label>
-          </ion-col>
+          
           <ion-col size="1">
             <ion-label>{{item.sku}}</ion-label>
           </ion-col>

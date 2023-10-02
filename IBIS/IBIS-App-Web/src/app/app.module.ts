@@ -225,7 +225,7 @@ import { AuditComponent } from './audit/audit.component';
       {path:'profile',component:ProfileComponent,canActivate : [AuthGuardService]},
       {path:'help-me',component:HelpMeComponent,canActivate : [AuthGuardService]},
       {path: 'calendar', component: CalendarComponent,canActivate : [AuthGuardService]},
-      {path:'audit',component:AuditComponent},
+      {path:'audit',component:AuditComponent,canActivate : [AuthGuardService]},
 
 
 
