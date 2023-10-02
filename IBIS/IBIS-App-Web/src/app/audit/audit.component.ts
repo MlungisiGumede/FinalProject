@@ -3,6 +3,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { AuditDetailsComponent } from '../audit-details/audit-details.component';
 import { UserService } from '../Services/user.service';
 import { of } from 'rxjs';
+import { ModalController } from '@ionic/angular';
+import { AuditHelpComponent } from '../audit-help/audit-help.component';
 
 @Component({
   selector: 'app-audit',
@@ -13,7 +15,7 @@ export class AuditComponent implements OnInit {
 data:any
 filterTerm:any
   constructor(public matDialog:MatDialog,
-    private userService:UserService) { }
+    private userService:UserService,public helpModal: ModalController) { }
 
   ngOnInit(): void {
     this.userService.getAuditTrail().subscribe(res=>{
@@ -21,6 +23,12 @@ filterTerm:any
       this.data = of(res)
     });
   }
+  async showHelp(){
+    const modal = await this.helpModal.create({
+      component: AuditHelpComponent});
+      return await modal.present();
+  }
+  
 ViewDetails(details:any){
   //let detail =  JSON.parse(details)
   var retrievedObject = JSON.parse(details.replace(/\<br \/\>/g, ''));
