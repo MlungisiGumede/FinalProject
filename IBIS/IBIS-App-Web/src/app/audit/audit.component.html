@@ -1,7 +1,8 @@
 <ion-content class="ion-margin" id="htmlData">
     <div class="contents">
+      <ion-icon id="helpIcon" name="help-circle" style="color: #002850;" (click)="showHelp()" matTooltip="Help"></ion-icon>
       <ion-title><h1>Audit Trail</h1></ion-title>
-      <ion-searchbar class="isb" placeholder="Search Inventory..." showCancelButton="focus" [(ngModel)]="filterTerm" animated></ion-searchbar><br/>
+      <ion-searchbar class="isb" placeholder="Search Audit trail..." showCancelButton="focus" [(ngModel)]="filterTerm" animated></ion-searchbar><br/>
         <ion-grid class="ion-margin" class="ion-grid-padding">
           <ion-row>
             <ion-col>Audit ID</ion-col>

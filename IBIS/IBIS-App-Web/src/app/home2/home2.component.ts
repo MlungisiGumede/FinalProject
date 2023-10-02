@@ -132,6 +132,9 @@ role:any
 Navigate(){
   this.router.navigate(['/calendar'])
 }
+navigateAudit(){
+  this.router.navigate(['/audit'])
+}
   UpdateRole(user:any){
     const dialogRef = this.matDialog.open(ViewUserComponent,{
      data:{'user':user,'disable':true}

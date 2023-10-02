@@ -14,7 +14,7 @@
       </div>
       
       <button *ngIf="CheckPermission(5)" (click)="request =1" class="ctrl-btn">Control Users</button>
-      <button *ngIf="CheckPermission(6)" class="au-btn">View Audit trail</button>
+      <button *ngIf="CheckPermission(6)" class="au-btn" (click)="navigateAudit()">View Audit trail</button>
       <button *ngIf="CheckPermission(6)" (click)="Navigate()" class="au-btn">View Calendar</button>
     </div>
 

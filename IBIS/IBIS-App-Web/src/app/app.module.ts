@@ -92,6 +92,7 @@ import { ReportHelpComponent } from './report-help/report-help.component';
 import { WriteOffHelpComponent } from './write-off-help/write-off-help.component';
 import { AuditDetailsComponent } from './audit-details/audit-details.component';
 import { AuditComponent } from './audit/audit.component';
+import { AuditHelpComponent } from './audit-help/audit-help.component';
 
 
 
@@ -163,7 +164,8 @@ import { AuditComponent } from './audit/audit.component';
     ReportHelpComponent,
     WriteOffHelpComponent,
     AuditDetailsComponent,
-    AuditComponent
+    AuditComponent,
+    AuditHelpComponent
    
     
   
