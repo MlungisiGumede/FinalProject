@@ -62,11 +62,11 @@ namespace IBIS_API.Controllers
 
 
         private readonly DataContextcs _context;
-        private static PredictionEngine<ModelInput, ModelOutput> _predengine;
-        public ManyToManyController(DataContextcs context, PredictionEngine<ModelInput, ModelOutput> predictionengine)
+        //private static PredictionEngine<ModelInput, ModelOutput> _predengine;
+        public ManyToManyController(DataContextcs context)//, PredictionEngine<ModelInput, ModelOutput> predictionengine)
         {
             _context = context;
-            _predengine = predictionengine;
+           // _predengine = predictionengine;
         }
 
         [HttpGet]
@@ -888,75 +888,75 @@ namespace IBIS_API.Controllers
             }
             return Ok();
         }
-        [HttpGet]
-        [Route("ClassifyReviews")]
-        public void GenerateReviews(CustomerOrder ord)
-        {
+        //[HttpGet]
+        //[Route("ClassifyReviews")]
+        //public void GenerateReviews(CustomerOrder ord)
+        //{
 
 
-            MLContext mlContext = new MLContext();
+        //    MLContext mlContext = new MLContext();
 
 
-            ModelInput modelInput = new ModelInput();
+        //    ModelInput modelInput = new ModelInput();
 
-            BertUncasedLargeTokenizer token = new BertUncasedLargeTokenizer();
-            // var customerOrders = _context.CustomerOrders.ToList();
-            var tokenizer = new BertUncasedLargeTokenizer();
-            List<string> reviewList = new List<string>();
-
-
-
-            var input = ord.Review;
-            //var arr = review.ToArray();
-
-            var tokens = tokenizer.Tokenize();
-            var encoded = tokenizer.Encode(512, input);
-            // var encoded = token.Encode(32,input); // previous 32...
+        //    BertUncasedLargeTokenizer token = new BertUncasedLargeTokenizer();
+        //    // var customerOrders = _context.CustomerOrders.ToList();
+        //    var tokenizer = new BertUncasedLargeTokenizer();
+        //    List<string> reviewList = new List<string>();
 
 
-            var bertInput = new ModelInput()
-            {
-                InputIds = encoded.Select(t => t.InputIds).ToArray(),
-                AttentionMask = encoded.Select(t => t.AttentionMask).ToArray(),
 
-            };
-            ModelInput ml = new ModelInput();
-            var model = ml.ModelStartup2(tokens.Count());
+        //    var input = ord.Review;
+        //    //var arr = review.ToArray();
 
-            var output = _predengine.Predict(bertInput);
-            var lastHiddenState = output.output0;
-            string sentiment = "your mood is ";
-            if (lastHiddenState[0] > lastHiddenState[1])
-            {
-                ord.ReviewClassification_ID = 0;
-                reviewList.Add("negative");
-            }
-            else
-            {
-                ord.ReviewClassification_ID = 1;
-                reviewList.Add("Positive");
-            }
-            //Bad 4.6,-3.7
-            //Good - 4,4.4
-            //Excellent - 4.2,4.5
-            //Trash 4.5,-3.6
-
-            // Define the sentiment labels and map the index to the corresponding label
-
-            // var sentiment = sentimentLabels[maxIndex];
-            //token.Untokenize(val);
-            //output.
-            //engine.Predict()
+        //    var tokens = tokenizer.Tokenize();
+        //    var encoded = tokenizer.Encode(512, input);
+        //    // var encoded = token.Encode(32,input); // previous 32...
 
 
-        }
+        //    var bertInput = new ModelInput()
+        //    {
+        //        InputIds = encoded.Select(t => t.InputIds).ToArray(),
+        //        AttentionMask = encoded.Select(t => t.AttentionMask).ToArray(),
+
+        //    };
+        //    ModelInput ml = new ModelInput();
+        //    var model = ml.ModelStartup2(tokens.Count());
+
+        //    var output = _predengine.Predict(bertInput);
+        //    var lastHiddenState = output.output0;
+        //    string sentiment = "your mood is ";
+        //    if (lastHiddenState[0] > lastHiddenState[1])
+        //    {
+        //        ord.ReviewClassification_ID = 0;
+        //        reviewList.Add("negative");
+        //    }
+        //    else
+        //    {
+        //        ord.ReviewClassification_ID = 1;
+        //        reviewList.Add("Positive");
+        //    }
+        //    //Bad 4.6,-3.7
+        //    //Good - 4,4.4
+        //    //Excellent - 4.2,4.5
+        //    //Trash 4.5,-3.6
+
+        //    // Define the sentiment labels and map the index to the corresponding label
+
+        //    // var sentiment = sentimentLabels[maxIndex];
+        //    //token.Untokenize(val);
+        //    //output.
+        //    //engine.Predict()
+
+
+        //}
 
         [HttpPost]
         [Route("RecordReview")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<ActionResult> RecordReview(CustomerOrder ord)
         {
-            GenerateReviews(ord);
+           // GenerateReviews(ord);
             
             _context.CustomerOrders.Update(ord);
             await _context.SaveChangesAsync();
