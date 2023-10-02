@@ -31,14 +31,14 @@
               <ion-label>{{item.email}}</ion-label>
             </ion-col>
             <ion-col>
-              <ion-button class="red-Btn" (click)="OnEdit(item)">View</ion-button>
-              <ion-button class="light-Btn" (click)="DeleteCustomer(item.customer_ID)">Remove</ion-button>
-              <ion-button class="light-Btn" (click)="AddCustomerOrder(item)">Add Customer Order</ion-button>
+              <ion-button class="light-Btn" (click)="OnEdit(item)"matTooltip="View Customer">View</ion-button>
+              <ion-button class="Red-Btn" (click)="DeleteCustomer(item.customer_ID)" matTooltip="Remove"><ion-icon name="trash-outline"></ion-icon></ion-button>
+              <ion-button class="green-Btn" (click)="AddCustomerOrder(item)" matTooltip="Place a customer order"><ion-icon name="paper-plane-outline"></ion-icon></ion-button>
             </ion-col>
           </ion-row>
           <ion-item-divider></ion-item-divider>
         </ion-grid>
-        <ion-button class="light-Btn" (click)="AddCustomer()">Add</ion-button>
-        <!-- <ion-button class="red-Btn" (click)="generPDF()">Generate Report</ion-button> -->
+        <ion-button class="light-Btn" (click)="AddCustomer()" matTooltip="Add new Customer">Add</ion-button>
+        <!-- <ion-button class="red-Btn" (click)="generPDF()">Generate Report</ion-button>  <ion-icon name="add-outline"></ion-icon> -->
     </div>
   

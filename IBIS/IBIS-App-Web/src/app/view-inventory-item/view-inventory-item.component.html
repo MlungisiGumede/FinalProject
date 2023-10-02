@@ -12,11 +12,14 @@
            <span class="details">Inventory Name</span>
            <input   type="text" placeholder="Name" formControlName="name">
          </div>
+         <div class="input-box">
+         <span class="details">Supplier Name</span>
          <mat-select formControlName="supplier_ID"   >
           <mat-option *ngFor="let supplier of suppliers" [value]="supplier.supplier_ID">
             {{supplier.name}}
           </mat-option>
         </mat-select>
+      </div>
        <div class="buttondiv">
        <div class="button">
          <input type="submit" value="Update" (click)="update()" [routerLink]="['/Inventory']" >

@@ -7,21 +7,21 @@
          <div class="user-details" >
            <div class="input-box">
              <span class="details"> Name</span>
-             <ion-input type="text" placeholder="Name" formControlName="name" class="priceBox"></ion-input>
+             <ion-input type="text" placeholder="e.g John" formControlName="name" class="priceBox"></ion-input>
               <ion-note class="error-message" *ngIf="form.get('name')?.hasError('required')">
                 A supplier name is required
               </ion-note>
            </div>
            <div class="input-box">
              <span class="details">Email</span>
-             <ion-input type="email" placeholder="Email address" formControlName="email" class="priceBox"></ion-input>
+             <ion-input type="email" placeholder="e.g JohnWilliam@gmail.com" formControlName="email" class="priceBox"></ion-input>
               <ion-note class="error-message" *ngIf="form.get('email')?.hasError('email')">
                 Enter a valid email address
               </ion-note>
            </div>
            <div class="input-box">
              <span class="details">Address</span>
-             <ion-input type="text" placeholder="Address" formControlName="address" class="priceBox"></ion-input>
+             <ion-input type="text" placeholder="e.g 234 Pine st" formControlName="address" class="priceBox"></ion-input>
               <ion-note class="error-message" *ngIf="form.get('address')?.hasError('required')">
                 Address required
               </ion-note>
@@ -29,7 +29,7 @@
            
           <div class="input-box">
             <span class="details">Phone number</span>
-            <ion-input type="tel" placeholder="Phone number" formControlName="phone" class="priceBox"></ion-input>
+            <ion-input type="tel" placeholder="e.g 0847858596" formControlName="phone" class="priceBox"></ion-input>
             <ion-note class="error-message" *ngIf="form.get('phone')?.hasError('minlength')">
               Phone number must have at least 10 digits
             </ion-note>

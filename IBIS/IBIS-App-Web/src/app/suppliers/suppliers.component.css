@@ -46,7 +46,7 @@
     float: left;
 }
 .light-Btns{
-  --background: #1976D2;
+  --background: #FFD700;
   --border-radius: 20em;
   float: right;
 }
@@ -54,7 +54,7 @@
 .green-Btn{
   --background: #5CB85C;
   --border-radius: 10em;
-float: right;
+float: left;
 }
 
 .red-Btn{

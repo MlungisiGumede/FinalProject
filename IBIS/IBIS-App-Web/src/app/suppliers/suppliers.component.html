@@ -11,7 +11,6 @@
           <ion-col>Email</ion-col>
           <ion-col>Phone</ion-col>
           <ion-col></ion-col>
-          <ion-col></ion-col>
         </ion-row>
         <ion-item-divider></ion-item-divider>
         <ion-row *ngFor="let item of data | async | filter: filterTerm">
@@ -31,10 +30,10 @@
             <ion-label>{{item.phone}}</ion-label>
           </ion-col>
           <ion-col>
-            <ion-button  class="light-Btn" (click)="View(item)">View</ion-button>
-            <ion-button  class="red-Btn" (click)="delete(item.supplier_ID)">Remove</ion-button>
-        </ion-col>
-        <ion-col> <ion-button class="green-Btn" (click)="SupplierOrder(item)">Order From Supplier</ion-button></ion-col>
+            <ion-button  class="light-Btn" (click)="View(item)" matTooltip="View Supplier" matTooltip="View Supplier">View</ion-button>
+            <ion-button  class="red-Btn" (click)="delete(item.supplier_ID)" matTooltip="Remove"><ion-icon name="trash-outline"></ion-icon></ion-button>
+       <ion-button class="green-Btn" (click)="SupplierOrder(item)" matTooltip="Place a supplier order"><ion-icon name="paper-plane-outline"></ion-icon></ion-button>
+      </ion-col>
         </ion-row>
         <ion-item-divider></ion-item-divider>
       </ion-grid>
