@@ -170,7 +170,7 @@ namespace IBIS_API.Controllers
             AuditTrail audit = new AuditTrail();
             audit.User = username;
             audit.Date = DateTime.Now;
-            audit.Name = "File Uploaded";
+            audit.Name = "User Password reset";
             audit.Description = JsonSerializer.Serialize(user);
             //string resetToken = await _userManager.GeneratePasswordResetTokenAsync(user);
             //IdentityResult passwordChangeResult = await _userManager.ResetPasswordAsync(user, resetToken, uvm.Password);
@@ -346,16 +346,26 @@ namespace IBIS_API.Controllers
 
                                 
                                 audit.Name = "Deleted Customer User";
-                               // var config = new { id = user.Id, userName = user.UserName, email = user.Email, permissions = user.Permissions };
-                               // var str = JsonSerializer.Serialize(config);
+                                // var config = new { id = user.Id, userName = user.UserName, email = user.Email, permissions = user.Permissions };
+                                // var str = JsonSerializer.Serialize(config);
                                 //audit.Description = str;
 
-
+                                audit.Description = JsonSerializer.Serialize(user);
                                 //audit.Description = "Deleted Customer User Account Details:" + Environment.NewLine + user.UserName + user.Email + Environment.NewLine + user.Permissions;
+                                //_context.Customers.Remove(cus);
+                                //_context.Add(audit);
+                               // await _context.SaveChangesAsync();
+                                AuditTrail audit2 = new AuditTrail();
+                                audit2.User = username;
+
+                                audit2.Date = DateTime.Now;
+                                audit2.Description = JsonSerializer.Serialize(cus);
                                 _context.Customers.Remove(cus);
-                                _context.Add(audit);
+                                audit.Name = "Deleted Customer ";
+                                _context.Add(audit2);
                                 await _context.SaveChangesAsync();
-                                
+                                context.Commit();
+
 
                             }
                             else
@@ -371,10 +381,14 @@ namespace IBIS_API.Controllers
                             {
                                 return BadRequest("Cant Delete a Customer with orders");
                             }
-                            audit.Description = JsonSerializer.Serialize(cus);
+                            AuditTrail audit2 = new AuditTrail();
+                            audit2.User = username;
+
+                            audit2.Date = DateTime.Now;
+                            audit2.Description = JsonSerializer.Serialize(cus);
                             _context.Customers.Remove(cus);
-                            audit.Name = "Deleted; Customer User";
-                            _context.Add(audit);
+                            audit.Name = "Deleted Customer ";
+                            _context.Add(audit2);
                             await _context.SaveChangesAsync();
                             context.Commit();
                         }
@@ -410,7 +424,7 @@ namespace IBIS_API.Controllers
 
                     AuditTrail audit = new AuditTrail();
 
-                    audit.User = user.UserName;
+                    audit.User = username;
                     audit.Date = DateTime.Now;
                     audit.Name = "Deleted Employee user";
 
@@ -421,6 +435,7 @@ namespace IBIS_API.Controllers
                         string roleName = roles.FirstOrDefault().ToString();
                         var result1 = await _userManager.RemoveFromRoleAsync(user, roleName);
                         var result2 = await _userManager.RemoveClaimsAsync(user, claims);
+                        audit.Description = JsonSerializer.Serialize(user);
                         var result3 = await _userManager.DeleteAsync(user);
                         if (result1.Succeeded && result2.Succeeded && result3.Succeeded)
                         {
@@ -440,7 +455,7 @@ namespace IBIS_API.Controllers
                             {
                                 AuditTrail audit2 = new AuditTrail();
 
-                                audit2.User = user.UserName;
+                                audit2.User = username;
                                 audit2.Date = DateTime.Now;
                                 audit2.Name = "Deleted Employee";
                                 var str2 = JsonSerializer.Serialize(employee);
@@ -449,6 +464,7 @@ namespace IBIS_API.Controllers
                                 _context.Employees.Remove(employee);
                                 await _context.SaveChangesAsync();
                                 context.Commit();
+                                return NoContent();
                             }
                             
                         }
@@ -458,6 +474,8 @@ namespace IBIS_API.Controllers
                             context.Rollback();
                             return BadRequest("Failed to delete user");
                         }
+                        await _context.SaveChangesAsync();
+                        context.Commit();
                     }
                     catch (Exception ex)
                     {
@@ -469,10 +487,19 @@ namespace IBIS_API.Controllers
             {
                 return BadRequest("No user account for particular customer");
             }
+
             return NoContent();
         }
+        [HttpGet]
+        [Route("getAuditTrail")]
+        public async Task<ActionResult<IEnumerable<AuditTrail>>> GetAuditTrail()
+        {
+            return await _context.AuditTrail.ToListAsync();
 
-        
+        }
+
+
+
 
 
         [HttpPost]
@@ -542,7 +569,8 @@ namespace IBIS_API.Controllers
                 audit.User = uvm.Username;
                 audit.Date = DateTime.Now;
                 audit.Name = "Log In";
-                audit.Description = JsonSerializer.Serialize(uvm);
+                //_userManager.PasswordHasher.HashPassword(user, uvm.Password);
+                audit.Description = JsonSerializer.Serialize(user);
                 _context.Add(audit);
                 await _context.SaveChangesAsync();
                 //return Ok(roleName);
@@ -607,7 +635,11 @@ namespace IBIS_API.Controllers
                 audit.User = username;
                 audit.Date = DateTime.Now;
                 audit.Name = "File Uploaded";
+                //audit.Description = JsonSerializer.Serialize(file);
+                
+                await _context.SaveChangesAsync();
                 audit.Description = JsonSerializer.Serialize(file);
+                _context.Add(audit);
                 await _context.SaveChangesAsync();
                 context.Commit();
             }
@@ -679,7 +711,9 @@ namespace IBIS_API.Controllers
                     _context.UserPermissions.Add(userPermission);
                         await _context.SaveChangesAsync();
                         AuditTrail audit = new AuditTrail();
-                        audit.User = user.UserName;
+                        var userClaims = User;
+                        var username = userClaims.FindFirstValue(ClaimTypes.Name);
+                        audit.User = username;
                         audit.Date = DateTime.Now;
                         audit.Name = "User Permissions";
                         //var str = 
@@ -692,16 +726,23 @@ namespace IBIS_API.Controllers
                 }
                 else
                 {
+                    AuditTrail audit = new AuditTrail();
+                    var userClaims = User;
+                    var username = userClaims.FindFirstValue(ClaimTypes.Name);
+                    audit.User = username;
+                    audit.Date = DateTime.Now;
+                    audit.Name = "Updated User Details";
+                   
                     user.UserName = userVm.UserName;
                     user.Email = userVm.Email;
-                   
+                    audit.Description = JsonSerializer.Serialize(user);
+                    _context.Add(audit);
                 }
                 
                 await _userManager.UpdateAsync(user);// try figure this out later...
                 await _context.SaveChangesAsync();
                 transaction.Commit();
-                var userClaims = User;
-                var username = userClaims.FindFirstValue(ClaimTypes.Name);
+
                 //var user = await _userManager.FindByNameAsync(username);
                 
 
@@ -778,18 +819,22 @@ namespace IBIS_API.Controllers
             return Ok(ordersList);
 
         }
-        [HttpGet]
+        [HttpPost]
         [Route("SendSms")]
-        public async Task<IActionResult> SendSms()
+        public async Task<IActionResult> SendSms(User_Account uservM)
         {
+            Random generator = new Random();
+           int r = generator.Next(100000, 1000000);
             const string accountSid = "ACeb14bbf63263e7318c7f8971ea94df55";
             const string authToken = "089031f565b379487bbba7f4ab196e73";
             TwilioClient.Init(accountSid, authToken);
-
+            var user = await _userManager.FindByNameAsync(uservM.Username);
             //TwilioRestClient client = new TwilioRestClient(ACCOUNT_SID, AUTH_TOKEN);
             //client.
+           // user.phon
             //client.SendMessage("(502) 276-8990", ToNumber.Text, Message.Text)
-            var to = new PhoneNumber("+18035423230");
+            var to = new PhoneNumber("+"+user.PhoneNumber);
+            var from = new PhoneNumber("+15595496121");
             //var message = MessageResource.Create(
             //    to,
             //    from: new PhoneNumber("+27828558028"), //  From number, must be an SMS-enabled Twilio number ( This will send sms from ur "To" numbers ).  
@@ -797,9 +842,9 @@ namespace IBIS_API.Controllers
 
             MessageResource.Create(
       to: to,
-      messagingServiceSid: "MG54aee30786d986ca151639e0f838cf63",
-      body: "Hello from your Alpha sender 👏");
-            return Ok();
+      from: from,
+      body: "Your OTP is"+r);
+            return Ok(r);
         }
 
 
@@ -819,6 +864,7 @@ namespace IBIS_API.Controllers
                     Id = Guid.NewGuid().ToString(),
                     UserName = username,
                     Email = email,
+                    PhoneNumber = "27768027471"
                     //Permissions = true
                 };
                 if (!(await _roleManager.RoleExistsAsync("manager"))) // got from microsoft...
@@ -913,6 +959,7 @@ namespace IBIS_API.Controllers
                         if (roleresult.Succeeded)
                         {
                             _context.AuditTrail.Add(audit);
+                            await _context.SaveChangesAsync();
                             context.Commit();
 
                         }
@@ -952,6 +999,7 @@ namespace IBIS_API.Controllers
             AuditTrail audit = new AuditTrail();
             audit.Name = "Add Event";
             audit.Date = DateTime.Now;
+            audit.User = username;
             using (var context = _context.Database.BeginTransaction())
             {
                
@@ -962,7 +1010,7 @@ namespace IBIS_API.Controllers
                 audit.Description = JsonSerializer.Serialize(ev);
                 _context.Add(audit);
                 await _context.SaveChangesAsync();
-
+                context.Commit();
             }
           
             return Ok();

@@ -79,9 +79,9 @@ namespace IBIS_API.Controllers
             var str = JsonSerializer.Serialize(config);
             audit.Description = str;
             //var supplier = _context.Inventories.Where(c => c.Supplier_ID == sup.Supplier_ID).First();
-            audit.Description = "Edit Customer Details:" + Environment.NewLine + cus.Customer_ID + Environment.NewLine + cus.Customer_FirstName + " " + cus.Customer_Surname + Environment.NewLine + cus.Phone + Environment.NewLine + cus.Email + Environment.NewLine + cus.Address; ;
+            //audit.Description = "Edit Customer Details:" + Environment.NewLine + cus.Customer_ID + Environment.NewLine + cus.Customer_FirstName + " " + cus.Customer_Surname + Environment.NewLine + cus.Phone + Environment.NewLine + cus.Email + Environment.NewLine + cus.Address; ;
             _context.Entry(cus).State = EntityState.Modified;
-
+            _context.Add(audit);
             try
             {
                 await _context.SaveChangesAsync();

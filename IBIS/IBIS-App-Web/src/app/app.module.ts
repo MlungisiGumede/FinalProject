@@ -90,6 +90,8 @@ import { HomeHelpComponent } from './home-help/home-help.component';
 import { CalenderHelpComponent } from './calender-help/calender-help.component';
 import { ReportHelpComponent } from './report-help/report-help.component';
 import { WriteOffHelpComponent } from './write-off-help/write-off-help.component';
+import { AuditDetailsComponent } from './audit-details/audit-details.component';
+import { AuditComponent } from './audit/audit.component';
 
 
 
@@ -159,7 +161,9 @@ import { WriteOffHelpComponent } from './write-off-help/write-off-help.component
     HomeHelpComponent,
     CalenderHelpComponent,
     ReportHelpComponent,
-    WriteOffHelpComponent
+    WriteOffHelpComponent,
+    AuditDetailsComponent,
+    AuditComponent
    
     
   
@@ -220,8 +224,8 @@ import { WriteOffHelpComponent } from './write-off-help/write-off-help.component
       {path: 'payment', component: PaymentComponent,canActivate : [AuthGuardService]},
       {path:'profile',component:ProfileComponent,canActivate : [AuthGuardService]},
       {path:'help-me',component:HelpMeComponent,canActivate : [AuthGuardService]},
-      {path: 'calendar', component: CalendarComponent,canActivate : [AuthGuardService]}
-      
+      {path: 'calendar', component: CalendarComponent,canActivate : [AuthGuardService]},
+      {path:'audit',component:AuditComponent},
 
 
 
@@ -249,7 +253,7 @@ import { WriteOffHelpComponent } from './write-off-help/write-off-help.component
   ViewImageComponent,AddSupplierComponent,ViewCustomerOrderComponent,ViewSupplierOrderComponent,
   AddSupplierOrderComponent,AddInventoryItemComponent,ViewInventoryItemComponent,ViewSupplierComponent,
 AddProductComponent,AddSubCategoryComponent,AddCategoryComponent,ReviewComponent,
-ViewUserComponent,AddUserComponent],
+ViewUserComponent,AddUserComponent,AuditDetailsComponent],
   providers: [{provide:HTTP_INTERCEPTORS,useClass:AuthenticationService,multi:true}
   ,AuthGuardService],
   bootstrap: [AppComponent]

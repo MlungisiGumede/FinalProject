@@ -1,0 +1,37 @@
+<ion-content class="ion-margin" id="htmlData">
+    <div class="contents">
+      <ion-title><h1>Audit Trail</h1></ion-title>
+      <ion-searchbar class="isb" placeholder="Search Inventory..." showCancelButton="focus" [(ngModel)]="filterTerm" animated></ion-searchbar><br/>
+        <ion-grid class="ion-margin" class="ion-grid-padding">
+          <ion-row>
+            <ion-col>Audit ID</ion-col>
+            <ion-col>Name</ion-col>
+            <ion-col>User</ion-col>
+            <ion-col>Date and Time</ion-col>
+            
+            <ion-col></ion-col>
+          </ion-row>
+          <ion-item-divider></ion-item-divider>
+          <ion-row *ngFor="let item of data | async | filter: filterTerm">
+            <ion-col>
+              <ion-label>{{item.id}}</ion-label>
+            </ion-col>
+            <ion-col>
+              <ion-label>{{item.name}}</ion-label>
+            </ion-col>
+            <ion-col>
+              <ion-label>{{item.user}}</ion-label>
+            </ion-col>
+            <ion-col>
+                <ion-label>{{item.date}}</ion-label>
+              </ion-col>
+            <ion-col>
+              <ion-button class="red-Btn" (click)="ViewDetails(item.description)">View Details</ion-button>
+              
+            </ion-col>
+          </ion-row>
+          <ion-item-divider></ion-item-divider>
+        </ion-grid>
+      </div>
+</ion-content>
+  

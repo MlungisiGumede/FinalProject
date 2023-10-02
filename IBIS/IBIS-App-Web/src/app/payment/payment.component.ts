@@ -36,15 +36,15 @@ export class PaymentComponent implements OnInit {
       console.log(this.totalR)
 
       this.orderService.getCurrency().subscribe((res:any)=>{
-      //   const rates = res.rates;
-      //   console.log(rates['RSA'])
-      //   this.randToUsd = 1/rates['ZAR']
-      // this.total$ = this.totalR *  this.randToUsd // * 0.052 
-      // console.log(this.total$)
-      // this.total$ = (Math.round(this.total$ * 100) / 100).toFixed(2) // just round down instead...
-      // console.log(this.total$)
-      //    console.log(this.randToUsd)
-          this.total$ = 11
+        const rates = res.rates;
+        console.log(rates['RSA'])
+        this.randToUsd = 1/rates['ZAR']
+      this.total$ = this.totalR *  this.randToUsd // * 0.052 
+      console.log(this.total$)
+      this.total$ = (Math.round(this.total$ * 100) / 100).toFixed(2) // just round down instead...
+      console.log(this.total$)
+         console.log(this.randToUsd)
+          //this.total$ = 11
         this.RenderPayPal()
         
       })

@@ -24,6 +24,11 @@ export class LoginService  {
   constructor(private httpClient: HttpClient) { 
     this.loginstate = new BehaviorSubject<boolean>(false);
   }
+  public SendSms(username:any){
+    let user = new User()
+    user.username = username
+    return this.httpClient.post<any>(`${this.apiUrl}SendSms`,user)
+  }
   public SetNewPassWord(user:User){
     return this.httpClient.post<User>(`${this.apiUrl}setNewPassWord`,user)
   }

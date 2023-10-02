@@ -21,6 +21,9 @@ export class UserService {
 public getUsersList(): Observable<User[]> {
   return this.httpClient.get<User[]>(this.apiUrl)
 }
+public getAuditTrail(){
+  return this.httpClient.get<any>(`${this.apiUrl}/getAuditTrail`)
+}
 public UploadFile(file: any){
   return this.httpClient.post<FileUpload>(`${this.apiUrl}/fileUpload`,file)
 }

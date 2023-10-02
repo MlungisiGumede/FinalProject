@@ -11,6 +11,9 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using Microsoft.EntityFrameworkCore;
+//using Newtonsoft.Json;
+using System.Text.Json;
+using Twilio.TwiML.Voice;
 
 namespace IBIS_API.Controllers
 {
@@ -52,8 +55,18 @@ namespace IBIS_API.Controllers
         // PUT: api/Addresses/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<IActionResult> PutRecipe(int id, Recipe rec)
         {
+            var userClaims = User;
+
+            var username = userClaims.FindFirstValue(ClaimTypes.Name);
+            AuditTrail audit = new AuditTrail();
+            audit.User = username;
+            audit.Date = DateTime.Now;
+            audit.Name = "Edit Recipe";
+            audit.Description = JsonSerializer.Serialize(rec);
+            _context.Add(audit);
             if (id != rec.Recipe_ID)
             {
                 return BadRequest();
@@ -83,24 +96,53 @@ namespace IBIS_API.Controllers
         // POST: api/Addresses
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<ActionResult<Recipe>> PostRecipe(Recipe rec)
         {
-            _context.Recipes.Add(rec);
-            await _context.SaveChangesAsync();
+            var userClaims = User;
+           
+            var username = userClaims.FindFirstValue(ClaimTypes.Name);
+           
+            AuditTrail audit = new AuditTrail();
+            audit.User = username;
+            audit.Date = DateTime.Now;
+            audit.Name = "Add Recipe";
+          
+            using (var context = _context.Database.BeginTransaction())
+            {
+                _context.Recipes.Add(rec);
+                await _context.SaveChangesAsync();
+                audit.Description = JsonSerializer.Serialize(rec);
+                _context.Add(audit);
+                await _context.SaveChangesAsync();
+                context.Commit();
+
+            }
+
+               
 
             return CreatedAtAction("GetRecipe", new { id = rec.Recipe_ID  }, rec);
         }
 
         // DELETE: api/Addresses/5
         [HttpDelete("{id}")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<IActionResult> DeleteRecipe(int id)
         {
             var rec = await _context.Recipes.FindAsync(id);
+            var userClaims = User;
+
+            var username = userClaims.FindFirstValue(ClaimTypes.Name);
+            AuditTrail audit = new AuditTrail();
+            audit.User = username;
+            audit.Date = DateTime.Now;
+            audit.Name = "Delete Recipe";
+            audit.Description = JsonSerializer.Serialize(rec);
             if (rec == null)
             {
                 return NotFound();
             }
-
+            _context.Add(audit);
             _context.Recipes.Remove(rec);
             await _context.SaveChangesAsync();
 

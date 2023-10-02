@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
@@ -84,7 +85,7 @@ namespace IBIS_API.Controllers
         {
             using (var context = _context.Database.BeginTransaction())
             {
-                
+                AuditTrail audit = new AuditTrail();
                 var adjustment = _context.AdjustmentTypes.FirstOrDefault();
                 if (adjustment != null)
                 {
@@ -98,18 +99,29 @@ namespace IBIS_API.Controllers
                 var product = _context.Products.Where(c => c.Product_ID == writeOff.Product_ID).FirstOrDefault();
                 if (writeOff.Adjustment_ID == 1)
                 {
+                    audit.Name = "Add Write-Off";
                     product.Quantity = product.Quantity - writeOff.Quantity;
                 }
                 else
                 {
+                    audit.Name = "Add Write-Off";
                     product.Quantity = product.Quantity + writeOff.Quantity;
                 }
 
                 _context.Write_Offss.Add(writeOff);
-
                 await _context.SaveChangesAsync();
-                _context.Entry(product).State = EntityState.Modified;
+                var userClaims = User;
+                var username = userClaims.FindFirstValue(ClaimTypes.Name);
 
+               
+
+                audit.User = username;
+                audit.Date = DateTime.Now;
+                var str = new { WriteOff_ID = writeOff.Write_Off_Id, productName = product.Name, quantity = writeOff.Quantity };
+                audit.Description = JsonSerializer.Serialize(str);
+               
+                _context.Entry(product).State = EntityState.Modified;
+                _context.Add(audit);
                 await _context.SaveChangesAsync();
                 context.Commit();
             }
@@ -128,7 +140,18 @@ namespace IBIS_API.Controllers
             {
                 return NotFound();
             }
-
+            AuditTrail audit = new AuditTrail();
+            var userClaims = User;
+            var username = userClaims.FindFirstValue(ClaimTypes.Name);
+            audit.User = username;
+            audit.Date = DateTime.Now;
+            var product = _context.Products.Where(c => c.Product_ID == sup.Product_ID).FirstOrDefault();
+            var str = new { WriteOff_ID = sup.Write_Off_Id, productName = product.Name, quantity = sup.Quantity };
+            audit.Description = JsonSerializer.Serialize(str);
+            
+            _context.Entry(product).State = EntityState.Modified;
+            _context.Add(audit);
+            await _context.SaveChangesAsync();
             _context.Write_Offss.Remove(sup);
             await _context.SaveChangesAsync();
 

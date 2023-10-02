@@ -59,6 +59,29 @@ console.log(this.router.url)
     // check on refresh...
   }
 
+  SendSms(){
+    this.GetUser()
+    console.log(this.user)
+    this.loginservice.SendSms(this.user.username).pipe(map(
+      (res)=>{
+        this.otp = res
+    console.log(res)
+    }),
+    catchError((err) =>{
+    {
+        this.ShowSnackBar("failed to send sms", "error");
+      }
+      
+      return throwError(err)
+    })).subscribe((res)=>{
+      console.log(res)
+      this.ShowSnackBar("sms Sent Successfully", "success");
+    })
+
+      
+    }
+  
+
   otpValidator(control: FormControl): { [key: string]: boolean } | null {
     const value = control.value;
     if (value && (isNaN(value) || value.toString().length !== 6)) {
