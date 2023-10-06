@@ -29,6 +29,7 @@ filterTerm:any
       return await modal.present();
   }
   
+  
 ViewDetails(details:any){
   //let detail =  JSON.parse(details)
   var retrievedObject = JSON.parse(details.replace(/\<br \/\>/g, ''));

@@ -4,6 +4,7 @@ import { NavigationError, NavigationStart, Router } from '@angular/router';
 import { LoginService } from './Services/login.service';
 import { AuthenticationService } from './Services/authentication.service';
 import { AuthGuardService } from './Services/auth-guard.service';
+import { NgxSpinnerComponent, NgxSpinnerService } from 'ngx-spinner';
 
 
 
@@ -34,10 +35,11 @@ export class AppComponent implements OnInit {
 
 constructor(private loginService : LoginService, public router: Router,
   private authenticationService: AuthenticationService,
-  private authGuardService:AuthGuardService) {
+  private authGuardService:AuthGuardService,private spinner: NgxSpinnerService) {
 
 }
   ngOnInit(): void {
+    //this.spinner.show()
   this.authGuardService.showNavigation.subscribe((showNavigation) => {
     this.showNavigation = showNavigation
   })

@@ -94,7 +94,7 @@ import { AuditDetailsComponent } from './audit-details/audit-details.component';
 import { AuditComponent } from './audit/audit.component';
 import { AuditHelpComponent } from './audit-help/audit-help.component';
 import { ConfirmationComponent } from './confirmation/confirmation.component';
-
+import { NgxSpinnerModule } from 'ngx-spinner';
 
 
 
@@ -183,7 +183,9 @@ import { ConfirmationComponent } from './confirmation/confirmation.component';
     MatButtonModule,
     QRCodeModule,
     NgQrScannerModule,
-    
+    NgxSpinnerModule,
+    BrowserAnimationsModule,
+    //NgxSpinnerModule.forRoot({ type: 'timer' })],
     //BarcodeScannerLivestreamModule,
     MatRadioModule, //https://webartdevelopers.com/blog/pure-css-radio-button-dot-slider/ for idea of slideshow buttons....
     RouterModule.forRoot([
@@ -259,8 +261,9 @@ import { ConfirmationComponent } from './confirmation/confirmation.component';
   AddSupplierOrderComponent,AddInventoryItemComponent,ViewInventoryItemComponent,ViewSupplierComponent,
 AddProductComponent,AddSubCategoryComponent,AddCategoryComponent,ReviewComponent,
 ViewUserComponent,AddUserComponent,AuditDetailsComponent],
-  providers: [{provide:HTTP_INTERCEPTORS,useClass:AuthenticationService,multi:true}
-  ,AuthGuardService],
+  providers: [{provide:HTTP_INTERCEPTORS,useClass:AuthenticationService,multi:true},
+    //{ provide: HTTP_INTERCEPTORS, useClass: AuthenticationService, multi: true },
+  AuthGuardService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

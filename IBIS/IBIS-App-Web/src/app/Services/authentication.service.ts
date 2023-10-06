@@ -4,22 +4,26 @@ import {tap,catchError, map} from 'rxjs/operators';
 import { Router } from '@angular/router';
 import {Observable,throwError} from 'rxjs';
 import { environment } from 'src/environments/environment';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthenticationService implements HttpInterceptor {
-  apiUrl = environment.apiUrl+'User/';
+  apiUrl = environment.apiUrl+'User/'
+  
   intercept(req: HttpRequest<any>,
     next: HttpHandler): Observable<HttpEvent<any>> {
       //localStorage.getItem('Token') && localStorage.getItem('Token') != null
       let h1 = ""
       let h12 = "a"
+      //this.spinner.show()
+       // check this to show spinner or not...
       //console.log("hi")
       //console.log(localStorage.getItem('Token'))
       //console.log(localStorage.getItem('Token'))
       //let var = localStorage.getItem('Token')
-if (localStorage.getItem('Token') != 'null' && localStorage.getItem('Token') != null) {
+if(localStorage.getItem('Token') != 'null' && localStorage.getItem('Token') != null) {
   //console.log(localStorage.getItem('Token'))
   const jwt = JSON.parse(localStorage.getItem('Token')!) //console.log(jwt)
  const token = jwt.token
@@ -29,8 +33,21 @@ if (localStorage.getItem('Token') != 'null' && localStorage.getItem('Token') != 
        .set('Cache-Control', 'no-cache').set('responseType', 'blob')
    
   });
-
-   return next.handle(cloned);
+ if(req.method != 'GET'){
+this.spinner.show()
+ }
+   return next.handle(cloned).pipe(tap(async (event: HttpEvent < any > ) => {
+    if (event instanceof HttpResponse || event instanceof HttpErrorResponse) {
+      if(req.method != 'GET'){
+        console.log("hi im here")
+        this.spinner.hide()
+         }
+        
+    }
+  },(err:any)=>{
+    this.spinner.hide()
+  }
+   ))
 }
 else {
   // return next.handle(req).subscribe(
@@ -96,7 +113,7 @@ await val;
 //return val;
 }
   
-    constructor(private router: Router,private httpClient: HttpClient) {
+    constructor(private router: Router,private httpClient: HttpClient,private spinner: NgxSpinnerService) {
       
     }
   }
