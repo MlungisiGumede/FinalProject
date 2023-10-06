@@ -93,6 +93,7 @@ import { WriteOffHelpComponent } from './write-off-help/write-off-help.component
 import { AuditDetailsComponent } from './audit-details/audit-details.component';
 import { AuditComponent } from './audit/audit.component';
 import { AuditHelpComponent } from './audit-help/audit-help.component';
+import { ConfirmationComponent } from './confirmation/confirmation.component';
 
 
 
@@ -165,7 +166,8 @@ import { AuditHelpComponent } from './audit-help/audit-help.component';
     WriteOffHelpComponent,
     AuditDetailsComponent,
     AuditComponent,
-    AuditHelpComponent
+    AuditHelpComponent,
+    ConfirmationComponent
    
     
   
@@ -221,14 +223,15 @@ import { AuditHelpComponent } from './audit-help/audit-help.component';
       {path: 'otp/:username', component: OtpComponent,canActivate : [AuthGuardService]},
       //{path:'view-write-off/:id',component:ViewWriteOffsComponent,canActivate : [AuthGuardService]},
       {path: 'timer', component: TimerComponent,canActivate : [AuthGuardService]},
-      //{path: 'timer/:username', component: TimerComponent },
+      {path: 'timer/:username', component: TimerComponent },
       {path: 'customer-view', component: CustomerViewComponent,canActivate : [AuthGuardService]},
       {path: 'payment', component: PaymentComponent,canActivate : [AuthGuardService]},
       {path:'profile',component:ProfileComponent,canActivate : [AuthGuardService]},
       {path:'help-me',component:HelpMeComponent,canActivate : [AuthGuardService]},
       {path: 'calendar', component: CalendarComponent,canActivate : [AuthGuardService]},
       {path:'audit',component:AuditComponent,canActivate : [AuthGuardService]},
-
+   {path:'confirmation',component:ConfirmationComponent,canActivate : [AuthGuardService]},
+   {path:'confirmation/:token/:user',component:ConfirmationComponent,canActivate : [AuthGuardService]}
 
 
 

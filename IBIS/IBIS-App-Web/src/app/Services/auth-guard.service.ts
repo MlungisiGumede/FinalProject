@@ -32,6 +32,25 @@ return new Promise((resolve, reject) => {
   //this.ShowNavigation()
   // disabled routes method
  // could get user role here...
+ if(this.path.includes("confirmation")){
+  let token = route.queryParamMap.get("token");
+  let user = route.queryParamMap.get("user");
+ let myObj = {
+   token: token,
+   username: user
+ }
+ console.log(myObj)
+  this.loginService.CheckEmail(myObj).subscribe(
+    (data)=>{
+    
+      resolve(true)
+    }
+  ),(error:any) => {
+    resolve(false)
+  }
+ }else{
+
+ 
   this.authenticationService.Authenticate().then((success) => {
     console.log("success is here")
     console.log(success)
@@ -112,6 +131,7 @@ return new Promise((resolve, reject) => {
     }
    
   })
+}
       
        
         }

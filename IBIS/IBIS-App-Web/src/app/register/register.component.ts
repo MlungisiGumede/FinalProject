@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ModalController } from '@ionic/angular';
 import { RegisterHelpComponent } from '../register-help/register-help.component';
+import { environment } from 'src/environments/environment';
 
 
 @Component({
@@ -29,7 +30,8 @@ this.registerForm = this.fb.group({
   username : ['',[ Validators.required,Validators.minLength(6)]],
   password : ['', [Validators.required,Validators.minLength(6)]],
   fullName : ['', Validators.required],
-  email: ['',[Validators.required,Validators.email]]
+  email: ['',[Validators.required,Validators.email]],
+  clientUrl: [environment.clienUrl + 'confirmation'],
   // surname : ['', Validators.required],
   // address : ['', Validators.required],
   // Cellphone_Number : ['', Validators.required]
@@ -74,10 +76,12 @@ onSubmit(){
     this.register.Register(this.registerForm.value).subscribe(
        (res)=>{
         console.log(res)
+        localStorage.setItem('emailToken',JSON.stringify(res))
+        
         this.ShowSnackBar("User successfully registered", "success")
         //alert(res.message)
        
-      this.router.navigate(['/Login'])
+      //this.router.navigate(['/'])
        },
       (err) =>{
         

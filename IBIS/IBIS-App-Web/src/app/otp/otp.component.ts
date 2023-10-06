@@ -182,7 +182,7 @@ async GetUser(){
     console.log(localStorage.getItem('Token'))
     let otp = this.otpForm.controls['otp'].value
     if(otp==this.otp){
-      this.router.navigate(['/timer',this.username]);
+      this.router.navigate(['/timer',this.user.username]); // added in
     }else{
       
     }

@@ -35,6 +35,12 @@ using System.Text.Json.Serialization;
 using DocumentFormat.OpenXml.Presentation;
 using DocumentFormat.OpenXml.Spreadsheet;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using static Microsoft.ApplicationInsights.MetricDimensionNames.TelemetryContext;
+using System.Web;
+using System;
+using System.IO;
+using System.Text;
+
 
 namespace IBIS_API.Controllers
 {
@@ -191,7 +197,20 @@ namespace IBIS_API.Controllers
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<ActionResult> CheckAuthentication()
         {
+          
 
+            return Ok();
+        }
+        [HttpPost]
+        [Route("CheckEmail")]
+       
+        public async Task<ActionResult> CheckEmail(User_Account uvm)
+        {
+            var user = await _userManager.FindByNameAsync(uvm.Username);
+            if(await _userManager.IsEmailConfirmedAsync(user))
+            {
+                return BadRequest();
+            }
             return Ok();
         }
         [HttpGet]
@@ -206,22 +225,22 @@ namespace IBIS_API.Controllers
             var currentUser = _httpContextAccessor.HttpContext.User; // works
             var userClaims = User;
             UserRoleVM uRVM = new UserRoleVM();
-           
+
             var username = userClaims.FindFirstValue(ClaimTypes.Name);
             var permissionIDs = _context.UserPermissions.Where(c => c.userName == username).Select(c => c.Permission_Id).ToList();
             List<Permission> list = new List<Permission>();
-            foreach(var permissionID in permissionIDs)
+            foreach (var permissionID in permissionIDs)
             {
                 var permission = _context.Permissions.Where(c => c.Permission_ID == permissionID).First();
                 list.Add(permission);
-                
+
             }
             uRVM.Permissions = list; // maybe not most efficient....
             var user = await _userManager.FindByNameAsync(username);
             var roles = await _userManager.GetRolesAsync(user);
             string roleName = roles.FirstOrDefault().ToString();
             uRVM.Role = roleName;
-          //  uRVM.Permissions = user.Permissions;
+            //  uRVM.Permissions = user.Permissions;
             return Ok(uRVM);
             //return Created("", new
             //{
@@ -256,6 +275,8 @@ namespace IBIS_API.Controllers
                     //mail.Attachments.Add(new Attachment("D:\\TestFile.txt"));//--Uncomment this to send any attachment  
                     using (SmtpClient smtp = new SmtpClient(smtpAddress, portNumber))
                     {
+                        //var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                        //var confirmationLink = Url.Action(nameof(uvm.Email), "Account", new { token, email = user.Email }, Request.Scheme);
                         //smtp.UseDefaultCredentials = false;
                         smtp.Credentials = new NetworkCredential(emailFromAddress, "sxkbtjguspnshajt");
                         smtp.UseDefaultCredentials = false;
@@ -287,6 +308,7 @@ namespace IBIS_API.Controllers
                         // doesnt work if there is no internet connection so try and catch...
                         smtp.Send(mail);
                     }
+
                 }
             }
 
@@ -316,7 +338,7 @@ namespace IBIS_API.Controllers
             var username = userClaims.FindFirstValue(ClaimTypes.Name);
             AuditTrail audit = new AuditTrail();
             audit.User = username;
-           
+
             audit.Date = DateTime.Now;
             var cus = await _context.Customers.FindAsync(id);
             if (cus == null)
@@ -330,7 +352,7 @@ namespace IBIS_API.Controllers
                     try
                     {
                         var user = await _userManager.FindByEmailAsync(cus.Email);
-                        
+
                         if (user != null)
                         {
                             var claims = await _userManager.GetClaimsAsync(user);
@@ -344,7 +366,7 @@ namespace IBIS_API.Controllers
                             {
 
 
-                                
+
                                 audit.Name = "Deleted Customer User";
                                 // var config = new { id = user.Id, userName = user.UserName, email = user.Email, permissions = user.Permissions };
                                 // var str = JsonSerializer.Serialize(config);
@@ -354,7 +376,7 @@ namespace IBIS_API.Controllers
                                 //audit.Description = "Deleted Customer User Account Details:" + Environment.NewLine + user.UserName + user.Email + Environment.NewLine + user.Permissions;
                                 //_context.Customers.Remove(cus);
                                 //_context.Add(audit);
-                               // await _context.SaveChangesAsync();
+                                // await _context.SaveChangesAsync();
                                 AuditTrail audit2 = new AuditTrail();
                                 audit2.User = username;
 
@@ -412,7 +434,7 @@ namespace IBIS_API.Controllers
         public async Task<IActionResult> DeleteUser(string id) // this is userID...
         {
 
-          
+
             var user = await _userManager.FindByIdAsync(id);
             var employee = _context.Employees.Where(c => c.Email == user.Email).FirstOrDefault();
             if (user != null)
@@ -447,8 +469,8 @@ namespace IBIS_API.Controllers
                             {
                                 audit.Name = "Deleted Customer User";
 
-                               // var str2 = JsonSerializer.Serialize(config);
-                               // audit.Description = str2;
+                                // var str2 = JsonSerializer.Serialize(config);
+                                // audit.Description = str2;
 
                             }
                             else
@@ -466,7 +488,7 @@ namespace IBIS_API.Controllers
                                 context.Commit();
                                 return NoContent();
                             }
-                            
+
                         }
 
                         else
@@ -549,6 +571,15 @@ namespace IBIS_API.Controllers
         public async Task<ActionResult> Login(User_Account uvm)
         {
             var user = await _userManager.FindByNameAsync(uvm.Username);
+            if (user! != null) // check it down there so could only maybe check it once...
+            {
+                var confirmed = await _userManager.IsEmailConfirmedAsync(user);
+                if (!confirmed)
+                {
+                    return BadRequest();
+                }
+            }
+          
 
             if (user != null && await _userManager.CheckPasswordAsync(user, uvm.Password))
             {
@@ -605,7 +636,7 @@ namespace IBIS_API.Controllers
                     {
                         _context.Add(file);
                     }
-                    
+
                 }
                 else
                 {
@@ -614,15 +645,15 @@ namespace IBIS_API.Controllers
                     {
                         _context.Remove(fileFound);
                         _context.Add(file);
-                       
+
                     }
                     else
                     {
                         _context.Add(file);
-                      
+
                     }
                     await _context.SaveChangesAsync();
-                   
+
 
 
 
@@ -636,7 +667,7 @@ namespace IBIS_API.Controllers
                 audit.Date = DateTime.Now;
                 audit.Name = "File Uploaded";
                 //audit.Description = JsonSerializer.Serialize(file);
-                
+
                 await _context.SaveChangesAsync();
                 audit.Description = JsonSerializer.Serialize(file);
                 _context.Add(audit);
@@ -685,30 +716,30 @@ namespace IBIS_API.Controllers
         {
             // could you pass through app user....
             var user = await _userManager.FindByNameAsync(userVm.UserName);
-            
+
             // user.Permissions = userVm.Permissions;
             using (var transaction = _context.Database.BeginTransaction())
             {
-                if(userVm.Permissions.First() != null) { 
-                foreach (var permission in userVm.Permissions)
-                {
-                    var perm = _context.Permissions.Where(c => c.Permission_ID == permission.Permission_ID).FirstOrDefault();
-                    if (perm == null)
+                if (userVm.Permissions.First() != null) {
+                    foreach (var permission in userVm.Permissions)
                     {
-                        _context.Database.ExecuteSqlRaw("SET IDENTITY_INSERT [dbo].[Permissions] ON");
-                        _context.Add(permission);
-                       
-                        // the audit stuff as well...
+                        var perm = _context.Permissions.Where(c => c.Permission_ID == permission.Permission_ID).FirstOrDefault();
+                        if (perm == null)
+                        {
+                            _context.Database.ExecuteSqlRaw("SET IDENTITY_INSERT [dbo].[Permissions] ON");
+                            _context.Add(permission);
+
+                            // the audit stuff as well...
+                        }
+                        var currentPermissions = _context.UserPermissions.Where(c => c.userName == userVm.UserName).ToList();
+                        _context.RemoveRange(currentPermissions);
                     }
-                   var currentPermissions = _context.UserPermissions.Where(c => c.userName == userVm.UserName).ToList();
-                    _context.RemoveRange(currentPermissions);
-                }
-                foreach(var permission in userVm.Permissions)
-                {
-                    var userPermission = new UserPermissions();
-                    userPermission.userName = userVm.UserName;
-                    userPermission.Permission_Id = permission.Permission_ID;
-                    _context.UserPermissions.Add(userPermission);
+                    foreach (var permission in userVm.Permissions)
+                    {
+                        var userPermission = new UserPermissions();
+                        userPermission.userName = userVm.UserName;
+                        userPermission.Permission_Id = permission.Permission_ID;
+                        _context.UserPermissions.Add(userPermission);
                         await _context.SaveChangesAsync();
                         AuditTrail audit = new AuditTrail();
                         var userClaims = User;
@@ -732,19 +763,19 @@ namespace IBIS_API.Controllers
                     audit.User = username;
                     audit.Date = DateTime.Now;
                     audit.Name = "Updated User Details";
-                   
+
                     user.UserName = userVm.UserName;
                     user.Email = userVm.Email;
                     audit.Description = JsonSerializer.Serialize(user);
                     _context.Add(audit);
                 }
-                
+
                 await _userManager.UpdateAsync(user);// try figure this out later...
                 await _context.SaveChangesAsync();
                 transaction.Commit();
 
                 //var user = await _userManager.FindByNameAsync(username);
-                
+
 
             }
             //_userManager.RemoveFromRoleAsync(user,role);
@@ -775,7 +806,7 @@ namespace IBIS_API.Controllers
                 await _context.SaveChangesAsync();
                 transaction.Commit();
             }
-               
+
             //_userManager.RemoveFromRoleAsync(user,role);
             //_userManager.AddToRoleAsync(user,userVm.Role)
             return Ok();
@@ -824,16 +855,16 @@ namespace IBIS_API.Controllers
         public async Task<IActionResult> SendSms(User_Account uservM)
         {
             Random generator = new Random();
-           int r = generator.Next(100000, 1000000);
+            int r = generator.Next(100000, 1000000);
             const string accountSid = "ACeb14bbf63263e7318c7f8971ea94df55";
             const string authToken = "089031f565b379487bbba7f4ab196e73";
             TwilioClient.Init(accountSid, authToken);
             var user = await _userManager.FindByNameAsync(uservM.Username);
             //TwilioRestClient client = new TwilioRestClient(ACCOUNT_SID, AUTH_TOKEN);
             //client.
-           // user.phon
+            // user.phon
             //client.SendMessage("(502) 276-8990", ToNumber.Text, Message.Text)
-            var to = new PhoneNumber("+"+user.PhoneNumber);
+            var to = new PhoneNumber("+" + user.PhoneNumber);
             var from = new PhoneNumber("+15595496121");
             //var message = MessageResource.Create(
             //    to,
@@ -843,7 +874,7 @@ namespace IBIS_API.Controllers
             MessageResource.Create(
       to: to,
       from: from,
-      body: "Your OTP is"+r);
+      body: "Your OTP is" + r);
             return Ok(r);
         }
 
@@ -893,7 +924,61 @@ namespace IBIS_API.Controllers
 
 
             }
-            return Ok();
+            var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+            var confirmationLink = Url.Action(nameof(ConfirmEmail), "User", new { token, email = user.Email }, Request.Scheme);
+            using (MailMessage mail = new MailMessage())
+            {
+                mail.From = new MailAddress(emailFromAddress);
+                mail.To.Add(email);
+                mail.Subject = subject;
+
+                mail.IsBodyHtml = true;
+                mail.Body = confirmationLink;
+                //var message = new Message(new string[] { user.Email }, "Confirmation email link", confirmationLink, null);
+                mail.Body = "Please click the link to confirm your email address: <a href=\'" + confirmationLink + "'>Click this Link Here</a>";
+                mail.IsBodyHtml = true;
+
+
+                //mail.Body.re
+                //_userManager.se
+
+
+                using (SmtpClient smtp = new SmtpClient(smtpAddress, portNumber))
+                {
+
+                    //smtp.UseDefaultCredentials = false;
+                    smtp.Credentials = new NetworkCredential(emailFromAddress, "sxkbtjguspnshajt");
+                    smtp.UseDefaultCredentials = false;
+                    smtp.EnableSsl = enableSSL;
+                    //smtp.DeliveryMethod = SmtpDeliveryMethod.PickupDirectoryFromIis;
+                    // 
+                    // try
+                    //  {
+                    //      Ping myPing = new Ping(); // stack overflow...
+                    //      String host = "google.com";
+                    //       byte[] buffer = new byte[32];
+                    //      int timeout = 1000;
+                    //  PingOptions pingOptions = new PingOptions();
+                    //      PingReply reply = myPing.Send(host, timeout, buffer, pingOptions);
+                    //return (reply.Status == IPStatus.Success);
+                    //   }
+                    //   catch (Exception e)
+                    //  {
+                    //      return BadRequest("Couldnt connect to wifi"); // check status text in front end.
+                    //  }
+
+
+                    smtp.Send(mail);
+                    // if otp generated then navigate to the page...
+
+
+
+
+                    // doesnt work if there is no internet connection so try and catch...
+
+                }
+            }
+                return Ok();
         }
 
 
@@ -905,6 +990,8 @@ namespace IBIS_API.Controllers
             var statusText = "Account already exists";
             var customers = _context.Customers.ToList();
             var employees = _context.Employees.ToList();
+            string codeHtmlVersion = "";
+            string token;
             if (customers.Count == 0 && employees.Count == 0)
             {
                 return BadRequest("Not registerd on the system");
@@ -922,7 +1009,7 @@ namespace IBIS_API.Controllers
             {
                 using (var context = _context.Database.BeginTransaction())
                 {
-                    
+
 
 
                     AuditTrail audit = new AuditTrail();
@@ -940,6 +1027,7 @@ namespace IBIS_API.Controllers
                         Email = uvm.Email,
                         //Permissions = false
                     };
+                
                     var result = await _userManager.CreateAsync(user, uvm.Password);
                     if (result.Succeeded)
                     {
@@ -958,10 +1046,79 @@ namespace IBIS_API.Controllers
                         }
                         if (roleresult.Succeeded)
                         {
-                            _context.AuditTrail.Add(audit);
-                            await _context.SaveChangesAsync();
-                            context.Commit();
+                            using (MailMessage mail = new MailMessage())
+                            {
+                                mail.From = new MailAddress(emailFromAddress);
+                                mail.To.Add(uvm.Email);
+                                mail.Subject = subject;
 
+                                mail.IsBodyHtml = true;
+                                string bodString;
+                                using (StreamReader reader = System.IO.File.OpenText("./emailConfirmationRaija.html")) // Path to your 
+                                {                                                         // HTML file
+                                   
+
+                                    bodString = reader.ReadToEnd();
+                                    mail.Body = reader.ReadToEnd();  // Load the content from your file...
+                                                                     //mail.IsBodyHtml = true;                          //...
+                                }
+
+                                // var user = await _userManager.FindByEmailAsync(uvm.Email);
+
+                                //mail.Body = confirmationLink;
+                                //var message = new Message(new string[] { user.Email }, "Confirmation email link", confirmationLink, null);
+                                token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                                codeHtmlVersion = HttpUtility.UrlEncode(token);
+                                bodString = bodString.Replace("{Url}", ""+ uvm.ClientUrl + "?token=" + codeHtmlVersion + "&" + "user=" + user + "");
+                                mail.Body = bodString;
+                                mail.IsBodyHtml = true;
+                               
+                                //mail.Body = "Please click the link to confirm your email address: <a href=\'" + uvm.ClientUrl + "?token=" + codeHtmlVersion + "&" + "user=" + user + "'>Confirm Email</a>";
+                               
+                             
+
+                                //mail.Body.re
+                                //_userManager.se
+
+
+                                using (SmtpClient smtp = new SmtpClient(smtpAddress, portNumber))
+                                {
+
+                                    //smtp.UseDefaultCredentials = false;
+                                    smtp.Credentials = new NetworkCredential(emailFromAddress, "sxkbtjguspnshajt");
+                                    smtp.UseDefaultCredentials = false;
+                                    smtp.EnableSsl = enableSSL;
+                                    //smtp.DeliveryMethod = SmtpDeliveryMethod.PickupDirectoryFromIis;
+                                    // 
+                                    // try
+                                    //  {
+                                    //      Ping myPing = new Ping(); // stack overflow...
+                                    //      String host = "google.com";
+                                    //       byte[] buffer = new byte[32];
+                                    //      int timeout = 1000;
+                                    //  PingOptions pingOptions = new PingOptions();
+                                    //      PingReply reply = myPing.Send(host, timeout, buffer, pingOptions);
+                                    //return (reply.Status == IPStatus.Success);
+                                    //   }
+                                    //   catch (Exception e)
+                                    //  {
+                                    //      return BadRequest("Couldnt connect to wifi"); // check status text in front end.
+                                    //  }
+
+
+                                    smtp.Send(mail);
+                                    // if otp generated then navigate to the page...
+
+
+
+
+                                    // doesnt work if there is no internet connection so try and catch...
+
+                                }
+
+                                await _context.SaveChangesAsync();
+                                context.Commit();
+                            }
                         }
                         else
                         {
@@ -980,7 +1137,13 @@ namespace IBIS_API.Controllers
 
 
             }
-            return Ok();
+           
+            return Created("", new
+            {
+                token =  codeHtmlVersion,
+                user = user.UserName,
+
+            });
 
             //var roleResult = _userManager.AddToRoleAsync(user, role.Name);
             // https://learn.microsoft.com/en-us/answers/questions/623030/assign-user-to-role-during-registration
@@ -988,6 +1151,99 @@ namespace IBIS_API.Controllers
 
 
         }
+        [HttpGet]
+        [Route("SendConfirmation")]
+        public async Task<ActionResult> SendConfirmation()
+        {
+            var data = System.IO.File.ReadAllText("./emailConfirmation.html");
+            string email = "u21482358@tuks.co.za";
+            var user = await _userManager.FindByEmailAsync(email);
+            var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+            String body = "ur message : <a href='http://www.yoursite.com'></a>";
+            var confirmationLink = Url.Action(nameof(ConfirmEmail), "User", new { token, email = user.Email }, Request.Scheme);
+            using (MailMessage mail = new MailMessage())
+            {
+                mail.From = new MailAddress(emailFromAddress);
+                mail.To.Add(email);
+                mail.Subject = subject;
+
+                //mail.IsBodyHtml = true;
+                //mail.Body = confirmationLink;
+                //var message = new Message(new string[] { user.Email }, "Confirmation email link", confirmationLink, null);
+                //var fileContents = Server.MapPath("~/file.txt"); ;
+
+                //mail.Body = "Please click the link to confirm your email address: <a href=\'"+confirmationLink+"'>Click this Link Here</a>";
+                //mail.IsBodyHtml = true;
+
+
+                //mail.Body.re
+                //_userManager.se
+
+                string bodString = String.Empty;
+                using (SmtpClient smtp = new SmtpClient(smtpAddress, portNumber))
+                {
+                    
+                    using (StreamReader reader = System.IO.File.OpenText("./emailConfirmationRaija.html")) // Path to your 
+                    {                                                         // HTML file
+                        MailMessage myMail = new MailMessage();
+                      
+                        bodString = reader.ReadToEnd();
+                        mail.Body = reader.ReadToEnd();  // Load the content from your file...
+                        //mail.IsBodyHtml = true;                          //...
+                    }
+                   
+                   bodString = bodString.Replace("{Url}", confirmationLink);
+                    mail.Body = bodString;
+                    mail.IsBodyHtml = true;
+                    //smtp.  = false;
+                   var bod = mail.Body;
+                    smtp.Credentials = new NetworkCredential(emailFromAddress, "sxkbtjguspnshajt");
+                    smtp.UseDefaultCredentials = false;
+                    smtp.EnableSsl = enableSSL;
+                        
+
+
+                    smtp.Send(mail);
+                  
+
+                }
+                return Ok();
+            }
+        }
+      
+
+        [HttpGet]
+        public async Task<IActionResult> ConfirmEmail(string token, string email)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+            // More logic....
+
+            var result = await _userManager.ConfirmEmailAsync(user, token);
+            // More logic.... return whether success or failure
+            return Ok();
+        }
+
+        [HttpPost]
+        [Route("ConfirmEmail")]
+        public async Task<IActionResult> ConfirmUserEmail(User_Account uvm)
+        {
+            var user = await _userManager.FindByNameAsync(uvm.Username);
+            // More logic....
+
+            var result = await _userManager.ConfirmEmailAsync(user, uvm.token);
+            // More logic.... return whether success or failure
+            if (result.Succeeded)
+            {
+                return Ok();
+            }
+            else
+            {
+                return BadRequest();
+            }
+           
+        }
+
+
         [HttpPost]
         [Route("AddEvent")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]

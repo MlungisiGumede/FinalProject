@@ -24,6 +24,9 @@ export class LoginService  {
   constructor(private httpClient: HttpClient) { 
     this.loginstate = new BehaviorSubject<boolean>(false);
   }
+  public Con(user:User){
+    
+  }
   public SendSms(username:any){
     let user = new User()
     user.username = username
@@ -129,6 +132,13 @@ return this.httpClient.post<any>(`${this.apiUrl}register`,userObj)
 
     getlogin(): Observable<boolean> {
       return this.loginstate.asObservable();
+    }
+    ConfirmEmail(user:any){
+      
+      return this.httpClient.post<any>(`${this.apiUrl}ConfirmEmail`,user)
+    }
+    CheckEmail(user:any){
+      return this.httpClient.post<any>(`${this.apiUrl}CheckEmail`,user)
     }
 
 

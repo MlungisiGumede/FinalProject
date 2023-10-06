@@ -22,6 +22,7 @@ data:any
 form:any
 isDisabled:any
 title:any
+permissionsArr:any
 // dropDown:any = [
 //   {
 //     permission_ID:true,
@@ -124,10 +125,11 @@ OnSelect(e:any){
 }
 Submit(){
   
-  if(this.item.user.role == "employee"){
-    this.form.get('permissions')?.setValue(this.employeeDropDown)
-  }
   let arr:any[] = this.form.get('permissions')?.value
+  console.log(arr)
+    this.form.get('permissions')?.setValue(this.employeeDropDown)
+  
+ 
   let submitArr:any = []
   arr.forEach((item:any) => {
      let index = this.dropDown.findIndex((element:any) => element.permission_ID == item) 

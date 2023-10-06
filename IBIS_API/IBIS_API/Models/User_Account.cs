@@ -14,7 +14,11 @@ namespace IBIS_API.Models
 	 public string? Email { get; set; }
 		public double? time { get; set; }
 	public string? Cellphone_Number { get; set; }
-	//public virtual User_Account_Type? User_Account_Type_ID { get; set; }
+
+        public string? ClientUrl { get; set; }
+
+        public string? token { get; set; }
+        //public virtual User_Account_Type? User_Account_Type_ID { get; set; }
 
 
 
