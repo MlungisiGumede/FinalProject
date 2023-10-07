@@ -354,9 +354,11 @@ AssignProduct(item:any){
   this.data = of(products)
 }
 UpdatePrice(item:Product){
-  this.request = "price"
+  //this.request = "price"
+  
+  console.log(item.price)
   this.price = item.price
-  this.edited = true
+  //this.edited = true
   this.AssignProduct(item)
 }
 OnDone(item:Product){

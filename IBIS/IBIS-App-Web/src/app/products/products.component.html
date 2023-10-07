@@ -11,7 +11,7 @@
     <ion-icon id="helpIcon" name="help-circle" style="color: #002850;" (click)="showHelp()" matTooltip="Help"></ion-icon>
     <ion-title><h1>{{title}}</h1></ion-title>
     <ion-searchbar class="isb" placeholder="Search Products..." showCancelButton="focus" [(ngModel)]="filterTerm" animated></ion-searchbar><br/>
-    <table mat-table #orderTable [dataSource]="dataSource" class="mat-elevation-z8">
+    <table [formGroup]="form" mat-table #orderTable [dataSource]="dataSource" class="mat-elevation-z8">
       <ng-container [matColumnDef]="col.key" *ngFor="let col of columnsSchema">
         <th mat-header-cell  *matHeaderCellDef>
           {{ col.name }}
@@ -25,10 +25,10 @@
              {{GetSubCategoryName(item.subCategory_ID)}}
             </ng-container>
               <ng-container *ngSwitchCase="'price'">
-                  <ng-container *ngIf="request!='price'" >
+                  <ng-container *ngIf="!item.edited" >
                       {{item.price}}
                   </ng-container>
-                  <ng-container *ngIf="request=='price'" >
+                  <ng-container *ngIf="item.edited" >
                     <input mat-input type="number" formControlName="price" [(ngModel)]="price">
                   </ng-container>
                  
@@ -36,12 +36,12 @@
                 </ng-container>
                 <ng-container *ngSwitchCase="'actions'">
                  
-                  <ion-button class="light-Btn" *ngIf="!edited" (click)="UpdatePrice(item)"  matTooltip="Update Product Price">Update Price</ion-button>
-                  <ion-button class="light-Btn" *ngIf="!edited" (click)="ViewProduct(item)"  matTooltip="View Product">View</ion-button>
-                  <ion-button class="red-Btn" *ngIf="!edited" (click)="delete(item.product_ID)" matTooltip="Remove"><ion-icon name="trash-outline"></ion-icon></ion-button>
-                  <ion-button class="green-Btn" [disabled]="!form.valid" *ngIf="edited && request == 'price'" (click)="OnDone(item)">Done</ion-button>
+                  <ion-button class="light-Btn" *ngIf="!item.edited" (click)="UpdatePrice(item);item.edited=true;price=item.price"  matTooltip="Update Product Price">Update Price</ion-button>
+                  <ion-button class="light-Btn" *ngIf="!item.edited" (click)="ViewProduct(item)"  matTooltip="View Product">View</ion-button>
+                  <ion-button class="red-Btn" *ngIf="!item.edited" (click)="delete(item.product_ID)" matTooltip="Remove"><ion-icon name="trash-outline"></ion-icon></ion-button>
+                  <ion-button class="green-Btn" [disabled]="!form.valid" *ngIf="item.edited" (click)="OnDone(item);item.edited=false">Done</ion-button>
                   <ion-button class="green-Btn" *ngIf="request == 'write-off' || request == 'write-up'" (click)="WriteOffScreen(item)">Select</ion-button>
-                  <ion-button class="red-Btn2" *ngIf="edited" (click)="Cancel()" matTooltip="Remove">Cancel</ion-button>
+                  <ion-button class="red-Btn2" *ngIf="item.edited" (click)="Cancel()" matTooltip="Remove">Cancel</ion-button>
              
             </ng-container>
             <ng-container *ngSwitchDefault>
