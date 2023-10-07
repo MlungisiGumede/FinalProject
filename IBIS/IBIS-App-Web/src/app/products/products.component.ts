@@ -26,6 +26,7 @@ import { ProductsHelpComponent } from '../products-help/products-help.component'
 import { Barcode, BarcodeScanner } from '@capacitor-mlkit/barcode-scanning';
 import {Html5QrcodeScanner} from 'html5-qrcode'
 import { LoginService } from '../Services/login.service';
+import { MatPaginator } from '@angular/material/paginator';
 
 var pdfMake = require('pdfmake/build/pdfmake');
 var pdfFonts = require('pdfmake/build/vfs_fonts');
@@ -61,6 +62,7 @@ barcode: any;
   price:any
   title:any = "Products"
   form:any
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
   permissions:any
   role:any
   isSupported = true;
@@ -72,7 +74,11 @@ barcode: any;
 
   barcodes: Barcode[] = [];
   combinedData: { Name: string, Quantity: number , Price: number}[] = [];
+  dataSource:any = new MatTableDataSource<any>();
 
+  columnsSchema:any = [{key:'product_ID',name:'Product_ID'}, {key:'name',name:'Name'}, {key:'category_ID',name:'Category'}, {key:'subCategory_ID',name:'Sub Category'}, {key:'quantity',name:'Quantity'}, {key:'price',name:'Price'}, {key:'actions',name:''}];
+  //columnsSchema:any = [{key:'product_ID',name:'Product_ID'}, {key:'name',name:'Name'}, {key:'category_ID',name:'Category'}, {key:'subCategory_ID',name:'Sub Category'}, {key:'quantity',name:'Quantity'}, {key:'price',name:'Price'}];
+  displayedColumns: string[] = this.columnsSchema.map((x:any) => x.key);
   constructor(private productService: ProductService,public router: Router,private toastController: ToastController
     ,private matDialog:MatDialog,private _snackbar: MatSnackBar,private writeOffService:WriteOffService,public helpModal: ModalController
     ,private alertController: AlertController,private loginService:LoginService) {
@@ -217,6 +223,9 @@ this.router.navigate(['/write-off'])
         console.log(response);
         this.data = of(response)
         this.products = response
+        this.dataSource = new MatTableDataSource(response)
+        this.dataSource._updateChangeSubscription()
+        this.dataSource.paginator = this.paginator;
         this.reportData = response
         console.log(this.data)
         resolve(true)

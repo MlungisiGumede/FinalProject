@@ -11,77 +11,60 @@
     <ion-icon id="helpIcon" name="help-circle" style="color: #002850;" (click)="showHelp()" matTooltip="Help"></ion-icon>
     <ion-title><h1>{{title}}</h1></ion-title>
     <ion-searchbar class="isb" placeholder="Search Products..." showCancelButton="focus" [(ngModel)]="filterTerm" animated></ion-searchbar><br/>
-      <ion-grid class="ion-margin" class="ion-grid-padding">
-        <ion-row>
-          <ion-col size="1"><ion-label>Product ID</ion-label></ion-col>
-          <ion-col size="1"><ion-label>Product Name</ion-label></ion-col>
-          <ion-col size="1"><ion-label></ion-label>Category</ion-col>
-          <ion-col  size="1"><ion-label></ion-label>Subcategory</ion-col>
-          <ion-col *ngIf="request!='price'" size="1"><ion-label></ion-label>Price</ion-col>
-          <ion-col *ngIf="request=='price'" size="2"><ion-label></ion-label>Price per category</ion-col>
-          <ion-col size="1"><ion-label></ion-label>Quantity</ion-col>
-          <ion-col size="1"><ion-label></ion-label>SKU</ion-col>
-         
-          <!-- <ion-col></ion-col>
-          <ion-col *ngIf="!edited"></ion-col>
-          <ion-col *ngIf="!edited"></ion-col>
-          <ion-col *ngIf="!edited"></ion-col> -->
-        </ion-row>
-      </ion-grid>
-      <ion-grid>
-        <ion-row *ngFor="let item of data | async | filter: filterTerm">
-          <ion-col size="1">
-            <ion-label>{{item.product_ID}}</ion-label>
-          </ion-col>
-          <ion-col size="1">
-            <ion-label>{{item.name}}</ion-label>
-          </ion-col >
-          <ion-col size="1">
-            <ion-label>{{GetCategoryName(item.category_ID)}}</ion-label>
-          </ion-col>
-          <ion-col size="1">
-            <ion-label>{{GetSubCategoryName(item.subCategory_ID)}}</ion-label>
-          </ion-col>
-          <ion-col *ngIf="request!='price'" size="1">
-            <ion-label >{{item.price}}</ion-label>
-          </ion-col>
-            <div [formGroup]="form" *ngIf="edited">
-
-          <ion-col size="3" *ngIf="request=='price'">
-            <input mat-input type="number" formControlName="price" [(ngModel)]="price">
-          </ion-col>
-        </div>
-          <ion-col size="1">
-            <ion-label>{{item.quantity}}</ion-label>
-          </ion-col>
-          <!-- <ion-col *ngIf="request=='quantity'">
-            <ion-label>+</ion-label>
-          </ion-col>
-          <ion-col *ngIf="request=='quantity'">
-            <input mat-input type="number" min="1" [(ngModel)]="quantity">
-          </ion-col> -->
-          
-          <ion-col size="1">
-            <ion-label>{{item.sku}}</ion-label>
-          </ion-col>
-            <div style="display: flex;">
-             <ion-button class="light-Btn" *ngIf="!edited" (click)="UpdatePrice(item)"  matTooltip="Update Product Price">Update Price</ion-button> 
-            <ion-button class="light-Btn" *ngIf="!edited" (click)="ViewProduct(item)"  matTooltip="View Product">View</ion-button>
-            <ion-button class="red-Btn" *ngIf="!edited" (click)="delete(item.product_ID)" matTooltip="Remove"><ion-icon name="trash-outline"></ion-icon></ion-button>
-           </div>
-
-          <ion-col>
-            <ion-button class="green-Btn" [disabled]="!form.valid" *ngIf="edited && request == 'price'" (click)="OnDone(item)">Done</ion-button>
-            <ion-button class="green-Btn" *ngIf="request == 'write-off' || request == 'write-up'" (click)="WriteOffScreen(item)">Select</ion-button>
-          </ion-col>
-          <ion-col>
-            
-          
-            <ion-button class="red-Btn2" *ngIf="edited" (click)="Cancel()" matTooltip="Remove">Cancel</ion-button>
-          </ion-col>
-        </ion-row>
-        
-      </ion-grid>
+    <table mat-table #orderTable [dataSource]="dataSource" class="mat-elevation-z8">
+      <ng-container [matColumnDef]="col.key" *ngFor="let col of columnsSchema">
+        <th mat-header-cell  *matHeaderCellDef>
+          {{ col.name }}
+        </th>
+        <td mat-cell *matCellDef="let item" [ngSwitch]="col.key">
+          <!-- <ng-container  [ngSwitch]="col.key"> -->
+            <ng-container *ngSwitchCase="'category_ID'">
+              {{GetCategoryName(item.category_ID)}}
+            </ng-container>
+            <ng-container *ngSwitchCase="'subCategory_ID'">
+             {{GetSubCategoryName(item.subCategory_ID)}}
+            </ng-container>
+              <ng-container *ngSwitchCase="'price'">
+                  <ng-container *ngIf="request!='price'" >
+                      {{item.price}}
+                  </ng-container>
+                  <ng-container *ngIf="request=='price'" >
+                    <input mat-input type="number" formControlName="price" [(ngModel)]="price">
+                  </ng-container>
+                 
+                 
+                </ng-container>
+                <ng-container *ngSwitchCase="'actions'">
+                 
+                  <ion-button class="light-Btn" *ngIf="!edited" (click)="UpdatePrice(item)"  matTooltip="Update Product Price">Update Price</ion-button>
+                  <ion-button class="light-Btn" *ngIf="!edited" (click)="ViewProduct(item)"  matTooltip="View Product">View</ion-button>
+                  <ion-button class="red-Btn" *ngIf="!edited" (click)="delete(item.product_ID)" matTooltip="Remove"><ion-icon name="trash-outline"></ion-icon></ion-button>
+                  <ion-button class="green-Btn" [disabled]="!form.valid" *ngIf="edited && request == 'price'" (click)="OnDone(item)">Done</ion-button>
+                  <ion-button class="green-Btn" *ngIf="request == 'write-off' || request == 'write-up'" (click)="WriteOffScreen(item)">Select</ion-button>
+                  <ion-button class="red-Btn2" *ngIf="edited" (click)="Cancel()" matTooltip="Remove">Cancel</ion-button>
+             
+            </ng-container>
+            <ng-container *ngSwitchDefault>
+              {{item[col.key]}}
+            </ng-container>
+           
+        </td>
+          </ng-container>
+       
+     
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+      <mat-paginator #paginator
+      [pageSize]="10"
+      [pageSizeOptions]="[3, 5, 10]"
+      showFirstLastButtons
+      >
+    </mat-paginator>
+    
+    
+    
+    
       <ion-button class="light-Btn" (click)="addproduct()">Add product</ion-button>
       <ion-button class="light-Btn" (click)=" AddCategory()">Add Category</ion-button>
       <ion-button class="light-Btn" (click)=" AddSubCategory()">Add SubCategory</ion-button>
@@ -89,6 +72,9 @@
       <ion-button class="light-Btn"  [routerLink]="['/view-write-off']">view write offs</ion-button>
         <ion-button *ngIf="CheckPermission()" class="light-Btn" (click)="request = 'write-off'; edited = 'true';title = 'Select Product to write off'" >Write off</ion-button>
         <ion-button *ngIf="CheckPermission()" class="light-Btn" (click)="request = 'write-up';edited = 'true';title = 'Select Product to write up'" >Write Up</ion-button>
+    
+
 
   </div>
+</ion-content>
 

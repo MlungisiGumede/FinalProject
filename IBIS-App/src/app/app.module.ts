@@ -37,7 +37,7 @@ import { CreateRecipeComponent } from './create-recipe/create-recipe.component';
 import { ViewRecipeComponent } from './view-recipe/view-recipe.component';
 import { CreateSupplierOrderComponent } from './create-supplier-order/create-supplier-order.component';
 import { ReportsComponent } from './reports/reports.component';
-
+import {MatPaginatorModule} from '@angular/material/paginator';
 
 @NgModule({
   declarations: [
