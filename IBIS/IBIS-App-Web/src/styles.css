@@ -6,6 +6,20 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
+.mat-radio-button .mat-radio-outer-circle {
+    border-color: grey;
+}
+/* .mat-radio-checked .mat-radio-inner-circle {
+    color: red;
+    border-color: red;
+} */
+.mat-radio-button.mat-accent .mat-radio-inner-circle {
+    color:grey;
+    background-color:grey ;
+  }
+  .mat-radio-button.mat-accent.mat-radio-checked .mat-radio-outer-circle{
+    border-color:grey; 
+  }
 
 
 .success{

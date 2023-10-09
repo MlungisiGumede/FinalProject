@@ -77,7 +77,7 @@ import { ReviewComponent } from './review/review.component';
 //import { BarcodeScannerLivestreamModule } from 'ngx-barcode-scanner';
 import { Home2Component } from './home2/home2.component';
 import { HelpMeComponent } from './help-me/help-me.component';
-import {MatRadioModule} from '@angular/material/radio';
+import {MAT_RADIO_DEFAULT_OPTIONS, MatRadioModule} from '@angular/material/radio';
 import { AddUserComponent } from './add-user/add-user.component';
 import { CalendarComponent } from './calendar/calendar.component';
 import { CalendarModalComponent } from './calendar-modal/calendar-modal.component';
@@ -264,7 +264,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 AddProductComponent,AddSubCategoryComponent,AddCategoryComponent,ReviewComponent,
 ViewUserComponent,AddUserComponent,AuditDetailsComponent],
   providers: [{provide:HTTP_INTERCEPTORS,useClass:AuthenticationService,multi:true},
-    //{ provide: HTTP_INTERCEPTORS, useClass: AuthenticationService, multi: true },
+     //{ provide: MAT_RADIO_DEFAULT_OPTIONS, useValue: { color: 'red' } },
   AuthGuardService],
   bootstrap: [AppComponent]
 })

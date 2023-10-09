@@ -355,9 +355,9 @@ ViewProduct(item:any){
   let dialogRef:any = []
   //this.categories = {"category_ID":item.category_ID,"name":item.category_Name}
   if(this.categories && this.subCategories){
-    let product:any = this.products.find((product:any) => product.product_ID == item.product_ID)
+    //let product:any = this.products.find((product:any) => product.product_ID == item.product_ID)
   dialogRef = this.matDialog.open(ViewProductComponent,{
-    data:{'product':product,'categories':this.categories,'subCategories':this.subCategories}
+    data:{'product':item,'categories':this.categories,'subCategories':this.subCategories}
   })
 }
   dialogRef.afterClosed().subscribe((result:any) => {
@@ -436,8 +436,7 @@ OnDone(item:Product){
     //if(this.categories && this.subCategories){
       dialogRef = this.matDialog.open(AddProductComponent,{
         data:{'categories':this.categories,'subCategories':this.subCategories},
-        width:'100%',
-        height:'100%'
+        
       });
    // }
 

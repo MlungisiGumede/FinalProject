@@ -74,7 +74,7 @@
             <button (click)="fileUpload.click()" class="formElement" >Scan Image</button>
             <br>
             <span class="formElement2">
-              <img src="{{url}}" alt="no Identifier">
+              <img style="max-width: 300px;max-height: 300px;" src="{{url}}" alt="no Identifier">
             </span>
             <br>
             <br>
@@ -101,9 +101,9 @@
         <button  *ngIf="selectedPage>1" (click)="PageBackward();" class="NextButt">Back</button>
         <button  *ngIf="selectedPage>1" class="SubmitButt" (click)="AddProduct()"  [disabled]="!form.valid" >Submit</button>
         </div>
-        <mat-radio-group #radioGroup  formControlName="page">
+        <mat-radio-group  #radioGroup  formControlName="page">
           
-          <mat-radio-button disabled   *ngFor="let radio of radioList$ | async let i=index" class="radio" [value]="i+1" ></mat-radio-button>
+          <mat-radio-button (click)="preventDefault($event)"  *ngFor="let radio of radioList$ | async let i=index"[value]="i+1" ></mat-radio-button>
          
         </mat-radio-group>
           

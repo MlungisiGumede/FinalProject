@@ -5,6 +5,10 @@
   box-sizing: border-box;
   font-family: 'Poppins',sans-serif;
 }
+/* input[type='radio']{
+  accent-color: yellow;
+} */
+
 body{
   display: flex;
   justify-content: center;
@@ -15,7 +19,7 @@ body{
 .container{
   
   width: 100%;
-  background-color: grey;
+  background-color: black;
   border:yellow 10px;
   padding-bottom:  5px;
   padding-left: 25px;;
@@ -119,7 +123,7 @@ form .input-box span.details{
   font-size: 16px;
   border-radius: 5px;
   outline:black;
-  height: 350px;
+  /* height: 350px; */
   width: 650px;
 } */
 
@@ -229,9 +233,12 @@ color: grey;
   
 }
 
-.mat-radio-button[disabled] {
-  opacity: 0.6; /* Example: 60% opacity for disabled state */
+.mat-radio-button[disabled]  {
+  /* opacity: 0.6; Example: 60% opacity for disabled state */
+  color: red;
+ 
 }
+
 
 .NextButt{
   flex-shrink: 0;

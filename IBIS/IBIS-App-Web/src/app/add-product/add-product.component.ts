@@ -137,6 +137,9 @@ selectedCategory: string | null = null;
     // for example:
     console.warn(`Code scan error = ${error}`);
   }
+  preventDefault(event:any){
+    event.preventDefault()
+  }
  
 PageForward(){
   let page = this.selectedPage
