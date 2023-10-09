@@ -90,6 +90,7 @@ constructor(private loginService : LoginService, public router: Router,
       label: 'Home',
       icon: 'home',
       route: 'home',
+      
     },
     {
       label: 'Inventory',

@@ -47,6 +47,7 @@ barcode: any;
   data:Observable<any> = new Observable();
   data2: Product[] = [];
   reportData:any
+  productVm:any
   products: any
   idtodelete :any;
   search= "";
@@ -74,7 +75,7 @@ barcode: any;
 
   barcodes: Barcode[] = [];
   combinedData: { Name: string, Quantity: number , Price: number}[] = [];
-  dataSource:any = new MatTableDataSource<any>();
+  dataSource:MatTableDataSource<any> = new MatTableDataSource<any>();
 
   columnsSchema:any = [{key:'product_ID',name:'Product_ID'}, {key:'name',name:'Name'}, {key:'category_ID',name:'Category'}, {key:'subCategory_ID',name:'Sub Category'}, {key:'quantity',name:'Quantity'}, {key:'price',name:'Price'}, {key:'actions',name:''}];
   //columnsSchema:any = [{key:'product_ID',name:'Product_ID'}, {key:'name',name:'Name'}, {key:'category_ID',name:'Category'}, {key:'subCategory_ID',name:'Sub Category'}, {key:'quantity',name:'Quantity'}, {key:'price',name:'Price'}];
@@ -86,6 +87,20 @@ barcode: any;
     
     productService = {} as ProductService;
   }
+ 
+  // ngOnInit(): void {
+  //   this.getProducts();
+  //   this.getCategories();
+  //   this.getSubCategories();
+  //   this.getPermissions();
+  // }
+  filter(event:any){
+      this.dataSource.filterPredicate = function (record,filter) {
+        return record.name.toLowerCase().includes(filter) || record.price.toString().includes(filter) || record.quantity.toString().includes(filter) || record.categoryName.toLowerCase().includes(filter) || record.subCategoryName.toLowerCase().includes(filter);
+    }
+    ;let filtervalue = event.target.value.trim().toLowerCase();
+    this.dataSource.filter = filtervalue;
+   }
   onValueChanges(result: any) {
     console.log("change")
     this.barcode = result.codeResult.code;
@@ -145,6 +160,7 @@ barcode: any;
  // }
 
   ngOnInit() {
+ 
     this.GetUserRole()
     BarcodeScanner.isSupported().then((result) => {
       this.isSupported = result.supported;
@@ -153,15 +169,17 @@ barcode: any;
      
       price: new FormControl("",[Validators.required, Validators.min(1)]),
     })
-    this.getProducts()
+    
     this.productService.getCategoriesList().subscribe((res)=>{
       console.log(res)
       this.categories = res
+      this.productService.getSubCategoriesList().subscribe((res)=>{
+        console.log(res)
+        this.subCategories = res
+        this.getProducts()
+      })
     })
-    this.productService.getSubCategoriesList().subscribe((res)=>{
-      console.log(res)
-      this.subCategories = res
-    })
+ 
 
     
     // this.data2 = [
@@ -207,12 +225,13 @@ barcode: any;
     return value
   }
   WriteOffScreen(item:any){
+    let product:any = this.products.find((product:any) => product.product_ID == item.product_ID)
 if(this.request == "write-off"){
-  item.type = 1
+  product.type = 1
 }else{
-  item.type = 2
+  product.type = 2
 }
-this.writeOffService.adjustQuantity.next(item)
+this.writeOffService.adjustQuantity.next(product)
 this.router.navigate(['/write-off'])
   }
 
@@ -223,8 +242,17 @@ this.router.navigate(['/write-off'])
         console.log(response);
         this.data = of(response)
         this.products = response
-        this.dataSource = new MatTableDataSource(response)
+        this.productVm = response
+        this.productVm.forEach((element:any) => {
+          element.categoryName = this.GetCategoryName(element.category_ID)
+          element.subCategoryName = this.GetSubCategoryName(element.subCategory_ID)
+                });
+        this.dataSource = new MatTableDataSource(this.productVm)
+
         this.dataSource._updateChangeSubscription()
+      //   this.dataSource.filterPredicate = function(data:any, filter: string): boolean {
+      //     return data.price.toLowerCase().includes(filter);
+      // };
         this.dataSource.paginator = this.paginator;
         this.reportData = response
         console.log(this.data)
@@ -327,8 +355,9 @@ ViewProduct(item:any){
   let dialogRef:any = []
   //this.categories = {"category_ID":item.category_ID,"name":item.category_Name}
   if(this.categories && this.subCategories){
+    let product:any = this.products.find((product:any) => product.product_ID == item.product_ID)
   dialogRef = this.matDialog.open(ViewProductComponent,{
-    data:{'product':item,'categories':this.categories,'subCategories':this.subCategories}
+    data:{'product':product,'categories':this.categories,'subCategories':this.subCategories}
   })
 }
   dialogRef.afterClosed().subscribe((result:any) => {

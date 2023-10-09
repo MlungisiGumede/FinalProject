@@ -1,14 +1,14 @@
-<mat-toolbar class="toolbartop" ><img *ngIf="showNavigation || showLogOut"
+<mat-toolbar fxLayoutAlign="start center" class="toolbartop" >
+  <mat-toolbar-row  style="display:flex;
+  justify-content:space-between;">
+  <!-- <img *ngIf="showNavigation || showLogOut"
   src="https://aheioqhobo.cloudimg.io/v7/_playground-bucket-v2.teleporthq.io_/c275214c-1566-4620-8ed4-77d53acf793c/51e02260-b657-44dd-9783-c129dbd276fb?org_if_sml=14054"
   alt="Rectangle44037"
   class="signup-rectangle4"
-/><h1 *ngIf="showNavigation || showLogOut" class="heading">KMJ Butchery IBIS</h1>
-  <!-- <mat-form-field class="example-full-width" *ngIf="showNavigation">
-    <span matPrefix> </span> 
-    <input type="tel" matInput placeholder="Search here..." name= "search" [(ngModel)]= "search"> 
-    <button matSuffix mat-button class="btns"><mat-icon class="btns" >search</mat-icon></button>
-    </mat-form-field > -->
-  <mat-form-field class="formfields" *ngIf="showLogOut">
+/> -->
+<mat-icon  style="color: white;">settings</mat-icon>
+<h1 *ngIf="showNavigation || showLogOut" class="heading">KMJ Butchery IBIS</h1>
+  <mat-form-field *ngIf="showLogOut" fxLayoutAlign="end center" style="color: white;">
     <ion-icon name="person-outline"></ion-icon>
     <mat-select #selector   (selectionChange)="IsLogOut()" [(ngModel)]="selectedValue">
       <mat-option *ngFor="let user of use" [value]="user.value" [routerLink]="user.route" routerLinkActive #rla="routerLinkActive">
@@ -18,9 +18,10 @@
       
     </mat-select>
   </mat-form-field>
+</mat-toolbar-row>
 </mat-toolbar>
  <!-- <ngx-spinner bdColor="rgba(51,51,51,0.8)" size = "medium" color = "#fff" fullscreen = "true" type = "timer" ><p style="color: white" > Loading... </p></ngx-spinner> -->
-<ngx-spinner bdColor="rgba(7,1,1,0.95)" size="small" type="timer">
+<ngx-spinner bdColor="rgba(7,1,1,0.95)" size="medium" type="timer">
   <p style="color: white">Loading </p>
 </ngx-spinner>
 
