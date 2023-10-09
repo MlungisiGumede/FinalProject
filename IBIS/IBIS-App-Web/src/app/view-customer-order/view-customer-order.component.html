@@ -20,7 +20,7 @@
         </div>
         <div *ngSwitchCase="'number'">
          
-          <td mat-footer-cell *matFooterCellDef><p style="color:darkgoldenrod;" *ngIf="quantityGreater==true">
+          <td mat-footer-cell *matFooterCellDef><p style="color:darkgoldenrod;" *ngIf="quantityGreater">
           Warning:Quantity is greater than stock on hand
         </p> </td>
         </div>
@@ -69,7 +69,7 @@
           <!-- display2(element) -->
           <mat-form-field *ngSwitchCase="'product_ID'"  >
             <mat-label>Select Product</mat-label>
-            <mat-select formControlName="product_ID" (selectionChange)="SetPrice($event,rowIndex)" >
+            <mat-select #select formControlName="product_ID" (closed)="SetPrevious(rowIndex)" (opened)="Reset(rowIndex)" (selectionChange)="SetPrice($event,rowIndex)" >
               <mat-option>
                 <input matInput (keyup)="onKey($any($event.target).value)" (click)="$event.stopPropagation()" (keydown)="$event.stopPropagation()"/>
                
@@ -93,20 +93,20 @@
             <div *ngSwitchCase="'isDone'">
                  <input type="hidden">
 
-                 <div *ngSwitchCase="'price'">
-             
-                  <input type="number" *ngIf="element.price" formControlName="price" matInput list="price" />
-                  <datalist *ngIf="element.price" id="price">
-                 <option [value]="FindPrice(element.product_ID)"  >
-                  {{FindPrice(element.product_ID)}}
-                 </option>
-                </datalist>
-                </div>
+                 
     
                 
             </div>
          
-  
+            <div *ngSwitchCase="'price'">
+             
+              <input type="number" formControlName="price" matInput list="price" />
+              <datalist *ngIf="element.price" id="price">
+             <option [value]="FindPrice(element.product_ID)"  >
+              {{FindPrice(element.product_ID)}}
+             </option>
+            </datalist>
+            </div>
            
            
             <mat-form-field  *ngSwitchDefault>

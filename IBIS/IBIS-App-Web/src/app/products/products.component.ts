@@ -27,6 +27,7 @@ import { Barcode, BarcodeScanner } from '@capacitor-mlkit/barcode-scanning';
 import {Html5QrcodeScanner} from 'html5-qrcode'
 import { LoginService } from '../Services/login.service';
 import { MatPaginator } from '@angular/material/paginator';
+import { DatePipe } from '@angular/common';
 
 var pdfMake = require('pdfmake/build/pdfmake');
 var pdfFonts = require('pdfmake/build/vfs_fonts');
@@ -616,6 +617,11 @@ OnDone(item:Product){
       console.log(body)
       return body;
   }
+  GenerateDate(){
+    let date = Date.now();
+    let datePipe = new DatePipe('en-US');
+    return datePipe.transform(date, 'yyyy-MM-dd');
+  }
 
   generPDF() {
     let docDefinition = {
@@ -655,16 +661,16 @@ OnDone(item:Product){
           style: 'sectionHeader'
         },
         {
-            text: 'this.invoice.additionalDetails',
+            text: 'Date Generated: '+this.GenerateDate(),
             margin: [0, 0 ,0, 15]          
         },
       
        
         {
             ul: [
-              'Order can be return in max 10 days.',
-              'Warrenty of the product will be subject to the manufacturer terms and conditions.',
-              'This is system generated invoice.',
+              'This is a Products report',
+              'Shows all products on the system',
+              'Generated with PDFMake',
             ],
         }
       ],

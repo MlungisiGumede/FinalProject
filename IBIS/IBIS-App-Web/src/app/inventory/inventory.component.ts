@@ -22,7 +22,7 @@ import { MatTableDataSource } from '@angular/material/table';
 //import * as pdfFonts from "pdfmake/build/vfs_fonts";  
 //pdfMake.vfs = pdfFonts.pdfMake.vfs; 
 //(<any>pdfMake).vfs = pdfFonts.pdfMake.vfs;
-
+import { DatePipe } from '@angular/common';
 var pdfMake = require('pdfmake/build/pdfmake');
 var pdfFonts = require('pdfmake/build/vfs_fonts');
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
@@ -260,7 +260,11 @@ console.log(columns)
     console.log(body)
     return body;
 }
-
+GenerateDate(){
+  let date = Date.now();
+  let datePipe = new DatePipe('en-US');
+  return datePipe.transform(date, 'yyyy-MM-dd');
+}
 
 
 
@@ -296,7 +300,7 @@ console.log(columns)
               {
                 table: {
                   headerRows: 1,
-                   widths: ['*', 'auto', 'auto', 'auto'],
+                   widths: ['auto', 'auto', 'auto', 'auto'],
                   body: this.FormBody(this.reportData, ['inventory_ID','sku','name','supplier_ID'])
                 }
               },
@@ -305,16 +309,16 @@ console.log(columns)
                 style: 'sectionHeader'
               },
               {
-                  text: 'this.invoice.additionalDetails',
+                  text: 'Date Generated: '+this.GenerateDate(),
                   margin: [0, 0 ,0, 15]          
               },
             
              
               {
                   ul: [
-                    'Order can be return in max 10 days.',
-                    'Warrenty of the product will be subject to the manufacturer terms and conditions.',
-                    'This is system generated invoice.',
+                    'This is an Inventory report',
+              'Shows all inventories on the system',
+              'Generated with PDFMake',
                   ],
               }
             ],

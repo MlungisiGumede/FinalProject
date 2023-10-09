@@ -113,7 +113,7 @@ export class ViewCustomerOrderComponent implements OnInit {
         key: "Quantity",
         type: "number",
         label: "Quantity"
-    },   
+    },
     {key:"Price",
      type:"number",
      label:"Price per unit (kg)"
@@ -141,6 +141,7 @@ export class ViewCustomerOrderComponent implements OnInit {
  // dataSource: any;
  orderDef:any
   columnsSchema:any
+  previousValue:any
 
   orders:any = []
   customerColumns = [] // columns schema then map...
@@ -149,7 +150,7 @@ export class ViewCustomerOrderComponent implements OnInit {
     { id: 1, title: 'title 1' },
     { id: 2, title: 'title 2' },
   ]
-  
+
   products:any = [{
     product_ID: '1',
     name: 'Beef',
@@ -194,56 +195,73 @@ dropDown:any= [{
     this.tableForm = this.formBuilder.group({
       arrayForm: this.formBuilder.array(this.results.map(r => this.formBuilder.group(r)))
     });
-    
+
       this.columnsSchema = this.CustomercolumnsSchema
       this.displayedColumns = this.CustomercolumnsSchema.map((col) => col.key);
      this.customerOrder = data
       // getSuppliers
      this.edit = data.edit
     this.title = data.name
-      
+
      }
      onKey(value:any) {
       this.filteredDropDown = this.search(value);
       }
+      Reset(rowIndex:any){
+        // previous value type of thing...
+        // this.previousValue = (this.form.get('records') as FormArray).controls[rowIndex].get('product_ID')?.value;
+        // let val = (this.form.get('records') as FormArray).controls[rowIndex].get('product_ID')?.setValue(null)
+
+
+        }
+        SetPrevious(rowIndex:any){
+          // if(this.previousValue){
+          //   let val = (this.form.get('records') as FormArray).controls[rowIndex].get('product_ID')?.setValue(this.previousValue)
+          // }
+
+        }
+
+
+
+
       ConsoleLog(element:any,key:any){
         //console.log(element)
         //console.log(key)
       }
 
-     
+
      // **// Filter the states list and send back to populate the selectedStates**
       search(value: string) {
         let filter = value.toLowerCase();
         return this.dropDown.filter((option:any) => option.name.toLowerCase().startsWith(filter));
       }
-    
-    
-   
-   
+
+
+
+
     // this.displayedColumns.forEach((col) => {
     //   this.form.addControl(col, new FormControl('', Validators.required))
     // })
-    
+
    ;
-  
-  
+
+
   disp(value:any){
-   
+
   }
 
   addRow(){
     this.edited = true
-    const control =  this.form.get('records') as FormArray; 
-    
+    const control =  this.form.get('records') as FormArray;
+
     control.push(this.initiateEmptyProductForm());
 
     this.dataSource = new MatTableDataSource((this.form.get('records') as FormArray).value);
 
 
-  
-    
-  } 
+
+
+  }
       editRow(rowIndex:any){
         this.edited = true
         let val = (this.form.get('records') as FormArray).controls[rowIndex].get('isDone')?.setValue(false)
@@ -256,9 +274,9 @@ dropDown:any= [{
         let productIndex = this.products.findIndex((item:any) => item.product_ID == product_ID)
         this.dropDown.push(this.products[productIndex])
         this.filteredDropDown.push(this.products[productIndex])
-       
-       
-       
+
+
+
       }
       SetPrice(event:any,rowIndex:any){
         console.log(event)
@@ -271,7 +289,7 @@ dropDown:any= [{
         this.dataSource = new MatTableDataSource((this.form.get('records') as FormArray).value);
         this.dataSource._updateChangeSubscription()
       }
-  
+
 
       initiateProductForm(element:CustomerOrderLine,product_Name:any,quantityGreater:boolean): FormGroup {
         console.log(element)
@@ -297,10 +315,10 @@ dropDown:any= [{
         isDelete: new FormControl("")
         });
       }
-   
+
       DeleteRow(rowIndex: number) {
         //.edited = false
-       
+
         if(this.dataSource.data.length==0){
           this.edited = false
         }
@@ -309,18 +327,19 @@ dropDown:any= [{
         }else{
           let product_ID =(this.form.get('records') as FormArray).controls[rowIndex].get('product_ID')?.value
           let productIndex = this.products.findIndex((item:any) => item.product_ID == product_ID)
-         
+
           this.dropDown.push(this.products[productIndex])
-        
+
         }
         const control =  this.form.get('records') as FormArray;
 
         control.removeAt(rowIndex);
+        this.quantityGreater = false
         this.dataSource = new MatTableDataSource((this.form.get('records') as FormArray).value);
-       
+
         this.dataSource._updateChangeSubscription()
         this.cdr.detectChanges()
-       
+
         this.myTable.renderRows()
       }
       CalculateTotal(rowIndex:any){
@@ -330,10 +349,10 @@ dropDown:any= [{
         if(quantity && price){
           return quantity*price
         }
-       return 
+       return
       }
       CalculateSubTotal(){
-       
+
         let total = 0
         let formArr = this.form.get('records') as FormArray
        for(let i = 0; i < formArr.length; i++){
@@ -345,11 +364,11 @@ dropDown:any= [{
        }
        return total
       }
-     
+
   ngOnInit() {
     this.form = this.formBuilder.group({
       'records': this.formBuilder.array([])
-    
+
       })
        this.dropDown = [...this.data.products]
        this.filteredDropDown = [...this.data.products]
@@ -364,12 +383,12 @@ dropDown:any= [{
               control.push(this.initiateProductForm(element,product_Name,true))
             }else{
               control.push(this.initiateProductForm(element,product_Name,false))
-              
+
             }
             console.log((this.form.get('records') as FormArray).value)
           });
        let val = (this.form.get('records') as FormArray).value.forEach((element:any) => {
-            
+
             let index = this.dropDown.findIndex((item:any) => item.product_ID == element.product_ID)
             console.log(index)
             console.log(this.dropDown[index])
@@ -403,11 +422,11 @@ dropDown:any= [{
           this.quantityGreater = false
         }
           }
-    
- 
-        
-    
-  
+
+
+
+
+
   Edit(){
     let customerOrderViewModel:CustomerOrderViewModel = new CustomerOrderViewModel()
       let customerOrder:CustomerOrder = new CustomerOrder()
@@ -424,17 +443,17 @@ dropDown:any= [{
       customerOrderViewModel.customerOrderLines = orderLines
       this.orderService.UpdateCustomerOrder(customerOrderViewModel).pipe(map(
         (res)=>{
-  
-  
-  
-  
-  
-  
+
+
+
+
+
+
       }),
       catchError((err) =>{
         console.log(err)
         this.dialogRef.close(false);
-       
+
         return throwError(err)
       })).
   subscribe(() => {
@@ -442,28 +461,28 @@ dropDown:any= [{
       }), (error:any) => {
         this.dialogRef.close(false)
       }
-      
-  }
-    
-  
-      
 
-     
-     
-     
+  }
+
+
+
+
+
+
+
      // let prodct_Name = this.products[index].Name
       //console.log(prodct_Name)
-      
-    
-      
-      
-    
-    
+
+
+
+
+
+
     OnDone(rowIndex:any){
       this.edited = false
-     
+
       let formArr = this.form.get('records') as FormArray
-      
+
       let element = formArr.controls[rowIndex].value
       let product_ID =(this.form.get('records') as FormArray).controls[rowIndex].get('product_ID')?.value
       let productIndex = this.products.findIndex((item:any) => item.product_ID == product_ID)
@@ -481,16 +500,16 @@ dropDown:any= [{
       let index = this.dropDown.findIndex((item:any) => item.product_ID == element.product_ID)
       this.dropDown.splice(index,1)
       this.filteredDropDown.splice(index,1)
-     
+
       this.dataSource = new MatTableDataSource((this.form.get('records') as FormArray).value);
-     
-     
+
+
      // let prodct_Name = this.products[index].Name
-     
+
       this.dataSource._updateChangeSubscription()
     }
- 
- 
+
+
 
   }
 

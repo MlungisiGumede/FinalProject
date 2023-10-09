@@ -100,7 +100,7 @@
             
             <div *ngSwitchCase="'price'">
               
-              <input type="number" *ngIf="element.price" formControlName="price" matInput list="price" />
+              <input type="number" formControlName="price" matInput list="price" />
               <datalist *ngIf="element.price" id="price">
              <option [value]="FindPrice(element.product_ID)"  >
               {{FindPrice(element.product_ID)}}

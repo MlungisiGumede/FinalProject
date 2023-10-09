@@ -247,7 +247,7 @@ export class AddCustomerOrderComponent implements OnInit {
 
         control.removeAt(rowIndex);
         this.dataSource = new MatTableDataSource((this.form.get('records') as FormArray).value);
-       
+       this.quantityGreater = false
         this.dataSource._updateChangeSubscription()
         this.cdr.detectChanges()
        

@@ -273,10 +273,10 @@ this.getWriteOffs();
                 text: `Date: ${new Date().toLocaleString()}`,
                 alignment: 'right'
               },
-              { 
-                text: `Bill No : ${((Math.random() *1000).toFixed(0))}`,
-                alignment: 'right'
-              }
+              // { 
+              //   text: `Bill No : ${((Math.random() *1000).toFixed(0))}`,
+              //   alignment: 'right'
+              // }
             ]
           ]
         },
@@ -305,10 +305,10 @@ this.getWriteOffs();
             margin: [0, 0 ,0, 15]          
         },
         {
-          columns: [
-            [{ qr: `${'this.invoice.customerName'}`, fit: '50' }],
-            [{ text: 'Signature', alignment: 'right', italics: true}],
-          ]
+          // columns: [
+          //   [{ qr: `${'this.invoice.customerName'}`, fit: '50' }],
+          //   [{ text: 'Signature', alignment: 'right', italics: true}],
+          // ]
         },
         {
           text: 'Description',
