@@ -112,6 +112,14 @@
               "target": "Package",
               "version": "[6.0.16, )"
             },
+            "PayFast": {
+              "target": "Package",
+              "version": "[1.0.5, )"
+            },
+            "PayFast.AspNetCore": {
+              "target": "Package",
+              "version": "[1.0.5, )"
+            },
             "Spire.XLS": {
               "target": "Package",
               "version": "[13.9.1, )"

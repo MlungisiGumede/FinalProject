@@ -10,6 +10,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { AuthGuardService } from '../Services/auth-guard.service';
 import { throwToolbarMixedModesError } from '@angular/material/toolbar';
 import { catchError, map, throwError } from 'rxjs';
+import { UserService } from '../Services/user.service';
 
 @Component({
   selector: 'app-otp',
@@ -23,15 +24,20 @@ export class OtpComponent implements OnInit {
   otp :any;
   otpForm!: FormGroup;
   username:any
+  dataLoaded=false
   sent = false
   title1 = "A one-time-pin (OTP) has been sent to you."
   title2 = "Click to send One Time Pin"
   title:any = this.title2
   user:User = new User()
   previousUrl:any
+  src:any =  "../../assets/butchery.jpg"
+  url:any
+  files:any
   
   constructor(private loginservice: LoginService,private fb: FormBuilder, private router: Router,private toastController: ToastController
-    ,private ActivatedRoute: ActivatedRoute,private _snackbar: MatSnackBar,private authGuardservice:AuthGuardService) { 
+    ,private ActivatedRoute: ActivatedRoute,private _snackbar: MatSnackBar,private authGuardservice:AuthGuardService,
+    private userService:UserService) { 
       this.authGuardservice.previousUrl.subscribe(previousUrl=>{
         this.previousUrl = previousUrl
         console.log(this.previousUrl)
@@ -53,10 +59,32 @@ console.log(this.router.url)
      // this.user.password = params['user'].password
     
   })
+  this.GetFiles()
 
   //console.log("after")
   
     // check on refresh...
+  }
+  GetFiles(){
+    this.userService.GetFiles().subscribe(res=>{
+      this.files = res
+      console.log(res)
+      this.dataLoaded = true
+      if(res[0]){
+        this.src = res[0].base64
+        this.url = res[0].base64
+        //this.src = res[0].base64
+        console.log(res[0].base64)
+       
+        //this.src = res[0].base64
+      }
+      // this.url = res[0].base64
+      // this.files.push(res[0]) // or this.files = res
+      // this.files.push(res[1]) // or this.files = res
+     //this.url = btoa(res.base64)
+    }),(err:any) =>{
+this.dataLoaded = true
+    }
   }
 
   SendSms(){

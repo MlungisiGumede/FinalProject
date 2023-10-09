@@ -6,6 +6,7 @@ import { Route, Router } from '@angular/router';
 import {ModalController,ToastController } from '@ionic/angular';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { HelpFunctionComponent } from '../help-function/help-function.component';
+import { UserService } from '../Services/user.service';
 
 
 @Component({
@@ -17,11 +18,15 @@ export class LoginComponent implements OnInit {
   data: any;
   users : User[]=[];
   name ="";
+  dataLoaded=false
+  files:any
+  src:any =  "../../assets/butchery.jpg"
+  url:any
   loginForm!: FormGroup;
   
   constructor(private loginservice: LoginService,private fb: FormBuilder, private router: Router,
     private toastController: ToastController, public helpModal: ModalController,
-    private _snackbar: MatSnackBar) {
+    private _snackbar: MatSnackBar,private userService: UserService) {
 
 
     loginservice = {} as LoginService;
@@ -37,7 +42,29 @@ this.loginForm = this.fb.group({
   username : ['', Validators.required],
   password : ['', Validators.required]
 })
+this.GetFiles()
 this.loginservice.setlogin(true)
+  }
+  GetFiles(){
+    this.userService.GetFiles().subscribe(res=>{
+      this.files = res
+      console.log(res)
+      this.dataLoaded = true
+      if(res[0]){
+        this.src = res[0].base64
+        this.url = res[0].base64
+        //this.src = res[0].base64
+        console.log(res[0].base64)
+       
+        //this.src = res[0].base64
+      }
+      // this.url = res[0].base64
+      // this.files.push(res[0]) // or this.files = res
+      // this.files.push(res[1]) // or this.files = res
+     //this.url = btoa(res.base64)
+    }),(err:any) =>{
+this.dataLoaded = true
+    }
   }
 
   onlogin(){

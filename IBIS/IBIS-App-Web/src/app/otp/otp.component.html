@@ -1,4 +1,5 @@
-<body>
+<body *ngIf="dataLoaded">
+    <!-- <div class="blur" [style.background-image]="'url('+src+')'"></div> -->
     <div class="otp-page">
         <form [formGroup]="otpForm" class="otp-form">
             <ion-button fill="clear" (click)="BackToLogin()">Back to Login</ion-button>

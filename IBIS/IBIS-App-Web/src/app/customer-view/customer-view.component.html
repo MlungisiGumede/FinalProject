@@ -52,8 +52,20 @@
 
                 <div *ngSwitchCase="1">
               <ion-button (click)="ViewOrder(item)" class="red-btn" >View</ion-button>
-              <ion-button *ngIf="!item.transaction_ID" class="red-btn" (click)="Check(item)" matTooltip="checkout">Checkout</ion-button>
-              
+             
+              <form *ngIf="environment.production != true" #form ngNoForm action="https://sandbox.payfast.co.za​/eng/process" method="POST" >
+                <input type="hidden" name="merchant_id" value="10000100">
+                <input type="hidden" name="merchant_key" value="46f0cd694581a">
+                 <input type="hidden" name="amount" value="{{CalculateTotal(item.customerOrder_ID)}}">
+                <input type="hidden" name="item_name" value="{{item.customerOrder_ID}}">
+                <!-- <input type="hidden" name="signauture" value="jt7NOE43FZPn"> -->
+                 <input type="hidden" name="notify_url" value="https://inf370team62023.azurewebsites.net/api/ManytoMany/Notify">
+                 <input type="hidden" name="return_url" value="https://testangular.azurewebsites.net/Register"> 
+                 <input type="hidden" name="email_address" value="john@doe.com" />
+                 <ion-button type="submit" *ngIf="!item.transaction_ID" class="red-btn" matTooltip="checkout">Checkout</ion-button>
+                
+             </form> 
+             <ion-button type="submit" *ngIf="!item.transaction_ID && environment.production != false" class="red-btn" matTooltip="checkout">Checkout</ion-button>
                 </div>
               
               <div *ngSwitchCase="2">
@@ -70,8 +82,11 @@
           </ion-row>
           <ion-item-divider></ion-item-divider>
         </ion-grid>
-        <ion-button class="red-Btn" >Checkout All</ion-button>
+   
+       <ion-button class="red-btn"></ion-button>
+        
     </div>
+    <ion-button (click)="sub(form)" class="red-btn"></ion-button>
     <div fxLayout="row" fxLayoutGap="12px" fxLayoutAlign="center center" style="margin-top: 12px">
       <div id="paypal-button"></div>
   </div>

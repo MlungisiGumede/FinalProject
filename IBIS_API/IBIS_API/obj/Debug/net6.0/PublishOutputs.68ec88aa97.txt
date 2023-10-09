@@ -111,6 +111,8 @@ C:\Users\27768\Documents\GitHub\inf370-team6\IBIS_API\IBIS_API\obj\Debug\net6.0\
 C:\Users\27768\Documents\GitHub\inf370-team6\IBIS_API\IBIS_API\obj\Debug\net6.0\PubTmp\Out\NuGet.ProjectModel.dll
 C:\Users\27768\Documents\GitHub\inf370-team6\IBIS_API\IBIS_API\obj\Debug\net6.0\PubTmp\Out\NuGet.Protocol.dll
 C:\Users\27768\Documents\GitHub\inf370-team6\IBIS_API\IBIS_API\obj\Debug\net6.0\PubTmp\Out\NuGet.Versioning.dll
+C:\Users\27768\Documents\GitHub\inf370-team6\IBIS_API\IBIS_API\obj\Debug\net6.0\PubTmp\Out\PayFast.dll
+C:\Users\27768\Documents\GitHub\inf370-team6\IBIS_API\IBIS_API\obj\Debug\net6.0\PubTmp\Out\PayFast.AspNetCore.dll
 C:\Users\27768\Documents\GitHub\inf370-team6\IBIS_API\IBIS_API\obj\Debug\net6.0\PubTmp\Out\SixLabors.Fonts.dll
 C:\Users\27768\Documents\GitHub\inf370-team6\IBIS_API\IBIS_API\obj\Debug\net6.0\PubTmp\Out\Spire.Pdf.dll
 C:\Users\27768\Documents\GitHub\inf370-team6\IBIS_API\IBIS_API\obj\Debug\net6.0\PubTmp\Out\Spire.XLS.dll

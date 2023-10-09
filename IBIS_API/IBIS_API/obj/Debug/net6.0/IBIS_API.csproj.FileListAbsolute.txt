@@ -638,3 +638,5 @@ C:\Users\27768\Documents\GitHub\inf370-team6\IBIS_API\IBIS_API\bin\Debug\net6.0\
 C:\Users\27768\Documents\GitHub\inf370-team6\IBIS_API\IBIS_API\bin\Debug\net6.0\Microsoft.Extensions.PlatformAbstractions.dll
 C:\Users\27768\Documents\GitHub\inf370-team6\IBIS_API\IBIS_API\bin\Debug\net6.0\System.Diagnostics.PerformanceCounter.dll
 C:\Users\27768\Documents\GitHub\inf370-team6\IBIS_API\IBIS_API\bin\Debug\net6.0\runtimes\win\lib\netcoreapp2.0\System.Diagnostics.PerformanceCounter.dll
+C:\Users\27768\Documents\GitHub\inf370-team6\IBIS_API\IBIS_API\bin\Debug\net6.0\PayFast.dll
+C:\Users\27768\Documents\GitHub\inf370-team6\IBIS_API\IBIS_API\bin\Debug\net6.0\PayFast.AspNetCore.dll

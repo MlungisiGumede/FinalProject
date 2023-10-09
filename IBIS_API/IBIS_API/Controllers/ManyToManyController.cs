@@ -43,6 +43,13 @@ using DocumentFormat.OpenXml.Wordprocessing;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using DocumentFormat.OpenXml.InkML;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Logging;
+
+using PayFast;
+using PayFast.AspNetCore;
+
 
 
 namespace IBIS_API.Controllers
@@ -59,15 +66,85 @@ namespace IBIS_API.Controllers
                                                                    //Sender Password  
         static string emailToAddress = "ma.gaitsmith@gmail.com"; //Receiver Email Address  
         static string subject = "Hello";
-
+        private readonly ILogger logger;
+        private readonly UserManager<AppUser> _userManager;
 
         private readonly DataContextcs _context;
         //private static PredictionEngine<ModelInput, ModelOutput> _predengine;
-        public ManyToManyController(DataContextcs context)//, PredictionEngine<ModelInput, ModelOutput> predictionengine)
+       
+        public ManyToManyController(DataContextcs context, ILogger<ManyToManyController> logger, UserManager<AppUser> userManager)//, PredictionEngine<ModelInput, ModelOutput> predictionengine)
         {
             _context = context;
-           // _predengine = predictionengine;
+            this.logger = logger;
+            _userManager = userManager;
+            // _predengine = predictionengine;
         }
+        [HttpPost]
+        [Route("Notify")]
+        
+        public async Task<IActionResult> Notify([ModelBinder(BinderType = typeof(PayFastNotifyModelBinder))] PayFastNotify payFastNotifyViewModel)
+        {
+            //payFastNotifyViewModel.SetPassPhrase(this.payFastSettings.PassPhrase);
+
+            //var calculatedSignature = payFastNotifyViewModel.GetCalculatedSignature();
+
+            //var isValid = payFastNotifyViewModel.signature == calculatedSignature;
+
+            //this.logger.LogInformation($"Signature Validation Result: {isValid}");
+
+            //// The PayFast Validator is still under developement
+            //// Its not recommended to rely on this for production use cases
+            //var payfastValidator = new PayFastValidator(this.payFastSettings, payFastNotifyViewModel, this.HttpContext.Connection.RemoteIpAddress);
+
+            //var merchantIdValidationResult = payfastValidator.ValidateMerchantId();
+
+            //this.logger.LogInformation($"Merchant Id Validation Result: {merchantIdValidationResult}");
+
+            //var ipAddressValidationResult = await payfastValidator.ValidateSourceIp();
+
+            //this.logger.LogInformation($"Ip Address Validation Result: {ipAddressValidationResult}");
+
+            // Currently seems that the data validation only works for success
+           
+            var id = int.Parse(payFastNotifyViewModel.item_name);
+            var order = _context.CustomerOrders.Where(c => c.CustomerOrder_ID == id).First();
+            if (payFastNotifyViewModel.payment_status == PayFastStatics.CompletePaymentConfirmation)
+            {
+                var customerOrdersLine = _context.CustomerOrdersLine.Where(c => c.CustomerOrder_ID == order.CustomerOrder_ID).ToList();
+                var cus1 = _context.Customers.Where(c => c.Customer_ID == order.Customer_ID).First();
+                _context.ChangeTracker.Clear();
+                double total1 = 0;
+               
+                foreach (var line in customerOrdersLine)
+                {
+                    total1 = total1 + (line.Quantity * line.Price);
+                }
+                order.Transaction_ID = payFastNotifyViewModel.pf_payment_id;
+                AuditTrail audit = new AuditTrail();
+                var user = await _userManager.FindByEmailAsync(cus1.Email);
+                audit.User = user.UserName;
+                audit.Date = DateTime.Now;
+                audit.Name = "Payment For Order";
+                
+                var config2 = new { CustomerOrder_ID = order.CustomerOrder_ID, CustomerName = cus1.Customer_FirstName + " " + cus1.Customer_Surname, Transaction_ID = order.Transaction_ID, OrderStatus_ID = order.OrderStatus_ID, Total = total1 };
+                var str2 = JsonSerializer.Serialize(config2);
+                audit.Description = str2;
+                //audit.Description = "Payment For Order:" + Environment.NewLine + ord.CustomerOrder_ID + Environment.NewLine + cus1.Customer_FirstName + " " + cus1.Customer_Surname + Environment.NewLine + ord.Date_Created + Environment.NewLine + ord.Transaction_ID + Environment.NewLine + ord.OrderStatus_ID + Environment.NewLine + total1;
+                _context.AuditTrail.Add(audit);
+                _context.CustomerOrders.Update(order);
+                await _context.SaveChangesAsync();
+            }
+
+            if (payFastNotifyViewModel.payment_status == PayFastStatics.CancelledPaymentConfirmation)
+            {
+                return BadRequest("payment Cancelled");
+                this.logger.LogInformation($"Subscription was cancelled");
+            }
+
+            return Ok();
+        }
+
+
 
         [HttpGet]
         [Route("getCustomerOrders")]

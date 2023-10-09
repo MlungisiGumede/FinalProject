@@ -1,6 +1,6 @@
 <!-- div *ngIf="!request" class="advanced__background">
     <div style="text-align: center;" class="advanced__backgroundBody"> -->
-        <body >
+        <body *ngIf="dataLoaded" >
           <ion-icon id="helpIcon" name="help-circle" style="color: #002850;" (click)="showHelp()" matTooltip="Help"></ion-icon>
         <div class="blur" [style.background-image]="'url('+src+')'"></div>
         

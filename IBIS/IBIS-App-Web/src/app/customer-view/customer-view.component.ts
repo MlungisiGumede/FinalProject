@@ -1,4 +1,4 @@
-import { Component, OnInit,OnDestroy, Renderer2, Inject } from '@angular/core';
+import { Component, OnInit,OnDestroy, Renderer2, Inject, ViewChild } from '@angular/core';
 import { LoginService } from '../Services/login.service';
 import { of, throttleTime } from 'rxjs';
 import { OrdersService } from '../Services/orders.service';
@@ -13,6 +13,7 @@ import { ViewCustomerOrderComponent } from '../view-customer-order/view-customer
 import { MatDialog } from '@angular/material/dialog';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ReviewComponent } from '../review/review.component';
+import { environment } from 'src/environments/environment';
 
 declare let paypal:any;  
 
@@ -24,6 +25,7 @@ declare let paypal:any;
 export class CustomerViewComponent implements OnInit {
 customerOrders$:any = of([{}])
 filterTerm:any
+@ViewChild('form') subForm: any
 order = new CustomerOrder()
 customerOrderLine:any
 customer:any
@@ -33,6 +35,7 @@ total:any
 result:any
 data!:any
 customerOrders:any
+environment = environment
  
   idtodelete :any;
   //filterTerm!: string;
@@ -48,6 +51,7 @@ form:any
 supplierOrders:any
 role:any
 permissions:any
+formGroup!: FormGroup;
 statusResults:any = [
   {
     status_ID: 1,
@@ -78,6 +82,8 @@ filteredCustomerOrders:any = of([{}])
     // this.form = new FormGroup({
     //   review : new FormControl("",[Validators.required, Validators.min(1)]),
     // })
+    
+    
     this.GetUserRole().then((res) => {
       
     })
@@ -107,6 +113,25 @@ filteredCustomerOrders:any = of([{}])
      
   
     
+  }
+  submit(form:any){
+    console.log(form)
+    let obj = {
+      'merchant_id':'10000100',
+      'merchant_key':'46f0cd694581a',
+    }
+   this.orderservice.PostPayFast(obj).subscribe((res:any)=>{
+     res.status(200).send()
+   })
+   
+  
+    // this.httpClient.post("https://sandbox.payfast.co.za​/eng/process",form.value).subscribe((res:any)=>{
+    //   console.log(res)
+    // })
+
+  }
+  sub(e:any){
+   e.target.submit()
   }
   async GetUserRole(){
     let value = new Promise((resolve, reject) => {
@@ -219,6 +244,40 @@ filteredCustomerOrders:any = of([{}])
         document.body.appendChild(scriptElement)
         //https://stackoverflow.com/questions/43806348/how-to-integrate-paypal-express-checkout-into-angular2-typescript-project
     })
+  }
+  Yoco(){
+    let amount = 3;
+    let token:any = localStorage.getItem('Token')
+    localStorage.setItem('temp',token)
+    localStorage.removeItem('Token')
+    
+    this.orderservice.PostYoco(amount).subscribe((res)=>{
+      let token:any = localStorage.getItem('temp')
+      console.log('current',token)
+      localStorage.setItem('Token',token)
+      
+    }),(error:any)=>{
+      localStorage.setItem('Token',token)
+    }
+  }
+  PostPayFast(){
+  let obj = {
+    // <input type="hidden" name="merchant_id" value="10000100">
+    // <input type="hidden" name="merchant_key" value="46f0cd694581a">
+    // <!-- <input type="hidden" name="amount" value="100.00">
+    // <input type="hidden" name="item_name" value="Test Product"> -->
+    // <input type="hidden" name="signauture" value="jt7NOE43FZPn">
+    'merchant_id':'10000100',
+    'merchant_key':'46f0cd694581a',
+    
+    'signauture':'jt7NOE43FZPn'
+    
+  }
+  // pass the order id as the item name as well
+  // return url pass the successful parameter... or the order ID
+  this.orderservice.PostPayFast(obj).subscribe((res)=>{
+    
+  })
   }
   Check(item:any){
     let total = this.CalculateTotal(item.customerOrder_ID)

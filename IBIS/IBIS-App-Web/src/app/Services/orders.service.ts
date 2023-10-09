@@ -56,6 +56,16 @@ export class OrdersService {
        createOrder(ord: Orders){
         return this.httpClient.post(this.apiUrl, ord, this.httpOptions)
       }
+      PostPayFast(obj:any){
+       let req = this.httpClient.post('https://sandbox.payfast.co.za​/eng/process?merchant_id=10000100&merchant_key=46f0cd694581a&amount=100.00&item_name=Order ID:6',obj)
+       
+        return this.httpClient.post('https://sandbox.payfast.co.za​/eng/process?merchant_id=10000100&merchant_key=46f0cd694581a&amount=100.00&item_name=Order ID:6',{
+
+          headers: new HttpHeaders({
+            'Content-Type': 'application/json'
+          })
+        })
+      }
       
      getCurrency():any{
       let url = 'https://api.currencybeacon.com/v1/latest?api_key=FrWo45q23NJqHOVAbqny7GsgCvnJAZNN'
@@ -71,6 +81,16 @@ export class OrdersService {
     UpdateSupplierOrderStatus(item:SupplierOrder){
       return this.httpClient.put(this.manytoManyAPIUrl + '/putSupplierOrderStatus', item, this.httpOptions)
     }
+    PostYoco(amount:any){
+      let headers = new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Authorization':'Bearer 960bfde0VBrLlpK098e4ffeb53e1' });
+        let options = { headers: headers };
+        
+      return this.httpClient.post('https://payments.yoco.com/api/checkouts',{'amount':4,'currency':'ZAR'},options)
+      
+    }
+  
     
        getOrderList(): Observable<Orders> {
          return this.httpClient

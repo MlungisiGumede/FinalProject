@@ -13,7 +13,7 @@ import { ProfileHelpComponent } from '../profile-help/profile-help.component';
   styleUrls: ['./profile.component.css']
 })
 export class ProfileComponent implements OnInit {
-
+dataLoaded:any = false
   async presentActionSheet() {
     const actionSheet = await this.actionSheetCtrl.create({
       header: 'Upload File',
@@ -64,18 +64,22 @@ src:any = "../../assets/butchery.jpg" // or whatever then do the api call...
     this.userService.GetFiles().subscribe(res=>{
       this.files = res
       console.log(res)
+      this.dataLoaded = true
       if(res[0]){
         this.src = res[0].base64
         this.url = res[0].base64
         //this.src = res[0].base64
         console.log(res[0].base64)
+       
         //this.src = res[0].base64
       }
       // this.url = res[0].base64
       // this.files.push(res[0]) // or this.files = res
       // this.files.push(res[1]) // or this.files = res
      //this.url = btoa(res.base64)
-    })
+    }),(err:any) =>{
+this.dataLoaded = true
+    }
   }
   Download() {
     // https://stackoverflow.com/questions/68255538/angular-download-base64-file-data
@@ -158,6 +162,7 @@ console.log(event)
     this.request = undefined
     this.fileName = undefined
     this.userService.UploadFile(this.fileUpload).subscribe(res=>{
+      this.GetFiles()
        if(this.fileUpload.type == 1){
          this.url = res.base64
          

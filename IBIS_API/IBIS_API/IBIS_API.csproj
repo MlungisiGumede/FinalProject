@@ -32,6 +32,8 @@
     <PackageReference Include="Microsoft.ML.OnnxRuntime" Version="1.16.0" />
     <PackageReference Include="Microsoft.ML.OnnxTransformer" Version="2.0.1" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.16" />
+    <PackageReference Include="PayFast" Version="1.0.5" />
+    <PackageReference Include="PayFast.AspNetCore" Version="1.0.5" />
     <PackageReference Include="Spire.XLS" Version="13.9.1" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
     <PackageReference Include="Twilio" Version="6.14.0" />

@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import { NavigationError, NavigationStart, Router } from '@angular/router';
 import { LoginService } from './Services/login.service';
 import { AuthenticationService } from './Services/authentication.service';
 import { AuthGuardService } from './Services/auth-guard.service';
 import { NgxSpinnerComponent, NgxSpinnerService } from 'ngx-spinner';
+import { MatSelect } from '@angular/material/select';
 
 
 
@@ -32,7 +33,7 @@ export class AppComponent implements OnInit {
   selectedValue:any
   url:any
   showLogOut:any
-
+  @ViewChild('selector', { static: false }) selector!: MatSelect
 constructor(private loginService : LoginService, public router: Router,
   private authenticationService: AuthenticationService,
   private authGuardService:AuthGuardService,private spinner: NgxSpinnerService) {
@@ -128,15 +129,23 @@ constructor(private loginService : LoginService, public router: Router,
   
   ];
   IsLogOut(){
+    if(this.selectedValue == 'user-1'){
+      this.router.navigate(['/profile'])
+    }
+   
   if(this.selectedValue == 'user-2'){
     localStorage.removeItem('Token')
     //localStorage.removeItem('OTP')
     this.showNavigation = false
     this.showLogOut = false
+   
     //this.authGuardService.ShowNavigation()
     this.router.navigate(['/Login'])
+  }if(this.selectedValue == 'user-3'){
+    this.router.navigate(['/help-me'])
   }
-
+  this.selectedValue = undefined
+  this.selector.close()
   }
 
 }

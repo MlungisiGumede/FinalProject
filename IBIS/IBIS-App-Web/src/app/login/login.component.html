@@ -1,7 +1,7 @@
 
 
-<body>
-  
+<body *ngIf="dataLoaded">
+  <div class="blur" [style.background-image]="'url('+src+')'"></div>
   <form [formGroup]="loginForm" novalidate>
 <form  class="folder">
 <div class="login-page">

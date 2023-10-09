@@ -1,13 +1,21 @@
-.folder{
+/* .folder{
 
   backdrop-filter: blur(10px);
-}
+} */
 
 
 
 .p1{
 
     color: white;
+}
+.blur{
+   filter: blur(5px); 
+filter: brightness(30%);
+height: 100vh;
+width: 100vw;
+
+position: absolute;
 }
 
 .back{
@@ -23,11 +31,11 @@ color: lightblue;
   width: 360px;
   padding: 8% 0 0;
   margin: auto;
-  backdrop-filter: blur(10px);
+  /* backdrop-filter: blur(10px); */
   
 }
 .form {
-  backdrop-filter: blur(10px);
+  /* backdrop-filter: blur(10px); */
   position: relative;
   z-index: 1;
   background: #FFFFFF;

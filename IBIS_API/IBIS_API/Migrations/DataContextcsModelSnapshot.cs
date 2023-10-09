@@ -142,6 +142,9 @@ namespace IBIS_API.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
+                    b.Property<double?>("timerSettings")
+                        .HasColumnType("float");
+
                     b.HasKey("Id");
 
                     b.HasIndex("NormalizedEmail")
@@ -644,6 +647,9 @@ namespace IBIS_API.Migrations
                     b.Property<string>("Cellphone_Number")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("ClientUrl")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Email")
                         .HasColumnType("nvarchar(max)");
 
@@ -655,6 +661,9 @@ namespace IBIS_API.Migrations
 
                     b.Property<double?>("time")
                         .HasColumnType("float");
+
+                    b.Property<string>("token")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Username");
 
