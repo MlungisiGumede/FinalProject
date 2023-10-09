@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Supplier } from '../Models/Supplier';
 import { SupplierService } from '../Services/supplier.service';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -12,6 +12,8 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Observable, catchError, map, of, throwError } from 'rxjs';
 import { ViewSupplierComponent } from '../view-supplier/view-supplier.component';
 import { SupplierHelpComponent } from '../supplier-help/supplier-help.component';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatTableDataSource } from '@angular/material/table';
 
 var pdfMake = require('pdfmake/build/pdfmake');
 var pdfFonts = require('pdfmake/build/vfs_fonts');
@@ -30,7 +32,10 @@ export class SuppliersComponent implements OnInit {
   idtodelete :any;
   id: any;
   filterTerm!: string;
-  
+  columnsSchema:any = [{key:'supplier_ID',name:'Supplier ID'}, {key:'name',name:'SupplierName'}, {key:'address',name:'Address'},{key:'email',name:'Email'},{key:'phone',name:'Phone'}, {key:'actions',name:''}]
+  displayedColumns: string[] = this.columnsSchema.map((x:any) => x.key);
+  @ViewChild(MatPaginator) paginator!: MatPaginator
+  dataSource:MatTableDataSource<any> = new MatTableDataSource<any>();
 
   constructor(private supply: SupplierService,public router: Router,private route: ActivatedRoute,private logged: LoginService,private toastController: ToastController
     ,private matDialog: MatDialog,public inventoryService: InventoryService,
@@ -85,8 +90,13 @@ dialogRef.afterClosed().subscribe(result => {
     this.supply.getSupplierList().subscribe(response => {
       console.log(response);
       this.data = of(response);
+      this.dataSource = new MatTableDataSource(response);
+      this.dataSource.paginator = this.paginator
     })
 
+  }
+  filter(event:any){
+    this.dataSource.filter = event.target.value.trim().toLowerCase();
   }
   async showHelp(){
     const modal = await this.helpModal.create({

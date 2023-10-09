@@ -31,12 +31,12 @@
     }
     
     h1{
-      color: #FFD700;
+      color: black;
       font-size: 1.8em !important;
     }
   
   .light-Btn{
-      --background: #FFD700;
+    --background: lightblue;
       color: black;
       --border-radius: 20em;
       float: right;
@@ -49,9 +49,12 @@
   }
 
   .Red-Btn{
-    --background: red;
+    --background: #EF9A9A;
     --border-radius: 20em;
     float: right;
+}
+table{
+  width: 100%;
 }
   
   .isb{

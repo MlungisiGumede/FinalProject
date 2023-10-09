@@ -5,6 +5,7 @@ import { UserService } from '../Services/user.service';
 import { of } from 'rxjs';
 import { ModalController } from '@ionic/angular';
 import { AuditHelpComponent } from '../audit-help/audit-help.component';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-audit',
@@ -15,12 +16,15 @@ export class AuditComponent implements OnInit {
 data:any
 filterTerm:any
   constructor(public matDialog:MatDialog,
-    private userService:UserService,public helpModal: ModalController) { }
+    private userService:UserService,public helpModal: ModalController,
+    private spinner: NgxSpinnerService) { }
 
   ngOnInit(): void {
+    this.spinner.show();
     this.userService.getAuditTrail().subscribe(res=>{
       console.log(res)
       this.data = of(res)
+      this.spinner.hide();
     });
   }
   async showHelp(){

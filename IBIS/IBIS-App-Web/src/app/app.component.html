@@ -1,4 +1,4 @@
-<mat-toolbar fxLayoutAlign="start center" class="toolbartop" >
+<mat-toolbar *ngIf="showNavigation || showLogOut" fxLayoutAlign="start center" class="toolbartop" >
   <mat-toolbar-row  style="display:flex;
   justify-content:space-between;">
   <!-- <img *ngIf="showNavigation || showLogOut"
@@ -7,7 +7,7 @@
   class="signup-rectangle4"
 /> -->
 <mat-icon  style="color: white;">settings</mat-icon>
-<h1 *ngIf="showNavigation || showLogOut" class="heading">KMJ Butchery IBIS</h1>
+<h1  class="heading">KMJ Butchery IBIS</h1>
   <mat-form-field *ngIf="showLogOut" fxLayoutAlign="end center" style="color: white;">
     <ion-icon name="person-outline"></ion-icon>
     <mat-select #selector   (selectionChange)="IsLogOut()" [(ngModel)]="selectedValue">

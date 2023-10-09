@@ -27,6 +27,9 @@ mat-column-name{
   width: 10%;
   border-right: 1px solid currentColor;
 }
+.mat-column-price{
+  width: 10%;
+}
 table{
   width: 100%;
 }
@@ -58,12 +61,12 @@ table{
   }
   
   h1{
-    color: #FFD700;
+    color: black;
     font-size: 1.8em !important;
   }
 
 .light-Btn{
-    --background: #FFD700;
+    --background: lightblue;
     --border-radius: 20em;
     display: left;
 }
@@ -76,17 +79,17 @@ table{
 .green-Btn{
   --background: #5CB85C;
   --border-radius: 10em;
-float: right;
+
 }
 
 .red-Btn2{
-  --background: red;
+  --background: lightred;
   --border-radius: 10em;
-float: right;
+
 }
 
 .red-Btn{
-    --background: #E02828;
+    --background: #EF9A9A;
     --border-radius: 20em;
     display: left;
 }

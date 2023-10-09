@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ModalController, ToastController } from '@ionic/angular';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
@@ -14,6 +14,8 @@ import { Observable, catchError, map, of, throwError } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { UserService } from '../Services/user.service';
 import { CustomerHelpComponent } from '../customer-help/customer-help.component';
+import { MatTableDataSource } from '@angular/material/table';
+import { MatPaginator } from '@angular/material/paginator';
 @Component({
   selector: 'app-customers',
   templateUrl: './customers.component.html',
@@ -22,6 +24,10 @@ import { CustomerHelpComponent } from '../customer-help/customer-help.component'
 export class CustomersComponent implements OnInit {
 data:Observable<any> = new Observable();
 filterTerm!:string;
+columnsSchema:any = [{key:'customer_ID',name:'customer_ID'}, {key:'fullName',name:'Full Name'}, {key:'address',name:'Address'},{key:'email',name:'Email'},{key:'phone',name:'Phone'}, {key:'actions',name:''}]
+  displayedColumns: string[] = this.columnsSchema.map((x:any) => x.key);
+@ViewChild(MatPaginator) paginator!: MatPaginator
+  dataSource:MatTableDataSource<any> = new MatTableDataSource<any>();
   constructor(public matDialog:MatDialog,private customerSerivce : CustomerService ,public toastController: ToastController
     ,public cdr:ChangeDetectorRef,private _snackbar: MatSnackBar, public helpModal: ModalController,
     private userService:UserService) { }
@@ -37,6 +43,10 @@ filterTerm!:string;
 
     this.getCustomers()
   }
+  filter(event:any){
+    this.dataSource.filter = event.target.value.trim().toLowerCase();
+    
+  }
   async showHelp(){
     const modal = await this.helpModal.create({
       component: CustomerHelpComponent});
@@ -47,6 +57,13 @@ filterTerm!:string;
     this.customerSerivce.getCustomerList().subscribe(response => {
       console.log(response);
       this.data = of(response);
+      let data:any = response
+      data.forEach((element:any) => {
+        element.fullName = element.customer_FirstName + " " + element.customer_Surname
+      })
+      this.dataSource = new MatTableDataSource(data)
+      this.dataSource.paginator = this.paginator
+      this.dataSource._updateChangeSubscription()
       //this.cdr.detectChanges()
       //console.log(this.data[0].inventory_ID);
       

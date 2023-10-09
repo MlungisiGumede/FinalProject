@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit,ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { InventoryService } from '../Services/inventory.service';
 import { Inventory } from '../Models/Inventory';
@@ -15,6 +15,8 @@ import { Observable, catchError, map, of, throwError } from 'rxjs';
 import { ViewInventoryItemComponent } from '../view-inventory-item/view-inventory-item.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { InventoryHelpComponent } from '../inventory-help/inventory-help.component';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatTableDataSource } from '@angular/material/table';
 //import pdfMake from "pdfmake/build/pdfmake";
 //import * as pdfMake from 'pdfmake/build/pdfmake';
 //import * as pdfFonts from "pdfmake/build/vfs_fonts";  
@@ -40,7 +42,10 @@ export class InventoryComponent implements OnInit {
   inID: any;
   suppliers:Supplier[] = []
   reportData:any
-
+  columnsSchema:any = [{key:'sku',name:'SKU'}, {key:'name',name:'Name'}, {key:'supplier_ID',name:'Supplier Name'}, {key:'actions',name:''}]
+  displayedColumns: string[] = this.columnsSchema.map((x:any) => x.key);
+  @ViewChild(MatPaginator) paginator!: MatPaginator
+  dataSource:MatTableDataSource<any> = new MatTableDataSource<any>();
   constructor(public router: Router, private inv : InventoryService,private toastController: ToastController,private fb : FormBuilder
     ,public matDialog: MatDialog,public supplierService:SupplierService,public helpModal: ModalController,
     private _snackbar: MatSnackBar) {
@@ -82,7 +87,9 @@ export class InventoryComponent implements OnInit {
   }
 
   ngOnInit() {
-
+this.dataSource.filterPredicate = function (record,filter) {
+  return record.name.toLowerCase().includes(filter) || record.sku.toString().includes(filter) || record.supplierName.toLowerCase().includes(filter)
+}
  
 
     this.supplierService.getSupplierList().subscribe(response => {
@@ -100,6 +107,13 @@ export class InventoryComponent implements OnInit {
       console.log(response);
       if(response){
         this.data = of(response)
+        this.inventory = response
+        this.inventory.forEach((element:any) => {
+          element.supplierName = this.GetSupplierName(element.supplier_ID)
+        })
+        this.dataSource = new MatTableDataSource(this.inventory)
+         this.dataSource.paginator = this.paginator
+        this.dataSource._updateChangeSubscription()
           this.reportData = response
       }
    
@@ -139,6 +153,13 @@ this.getInventory();
 }
 
   }
+  filter(event:any){
+    this.dataSource.filterPredicate = function (record,filter) {
+      return record.name.toLowerCase().includes(filter) || record.sku.toString().includes(filter) || record.supplierName.toLowerCase().includes(filter)
+  }
+  ;let filtervalue = event.target.value.trim().toLowerCase();
+  this.dataSource.filter = filtervalue;
+ }
 
 
 

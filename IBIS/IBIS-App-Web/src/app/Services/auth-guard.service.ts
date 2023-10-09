@@ -110,6 +110,7 @@ return new Promise((resolve, reject) => {
   }).catch((error:any) => {
     if(error.status==401){ 
       this.showNavigation.next(false)
+      this.showLogOut.next(false)
       if(this.ValidRequest()){ // through code to OTP or Timer
         this.ShowNavigation() // cant access route without code...?..? so not needed to check user role...
         console.log("nope")

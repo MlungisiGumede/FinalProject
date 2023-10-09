@@ -404,8 +404,9 @@ OnDone(item:Product){
     })
     
   }else{
-    product.price = this.price
-    this.productService.updateProduct(product).pipe(map(
+    let prod = product
+    prod.price = this.price
+    this.productService.updateProduct(prod).pipe(map(
       (res)=>{
 
 
@@ -416,6 +417,7 @@ OnDone(item:Product){
     }),
     catchError((err) =>{
       console.log(err)
+      this.getProducts()
       this.ShowSnackBar("failed to update price", "error");
      
       return throwError(err)

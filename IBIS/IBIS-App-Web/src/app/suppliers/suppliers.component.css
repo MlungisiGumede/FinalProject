@@ -36,12 +36,16 @@
   }
   
   h1{
-    color: #FFD700;
+    color: black;
     font-size: 1.8em !important;
+  }
+  table{
+    width: 100%;
   }
 
 .light-Btn{
-    --background: #FFD700;
+  --background: lightblue;
+ 
     --border-radius: 20em;
     float: left;
 }
@@ -58,7 +62,7 @@ float: left;
 }
 
 .red-Btn{
-    --background: #E02828;
+  --background: #EF9A9A;
     --border-radius: 20em;
     float: left;
 }
