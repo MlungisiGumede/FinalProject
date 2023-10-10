@@ -4,7 +4,7 @@
     
     <h2>{{title}}</h2>
 
-    <button *ngIf="edit" class="button-add-row" [disabled]="edited" mat-button (click)="addRow()">Add Row</button>
+    <button *ngIf="edit" class="button-add-row" [disabled]="edited || dropDown.length == 0" mat-button (click)="addRow()">Add Row</button>
    
   </article>
   <form action="" [formGroup]="form">
@@ -46,7 +46,7 @@
        
           <div *ngSwitchCase="'isDelete'">
             
-              <button mat-button *ngIf="edit" (click)="DeleteRow(rowIndex)" >Delete</button>
+              <button [disabled]="edited" mat-button *ngIf="edit" (click)="DeleteRow(rowIndex)" >Delete</button>
               
             </div>
             <span *ngSwitchCase="'total'">
@@ -67,6 +67,7 @@
         <div [ngSwitch]="col.type" *ngIf="!element.isDone">
          
           <!-- display2(element) -->
+          <ng-container>
           <mat-form-field *ngSwitchCase="'product_ID'"  >
             <mat-label>Select Product</mat-label>
             <mat-select #select formControlName="product_ID" (closed)="SetPrevious(rowIndex)" (opened)="Reset(rowIndex)" (selectionChange)="SetPrice($event,rowIndex)" >
@@ -81,8 +82,9 @@
   
             
           </mat-form-field>
+        </ng-container>
           <div *ngSwitchCase="'isDelete'">
-            <button style="float: right;" mat-button (click)="DeleteRow(rowIndex)" *ngIf="edit" >Delete</button>
+            <button  style="float: right;" mat-button (click)="DeleteRow(rowIndex)" *ngIf="edit" >Delete</button>
             <button *ngIf="edited && edit" [disabled]="!form.valid" class="button-add-row"  (click)="OnDone(rowIndex)" mat-button style="float: right;">Done</button>
              
             </div>

@@ -36,7 +36,7 @@
        
           <div *ngSwitchCase="'isDelete'">
             
-              <button mat-button (click)="DeleteRow(rowIndex)" >Delete</button>
+              <button [disabled]="edited==true" mat-button (click)="DeleteRow(rowIndex)" >Delete</button>
             </div>
             <span *ngSwitchCase="'total'">
               {{CalculateTotal(rowIndex)}}

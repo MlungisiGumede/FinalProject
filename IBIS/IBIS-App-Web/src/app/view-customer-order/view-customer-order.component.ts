@@ -336,11 +336,11 @@ dropDown:any= [{
         control.removeAt(rowIndex);
         this.quantityGreater = false
         this.dataSource = new MatTableDataSource((this.form.get('records') as FormArray).value);
-
+          this.dataSource.data = [...this.dataSource.data]
         this.dataSource._updateChangeSubscription()
-        this.cdr.detectChanges()
+        //this.cdr.detectChanges()
 
-        this.myTable.renderRows()
+        //this.myTable.renderRows()
       }
       CalculateTotal(rowIndex:any){
         let formArr = this.form.get('records') as FormArray

@@ -46,7 +46,7 @@
        
           <div *ngSwitchCase="'isDelete'">
             
-              <button mat-button (click)="DeleteRow(rowIndex)" matTooltip="Delete">Delete</button>
+              <button mat-button [disabled]="edited==true" (click)="DeleteRow(rowIndex)" matTooltip="Delete">Delete</button>
               
             </div>
             <span *ngSwitchCase="'total'">
