@@ -67,8 +67,8 @@
     }
   
   .light-Btn{
-      --background: yellow;
-      color: black;
+      --background: skyblue;
+      /* color: black; */
       --border-radius: 20em;
       float: right;
   }

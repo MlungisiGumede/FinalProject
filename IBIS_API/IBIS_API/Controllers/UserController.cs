@@ -278,6 +278,21 @@ namespace IBIS_API.Controllers
                         //var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                         //var confirmationLink = Url.Action(nameof(uvm.Email), "Account", new { token, email = user.Email }, Request.Scheme);
                         //smtp.UseDefaultCredentials = false;
+                        string bodString = string.Empty;
+                        using (StreamReader reader = System.IO.File.OpenText("./otp.html")) // Path to your 
+                        {                                                         // HTML file
+
+
+                            bodString = reader.ReadToEnd();
+                            mail.Body = reader.ReadToEnd();  // Load the content from your file...
+                                                             //mail.IsBodyHtml = true;                          //...
+                        }
+                       bodString = bodString.Replace("{otp}",r.ToString());
+                        //bodString = bodString.Replace("'{otp}'", r.ToString());
+                        // bodString = bodString.Replace("otp'", r.ToString());
+                        // bodString = bodString.Replace("{Otp}","hi");
+                        mail.Body = bodString;
+                        mail.IsBodyHtml = true;
                         smtp.Credentials = new NetworkCredential(emailFromAddress, "sxkbtjguspnshajt");
                         smtp.UseDefaultCredentials = false;
                         smtp.EnableSsl = enableSSL;

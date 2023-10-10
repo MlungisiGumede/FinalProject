@@ -19,6 +19,9 @@
   .active, .collapsible:hover {
     background-color: #1561ac;
   }
+  table{
+    width: 100%;
+  }
   
   .contents{
       width: 90%;

@@ -66,6 +66,7 @@ export class ReportsComponent implements OnInit {
   filteredCustomerOrderLines:any
   products:ProductViewModel[]|any
   selectedFormat:any
+  productsDropDown:any
   formats = [
     { format_ID: 1, name: 'PDF' },
     { format_ID: 2, name: 'Excel' },
@@ -258,7 +259,15 @@ this.ShowSnackBar('SubCategores Export Successfully Exported to Excel Check Your
     if(this.request =='order'){
       this.DatedOrdersReport()
     }else if(this.request == 'stock'){
-      this.CreateStockTakeChart()
+      console.log(this.selectedProduct)
+      if(this.selectedProduct == 'All'){
+        console.log('all')
+        this.CreateStockChart2()
+        this.selectedProduct = ""
+      }else{
+        this.CreateStockTakeChart()
+      }
+     
     }else if(this.request == 'popular'){
       this.MostPopularProducts()
     }else if(this.request == 'category'){
@@ -297,7 +306,10 @@ this.ShowSnackBar('SubCategores Export Successfully Exported to Excel Check Your
     let value = new Promise((resolve, reject) => {
       this.orderService.getProductViewModel().subscribe(response => {
         console.log(response)
+        let res = [...response]
         this.products = response
+        this.productsDropDown = res
+        this.productsDropDown.push({'product_ID': 'All','name':'All'})
         resolve(response)
       }),(error:any) => {
         reject(error)
@@ -701,6 +713,106 @@ CreateStockTakeChart(){
 });
 })
 
+}
+CreateStockChart2(){
+  let myChart = Chart.getChart("myChart")
+  if(myChart){
+    myChart.destroy()
+  }
+ 
+    
+  
+   
+    let labelStrings = []
+    let colours:any = []
+    let quantities:any = []
+    let quantitiesAfterOrders:any = []
+    let names:any = []
+    let products = this.products
+    this.products.forEach((item:any) => {
+      if(item.quantityAfterOrders < 0){
+        colours.push('red')
+        labelStrings.push("Product Quantity After Orders (Negative)")
+      }else{
+        colours.push('green')
+        labelStrings.push(" Product Quantity After Orders (Positive)")
+      }
+      names.push(item.name)
+      quantities.push(item.quantity)
+      quantitiesAfterOrders.push(Math.abs(item.quantityAfterOrders))
+    })
+ 
+
+  
+
+var data = {
+  labels: names, // product names
+   barPercentage: 0.9,
+  categoryPercentage: 1,
+  datasets: [{
+    label: "Product Quantity",
+    backgroundColor: "green",
+    data: quantities // product quantities
+  }, {
+    label: "Product Quantity After Orders",
+    backgroundColor: colours,
+    data: quantitiesAfterOrders // // product quantities after orders
+  }]
+};
+console.log("hit")
+this.chart = new Chart('myChart', {
+  type: 'bar',
+  data: data,
+  options: {
+    aspectRatio:2.5,
+   
+    plugins: {
+      title: {
+          display: true,
+          text: 'Product Report For '+ 'All Products (Scroll Over each Bar to see Details)'
+      },
+      legend: {
+        display: false
+      },
+      tooltip: {
+        enabled: true,
+        callbacks: {
+          label(tooltipItem) { // ai helped with this or whatever...
+            console.log(tooltipItem)
+            let index:any = tooltipItem.dataIndex
+            if(tooltipItem.datasetIndex == 1){
+              console.log(tooltipItem.dataIndex)
+             
+              //ReportsComponent.
+              console.log(products[index])
+             
+                return + "" + products[index].quantityAfterOrders
+              
+              
+            }else{
+              return + "" + products[index].quantity
+            }
+           
+        },
+        title(tooltipItem) {
+          let arr:any = []
+          console.log(tooltipItem)
+          //return tooltipItem[0].dataset.label
+          if(tooltipItem[0].datasetIndex == 0){
+            return "Quantity"
+            //return arr[0]
+            
+          }else{
+            return "Quantity After Orders"
+            //return arr[0]
+          }
+          //if(tooltipItem.)
+        }
+      }
+    }
+  }
+}
+});
 }
   CreateCustomerOrdersChart(){
     this.isCustomerOrder = true

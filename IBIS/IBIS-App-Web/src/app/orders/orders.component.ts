@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { IonicModule, ModalController } from '@ionic/angular';
 import { Orders } from '../Models/Orders';
 import { Router } from '@angular/router';
@@ -16,6 +16,8 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { catchError, map, throwError } from 'rxjs';
 import { OrdersHelpComponent } from '../orders-help/orders-help.component';
 import { LoginService } from '../Services/login.service';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatTableDataSource } from '@angular/material/table';
 var pdfMake = require('pdfmake/build/pdfmake');
 var pdfFonts = require('pdfmake/build/vfs_fonts');
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
@@ -42,6 +44,14 @@ export class OrdersComponent implements OnInit {
   inventories:any
   permissions:any
   role:any
+  columnsSchema:any
+  CustomercolumnsSchema:any = [{key:'customerOrder_ID',name:'Customer Order ID'}, {key:'customerName',name:'Customer Name'}, {key:'date',name:'Date'},{key:'orderStatus',name:'Order Status'},{key:'total',name:'Total'}, {key:'actions',name:''}]
+  SuppliercolumnsSchema:any = [{key:'supplierOrder_ID',name:'Supplier Order ID'}, {key:'supplierName',name:'Supplier Name'}, {key:'date',name:'Date'},{key:'orderStatus',name:'Order Status'},{key:'total',name:'Total'}, {key:'actions',name:''}]
+  displayedColumns: any[] =[]
+  @ViewChild(MatPaginator) paginator!: MatPaginator
+  dataSource:MatTableDataSource<any> = new MatTableDataSource<any>();
+  customerOrdersVm:any
+  supplierOrdersVm:any
   // supplierOrders:any
   // customerOrders:any
   isCustomerOrder:boolean=false
@@ -123,7 +133,13 @@ export class OrdersComponent implements OnInit {
     }
       // this.data = this.supplierOrders
     
-
+      filter(event:any){
+        this.dataSource.filterPredicate = function (record,filter) {
+          return record.name.toLowerCase().includes(filter) || record.sku.toString().includes(filter) || record.supplierName.toLowerCase().includes(filter)
+      }
+      ;let filtervalue = event.target.value.trim().toLowerCase();
+      this.dataSource.filter = filtervalue;
+     }
   async ngOnInit(): Promise<void> {
    this.GetUserRole()
  await this.ReadOrders()
@@ -159,18 +175,7 @@ return value
       this.supplierOrderLine = []
       this.products = []
       this.inventories = []
-      if(result[0]){
-        this.customerOrders = result[0]
-        
-      }if(result[1]){
-        this.supplierOrders = result[1]
-      }
-      //this.data = this.supplierOrders
-      if(result[2]){
-        this.customers = result[2]
-      }if(result[3]){
-        this.suppliers = result[3]
-      } if(result[4]){
+      if(result[4]){
         this.customersOrderLine = result[4]
       }  if(result[5]){
         this.supplierOrderLine = result[5]
@@ -179,6 +184,42 @@ return value
       }if(result[7]){
         this.inventories = result[7]
       }
+      if(result[2]){
+        this.customers = result[2]
+        
+      } 
+      if(result[0]){
+        this.customerOrders = result[0]
+        let customerOrderVm:any = this.customerOrders
+        this.customerOrdersVm = customerOrderVm
+        customerOrderVm.forEach((element:any) => {
+          element.customerName = this.getCustomerName(element.customer_ID)
+          element.total = this.CalculateTotal(element.customerOrder_ID)
+          element.orderStatus = this.ReturnType(element)
+          element.date = this.ConvertDate(element.date_Created)
+
+        })
+       
+        
+      }if(result[3]){
+        this.suppliers = result[3]
+      }if(result[1]){
+        this.supplierOrders = result[1]
+        let supplierOrderVm:any[] = this.supplierOrders
+        this.supplierOrdersVm = supplierOrderVm
+        console.log(supplierOrderVm)
+        supplierOrderVm.forEach((element:any) => {
+          element.supplierName = this.getSupplierName(element.supplier_ID)
+          element.total = this.CalculateTotal(element.supplierOrder_ID)
+          element.orderStatus = this.ReturnType(element)
+          element.date = this.ConvertDate(element.date_Created)
+
+        });
+        console.log(supplierOrderVm)
+        this.supplierOrders = result[1]
+      }
+      //this.data = this.supplierOrders
+    
       this.CheckOrderStatus()
       resolve("true")
     },(err:any)=>{
@@ -191,7 +232,18 @@ return value
 
   })
   await val
-
+if(!this.isCustomerOrder){
+      this.columnsSchema = this.SuppliercolumnsSchema
+      this.displayedColumns = this.SuppliercolumnsSchema.map((x:any) => x.key);
+        this.dataSource = new MatTableDataSource(this.supplierOrders)
+        
+        this.dataSource.paginator = this.paginator
+}else{
+  this.columnsSchema = this.CustomercolumnsSchema
+  this.displayedColumns = this.CustomercolumnsSchema.map((x:any) => x.key);
+  this.dataSource = new MatTableDataSource(this.customerOrders)
+  this.dataSource.paginator = this.paginator
+}
   return val
   }
   getCustomerName(id:any){
@@ -287,6 +339,12 @@ return value
       if(this.isCustomerOrder){
         this.isCustomerOrder = false
       this.isCustomerOrder = false
+      this.columnsSchema = this.SuppliercolumnsSchema
+    this.displayedColumns = this.SuppliercolumnsSchema.map((x:any) => x.key);
+    console.log(this.customerOrdersVm)
+    this.dataSource = new MatTableDataSource(this.supplierOrdersVm)
+    this.dataSource.paginator = this.paginator
+    this.dataSource._updateChangeSubscription();
       this.data = [...this.supplierOrders]
       this.selectedStatus = 4
       this.title = "Supplier Orders"
@@ -329,7 +387,15 @@ console.log("customer")
     this.isCustomerOrder = true
     this.data = [...this.customerOrders]
     this.selectedStatus = 4
-    
+    this.columnsSchema = this.CustomercolumnsSchema
+    this.displayedColumns = this.CustomercolumnsSchema.map((x:any) => x.key);
+    console.log(this.customerOrdersVm)
+    this.customerOrdersVm.forEach((element:any) => {
+      element.total = this.CalculateTotal(element.customerOrder_ID)
+    })
+    this.dataSource = new MatTableDataSource(this.customerOrdersVm)
+    this.dataSource.paginator = this.paginator
+    this.dataSource._updateChangeSubscription();
     this.title = "Customer Orders"
     //this.cdr.detectChanges()
  }
@@ -373,6 +439,9 @@ CheckOrderStatus(){
   
   this.data = [...this.data]
   console.log(this.data)
+  this.dataSource = new MatTableDataSource(this.data)
+  this.dataSource.paginator = this.paginator
+  this.dataSource._updateChangeSubscription();
   if(this.data.length==0){}
   console.log(this.data)
   this.cdr.detectChanges()

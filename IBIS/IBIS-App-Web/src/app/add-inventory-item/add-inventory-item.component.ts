@@ -29,7 +29,7 @@ export class AddInventoryItemComponent implements OnInit {
 
   ngOnInit(): void {
     this.form = new FormGroup({
-      sku: new FormControl("",Validators.required),
+      sku: new FormControl("",),
       name: new FormControl("",Validators.required),
       supplier_ID: new FormControl("",Validators.required),
     })

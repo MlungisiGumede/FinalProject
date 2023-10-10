@@ -2,37 +2,41 @@
     <div class="contents">
       <ion-icon id="helpIcon" name="help-circle" style="color: #002850;" (click)="showHelp()" matTooltip="Help"></ion-icon>
       <ion-title><h1>Audit Trail</h1></ion-title>
-      <ion-searchbar class="isb" placeholder="Search Audit trail..." showCancelButton="focus" [(ngModel)]="filterTerm" animated></ion-searchbar><br/>
-        <ion-grid class="ion-margin" class="ion-grid-padding">
-          <ion-row>
-            <ion-col>Audit ID</ion-col>
-            <ion-col>Name</ion-col>
-            <ion-col>User</ion-col>
-            <ion-col>Date and Time</ion-col>
-            
-            <ion-col></ion-col>
-          </ion-row>
-          <ion-item-divider></ion-item-divider>
-          <ion-row *ngFor="let item of data | async | filter: filterTerm">
-            <ion-col>
-              <ion-label>{{item.id}}</ion-label>
-            </ion-col>
-            <ion-col>
-              <ion-label>{{item.name}}</ion-label>
-            </ion-col>
-            <ion-col>
-              <ion-label>{{item.user}}</ion-label>
-            </ion-col>
-            <ion-col>
-                <ion-label>{{item.date}}</ion-label>
-              </ion-col>
-            <ion-col>
-              <ion-button class="light-Btn" (click)="ViewDetails(item.description)">View Details</ion-button>
-              
-            </ion-col>
-          </ion-row>
-          <ion-item-divider></ion-item-divider>
-        </ion-grid>
+      <ion-searchbar class="isb" placeholder="Search Audit trail..." showCancelButton="focus" (keyup)="filter($event)" animated></ion-searchbar><br/>
+      <table mat-table #orderTable [dataSource]="dataSource" class="mat-elevation-z0">
+        <ng-container [matColumnDef]="col.key" *ngFor="let col of columnsSchema">
+          <th mat-header-cell  *matHeaderCellDef>
+            {{ col.name }}
+          </th>
+          <td mat-cell *matCellDef="let item" [ngSwitch]="col.key">
+            <!-- <ng-container  [ngSwitch]="col.key"> -->
+             
+                
+                  <ng-container *ngSwitchCase="'actions'">
+                    
+                    <ion-button class="light-Btn" (click)="ViewDetails(item.description)">View Details</ion-button>
+                   
+                   
+               
+              </ng-container>
+              <ng-container *ngSwitchDefault>
+                {{item[col.key]}}
+              </ng-container>
+             
+          </td>
+            </ng-container>
+         
+       
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+        <mat-paginator #paginator
+        [pageSize]="10"
+        [pageSizeOptions]="[10, 20, 30]"
+        showFirstLastButtons
+        >
+      </mat-paginator>
+       
       </div>
 </ion-content>
   

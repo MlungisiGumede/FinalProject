@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit,ViewChild } from '@angular/core';
 import { Recipe } from '../Models/Recipes';
 import { RecipeService } from '../Services/recipe.service';
 import { Router } from '@angular/router';
@@ -6,6 +6,8 @@ import { ModalController, ToastController } from '@ionic/angular';
 import { AiImageServiceService } from '../Services/ai-image-service.service';
 import { RecipesHelpComponent } from '../recipes-help/recipes-help.component';
 import { JsonpInterceptor } from '@angular/common/http';
+import { MatTableDataSource } from '@angular/material/table';
+import { MatPaginator } from '@angular/material/paginator';
 @Component({
   selector: 'app-recipes',
   templateUrl: './recipes.component.html',
@@ -19,6 +21,10 @@ export class RecipesComponent implements OnInit {
   isModalOpen = false;
   title = 'OpenAI Image API';
   imageUrl ='';
+  columnsSchema:any = [{key:'recipe_ID',name:'Recipe ID'}, {key:'recipe_Name',name:'Recipe Name'}, {key:'recipe_Ingredients',name:'Recipe Ingredients'}, {key:'actions',name:''}]
+  displayedColumns: string[] = this.columnsSchema.map((x:any) => x.key);
+  @ViewChild(MatPaginator) paginator!: MatPaginator
+  dataSource:MatTableDataSource<any> = new MatTableDataSource<any>();
   constructor(private recService: RecipeService,public router: Router,private toastController: ToastController, 
     private aiService: AiImageServiceService,public helpModal: ModalController) {
     recService = {} as RecipeService;
@@ -32,9 +38,16 @@ export class RecipesComponent implements OnInit {
     this.recService.getRecipeList().subscribe(response => {
       console.log(response);
       this.data = response;
+      let res:any = response
+      this.dataSource = new MatTableDataSource(res);
+      this.dataSource.paginator = this.paginator
+      this.dataSource._updateChangeSubscription()
     })
     
 
+  }
+  filter(event:any){
+    this.dataSource.filter = event.target.value.trim().toLowerCase();
   }
   setOpen(isOpen: boolean) {
     this.isModalOpen = isOpen;

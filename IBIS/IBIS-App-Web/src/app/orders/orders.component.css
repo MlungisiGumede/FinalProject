@@ -37,6 +37,9 @@
     color: lightblue;
     font-size: 1.8em !important;
   }
+  table{
+    width: 100%;
+  }
 
 .light-Btn{
     --background: #FFD700;

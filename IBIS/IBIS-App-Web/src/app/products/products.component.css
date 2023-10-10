@@ -19,10 +19,10 @@
   width: 25% !important;
   /* border-right: 1px solid currentColor; */
 }
-.mat-column-product_ID{
-  width: 10% !important;
+/* .mat-column-product_ID{
+  width: 5% !important;
   
-}
+} */
 mat-column-name{
   width: 10%;
   border-right: 1px solid currentColor;
@@ -64,11 +64,16 @@ table{
     color: black;
     font-size: 1.8em !important;
   }
+  .mat-column-subCategory_ID{
+    width: 10%;
+  }
+ 
 
 .light-Btn{
     --background: lightblue;
     --border-radius: 20em;
-    display: left;
+    float: left;
+    /* display: left; */
 }
 .light-Btns{
   --background: #1976D2;

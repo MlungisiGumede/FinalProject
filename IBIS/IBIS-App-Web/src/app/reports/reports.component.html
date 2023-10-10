@@ -1,7 +1,7 @@
 <ion-content class="ion-margin">
     <div class="contents">
       <ion-icon id="helpIcon" name="help-circle" style="color: #002850;" (click)="showHelp()" matTooltip="Help"></ion-icon>
-      <ion-title><h1>Reports</h1></ion-title>
+      <h1>Reports</h1>
       <ion-searchbar class="isb" placeholder="Search Report..." showCancelButton="focus" [(ngModel)]="filterTerm" animated></ion-searchbar><br/>
        
         <!-- <ion-button class="light-Btn" (click)="generateInventoryReport()">Inventory Report</ion-button>
@@ -28,7 +28,7 @@
       </mat-form-field>
       <mat-form-field *ngIf="request == 'stock'" >
         <mat-select   [(ngModel)]="selectedProduct">
-          <mat-option  *ngFor="let product of products" [value]="product.product_ID">
+          <mat-option  *ngFor="let product of productsDropDown" [value]="product.product_ID">
             {{product.name}}
           </mat-option>
         </mat-select>

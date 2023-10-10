@@ -10,7 +10,7 @@
 <h1  class="heading">KMJ Butchery IBIS</h1>
   <mat-form-field *ngIf="showLogOut" fxLayoutAlign="end center" style="color: white;">
     <ion-icon name="person-outline"></ion-icon>
-    <mat-select #selector   (selectionChange)="IsLogOut()" [(ngModel)]="selectedValue">
+    <mat-select #selector style="max-width: 150px;"   (selectionChange)="IsLogOut()" [(ngModel)]="selectedValue">
       <mat-option *ngFor="let user of use" [value]="user.value" [routerLink]="user.route" routerLinkActive #rla="routerLinkActive">
         
         {{user.viewValue}}

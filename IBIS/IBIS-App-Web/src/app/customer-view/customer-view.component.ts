@@ -14,6 +14,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ReviewComponent } from '../review/review.component';
 import { environment } from 'src/environments/environment';
+import { MatTableDataSource } from '@angular/material/table';
+import { MatPaginator } from '@angular/material/paginator';
 
 declare let paypal:any;  
 
@@ -36,7 +38,10 @@ result:any
 data!:any
 customerOrders:any
 environment = environment
- 
+columnsSchema:any = [{key:'customerOrder_ID',name:'Customer Order ID'}, {key:'date',name:'Date'},{key:'orderStatus',name:'Order Status'},{key:'total',name:'Total'}, {key:'actions',name:''}]
+displayedColumns: any[] = this.columnsSchema.map((x:any) => x.key);
+  @ViewChild(MatPaginator) paginator!: MatPaginator
+  dataSource:MatTableDataSource<any> = new MatTableDataSource<any>();
   idtodelete :any;
   //filterTerm!: string;
   selectedStatus:any = 4
@@ -52,6 +57,7 @@ supplierOrders:any
 role:any
 permissions:any
 formGroup!: FormGroup;
+customerOrdersVm:any
 statusResults:any = [
   {
     status_ID: 1,
@@ -99,6 +105,16 @@ filteredCustomerOrders:any = of([{}])
           console.log(this.filteredCustomerOrders)
           this.filteredCustomerOrders.subscribe((res:any)=>{
       console.log(res)
+      this.customerOrdersVm = res
+      this.customerOrdersVm.forEach((element:any) => {
+        element.total = this.CalculateTotal(element.customerOrder_ID)
+        element.orderStatus = this.ReturnType(element)
+        element.date = this.ConvertDate(element.date_Created)
+
+      })
+      this.dataSource = new MatTableDataSource(this.customerOrdersVm)
+      this.dataSource.paginator = this.paginator
+      this.dataSource._updateChangeSubscription()
           })
           this.customerOrders$.subscribe((res:any)=>{
             console.log(res)
@@ -173,10 +189,18 @@ filteredCustomerOrders:any = of([{}])
   FilterOrders(){
     if(this.selectedStatus == 4){
       this.filteredCustomerOrders = of(this.customerOrders)
+      this.dataSource = new MatTableDataSource(this.customerOrders)
+      this.dataSource.paginator = this.paginator
+      this.dataSource._updateChangeSubscription()
       return
     }
     this.filteredCustomerOrders = of(this.customerOrders.filter((item:CustomerOrder)=> (item.orderStatus_ID == this.selectedStatus)))
     console.log(this.filteredCustomerOrders)
+    this.filteredCustomerOrders.subscribe((res:any)=>{
+      this.dataSource = new MatTableDataSource(res)
+      this.dataSource.paginator = this.paginator
+      this.dataSource._updateChangeSubscription()
+    })
     return
   }
   closeDialog(){
@@ -322,6 +346,8 @@ filteredCustomerOrders:any = of([{}])
       }
       
     })
+    await value
+    return value
   }
   async ReadOrders(){
     let val = new Promise((resolve:any)=>{ 

@@ -30,7 +30,7 @@ export class ViewInventoryItemComponent implements OnInit {
 this.suppliers = this.item.suppliers
   console.log(this.item)
       this.form = new FormGroup({
-        sKU: new FormControl(this.item.item.sku,Validators.required),
+        sKU: new FormControl(this.item.item.sku,),
         name: new FormControl(this.item.item.name,Validators.required),
         supplier_ID: new FormControl(this.item.item.supplier_ID,Validators.required),
         inventory_ID: new FormControl(this.item.item.inventory_ID),

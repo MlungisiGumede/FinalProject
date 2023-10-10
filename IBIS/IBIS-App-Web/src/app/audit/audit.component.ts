@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit,ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { AuditDetailsComponent } from '../audit-details/audit-details.component';
 import { UserService } from '../Services/user.service';
@@ -6,6 +6,8 @@ import { of } from 'rxjs';
 import { ModalController } from '@ionic/angular';
 import { AuditHelpComponent } from '../audit-help/audit-help.component';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { MatTableDataSource } from '@angular/material/table';
+import { MatPaginator } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-audit',
@@ -15,6 +17,10 @@ import { NgxSpinnerService } from 'ngx-spinner';
 export class AuditComponent implements OnInit {
 data:any
 filterTerm:any
+columnsSchema:any = [{key:'id',name:'Audit ID'}, {key:'name',name:'Name Of Operation'}, {key:'user',name:'UserName'},{key:'date',name:'Date'}, {key:'actions',name:''}]
+  displayedColumns: string[] = this.columnsSchema.map((x:any) => x.key);
+  @ViewChild(MatPaginator) paginator!: MatPaginator
+  dataSource:MatTableDataSource<any> = new MatTableDataSource<any>();
   constructor(public matDialog:MatDialog,
     private userService:UserService,public helpModal: ModalController,
     private spinner: NgxSpinnerService) { }
@@ -23,9 +29,14 @@ filterTerm:any
     this.spinner.show();
     this.userService.getAuditTrail().subscribe(res=>{
       console.log(res)
+      this.dataSource.data = res
+      this.dataSource.paginator = this.paginator
       this.data = of(res)
       this.spinner.hide();
     });
+  }
+  filter(event:any){
+    this.dataSource.filter = event.target.value.trim().toLowerCase();
   }
   async showHelp(){
     const modal = await this.helpModal.create({
