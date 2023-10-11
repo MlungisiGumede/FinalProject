@@ -1,17 +1,58 @@
 
+<div style="position: relative;height: 100%;width: 100%;">
+<ng-image-slider *ngIf="!isVideo" style="position: absolute;width: 100%;height: 100%;"
+#nav
+[images]="imageObject"
+[imagePopup]="false"
+[infinite]="true"
+[autoSlide]="4"
+[animationSpeed]="4"
+stopSlideOnHover="false"
+[imageSize]="{ width: '100%', height: '100%', space: 0 }"
+slideImage="1"
+></ng-image-slider>
+<div style="display: flex;justify-content: center;align-items: flex-end;z-index: 1;">
+  
+  
+ <div *ngIf="isVideo"  class="video-container" style="z-index: 1;height: 80vh;">
+  <br>
+        <video width="800"  style="z-index: 1;" controls class="sub-container">
+          <source style="z-index: 1;" src = "assets/370Demo.mp4" type="video/mp4">
+          Your browser does not support HTML5 video.
+      </video>
+      <br>
+      </div>
+
+ <div *ngIf="!isVideo" style="z-index: 1;height: 80vh;">
+      <br>
+      </div>
+</div>
+<div style="display: flex;justify-content: center;align-items: flex-end;">
+      <ion-button *ngIf="!isVideo" (click)="ToVideo();isVideo=!isVideo;" style="z-index: 10;">View Demo</ion-button>
+      <ion-button *ngIf="isVideo" (click)="isVideo=!isVideo;" style="z-index: 10;">Cancel</ion-button>
+<ion-button (click)="navigateAudit()" style="z-index: 10;">View Audit Trail</ion-button>
+<ion-button (click)="Navigate()" style="z-index: 10;">View Calendar</ion-button>
+</div>
+
+</div>
+
+
+
+
+
+
+
 
     
 
->
+<!-- >
 <div *ngIf="!request" class="advanced__background">
     <div style="text-align: center;" class="advanced__backgroundBody">
       <h1 >Welcome   <ion-icon id="helpIcon" name="help-circle" style="color:white;" (click)="showHelp()" matTooltip="Help"></ion-icon> </h1>
-      <div class="video-container">
-        <video width="800" controls class="sub-container">
-          <source src = "assets/370Demo.mp4" type="video/mp4">
-          Your browser does not support HTML5 video.
-      </video>
+     
       </div>
+</div>
+      
       
       <button *ngIf="CheckPermission(5)" (click)="request =1" class="ctrl-btn">Control Users</button>
       <button *ngIf="CheckPermission(6)" class="au-btn" (click)="navigateAudit()">View Audit trail</button>
@@ -28,7 +69,7 @@
             <ion-col>Username?...</ion-col>
             <ion-col>Role</ion-col>
             <ion-col>Email</ion-col>
-            <!-- <ion-col>Phone*</ion-col> -->
+           
             <ion-col>Permissions</ion-col>
             
             <ion-col></ion-col>
@@ -44,9 +85,7 @@
             <ion-col>
               <ion-label>{{item.email}}</ion-label>
             </ion-col>
-            <!-- <ion-col>
-              <ion-label>{{item.phone}}</ion-label>
-            </ion-col> -->
+           
             <ion-col>
               <ion-label>{{item.permissions}}</ion-label>
             </ion-col>
@@ -67,10 +106,11 @@
         </ion-grid>
         <ion-button class="light-Btn" (click)="Add()" >Add</ion-button>
         <ion-button class="light-Btn" (click)="request=false"  >Back</ion-button>
-        <!-- <ion-button class="red-Btn" (click)="generPDF()">Generate Report</ion-button> -->
-    </div>
+       
+    </div> -->
+    
   
 
    
 
-
+ -->

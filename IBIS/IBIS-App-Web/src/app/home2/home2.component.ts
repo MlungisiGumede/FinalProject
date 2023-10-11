@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit,ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { catchError, map, of, throwError } from 'rxjs';
 import { ViewUserComponent } from '../view-user/view-user.component';
@@ -8,6 +8,7 @@ import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { HomeHelpComponent } from '../home-help/home-help.component';
 import { ModalController } from '@ionic/angular';
+import { NgImageSliderComponent } from 'ng-image-slider/public_api';
 
 @Component({
   selector: 'app-home2',
@@ -20,11 +21,60 @@ data:any = of([{}])
 filterTerm!: string
 permissions:any
 role:any
+isVideo:any
+@ViewChild('nav') slider!: NgImageSliderComponent;
+imageObject = [
+  {
+    image:
+      'https://sanjayv.github.io/ng-image-slider/contents/assets/img/slider/5.jpg',
+    thumbImage:
+      'https://sanjayv.github.io/ng-image-slider/contents/assets/img/slider/5.jpg',
+    title: 'Hummingbirds are amazing creatures',
+  },
+  {
+    image:
+      'https://sanjayv.github.io/ng-image-slider/contents/assets/img/slider/9.jpg',
+    thumbImage:
+      'https://sanjayv.github.io/ng-image-slider/contents/assets/img/slider/9.jpg',
+  },
+  {
+    image:
+      'https://sanjayv.github.io/ng-image-slider/contents/assets/img/slider/4.jpg',
+    thumbImage:
+      'https://sanjayv.github.io/ng-image-slider/contents/assets/img/slider/4.jpg',
+    title: 'Example with title.',
+  },
+  {
+    image:
+      'https://sanjayv.github.io/ng-image-slider/contents/assets/img/slider/7.jpg',
+    thumbImage:
+      'https://sanjayv.github.io/ng-image-slider/contents/assets/img/slider/7.jpg',
+    title: 'Hummingbirds are amazing creatures',
+  },
+  {
+    image:
+      'https://sanjayv.github.io/ng-image-slider/contents/assets/img/slider/1.jpg',
+    thumbImage:
+      'https://sanjayv.github.io/ng-image-slider/contents/assets/img/slider/1.jpg',
+  },
+  {
+    image:
+      'https://sanjayv.github.io/ng-image-slider/contents/assets/img/slider/2.jpg',
+    thumbImage:
+      'https://sanjayv.github.io/ng-image-slider/contents/assets/img/slider/2.jpg',
+    title: 'Example two with title.',
+  },
+];
   constructor(public matDialog:MatDialog,public logInService:LoginService, public helpModal: ModalController,
     public router:Router,private _snackbar: MatSnackBar) { }
 
   ngOnInit(): void {
    this.GetUsers()
+   
+  }
+  ToVideo(){
+    this.slider.autoSlide = false
+    this.slider.stopSlideOnHover = true
   }
   async showHelp(){
     const modal = await this.helpModal.create({
