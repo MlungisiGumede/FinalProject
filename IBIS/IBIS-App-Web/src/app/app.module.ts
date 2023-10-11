@@ -96,6 +96,11 @@ import { AuditHelpComponent } from './audit-help/audit-help.component';
 import { ConfirmationComponent } from './confirmation/confirmation.component';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { MatPaginatorModule } from '@angular/material/paginator';
+//import { NgxCarouselModule } from 'ngx-carousel';
+import { NgImageSliderModule } from 'ng-image-slider';
+
+
+
 
 
 @NgModule({
@@ -187,6 +192,8 @@ import { MatPaginatorModule } from '@angular/material/paginator';
     NgxSpinnerModule,
     BrowserAnimationsModule,
     MatPaginatorModule,
+    NgImageSliderModule,
+    //NgxCarouselModule,
     //NgxSpinnerModule.forRoot({ type: 'timer' })],
     //BarcodeScannerLivestreamModule,
     MatRadioModule, //https://webartdevelopers.com/blog/pure-css-radio-button-dot-slider/ for idea of slideshow buttons....
@@ -255,7 +262,8 @@ import { MatPaginatorModule } from '@angular/material/paginator';
     MatSortModule,
     ReactiveFormsModule,
     MatExpansionModule,
-    IonicModule.forRoot()
+    IonicModule.forRoot(),
+   
 
   ],
   entryComponents: [AddCustomerComponent,ViewCustomerComponent,AddCustomerOrderComponent,
