@@ -73,7 +73,7 @@ images: LocalFile[]=[];
     this.form= this.fb.group({
       // product_ID : ['', Validators.required],
          reason : ['', Validators.required],
-        image: ['', Validators.required],
+        image: ['', ],
          quantity : ['', Validators.required],
        })
        let products:any = []

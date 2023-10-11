@@ -32,7 +32,7 @@ export class SuppliersComponent implements OnInit {
   idtodelete :any;
   id: any;
   filterTerm!: string;
-  columnsSchema:any = [{key:'supplier_ID',name:'Supplier ID'}, {key:'name',name:'SupplierName'}, {key:'address',name:'Address'},{key:'email',name:'Email'},{key:'phone',name:'Phone'}, {key:'actions',name:''}]
+  columnsSchema:any = [ {key:'name',name:'SupplierName'}, {key:'address',name:'Address'},{key:'email',name:'Email'},{key:'phone',name:'Phone'}, {key:'actions',name:''}]
   displayedColumns: string[] = this.columnsSchema.map((x:any) => x.key);
   @ViewChild(MatPaginator) paginator!: MatPaginator
   dataSource:MatTableDataSource<any> = new MatTableDataSource<any>();

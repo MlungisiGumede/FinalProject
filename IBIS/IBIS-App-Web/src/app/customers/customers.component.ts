@@ -24,7 +24,7 @@ import { MatPaginator } from '@angular/material/paginator';
 export class CustomersComponent implements OnInit {
 data:Observable<any> = new Observable();
 filterTerm!:string;
-columnsSchema:any = [{key:'customer_ID',name:'customer_ID'}, {key:'fullName',name:'Full Name'}, {key:'address',name:'Address'},{key:'email',name:'Email'},{key:'phone',name:'Phone'}, {key:'actions',name:''}]
+columnsSchema:any = [ {key:'fullName',name:'Full Name'}, {key:'address',name:'Address'},{key:'email',name:'Email'},{key:'phone',name:'Phone'}, {key:'actions',name:''}]
   displayedColumns: string[] = this.columnsSchema.map((x:any) => x.key);
 @ViewChild(MatPaginator) paginator!: MatPaginator
   dataSource:MatTableDataSource<any> = new MatTableDataSource<any>();

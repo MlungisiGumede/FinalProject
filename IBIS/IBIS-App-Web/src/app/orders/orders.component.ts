@@ -45,8 +45,8 @@ export class OrdersComponent implements OnInit {
   permissions:any
   role:any
   columnsSchema:any
-  CustomercolumnsSchema:any = [{key:'customerOrder_ID',name:'Customer Order ID'}, {key:'customerName',name:'Customer Name'}, {key:'date',name:'Date'},{key:'orderStatus',name:'Order Status'},{key:'total',name:'Total'}, {key:'actions',name:''}]
-  SuppliercolumnsSchema:any = [{key:'supplierOrder_ID',name:'Supplier Order ID'}, {key:'supplierName',name:'Supplier Name'}, {key:'date',name:'Date'},{key:'orderStatus',name:'Order Status'},{key:'total',name:'Total'}, {key:'actions',name:''}]
+  CustomercolumnsSchema:any = [ {key:'customerName',name:'Customer Name'}, {key:'date',name:'Date'},{key:'orderStatus',name:'Order Status'},{key:'total',name:'Total'}, {key:'actions',name:''}]
+  SuppliercolumnsSchema:any = [ {key:'supplierName',name:'Supplier Name'}, {key:'date',name:'Date'},{key:'orderStatus',name:'Order Status'},{key:'total',name:'Total'}, {key:'actions',name:''}]
   displayedColumns: any[] =[]
   @ViewChild(MatPaginator) paginator!: MatPaginator
   dataSource:MatTableDataSource<any> = new MatTableDataSource<any>();
@@ -134,10 +134,21 @@ export class OrdersComponent implements OnInit {
       // this.data = this.supplierOrders
     
       filter(event:any){
-        this.dataSource.filterPredicate = function (record,filter) {
-          return record.name.toLowerCase().includes(filter) || record.sku.toString().includes(filter) || record.supplierName.toLowerCase().includes(filter)
-      }
-      ;let filtervalue = event.target.value.trim().toLowerCase();
+        if(!this.isCustomerOrder){
+          this.dataSource.filterPredicate = function (record,filter) {
+            console.log(record)
+            return record.total.toString().includes(filter) || record.supplierName.toLowerCase().includes(filter) || record.orderStatus.toLowerCase().includes(filter)
+        }
+        }else{
+          console.log("hit")
+          this.dataSource.filterPredicate = function (record,filter) {
+            console.log(record)
+            return record.total.toString().includes(filter) || record.customerName.toLowerCase().includes(filter) || record.date.toString().includes(filter) || record.orderStatus.toLowerCase().includes(filter)
+          }
+        }
+     
+      let filtervalue = event.target.value.trim().toLowerCase();
+      console.log(filtervalue)
       this.dataSource.filter = filtervalue;
      }
   async ngOnInit(): Promise<void> {
@@ -605,8 +616,9 @@ if(!this.CheckPermission()){
     let tempDate = item.date_Created
     item.orderStatus_ID = id
     let array:any = []
-    let date = this.ConvertDate(item.Date_Created)
-    item.date_Created = date?.toString()
+    console.log(item)
+    //let date = this.ConvertDate(item.Date_Created)
+    //item.date_Created = date?.toString()
     if(this.isCustomerOrder){
 this.orderservice.UpdateCustomerOrderStatus(item).pipe(map(
   (res)=>{
@@ -643,14 +655,16 @@ this.ShowSnackBar("Customer order status successfully updated", "success")
       this.suppliers = result[3]
     }
   })
+  
   this.CheckOrderStatus()
 
   console.log(Response)
 })
   }else    if(!this.isCustomerOrder){
     item.orderStatus_ID = id
-    let date = this.ConvertDate(item.Date_Created)
-    item.date_Created = date?.toString()
+    //let date = this.ConvertDate(item.date_Created)
+    //console.log(date)
+    //item.date_Created = date?.toString()
     this.orderservice.UpdateSupplierOrderStatus(item).subscribe(Response => {
     
       this.orderservice.getOrders().subscribe((result:any) =>{
@@ -668,7 +682,9 @@ this.ShowSnackBar("Customer order status successfully updated", "success")
           this.suppliers = result[3]
         }
       })
-      this.CheckOrderStatus()
+      this.selectedStatus = 4
+      this.ngOnInit()
+      //this.CheckOrderStatus()
     
       console.log(Response)
     })

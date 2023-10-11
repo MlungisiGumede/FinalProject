@@ -408,16 +408,15 @@ this.ShowSnackBar('SubCategores Export Successfully Exported to Excel Check Your
           style: 'sectionHeader'
         },
         {
-            text: 'this.invoice.additionalDetails',
+            text: 'Date generated: '+this.ConvertDate(new Date()),
             margin: [0, 0 ,0, 15]          
         },
       
        
         {
             ul: [
-              'Order can be return in max 10 days.',
-              'Warrenty of the product will be subject to the manufacturer terms and conditions.',
-              'This is system generated invoice.',
+              'This is a customer dated orders report',
+              
             ],
         }
       ],

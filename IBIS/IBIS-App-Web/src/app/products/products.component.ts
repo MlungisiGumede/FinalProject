@@ -67,6 +67,7 @@ barcode: any;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   permissions:any
   role:any
+  table:any = 'products'
   isSupported = true;
   radioList:any = [{
     'id':1,
@@ -78,7 +79,7 @@ barcode: any;
   combinedData: { Name: string, Quantity: number , Price: number}[] = [];
   dataSource:MatTableDataSource<any> = new MatTableDataSource<any>();
 
-  columnsSchema:any = [{key:'product_ID',name:'Product_ID'}, {key:'name',name:'Name'}, {key:'category_ID',name:'Category'}, {key:'subCategory_ID',name:'Sub Category'}, {key:'quantity',name:'Quantity'}, {key:'price',name:'Price'}, {key:'actions',name:''}];
+  columnsSchema:any = [ {key:'name',name:'Name'}, {key:'category_ID',name:'Category'}, {key:'subCategory_ID',name:'Sub Category'}, {key:'quantity',name:'Quantity'}, {key:'price',name:'Price'}, {key:'actions',name:''}];
   //columnsSchema:any = [{key:'product_ID',name:'Product_ID'}, {key:'name',name:'Name'}, {key:'category_ID',name:'Category'}, {key:'subCategory_ID',name:'Sub Category'}, {key:'quantity',name:'Quantity'}, {key:'price',name:'Price'}];
   displayedColumns: string[] = this.columnsSchema.map((x:any) => x.key);
   constructor(private productService: ProductService,public router: Router,private toastController: ToastController

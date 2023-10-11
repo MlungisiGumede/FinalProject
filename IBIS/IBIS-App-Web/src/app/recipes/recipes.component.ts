@@ -21,7 +21,7 @@ export class RecipesComponent implements OnInit {
   isModalOpen = false;
   title = 'OpenAI Image API';
   imageUrl ='';
-  columnsSchema:any = [{key:'recipe_ID',name:'Recipe ID'}, {key:'recipe_Name',name:'Recipe Name'}, {key:'recipe_Ingredients',name:'Recipe Ingredients'}, {key:'actions',name:''}]
+  columnsSchema:any = [ {key:'recipe_Name',name:'Recipe Name'}, {key:'recipe_Ingredients',name:'Recipe Ingredients'}, {key:'actions',name:''}]
   displayedColumns: string[] = this.columnsSchema.map((x:any) => x.key);
   @ViewChild(MatPaginator) paginator!: MatPaginator
   dataSource:MatTableDataSource<any> = new MatTableDataSource<any>();

@@ -11,7 +11,7 @@
     <ion-icon id="helpIcon" name="help-circle" style="color: #002850;" (click)="showHelp()" matTooltip="Help"></ion-icon>
     <h1>{{title}}</h1>
     <ion-searchbar (keyup)="filter($event)" class="isb" placeholder="Search Products..." showCancelButton="focus" [(ngModel)]="filterTerm" animated></ion-searchbar><br/>
-    <table [formGroup]="form" mat-table #orderTable [dataSource]="dataSource" class="mat-elevation-z0">
+    <table *ngIf="table=='products'" [formGroup]="form" mat-table #orderTable [dataSource]="dataSource" class="mat-elevation-z0">
       <ng-container [matColumnDef]="col.key" *ngFor="let col of columnsSchema">
         <th mat-header-cell  *matHeaderCellDef>
           {{ col.name }}

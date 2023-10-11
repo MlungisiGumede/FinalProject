@@ -135,17 +135,29 @@ namespace IBIS_API.Controllers
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<IActionResult> DeletewriteOff(int id)
         {
+            AuditTrail audit = new AuditTrail();
             var sup = await _context.Write_Offss.FindAsync(id);
+            var product = _context.Products.Where(c => c.Product_ID == sup.Product_ID).FirstOrDefault();
             if (sup == null)
             {
                 return NotFound();
             }
-            AuditTrail audit = new AuditTrail();
+            if (sup.Adjustment_ID == 1)
+            {
+                audit.Name = "Add Write-Off";
+                product.Quantity = product.Quantity + sup.Quantity;
+            }
+            else
+            {
+                audit.Name = "Add Write-Off";
+                product.Quantity = product.Quantity - sup.Quantity;
+            }
+           
             var userClaims = User;
             var username = userClaims.FindFirstValue(ClaimTypes.Name);
             audit.User = username;
             audit.Date = DateTime.Now;
-            var product = _context.Products.Where(c => c.Product_ID == sup.Product_ID).FirstOrDefault();
+           
             var str = new { WriteOff_ID = sup.Write_Off_Id, productName = product.Name, quantity = sup.Quantity };
             audit.Description = JsonSerializer.Serialize(str);
             

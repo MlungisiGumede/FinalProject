@@ -1,4 +1,4 @@
-import { Component, OnInit,ViewChild } from '@angular/core';
+import { Component, OnInit,ViewChild,ChangeDetectorRef } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { catchError, map, of, throwError } from 'rxjs';
 import { ViewUserComponent } from '../view-user/view-user.component';
@@ -21,9 +21,10 @@ data:any = of([{}])
 filterTerm!: string
 permissions:any
 role:any
-isVideo:any
+isVideo:any = true
+sliderLoaded:any
 @ViewChild('nav') slider!: NgImageSliderComponent;
-imageObject = [
+imageObject:any = [
   {
     image:
       'https://sanjayv.github.io/ng-image-slider/contents/assets/img/slider/5.jpg',
@@ -66,15 +67,70 @@ imageObject = [
   },
 ];
   constructor(public matDialog:MatDialog,public logInService:LoginService, public helpModal: ModalController,
-    public router:Router,private _snackbar: MatSnackBar) { }
+    public router:Router,private _snackbar: MatSnackBar,private cdr: ChangeDetectorRef) { }
 
   ngOnInit(): void {
+    this.isVideo = false
+    
+    //this.slider. = false
+    
+    //this.sliderLoaded = true
+    //this.slider.autoSlide = false
+    
+    
+    //this.slider.imageAutoSlide
    this.GetUsers()
    
   }
+  ngAfterViewInit(){
+    console.log(this.slider)
+    
+    this.slider.stopSlideOnHover = false
+    this.slider.showArrow = false
+  }
   ToVideo(){
-    this.slider.autoSlide = false
-    this.slider.stopSlideOnHover = true
+   
+  
+  
+  this.slider.activeImageIndex = 0
+  //this.slider.close()
+  this.slider.imageAutoSlide
+  this.slider.lightboxClose
+  this.slider.next()
+  this.slider.next()
+  this.slider.next()
+  this.slider.next()
+  this.slider.next()
+  this.slider.next()
+  this.slider.next()
+  this.slider.autoSlideInterval = undefined
+  //this.slider.autoSlide = false
+  //this.slider.lazyLoading = false
+  this.slider.stopSlideOnHover = true
+  this.slider.sliderNextDisable = true
+  this.slider.slideImage = 0
+  this.slider.infinite = false
+  console.log(this.slider)
+  this.cdr.detectChanges()
+ //let val = [{value}]
+ //this.slider.images = val
+  //this.imageObject = val
+  //this.imageObject.push(value)
+  //this.imageObject = [...this.imageObject]
+  //this.slider.images
+
+  
+    
+   
+   
+  }
+  NotVideo(){
+    //this.slider.close()
+    this.slider.infinite = true
+    this.slider.autoSlide = true
+    //this.slider.infiniteNextImg
+    this.slider.sliderNextDisable = false
+    //this.slider.
   }
   async showHelp(){
     const modal = await this.helpModal.create({

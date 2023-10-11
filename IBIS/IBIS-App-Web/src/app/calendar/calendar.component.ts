@@ -7,6 +7,8 @@ import { LoginService } from '../Services/login.service';
 import { of } from 'rxjs';
 import { Router } from '@angular/router';
 import { CalenderHelpComponent } from '../calender-help/calender-help.component';
+import { MatSnackBar } from '@angular/material/snack-bar';
+//import { CalendarComponent } from 'ionic2-calendar/calendar';
 
 
 @Component({
@@ -49,7 +51,8 @@ export class CalendarComponent implements OnInit {
 
   constructor(private modalController: ModalController, private eventsService: EventsService,
     private changeDetectorRef: ChangeDetectorRef,private loginService: LoginService, public helpModal: ModalController,
-    public router: Router) { }
+    public router: Router,private _snackbar: MatSnackBar,
+    private cdr: ChangeDetectorRef) { }
 SetValue(e:any){
   console.log(e)
   console.log(e.target.value)
@@ -75,11 +78,22 @@ console.log(this.highlightedDates)
     await modal.present();
     modal.onDidDismiss().then((dataReturned) => {
       if(dataReturned.data){
-        alert(dataReturned)
+        //alert(dataReturned)
+        this.ngOnInit()
+        window.location.reload()
+        this.ShowSnackBar("Event Successfully Added", "success");
       }
       
     })
   }
+  ShowSnackBar(message: string, panel: string) {
+    this._snackbar.open(message, "close", {
+      duration: 5000,
+      panelClass: [panel]
+      
+    });
+  }
+
   Navigate(){
     this.router.navigate(['/home'])
   }
@@ -107,15 +121,18 @@ console.log(this.highlightedDates)
           backgroundColor: 'rgb(153, 204, 255)'
         })
       }
+
         let exists = false
        
         
       
-    
+   
     console.log(this.highlightedDates)
     
   })
+  this.cdr.detectChanges()
   })
+  
 }
 ViewEvents(){
   console.log(this.filteredEvents)

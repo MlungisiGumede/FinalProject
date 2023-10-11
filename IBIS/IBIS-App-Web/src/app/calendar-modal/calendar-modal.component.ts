@@ -31,7 +31,7 @@ export class CalendarModalComponent implements OnInit {
     };
     
     this.loginService.AddEvent(event).subscribe(res => {
-      alert("event Added")
+     
     });
     console.log('Event added:', event);
     

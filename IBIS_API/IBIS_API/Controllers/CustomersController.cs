@@ -63,9 +63,12 @@ namespace IBIS_API.Controllers
             var userClaims = User;
             var username = userClaims.FindFirstValue(ClaimTypes.Name);
             UserRoleVM uRVM = new UserRoleVM();
+            var cusFound = _context.Customers.Where(c => c.Customer_ID == cus.Customer_ID).First();
+            _context.ChangeTracker.Clear();
            // var cusOrigin = _context.Customers.Where(c => c.Customer_ID == cus.Customer_ID).FirstOrDefault();
             var user = await _userManager.FindByEmailAsync(cus.Email);
-            if(user != null)
+            
+            if(user != null && user.Email == cus.Email && cusFound.Email != cus.Email)
             {
                 return BadRequest("Email already exist for another user");
             }

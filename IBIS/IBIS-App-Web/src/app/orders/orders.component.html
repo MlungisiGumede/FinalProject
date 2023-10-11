@@ -4,7 +4,7 @@
     <h1>{{title}}</h1>
     <button (click)="ToCustomer()" >Customer Orders</button>
     <button (click)="ToSupplier()">Supplier Orders</button>
-    <ion-searchbar class="isb" placeholder="Search Orders..." showCancelButton="focus" [(ngModel)]="filterTerm" animated></ion-searchbar><br/>
+    <ion-searchbar class="isb" placeholder="Search Orders..." showCancelButton="focus" (keyup)="filter($event)" animated></ion-searchbar><br/>
     <mat-form-field style="float: right;"  >
       <mat-label>Select Orders</mat-label>
       <mat-select (selectionChange)="CheckOrderStatus()" [(ngModel)]="selectedStatus"  >
@@ -51,7 +51,7 @@
                   <div *ngSwitchCase="3">
                     <mat-icon  class="light-Btn"  *ngIf="!item.transaction_ID && permissions" (click)="delete(item)" matTooltip="delete">delete</mat-icon>
                     <mat-icon class="red-Btn" (click)="View(item)" matTooltip="edit">edit</mat-icon>
-                    <mat-icon *ngIf="permissions" class="red-Btn" id="1" (click)="UpdateOrderStatus(item,3)" matTooltip="cancel">cancel</mat-icon>
+                    <mat-icon *ngIf="CheckPermission()" class="light-Btn" (click)="UpdateOrderStatus(item,2)" matTooltip="check">check</mat-icon>
                   <mat-icon *ngIf="permissions" class="light-Btn" id="1" (click)="UpdateOrderStatus(item,1)" matTooltip="pending">pending</mat-icon>
                  
                   
