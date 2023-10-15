@@ -1,6 +1,6 @@
 <ion-content>
 <h1>Inventories</h1>
-<ion-searchbar (keyup)="filter($event)" class="isb" placeholder="Search Products..." showCancelButton="focus" [(ngModel)]="filterTerm" animated></ion-searchbar><br/>
+<ion-searchbar (keyup)="filter($event)" class="isb" placeholder="Search Inventories..." showCancelButton="focus" [(ngModel)]="filterTerm" animated></ion-searchbar><br/>
     <table mat-table #orderTable [dataSource]="dataSource" class="mat-elevation-z0">
       <ng-container [matColumnDef]="col.key" *ngFor="let col of columnsSchema">
         <th mat-header-cell  *matHeaderCellDef>

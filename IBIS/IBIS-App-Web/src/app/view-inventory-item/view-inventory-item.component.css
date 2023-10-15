@@ -7,7 +7,7 @@
   
 }
 body{
-  height: 100vh;
+ 
   display: flex;
   justify-content: center;
   align-items: center;
@@ -32,7 +32,7 @@ mat-select{
   font-size: 25px;
   font-weight: 500;
   position: relative;
-  color: yellow;
+  color: white
 }
 .container .title::before{
   content: "";

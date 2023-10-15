@@ -45,8 +45,8 @@ export class OrdersComponent implements OnInit {
   permissions:any
   role:any
   columnsSchema:any
-  CustomercolumnsSchema:any = [ {key:'customerName',name:'Customer Name'}, {key:'date',name:'Date'},{key:'orderStatus',name:'Order Status'},{key:'total',name:'Total'}, {key:'actions',name:''}]
-  SuppliercolumnsSchema:any = [ {key:'supplierName',name:'Supplier Name'}, {key:'date',name:'Date'},{key:'orderStatus',name:'Order Status'},{key:'total',name:'Total'}, {key:'actions',name:''}]
+  CustomercolumnsSchema:any = [{key:'customerOrder_ID',name:'Customer Order ID'}, {key:'customerName',name:'Customer Name'}, {key:'date',name:'Date'},{key:'orderStatus',name:'Order Status'},{key:'total',name:'Total'}, {key:'actions',name:''}]
+  SuppliercolumnsSchema:any = [{key:'supplierOrder_ID',name:'Supplier Order ID'}, {key:'supplierName',name:'Supplier Name'}, {key:'date',name:'Date'},{key:'orderStatus',name:'Order Status'},{key:'total',name:'Total'}, {key:'actions',name:''}]
   displayedColumns: any[] =[]
   @ViewChild(MatPaginator) paginator!: MatPaginator
   dataSource:MatTableDataSource<any> = new MatTableDataSource<any>();

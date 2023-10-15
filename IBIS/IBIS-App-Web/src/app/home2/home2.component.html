@@ -1,19 +1,28 @@
 
 <div style="position: relative;height: 100%;width: 100%;">
-<ng-image-slider style="position: absolute;width: 100%;height: 100%;"
+<ng-image-slider *ngIf="enabled" style="position: absolute;width: 100%;height: 100%;"
 #nav
 [images]="imageObject"
 [imagePopup]="false"
-[infinite]="true"
+[infinite]="false"
 [autoSlide]="1"
 [animationSpeed]="4"
+[imageSize]="{ width: '100%', height: '100%', space: 5 }"
+slideImage="1"
+></ng-image-slider>
+<ng-image-slider *ngIf="!enabled" style="position: absolute;width: 100%;height: 100%;"
+#nav
+[images]="imageObject2"
+[imagePopup]="false"
+[infinite]="false"
+[animationSpeed]="3"
 [imageSize]="{ width: '100%', height: '100%', space: 0 }"
 slideImage="1"
 ></ng-image-slider>
 <div style="display: flex;justify-content: center;align-items: flex-end;z-index: 1;">
   
   
- <div *ngIf="isVideo"  class="video-container" style="z-index: 1;height: 80vh;">
+ <div *ngIf="isVideo"  class="video-container" style="z-index: 1;height: 80vh;display: flex;align-items: flex-end;">
   <br>
         <video width="800"  style="z-index: 1;" controls class="sub-container">
           <source style="z-index: 1;" src = "assets/370Demo.mp4" type="video/mp4">
@@ -28,7 +37,7 @@ slideImage="1"
 </div>
 <div style="display: flex;justify-content: center;align-items: flex-end;">
       <ion-button *ngIf="!isVideo" (click)="ToVideo();isVideo=!isVideo;" style="z-index: 10;">View Demo</ion-button>
-      <ion-button *ngIf="isVideo" (click)="isVideo=!isVideo;" style="z-index: 10;">Cancel</ion-button>
+         <!-- <ion-button *ngIf="isVideo" (click)="isVideo=!isVideo;" style="z-index: 10;">Cancel</ion-button>  -->
 <ion-button (click)="navigateAudit()" style="z-index: 10;">View Audit Trail</ion-button>
 <ion-button (click)="Navigate()" style="z-index: 10;">View Calendar</ion-button>
 </div>

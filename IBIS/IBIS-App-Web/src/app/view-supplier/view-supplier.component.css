@@ -6,7 +6,7 @@
   font-family: 'Poppins',sans-serif;
 }
 body{
-  height: 100vh;
+ 
   display: flex;
   justify-content: center;
   align-items: center;
@@ -16,7 +16,7 @@ body{
 .container{
   max-width: 700px;
   width: 100%;
-  background-color: #FFD700;
+  background-color: black;
   padding: 25px 30px;
   border-radius: 5px;
   box-shadow: 0 5px 10px rgba(0,0,0,0.15);
@@ -25,6 +25,7 @@ body{
   font-size: 25px;
   font-weight: 500;
   position: relative;
+  color: white;
 }
 .container .title::before{
   content: "";
@@ -116,6 +117,9 @@ form .input-box span.details{
    transition: all 0.3s ease;
    background-color: black;
  }
+ span{
+  color: gray;
+}
  form .button input:hover{
   /* transform: scale(0.99); */
   background: linear-gradient(-135deg, #71b7e6, #9b59b6);
@@ -124,6 +128,7 @@ form .input-box span.details{
  .container{
   max-width: 100%;
 }
+
 form .user-details .input-box{
     margin-bottom: 15px;
     width: 100%;

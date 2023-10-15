@@ -12,6 +12,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { ViewImageComponent } from '../view-image/view-image.component';
 import { Observable, of } from 'rxjs';
 import { DatePipe } from '@angular/common';
+import { TOUCH_BUFFER_MS } from '@angular/cdk/a11y/input-modality/input-modality-detector';
+import { MatPaginator } from '@angular/material/paginator';
 
 var pdfMake = require('pdfmake/build/pdfmake');
 var pdfFonts = require('pdfmake/build/vfs_fonts');
@@ -30,6 +32,11 @@ export class ViewWriteOffsComponent implements OnInit {
   idtodelete :any;
   filterTerm!: string;
   reportData:any
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  columnsSchema:any = [{key:'image',name:'Image'},{key:'productName',name:'Product Name'},{key:'quantity',name:'Quantity'},{key:'reason',name:'Transaction Type'},  {key:'actions',name:''}];
+  //columnsSchema:any = [{key:'product_ID',name:'Product_ID'}, {key:'name',name:'Name'}, {key:'category_ID',name:'Category'}, {key:'subCategory_ID',name:'Sub Category'}, {key:'quantity',name:'Quantity'}, {key:'price',name:'Price'}];
+  displayedColumns: string[] = this.columnsSchema.map((x:any) => x.key);
+  dataSource:MatTableDataSource<any> = new MatTableDataSource<any>();
   
   constructor(private writeOffService: WriteOffService,public router: Router,private domSanitizer:DomSanitizer
     ,private ActivatedRoute: ActivatedRoute,public matDialog: MatDialog,
@@ -39,27 +46,53 @@ export class ViewWriteOffsComponent implements OnInit {
     writeOffService = {} as WriteOffService;
 
   }
+  filter(event:any){
+    this.dataSource.filterPredicate = function (record,filter) {
+      return record.quantity.toString().includes(filter) || record.productName.toLowerCase().includes(filter) || record.reason.toLowerCase().includes(filter);
+  }
+  ;let filtervalue = event.target.value.trim().toLowerCase();
+  this.dataSource.filter = filtervalue;
+ }
 
   ngOnInit() {
     this.ActivatedRoute.params.subscribe(params => {
       console.log("on loaded page")
-      this.getWriteOffs()
+      this.getProducts().then(response => {
+        this.getWriteOffs()
+      })
+      
      // this.user.password = params['user'].password
     
   })
-    this.getProducts()
+   
   }
-  getProducts(){
-    this.productService.getProductList().subscribe(response => {
+  async getProducts(){
+    let value = new Promise((resolve, reject) => {
+          this.productService.getProductList().subscribe(response => {
       console.log(response);
       this.products = response;
+      resolve(response);
+    }),((error:any) => {
+      reject(error);
     })
+    })
+await value
+return value
   }
 
   async getWriteOffs(){
     this.writeOffService.getWriteOffList().subscribe(response => {
       console.log(response);
+      let writeOffVm:any = response;
+      writeOffVm.forEach((element:any) => {
+        element.productName = this.GetProductName(element.product_ID)
+      });
+      //writeOffVm.productName = this.GetProductName(response.product_ID)
       this.data = of(response);
+      this.dataSource = new MatTableDataSource(writeOffVm)
+      this.dataSource.paginator = this.paginator
+      this.dataSource._updateChangeSubscription()
+
       this.reportData = response;
     })
     
@@ -68,8 +101,8 @@ export class ViewWriteOffsComponent implements OnInit {
   ViewImage(element:any){
 const dialog = this.matDialog.open(ViewImageComponent, {
   data: element,
-  height: '500px',
-  width: '500px',
+  // height: '500px',
+  // width: '500px',
 });
   }
   GetProductName(id:any){
@@ -337,7 +370,7 @@ this.getWriteOffs();
       //pdfMake.createPdf(docDefinition).print();      
    
       pdfMake.createPdf(docDefinition).open();      
-   
+   this.getWriteOffs()
      
    
 

@@ -135,6 +135,7 @@ constructor(private loginService : LoginService, public router: Router,
     }
    
   if(this.selectedValue == 'user-2'){
+    this.loginService.isVideo.next(false)
     localStorage.removeItem('Token')
     //localStorage.removeItem('OTP')
     this.showNavigation = false

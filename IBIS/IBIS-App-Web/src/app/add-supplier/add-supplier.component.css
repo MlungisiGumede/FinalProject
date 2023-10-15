@@ -6,7 +6,7 @@
   font-family: 'Poppins',sans-serif;
 }
 body{
-  height: 56vh;
+ 
   display: flex;
   justify-content: center;
   align-items: center;
@@ -29,7 +29,7 @@ body{
   font-size: 25px;
   font-weight: 500;
   position: relative;
-  color: yellow;
+  color: white;
   padding-left: 25px;
   margin-bottom: 20px;
   padding-top: 10px;

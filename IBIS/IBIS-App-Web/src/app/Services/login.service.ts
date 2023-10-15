@@ -14,7 +14,7 @@ export class LoginService  {
 
   private loginstate: BehaviorSubject<boolean>;
    public user:any = new BehaviorSubject<any>(null)
-
+public isVideo = new BehaviorSubject<boolean>(false);
 
 //const headers
 

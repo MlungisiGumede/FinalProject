@@ -1,6 +1,6 @@
-import { Component, OnInit,ViewChild,ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit,ViewChild,ChangeDetectorRef, HostListener } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { catchError, map, of, throwError } from 'rxjs';
+import { catchError, map, mergeMap, of, throwError, timer } from 'rxjs';
 import { ViewUserComponent } from '../view-user/view-user.component';
 import { LoginService } from '../Services/login.service';
 import { AddUserComponent } from '../add-user/add-user.component';
@@ -23,7 +23,11 @@ permissions:any
 role:any
 isVideo:any = true
 sliderLoaded:any
-@ViewChild('nav') slider!: NgImageSliderComponent;
+infinite:any = true
+enabled:any = true
+count:any = 0
+timer:any
+@ViewChild('nav',{static:false}) slider!: NgImageSliderComponent;
 imageObject:any = [
   {
     image:
@@ -66,6 +70,15 @@ imageObject:any = [
     title: 'Example two with title.',
   },
 ];
+imageObject2:any = [
+  {
+    image:
+      './assets/butchery.jpg',
+    thumbImage:
+      './assets/butchery.jpg',
+    
+  }
+]
   constructor(public matDialog:MatDialog,public logInService:LoginService, public helpModal: ModalController,
     public router:Router,private _snackbar: MatSnackBar,private cdr: ChangeDetectorRef) { }
 
@@ -87,49 +100,140 @@ imageObject:any = [
     
     this.slider.stopSlideOnHover = false
     this.slider.showArrow = false
+    this.slider.infinite = false
+    //this.slider.manageImageRatio = true
+    //this.slider.
+    this.slider.ngAfterViewInit()
+    let val = this.logInService.isVideo.subscribe((result:any)=>{
+      this.isVideo = result
+      console.log(result)
+      if(result){
+        this.ToVideo()
+      }else{
+        this.NotVideo()
+      }
+    })
+   
+   
   }
   ToVideo(){
+   this.slider.showArrow = true
+   this.slider.infinite = false
+  
+  this.timer.unsubscribe()
+  setTimeout( ()=> {
+    this.logInService.isVideo.subscribe((result:any)=>{
+      console.log(result)
+      if(!result){
+        this.logInService.isVideo.next(true)
+      }
+    })
    
-  
-  
-  this.slider.activeImageIndex = 0
-  //this.slider.close()
-  this.slider.imageAutoSlide
-  this.slider.lightboxClose
-  this.slider.next()
-  this.slider.next()
-  this.slider.next()
-  this.slider.next()
-  this.slider.next()
-  this.slider.next()
-  this.slider.next()
-  this.slider.autoSlideInterval = undefined
-  //this.slider.autoSlide = false
-  //this.slider.lazyLoading = false
-  this.slider.stopSlideOnHover = true
-  this.slider.sliderNextDisable = true
-  this.slider.slideImage = 0
-  this.slider.infinite = false
-  console.log(this.slider)
-  this.cdr.detectChanges()
- //let val = [{value}]
- //this.slider.images = val
-  //this.imageObject = val
-  //this.imageObject.push(value)
-  //this.imageObject = [...this.imageObject]
-  //this.slider.images
+}, 0 );
+  this.slider.animationSpeed = 1
+  //this.slider.
+  //this.slider.sliderNextDisable = true
+ 
+// this.slider.animationSpeed = 5
+// //this.slider.slideImage = 1
+// this.slider.infinite = false
+// this.slider.sliderNextDisable = true
+// this.slider.stopSlideOnHover = true
+// //this.slider.autoSlideCount = 5
+// this.slider.showArrow = true
+//  console.log(this.slider.autoSlideCount)
+//  //this.slider.close()
+//  console.log(this.slider.imageClick)
 
+//  console.log(this.slider.activeImageIndex)
+//  //console.log(this.slider.)
+//  //this.slider.next()
+// this.imageObject[5].image =   'https://sanjayv.github.io/ng-image-slider/contents/assets/img/slider/7.jpg'
+// this.imageObject[5].thumbImage =   'https://sanjayv.github.io/ng-image-slider/contents/assets/img/slider/7.jpg'
+// //this.imageObject[5].title = 'Thanks For watching'
+// this.imageObject[4].image =   'https://sanjayv.github.io/ng-image-slider/contents/assets/img/slider/7.jpg'
+// //this.imageObject[4].title = 'Thanks For watching'
+// this.imageObject[4].thumbImage =   'https://sanjayv.github.io/ng-image-slider/contents/assets/img/slider/7.jpg'
+// //this.imageObject[3].title = 'Thanks For watching'
+// this.imageObject[3].image =   'https://sanjayv.github.io/ng-image-slider/contents/assets/img/slider/7.jpg'
+// this.imageObject[3].thumbImage =   'https://sanjayv.github.io/ng-image-slider/contents/assets/img/slider/7.jpg'
+// this.imageObject[2].image =   'https://sanjayv.github.io/ng-image-slider/contents/assets/img/slider/7.jpg'
+// //this.imageObject[2].title = 'Thanks For watching'
+// this.imageObject[2].thumbImage =   'https://sanjayv.github.io/ng-image-slider/contents/assets/img/slider/7.jpg'
+// this.imageObject[1].image =   'https://sanjayv.github.io/ng-image-slider/contents/assets/img/slider/7.jpg'
+// this.imageObject[1].thumbImage =   'https://sanjayv.github.io/ng-image-slider/contents/assets/img/slider/7.jpg'
+
+// this.imageObject[0].image =   'https://sanjayv.github.io/ng-image-slider/contents/assets/img/slider/7.jpg'
+// this.imageObject[0].thumbImage =   'https://sanjayv.github.io/ng-image-slider/contents/assets/img/slider/7.jpg'
+// //this.slider.setSliderImages(this.imageObject)
+// //this.slider.slideImage = 6
+// //this.slider.sliderOrderType = 'DESC'
+// if(this.slider.activeImageIndex == -1){
+//   this.slider.slideImage = 6
+//  }else{
+//   this.slider.slideImage = 6
+//  }
+//  if(this.slider.activeImageIndex == -1){
+//   this.slider.slideImage = 6
+//  }else{
+//   this.slider.slideImage = 6
+//  }
+
+//  if(this.slider.activeImageIndex == -1){
+//   this.slider.slideImage = 6
+//  }else{
+//   this.slider.slideImage = 6
+//  }
+//  if(this.slider.activeImageIndex == -1){
+//   this.slider.slideImage = 6
+//  }else{
+//   this.slider.slideImage = 6
+//  }
+ 
+//this.enabled = false
+  //this.slider.setSliderImages(imageObj)
   
-    
    
    
   }
+  @HostListener('window:resize', ['$event'])
+onResize(event:any) {
+  this.timer.unsubscribe()
+  //this.logInService.isVideo.next(true)
+  this.slider.handleKeyboardEvent(event)
+  //this.slider.setSlid 1erWidth()
+  this.slider.showArrow = true
+  this.slider.infinite = false
+  //this.slider.sw
+  this.slider.animationSpeed = 1
+ this.slider.imageSize = {'width':event.target.outerWidth}
+  this.slider.sliderImageWidth = event.target.outerWidth
+  this.slider.sliderImageReceivedWidth = event.target.outerWidth
+  this.slider.sliderImageSizeWithPadding = 0
+  this.slider.autoSlide = false
+  this.slider.sliderNextDisable = true
+  this.slider.sliderPrevDisable = true
+  this.slider.stopSlideOnHover = true
+}
+@HostListener('touchend', ['$event']) onSwipeEnd($event:any) {
+ alert("swipe")
+}
   NotVideo(){
+    const reloadInterval = 960;
+
+    
+    this.timer = timer(0, reloadInterval).pipe(
+       mergeMap(_ => of(this.slider.next()))
+     ).subscribe(()=>{
+       this.count++
+   if(this.count == 2){
+     this.slider.infinite = true
+   }
+     })
+    //this.timer.subscribe()
     //this.slider.close()
-    this.slider.infinite = true
-    this.slider.autoSlide = true
-    //this.slider.infiniteNextImg
-    this.slider.sliderNextDisable = false
+    //this.enabled = true
+    //this.slider.ngAfterViewInit()
     //this.slider.
   }
   async showHelp(){
