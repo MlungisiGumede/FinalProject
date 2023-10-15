@@ -1,0 +1,13 @@
+.mat-column-product_ID{
+    width: 40% !important;
+}
+.mat-column-price{
+   
+    width: 20% !important;
+}
+.mat-column-quantity{
+    width: 20% !important;
+}
+.mat-column-total{
+    width: 20% !important;
+}
