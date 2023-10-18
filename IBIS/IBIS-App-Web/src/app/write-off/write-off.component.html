@@ -9,7 +9,7 @@
       <th class="thead">Subcategory</th>
       <th class="thead">Price per category</th>
       <th class="thead">Quantity</th>
-      <th class="thead">Expiry Date</th>
+      
     </tr>
    <tr  class="row"  *ngFor="let item of data | async">
          <td>{{item.product_ID}}</td>
@@ -18,7 +18,7 @@
     <td>{{GetSubCategoryName(item.subCategory_ID)}}</td>
     <td>{{item.price}}</td>
     <td>{{item.quantity}}</td>
-    <td>{{item.expiry}}</td>
+    
     </tr>
 </table> 
 
