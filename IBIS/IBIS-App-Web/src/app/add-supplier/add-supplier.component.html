@@ -42,9 +42,14 @@
           </div>
           
          </div>
-         <div class="button">
-           <ion-button type="submit" (click)="AddSupplier()" class="submitButton" [disabled]="!form.valid">Submit<ion-ripple-effect></ion-ripple-effect></ion-button>
+
+         <div class="button" style="display: flex;justify-content: center;">
+          <div></div>
+          <input style="background-color: green;width: 100%;" type="submit" value="Submit" (click)="AddSupplier()">
          </div>
+        
+         
+         
        </form>
      </div>
     </div>

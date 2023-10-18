@@ -78,7 +78,7 @@ onSubmit(){
         console.log(res)
         localStorage.setItem('emailToken',JSON.stringify(res))
         
-        this.ShowSnackBar("User successfully registered", "success")
+        this.ShowSnackBar("success:Confirm your account to get started", "success")
         //alert(res.message)
        
       //this.router.navigate(['/'])

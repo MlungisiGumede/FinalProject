@@ -44,7 +44,7 @@ images: LocalFile[]=[];
   pic: any;
   datawr:any;
   image:any
-  fileName:any = "required"
+  fileName:any = "optional"
   uploadFile:any
   categories:any
   subCategories:any
@@ -129,7 +129,7 @@ this.data = of(products)
      this.form= this.fb.group({
       // product_ID : ['', Validators.required],
          reason : ['', Validators.required],
-        image: ['', Validators.required],
+        image: ['', ],
          quantity : ['', [Validators.required,Validators.max(res.quantity)]],
        })
       this.quantity = res.quantity

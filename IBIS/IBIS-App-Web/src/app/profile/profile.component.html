@@ -17,8 +17,9 @@
  
   <div  class="contents">
     
-    <ion-title><h1 style="padding-left: 275px;">Welcome </h1></ion-title>
-    <ion-title><h1  style="padding-left: 350px;">View Business Profile</h1></ion-title>
+    <!-- <ion-title><h1 style="padding-left: 275px;">Welcome </h1></ion-title> -->
+   <ion-title><h1 style="padding-left: 275px;">Welcome To The Profile Screen</h1></ion-title>
+     <!-- <h1  style="padding-left: 350px;">View Business Profile</h1> -->
       <ion-grid class="ion-margin" class="ion-grid-padding">
         <ion-row >
          
@@ -55,7 +56,7 @@
 
             <!-- <ion-button *ngIf="request"   class="green-Btn" (click)="PostFile()" >Confirm  Upload</ion-button>
             <ion-button *ngIf="request"  class="green-Btn" (click)="fileName=undefined;request=undefined" >Cancel</ion-button> -->
-            <ion-button style="margin-left: 250px;" *ngIf="role != 'guest'"   class="green-Btn" (click)="fileUpload.click()" >Upload Business Brochure?</ion-button>
+            <ion-button style="margin-left: 250px;" *ngIf="role != 'guest'"   class="green-Btn" (click)="fileUpload.click()" >Upload Business Brochure</ion-button>
             <ion-button *ngIf="role != 'guest'"   class="green-Btn" (click)="imageUpload.click()" >Upload Profile Picture</ion-button>
             <ion-button  class="green-Btn" (click)="Download()">Download Brochure</ion-button>
 

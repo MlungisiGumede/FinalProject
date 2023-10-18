@@ -6,7 +6,7 @@
   font-family: 'Poppins',sans-serif;
 }
 body{
-  height: 64vh;
+  
   display: flex;
   justify-content: center;
   align-items: center;
@@ -26,7 +26,7 @@ mat-select{
 
 
 .container{
-  max-width: 700px;
+  
   width: 100%;
   background-color: black;
   border: yellow 2px;
@@ -38,7 +38,7 @@ mat-select{
   font-size: 25px;
   font-weight: 500;
   position: relative;
-  color: yellow;
+  color: white;
 }
 .container .title::before{
   content: "";
@@ -86,6 +86,7 @@ form .input-box span.details{
 .user-details .input-box input:valid{
   border-color: #9b59b6;
 }
+
  form .gender-details .gender-title{
   font-size: 20px;
   font-weight: 500;
@@ -222,5 +223,6 @@ background-color: white;
   border-radius: 10px;
   border-color: #9b59b6;
   width: 4.8cm;
-  margin-left: 4%;
+   margin-left: 8%;
+  width: 250px;
 }

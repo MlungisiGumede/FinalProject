@@ -168,7 +168,9 @@ this.getInventory();
     //this.router.navigate(['/add-inventory-item']);
     
       const dialogRef = this.matDialog.open(AddInventoryItemComponent,{
-        data:this.suppliers
+        data:this.suppliers,
+        width:'500px',
+        height:'500px',
       })
       dialogRef.afterClosed().subscribe(result => {
         if(result){

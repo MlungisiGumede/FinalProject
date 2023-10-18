@@ -42,7 +42,7 @@
     <input type="file" id="file" style="display: none;" accept="image/*" formControlName="image" (change)="FileChoice($event);SetFileName($event)"  #fileUpload/>
     <br>
     
-    <ion-button (click)="fileUpload.click()" >Upload image (optional)</ion-button>
+    <ion-button (click)="fileUpload.click()" >Upload image</ion-button>
     
     <span style="color: white;"> {{fileName}}</span>
   </label>

@@ -13,8 +13,8 @@
            <input   type="text" placeholder="Name" formControlName="name">
          </div>
          <div class="input-box">
-         <span class="details">Supplier Name</span>
-         <mat-select formControlName="supplier_ID"   >
+         <span  class="details">Supplier Name</span>
+         <mat-select style="background-color: white;width: 100%;" formControlName="supplier_ID"   >
           <mat-option *ngFor="let supplier of suppliers" [value]="supplier.supplier_ID">
             {{supplier.name}}
           </mat-option>
@@ -22,7 +22,7 @@
       </div>
        <div class="buttondiv">
        <div class="button">
-         <input type="submit" value="Update" (click)="update()" [routerLink]="['/Inventory']" >
+         <input type="submit" style="background-color: green;" class="submitButton" value="Update" (click)="update()" [routerLink]="['/Inventory']" >
         </div>
       </div>
        </div>

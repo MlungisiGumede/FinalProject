@@ -10,32 +10,26 @@
              <input  type="text" placeholder="SKU" formControlName="sku">
            </div> -->
 
+         
            <div class="input-box">
-            <span class="details">SKU is optional</span>
-            <ion-input type="text" placeholder="SKU" formControlName="sku" class="price-box"></ion-input>
-            <!-- <ion-note class="error-message" *ngIf="form.get('sku')?.hasError('required')">
-              An inventory SKU is.
-            </ion-note> -->
+            <span class="details">Inventoty SKU (optional)</span>
+            <input  type="text" placeholder="SKU" formControlName="sKU">
           </div>
-
-           <div class="input-box">
-             <span class="details">Inventory Name</span>
-             <ion-input type="text" placeholder="Inventory Name" formControlName="name" class="price-box"></ion-input>
-            <ion-note class="error-message" *ngIf="form.get('name')?.hasError('required')">
-              An inventory name is required.
-            </ion-note>
-           </div>
+          <div class="input-box">
+            <span class="details">Inventory Name</span>
+            <input   type="text" placeholder="Name" formControlName="name">
+          </div>
            
-           <mat-form-field class="drop-down-sub2">
-            <mat-label>Select Supplier</mat-label>
-            <mat-select formControlName="supplier_ID" style="background-color: white;" >
-              <mat-option *ngFor="let supplier of suppliers" [value]="supplier.supplier_ID">
-                {{supplier.name}}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
-          
-          <ion-button type="submit" (click)="createInventory()" class="submitButton" [disabled]="!form.valid">Add Item<ion-ripple-effect></ion-ripple-effect></ion-button>
+           <div class="input-box">
+            <span  class="details">Supplier Name</span>
+            <mat-select style="background-color: white;" formControlName="supplier_ID"   >
+             <mat-option *ngFor="let supplier of suppliers" [value]="supplier.supplier_ID">
+               {{supplier.name}}
+             </mat-option>
+           </mat-select>
+         </div>
+          <br>
+          <ion-button type="submit" style="background-color: green;" (click)="createInventory()" class="submitButton" [disabled]="!form.valid">Add Item</ion-button>
          <!-- <div class="buttondiv">
          <div class="button">
            <input type="submit" value="Add Item" (click)="createInventory()" >

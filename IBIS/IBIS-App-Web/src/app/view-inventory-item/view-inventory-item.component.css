@@ -4,23 +4,29 @@
   padding: 0;
   box-sizing: border-box;
   font-family: 'Poppins',sans-serif;
-  
 }
 body{
- 
+  
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 10px;
-  background: grey;
+  background: white;
 }
+
 mat-select{
   height: 40px;
   width: 160px;
-  background-color: white;
+  border-radius: 5px;
 }
+/* mat-form-field{
+  height: 100px;
+  width: 300px;
+} */
+
+
 .container{
-  max-width: 700px;
+  
   width: 100%;
   background-color: black;
   border: yellow 2px;
@@ -32,7 +38,7 @@ mat-select{
   font-size: 25px;
   font-weight: 500;
   position: relative;
-  color: white
+  color: white;
 }
 .container .title::before{
   content: "";
@@ -46,10 +52,14 @@ mat-select{
 }
 .content form .user-details{
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
+   flex-wrap: wrap;
   justify-content: space-between;
   margin: 20px 0 12px 0;
-  color: yellow;
+  color: white;
+}
+span{
+  color: white;
 }
 form .user-details .input-box{
   margin-bottom: 15px;
@@ -62,7 +72,8 @@ form .input-box span.details{
 }
 .user-details .input-box input{
   height: 45px;
-  width: 100%;
+  width: 250px;
+  /* width: 100%; */
   outline: none;
   font-size: 16px;
   border-radius: 5px;
@@ -74,6 +85,10 @@ form .input-box span.details{
 .user-details .input-box input:focus,
 .user-details .input-box input:valid{
   border-color: #9b59b6;
+}
+ion-input{
+  width: 250px !important;
+  margin-left: 0px;
 }
  form .gender-details .gender-title{
   font-size: 20px;
@@ -99,7 +114,15 @@ form .input-box span.details{
   border: 5px solid transparent;
   transition: all 0.3s ease;
 }
-
+ #dot-1:checked ~ .category label .one,
+ #dot-2:checked ~ .category label .two,
+ #dot-3:checked ~ .category label .three{
+   background: #9b59b6;
+   border-color: #d9d9d9;
+ }
+ form input[type="radio"]{
+   display: none;
+ }
  form .button{
    height: 45px;
    margin: 35px 0;
@@ -110,13 +133,13 @@ form .input-box span.details{
 
  .input-box{
 
-color: grey;
+color: black;
 
  }
 
  .buttondiv{
 
-    display: grid;
+    display: inline-block;
     grid-template-columns: 1fr 1fr;
     grid-gap: 10px;
 
@@ -134,7 +157,24 @@ color: grey;
    cursor: pointer;
    transition: all 0.3s ease;
    background: yellow;
+   display: flex;
+    margin-left: 0%;
  }
+
+ form .submitButton {
+  height: 1cm;
+  width: 2.5cm;
+  display: block;
+  margin-right: 10px;
+  margin: 0 auto;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center; 
+  color:green;
+  margin-left: 25%;
+ }
+
  form .button input:hover{
   /* transform: scale(0.99); */
   background: linear-gradient(-135deg, #71b7e6, #9b59b6);
@@ -163,4 +203,29 @@ form .user-details .input-box{
   .container .content .category{
     flex-direction: column;
   }
+}
+
+.error-message {
+  color: red;
+  font-size: 12px;
+  margin-top: 5px;
+  margin-left: 25px;
+}
+
+.price-box{
+background-color: white;
+  border-radius: 10px;
+  border-color: #9b59b6;
+  width: 60%;
+  color: black; 
+  margin-left: 25px;
+  font-size: 18px;
+}  
+.drop-down-sub2{
+  background-color: white;
+  border-radius: 10px;
+  border-color: #9b59b6;
+  width: 4.8cm;
+   margin-left: 8%;
+  width: 250px;
 }

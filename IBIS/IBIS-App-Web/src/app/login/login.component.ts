@@ -99,7 +99,9 @@ console.log(val)
        
       },
       error:(err:any) =>{
-        
+        if(err.status == 400){
+          this.ShowSnackBar("User account hasn't been confirmed", 'error')
+        }
         //alert(err?.error.message)
         console.log(err)
         this.ShowSnackBar("Login failed", 'error')
