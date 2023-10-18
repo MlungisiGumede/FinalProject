@@ -31,44 +31,38 @@ timer:any
 imageObject:any = [
   {
     image:
-      'https://sanjayv.github.io/ng-image-slider/contents/assets/img/slider/5.jpg',
+      'assets/slide1.jpg',
     thumbImage:
-      'https://sanjayv.github.io/ng-image-slider/contents/assets/img/slider/5.jpg',
-    title: 'Hummingbirds are amazing creatures',
+      'assets/slide1.jpg',
+    title: '',
   },
   {
     image:
-      'https://sanjayv.github.io/ng-image-slider/contents/assets/img/slider/9.jpg',
+      'assets/slide2.jpg',
     thumbImage:
-      'https://sanjayv.github.io/ng-image-slider/contents/assets/img/slider/9.jpg',
+      'assets/slide2.jpg',
   },
   {
     image:
-      'https://sanjayv.github.io/ng-image-slider/contents/assets/img/slider/4.jpg',
+      'assets/slide3.jpg',
     thumbImage:
-      'https://sanjayv.github.io/ng-image-slider/contents/assets/img/slider/4.jpg',
+      'assets/slide3.jpg',
     title: 'Example with title.',
   },
   {
     image:
-      'https://sanjayv.github.io/ng-image-slider/contents/assets/img/slider/7.jpg',
+      'assets/slide4.jpg',
     thumbImage:
-      'https://sanjayv.github.io/ng-image-slider/contents/assets/img/slider/7.jpg',
+      'assets/slide4.jpg',
     title: 'Hummingbirds are amazing creatures',
   },
   {
     image:
-      'https://sanjayv.github.io/ng-image-slider/contents/assets/img/slider/1.jpg',
+      'assets/Slide5.jpg',
     thumbImage:
-      'https://sanjayv.github.io/ng-image-slider/contents/assets/img/slider/1.jpg',
+      'assets/Slide5.jpg',
   },
-  {
-    image:
-      'https://sanjayv.github.io/ng-image-slider/contents/assets/img/slider/2.jpg',
-    thumbImage:
-      'https://sanjayv.github.io/ng-image-slider/contents/assets/img/slider/2.jpg',
-    title: 'Example two with title.',
-  },
+  
 ];
 imageObject2:any = [
   {
@@ -97,10 +91,11 @@ imageObject2:any = [
   }
   ngAfterViewInit(){
     console.log(this.slider)
-    
+    //this.slider.manageImageRatio = true
     this.slider.stopSlideOnHover = false
     this.slider.showArrow = false
     this.slider.infinite = false
+    
     //this.slider.manageImageRatio = true
     //this.slider.
     this.slider.ngAfterViewInit()
@@ -197,14 +192,25 @@ imageObject2:any = [
    
   }
   @HostListener('window:resize', ['$event'])
+  
 onResize(event:any) {
+  this.slider.sliderArrowDisableTeam(true)
+  this.slider.sliderMain= 1
   this.timer.unsubscribe()
+  this.imageObject[0].image =   'https://sanjayv.github.io/ng-image-slider/contents/assets/img/slider/7.jpg'
+  //event.preventDefault();
+  //alert(event.target.innerWidth)
   //this.logInService.isVideo.next(true)
+  
   this.slider.handleKeyboardEvent(event)
   //this.slider.setSlid 1erWidth()
   this.slider.showArrow = true
   this.slider.infinite = false
   //this.slider.sw
+  this.slider.ligthboxShow = true
+  this.slider.ligthboxShow = false
+  this.slider.lightboxClose
+ // this.slider.
   this.slider.animationSpeed = 1
  this.slider.imageSize = {'width':event.target.outerWidth}
   this.slider.sliderImageWidth = event.target.outerWidth

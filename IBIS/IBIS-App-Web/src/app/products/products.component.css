@@ -73,6 +73,7 @@ table{
     --background: lightblue;
     --border-radius: 20em;
     float: left;
+    color: black;
     /* display: left; */
 }
 .light-Btns{
@@ -82,6 +83,7 @@ table{
 }
 
 .green-Btn{
+  float: left;
   --background: #5CB85C;
   --border-radius: 10em;
 

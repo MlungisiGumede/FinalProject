@@ -1,10 +1,13 @@
 
 <article class="table-header">
-    <h2>Customer Order:</h2>
-    
+  <div [formGroup]="form" style="display: flex;">
+    <h2 style="margin-top: 10px;" >Customer Order ID:</h2>
+    <input type="number" [(ngModel)]="orderID" required style="margin-left: 10px;width: 250px;float: left;" matInput placeholder="Enter Invoice Number">
+  </div>
     <h2>{{title}}</h2>
 
     <button class="button-add-row" [disabled]="edited" mat-button (click)="addRow()" matTooltip="add row">Add Row</button>
+    
    
   </article>
   <form action="" [formGroup]="form">

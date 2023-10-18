@@ -65,9 +65,9 @@
     
     
     
-      <ion-button class="light-Btn" (click)="addproduct()">Add product</ion-button>
-      <ion-button class="light-Btn" (click)=" AddCategory()">Add Category</ion-button>
-      <ion-button class="light-Btn" (click)=" AddSubCategory()">Add SubCategory</ion-button>
+      <ion-button class="green-Btn" (click)="addproduct()">Add product</ion-button>
+      <ion-button class="green-Btn" (click)=" AddCategory()">Add Category</ion-button>
+      <ion-button class="green-Btn" (click)=" AddSubCategory()">Add SubCategory</ion-button>
       <ion-button class="light-Btn" (click)="generPDF()" >Generate Report</ion-button>
       <ion-button class="light-Btn"  [routerLink]="['/view-write-off']">view write offs</ion-button>
         <ion-button *ngIf="CheckPermission()" class="light-Btn" (click)="request = 'write-off'; edited = 'true';title = 'Select Product to write off'" >Write off</ion-button>

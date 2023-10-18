@@ -41,6 +41,7 @@ export class AddCustomerOrderComponent implements OnInit {
   rowIndexTemplate:any
   globalArray:any
   selectedValue:any
+  orderID:any
   //selectedQuantity:any
   quantityGreater = false
 //@ViewChild(MatTable) myTable: MatTable<any>;
@@ -298,6 +299,7 @@ export class AddCustomerOrderComponent implements OnInit {
      
   ngOnInit() {
     this.form = this.formBuilder.group({
+      //'customerOrder_ID': new FormControl("", Validators.required),
       'records': this.formBuilder.array([])
     
       })
@@ -353,6 +355,10 @@ export class AddCustomerOrderComponent implements OnInit {
     }
     Submit(){
       let customerOrderViewModel:CustomerOrderViewModel = new CustomerOrderViewModel()
+      // if(!this.orderID){
+      //   alert("enter Order ID")
+      //   return;
+      // }
       let customerOrder:CustomerOrder = new CustomerOrder()
       customerOrder.customer_ID = this.data.customer_ID
       let date = new Date(Date.now())

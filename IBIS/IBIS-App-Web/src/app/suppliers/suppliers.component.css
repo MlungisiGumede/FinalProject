@@ -45,7 +45,7 @@
 
 .light-Btn{
   --background: lightblue;
- 
+ color: black;
     --border-radius: 20em;
     float: left;
 }

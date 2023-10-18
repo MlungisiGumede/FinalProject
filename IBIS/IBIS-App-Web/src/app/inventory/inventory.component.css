@@ -49,6 +49,11 @@ table {
     --border-radius: 20em;
     float: right;
 }
+.green-Btn{
+  --background: #5CB85C;
+    --border-radius: 20em;
+    float: right;
+}
 
 .isb{
   width: 40%;
