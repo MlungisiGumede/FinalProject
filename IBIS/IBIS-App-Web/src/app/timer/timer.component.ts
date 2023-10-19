@@ -3,6 +3,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LoginService } from '../Services/login.service';
 import { User } from '../Models/User';
+import { AuthGuardService } from '../Services/auth-guard.service';
 
 @Component({
   selector: 'app-timer',
@@ -19,7 +20,7 @@ user:any
 username:any
 form:any
   constructor(private ActivatedRoute: ActivatedRoute,private loginService:LoginService,
-    private router: Router) { }
+    private router: Router,private authGuardService:AuthGuardService) { }
 
   ngOnInit(): void {
     this.ActivatedRoute.params.subscribe(params => {
@@ -44,9 +45,18 @@ form:any
       console.log(res)
       if(res){
         localStorage.setItem('Token', JSON.stringify(res))
-        this.router.navigate(['/home'])
+        this.authGuardService.previousUrl.subscribe(res =>{
+          //let route:string = res
+          console.log(res)
+          this.router.navigate([res])
+        })
+        
       }else{
-        this.router.navigate(['/Login'])
+        this.authGuardService.previousUrl.subscribe(res =>{
+          //let route:string = res
+          console.log(res)
+          this.router.navigate([res])
+        })
       }
       
     })
