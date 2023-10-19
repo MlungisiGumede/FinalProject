@@ -15,7 +15,7 @@
                 <ion-button class="green-Btn" (click)="SendSms()" >Send Sms</ion-button>
                 <ion-button class="green-Btn" (click)="SubmitOTP()" [disabled]="!otpForm.valid">Submit</ion-button>
                 
-                <ion-button *ngIf="user.username=='u21482358' && previousUrl == '/Login'" class="green-Btn" (click)="SubmitAndSetTimer()" [disabled]="!otpForm.valid">Submit and Set Timer</ion-button>
+                <!-- <ion-button *ngIf="user.username=='u21482358' && previousUrl == '/Login'" class="green-Btn" (click)="SubmitAndSetTimer()" [disabled]="!otpForm.valid">Submit and Set Timer</ion-button> -->
             </div>
             
         </form>

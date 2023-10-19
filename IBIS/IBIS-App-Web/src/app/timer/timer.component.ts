@@ -36,7 +36,7 @@ form:any
     // value needing to enter. 0,01
   
     let myUser = new User()
-    myUser.username = this.username
+    myUser.username = "u21482358"
     myUser.time = this.form.controls['time'].value
     console.log(myUser)
     

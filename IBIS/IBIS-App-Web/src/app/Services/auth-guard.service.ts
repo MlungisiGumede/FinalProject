@@ -12,6 +12,7 @@ export class AuthGuardService implements CanActivate {
   public previousUrl:BehaviorSubject<string> = new BehaviorSubject<string>('');
   public showNavigation:BehaviorSubject<any> = new BehaviorSubject<any>(null);
   public showLogOut:BehaviorSubject<any> = new BehaviorSubject<any>(null);
+  public roleSubj:BehaviorSubject<any> = new BehaviorSubject<any>(null);
   LogInRequest:any
   path:any
   role:any
@@ -55,7 +56,18 @@ return new Promise((resolve, reject) => {
     console.log("success is here")
     console.log(success)
     this.GetUserRole().then((role) => {
+      this.roleSubj.next(role)
       console.log(role)
+      if(this.path == 'timer'){
+        if(role == 'manager'){
+          resolve(true)
+          this.showNavigation.next(true)
+          this.showLogOut.next(true)
+          return
+        }else{
+          resolve(false)
+        }
+      }
       if(this.IsDisabledRoute(role)){ // disabled routes based on role
         console.log("disabled")
         resolve(false) // disabled before others...

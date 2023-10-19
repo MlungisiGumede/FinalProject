@@ -12,7 +12,7 @@
         <h1>Login</h1>
         <input formControlName="username" type="text" [(ngModel)]="name" name="name"  placeholder="username" required/>
         <input formControlName="password" type="password" placeholder="password" required/>
-        <button [disabled]="!loginForm.valid" (click)="onlogin()">login</button>
+        <button style="background-color: rgb(94, 94, 210);color: white;;" [disabled]="!loginForm.valid" (click)="onlogin()">login</button>
         <p class="message">Not registered? <a [routerLink]="['/Register']" matTooltip="create new account">Create an account</a></p>
         <p class="message">Forgot password? <a [routerLink]="['/newPassword']" matTooltip="Reset Password">reset password</a></p>
       </form>

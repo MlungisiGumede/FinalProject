@@ -2,8 +2,15 @@
   <div class="contents">
     <ion-icon id="helpIcon" name="help-circle" style="color: #002850;" (click)="showHelp()" matTooltip="help"></ion-icon>
     <h1>{{title}}</h1>
-    <button (click)="ToCustomer()" >Customer Orders</button>
-    <button (click)="ToSupplier()">Supplier Orders</button>
+    <ion-segment value="custom">
+      <ion-segment-button  (click)="ToCustomer()" value="segment">
+        <ion-label>Customer Orders</ion-label>
+      </ion-segment-button>
+      <ion-segment-button (click)="ToSupplier()"  value="custom">
+        <ion-label>Supplier Orders</ion-label>
+      </ion-segment-button>
+     
+    </ion-segment>
     <ion-searchbar class="isb" placeholder="Search Orders..." showCancelButton="focus" (keyup)="filter($event)" animated></ion-searchbar><br/>
     <mat-form-field style="float: right;"  >
       <mat-label>Select Orders</mat-label>

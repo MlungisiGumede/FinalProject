@@ -28,8 +28,8 @@
 <nav mat-tab-nav-bar class="yellow" *ngIf="showNavigation">
   <a mat-tab-link *ngFor="let tabItem of tabs" [routerLink]="tabItem.route" routerLinkActive #rla="routerLinkActive"
     [active]="rla.isActive">
-    <mat-icon class="mr-8">{{tabItem.icon}}</mat-icon>
-    {{tabItem.label}}
+    <mat-icon style="color: white;" class="mr-8">{{tabItem.icon}}</mat-icon>
+    <span style="color: white;">{{tabItem.label}}</span>
   </a>
 </nav>
 

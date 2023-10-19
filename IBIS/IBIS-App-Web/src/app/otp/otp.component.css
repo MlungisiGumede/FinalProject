@@ -85,7 +85,7 @@ color: lightblue;
     border-radius: 2px;
   }
   .light-Btn{
-    --background: #FFD700;
+    --background: rgb(94, 94, 210);
     --border-radius: 10em;
     display: inline-block;
   }

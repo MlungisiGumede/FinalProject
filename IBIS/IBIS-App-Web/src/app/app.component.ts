@@ -33,6 +33,7 @@ export class AppComponent implements OnInit {
   selectedValue:any
   url:any
   showLogOut:any
+  role:any
   @ViewChild('selector', { static: false }) selector!: MatSelect
 constructor(private loginService : LoginService, public router: Router,
   private authenticationService: AuthenticationService,
@@ -41,6 +42,8 @@ constructor(private loginService : LoginService, public router: Router,
 }
   ngOnInit(): void {
     //this.spinner.show()
+    this.GetUserRole()
+   
   this.authGuardService.showNavigation.subscribe((showNavigation) => {
     this.showNavigation = showNavigation
   })
@@ -71,6 +74,30 @@ constructor(private loginService : LoginService, public router: Router,
 //   }
 // })
 } 
+GetUserRole(){
+  this.authGuardService.roleSubj.subscribe( (role)=>{
+    this.role = role
+    if(role == 'manager'){
+      this.use = [
+        {value: 'user-0', viewValue: 'Display Settings',route: 'Dashboard'},
+        {value: 'user-1', viewValue: 'Profile',route: 'profile'},
+        {value: 'user-2', viewValue: 'Logout',route: 'Login'},
+        {value: 'user-3', viewValue: 'Help',route: 'help-me'},
+        {value:'user-4',viewValue: 'Timer',route: 'timer'}
+      ];
+    }else{
+      this.use = [
+        {value: 'user-0', viewValue: 'Display Settings',route: 'Dashboard'},
+        {value: 'user-1', viewValue: 'Profile',route: 'profile'},
+        {value: 'user-2', viewValue: 'Logout',route: 'Login'},
+        {value: 'user-3', viewValue: 'Help',route: 'help-me'},
+        
+      ];
+    }
+  }
+    //role = 
+  )
+}
 
     
     
@@ -84,6 +111,7 @@ constructor(private loginService : LoginService, public router: Router,
     {value: 'user-1', viewValue: 'Profile',route: 'profile'},
     {value: 'user-2', viewValue: 'Logout',route: 'Login'},
     {value: 'user-3', viewValue: 'Help',route: 'help-me'},
+    {value:'user-4',viewValue: 'Timer',route: 'timer'}
   ];
   tabs: TabItem[] = [
     {

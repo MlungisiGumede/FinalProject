@@ -1,9 +1,9 @@
 
 <article class="table-header">
-  <div [formGroup]="form" style="display: flex;">
+  <!-- <div [formGroup]="form" style="display: flex;">
     <h2 style="margin-top: 10px;" >Customer Order ID:</h2>
     <input type="number" [(ngModel)]="orderID" required style="margin-left: 10px;width: 250px;float: left;" matInput placeholder="Enter Invoice Number">
-  </div>
+  </div> -->
     <h2>{{title}}</h2>
 
     <button class="button-add-row" [disabled]="edited" mat-button (click)="addRow()" matTooltip="add row">Add Row</button>
@@ -103,12 +103,13 @@
             
             <div *ngSwitchCase="'price'">
               
-              <input type="number" formControlName="price" matInput list="price" />
-              <datalist *ngIf="element.price" id="price">
+              <!-- <input type="number" formControlName="price" matInput list="price" /> -->
+            <span> {{FindPrice(element.product_ID)}}</span>
+              <!-- <datalist *ngIf="element.price" id="price">
              <option [value]="FindPrice(element.product_ID)"  >
               {{FindPrice(element.product_ID)}}
              </option>
-            </datalist>
+            </datalist> -->
             </div>
            
   

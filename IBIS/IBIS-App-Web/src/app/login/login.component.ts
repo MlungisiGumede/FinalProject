@@ -18,9 +18,9 @@ export class LoginComponent implements OnInit {
   data: any;
   users : User[]=[];
   name ="";
-  dataLoaded=false
+  dataLoaded=true
   files:any
-  src:any =  "../../assets/butchery.jpg"
+  src:any =  "../../assets/Slide5.jpg"
   url:any
   loginForm!: FormGroup;
   
@@ -51,7 +51,7 @@ this.loginservice.setlogin(true)
       console.log(res)
       this.dataLoaded = true
       if(res[0]){
-        this.src = res[0].base64
+        //this.src = res[0].base64
         this.url = res[0].base64
         //this.src = res[0].base64
         console.log(res[0].base64)

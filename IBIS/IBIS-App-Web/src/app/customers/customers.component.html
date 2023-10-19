@@ -1,7 +1,7 @@
 <ion-content class="ion-margin" id="htmlData">
     <div class="contents">
       <ion-icon id="helpIcon" name="help-circle" style="color: #002850;" (click)="showHelp()"></ion-icon>
-      <ion-title><h1>Customer</h1></ion-title>
+      <h1 style="color: black;">Customers</h1>
       <ion-searchbar (keyup)="filter($event)" class="isb" placeholder="Search Customers..." showCancelButton="focus" [(ngModel)]="filterTerm" animated></ion-searchbar><br/>
       <table mat-table #orderTable [dataSource]="dataSource" class="mat-elevation-z0">
         <ng-container [matColumnDef]="col.key" *ngFor="let col of columnsSchema">
