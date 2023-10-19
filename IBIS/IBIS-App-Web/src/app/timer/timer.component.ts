@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { LoginService } from '../Services/login.service';
 import { User } from '../Models/User';
 import { AuthGuardService } from '../Services/auth-guard.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-timer',
@@ -20,7 +21,8 @@ user:any
 username:any
 form:any
   constructor(private ActivatedRoute: ActivatedRoute,private loginService:LoginService,
-    private router: Router,private authGuardService:AuthGuardService) { }
+    private router: Router,private authGuardService:AuthGuardService,
+    private _snackbar:MatSnackBar) { }
 
   ngOnInit(): void {
     this.ActivatedRoute.params.subscribe(params => {
@@ -45,6 +47,7 @@ form:any
       console.log(res)
       if(res){
         localStorage.setItem('Token', JSON.stringify(res))
+        this.ShowSnackBar("log in timer set","success")
         this.authGuardService.previousUrl.subscribe(res =>{
           //let route:string = res
           console.log(res)
@@ -64,5 +67,13 @@ form:any
     //localStorage.setItem('OTP', this.otp)
     console.log(localStorage.getItem('Token'))
   }
+  ShowSnackBar(message: string, panel: string) {
+    this._snackbar.open(message, "", {
+      duration: 5000,
+      panelClass: [panel]
+      
+    });
+  }
+
 
 }

@@ -590,7 +590,7 @@ if(!this.CheckPermission()){
     
   }
   ShowSnackBar(message: string, panel: string) {
-    this._snackbar.open(message, "close", {
+    this._snackbar.open(message, "", {
       duration: 5000,
       panelClass: [panel]
       

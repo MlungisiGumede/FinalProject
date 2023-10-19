@@ -254,7 +254,7 @@ async showHelp(){
     return await modal.present();
 }
 private ShowSnackBar(message: string, panel: string){
-  this._snackBar.open(message, "close", {
+  this._snackBar.open(message,"", {
     duration: 2000,
     panelClass: [panel]
   })
