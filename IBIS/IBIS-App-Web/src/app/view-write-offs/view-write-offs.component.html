@@ -1,6 +1,6 @@
 <ion-content class="ion-margin" id="htmlData">
   <div class="contents">
-    <ion-title><h1>Write offs</h1></ion-title>
+   <h1 style="color: black;">Write offs</h1>
     <ion-searchbar class="isb" placeholder="Search Products..." showCancelButton="focus" (keyup)="filter($event)" animated></ion-searchbar><br/>
     <table mat-table #orderTable [dataSource]="dataSource" class="mat-elevation-z0">
       <ng-container [matColumnDef]="col.key" *ngFor="let col of columnsSchema">

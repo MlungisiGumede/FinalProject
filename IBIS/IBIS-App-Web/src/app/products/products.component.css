@@ -29,9 +29,10 @@ mat-column-name{
 }
 .mat-column-price{
   width: 10%;
+ 
 }
 table{
-  width: 100%;
+  width: 90%;
 }
 
 
@@ -83,7 +84,7 @@ table{
 }
 
 .green-Btn{
-  float: left;
+   float: left; 
   --background: #5CB85C;
   --border-radius: 10em;
 
@@ -94,6 +95,7 @@ table{
   --border-radius: 10em;
 
 }
+
 
 .red-Btn{
     --background: #EF9A9A;
@@ -160,6 +162,10 @@ ion-grid {
         width: 80%;
         margin-top: 2vh;
         margin-left: 5vw;
+      }
+      .mat-column-price{
+        width: 10%;
+       max-width: 50px;
       }
       .logo{
           margin-left: 2vw !important;

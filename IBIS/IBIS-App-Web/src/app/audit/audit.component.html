@@ -1,7 +1,7 @@
 <ion-content class="ion-margin" id="htmlData">
     <div class="contents">
       <ion-icon id="helpIcon" name="help-circle" style="color: #002850;" (click)="showHelp()" matTooltip="Help"></ion-icon>
-      <ion-title><h1>Audit Trail</h1></ion-title>
+      <h1 style="color: black;">Audit Trail</h1>
       <ion-searchbar class="isb" placeholder="Search Audit trail..." showCancelButton="focus" (keyup)="filter($event)" animated></ion-searchbar><br/>
       <table mat-table #orderTable [dataSource]="dataSource" class="mat-elevation-z0">
         <ng-container [matColumnDef]="col.key" *ngFor="let col of columnsSchema">

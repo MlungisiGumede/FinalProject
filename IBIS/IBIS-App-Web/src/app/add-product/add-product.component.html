@@ -71,16 +71,16 @@
             <input type="file" id="file" style="display: none;" accept="image/*" formControlName="image" (change)="ScanFile($event)" #fileUpload/>
             
             
-            <button (click)="fileUpload.click()" class="formElement" >Scan Image</button>
+            <button (click)="fileUpload.click()" style="margin-left: 25%;" class="formElement" >Scan Image</button>
             <br>
-            <span class="formElement2">
+            <span class="formElement2" style="margin-left: 25%;">
               <img style="max-width: 300px;max-height: 300px;" src="{{url}}" alt="no Identifier">
             </span>
             <br>
             <br>
             <br>
             <br>
-            <input type="text" class="formElement" formControlName="sku" readonly placeholder="No identifier" >
+            <input type="text" class="formElement"  style="margin-left: 25%;" formControlName="sku" readonly placeholder="No identifier" >
           <div style="width: 20px;height: 20px;float: right;display: none;" id="reader"></div>
         </div>
 
@@ -95,13 +95,13 @@
         <button type="submit" >Submit<ion-ripple-effect></ion-ripple-effect></button> -->
       <!-- </div> -->
         </div>
-        <button *ngIf="selectedPage<2" (click)="PageForward()" class="NextButt2">Next</button>
+        <button *ngIf="selectedPage<2" (click)="PageForward()" class="NextButt">Next</button>
         <div style="display: flex;">
          
-        <button  *ngIf="selectedPage>1" (click)="PageBackward();" class="NextButt">Back</button>
+        <button  *ngIf="selectedPage>1" (click)="PageBackward();" style="margin-left: 10%;" class="formElement">Back</button>
         <button  *ngIf="selectedPage>1" class="SubmitButt" (click)="AddProduct()"  [disabled]="!form.valid" >Submit</button>
         </div>
-        <mat-radio-group  #radioGroup  formControlName="page">
+        <mat-radio-group style="margin-left: 43%;" #radioGroup  formControlName="page">
           
           <mat-radio-button (click)="preventDefault($event)"  *ngFor="let radio of radioList$ | async let i=index"[value]="i+1" ></mat-radio-button>
          

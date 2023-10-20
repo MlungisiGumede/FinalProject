@@ -3,7 +3,7 @@
       <h1 style="color: black;">{{welcome}}</h1>
       <h1>Your Orders</h1>
       <mat-form-field>
-        <input matInput type="search" placeholder="Search Orders..." [(ngModel)]="filterTerm">
+        <input matInput type="search" placeholder="Search Orders..." (keyup)="filter($event)" >
       </mat-form-field>
       
       <!-- <ion-searchbar class="isb" placeholder="Search Inventory..." showCancelButton="focus" [(ngModel)]="filterTerm" animated></ion-searchbar><br/> -->

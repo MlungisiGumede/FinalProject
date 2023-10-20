@@ -54,6 +54,32 @@
   --border-radius: 20em;
   float: right;
 }
+@media (max-width: 800px) {
+  /* tr {display: block; } */
+  td { word-break: break-all;
+    word-spacing:9999px; }
+  
+}
+.mat-column-email{
+   width: 20%; 
+
+}
+.mat-column-address{
+  width: 10%;
+}
+.mat-column-phone{
+  width: 10%;
+}
+.mat-column-name{
+  width: 10%;
+}
+.mat-column-actions{
+  width: 15%;
+}
+.mat-row {
+  min-width: max-content;
+}
+
 
 .green-Btn{
   --background: #5CB85C;
@@ -109,7 +135,7 @@ ion-grid {
 
   @media (max-width: 390px) {
     .contents{
-      width: 80%;
+      width: 100%;
       margin-top: 2vh;
       margin-left: 10vw;
     }
@@ -123,7 +149,7 @@ ion-grid {
   
     @media (max-width: 820px) {
       .contents{
-        width: 80%;
+        width: 100%;
         margin-top: 2vh;
         margin-left: 5vw;
       }

@@ -186,9 +186,22 @@ filteredCustomerOrders:any = of([{}])
     }
     return
   }
+  filter(event:any){
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+    this.dataSource.filterPredicate = function (record,filter) {
+      console.log(record)
+      return record.total.toString().includes(filter) || record.date.toString().includes(filter) || record.orderStatus.toLowerCase().includes(filter)
+  }
+  this.dataSource.filter = filterValue.trim().toLowerCase();
+}
+  
+ 
+  
   FilterOrders(){
     if(this.selectedStatus == 4){
       this.filteredCustomerOrders = of(this.customerOrders)
+      this.customerOrders = [...this.customerOrders]
       this.dataSource = new MatTableDataSource(this.customerOrders)
       this.dataSource.paginator = this.paginator
       this.dataSource._updateChangeSubscription()

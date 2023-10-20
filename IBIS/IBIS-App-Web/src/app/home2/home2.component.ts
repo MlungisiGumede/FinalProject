@@ -222,7 +222,7 @@ onResize(event:any) {
   this.slider.stopSlideOnHover = true
 }
 @HostListener('touchend', ['$event']) onSwipeEnd($event:any) {
- alert("swipe")
+ //alert("swipe")
 }
   NotVideo(){
     const reloadInterval = 960;
