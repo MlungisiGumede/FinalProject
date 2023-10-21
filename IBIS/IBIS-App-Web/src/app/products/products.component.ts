@@ -359,7 +359,9 @@ ViewProduct(item:any){
   if(this.categories && this.subCategories){
     //let product:any = this.products.find((product:any) => product.product_ID == item.product_ID)
   dialogRef = this.matDialog.open(ViewProductComponent,{
-    data:{'product':item,'categories':this.categories,'subCategories':this.subCategories}
+    data:{'product':item,'categories':this.categories,'subCategories':this.subCategories},
+    height:'100%',
+        width:'80%'
   })
 }
   dialogRef.afterClosed().subscribe((result:any) => {
@@ -438,6 +440,8 @@ OnDone(item:Product){
     //if(this.categories && this.subCategories){
       dialogRef = this.matDialog.open(AddProductComponent,{
         data:{'categories':this.categories,'subCategories':this.subCategories},
+        height:'100%',
+        width:'80%'
         
       });
    // }

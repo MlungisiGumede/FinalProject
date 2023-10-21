@@ -239,8 +239,9 @@ subscribe(res => {
   }
 
   onCategoryChange(event: any) {
+    console.log(event)
     this.form.get('subCategory_ID')?.setValue(null);
-    const selectedCategory = event.target.value;
+    const selectedCategory = event.value;
     this.selectedCategory = selectedCategory;
     this.filteredSubcategories = []
     console.log(this.subCategories)

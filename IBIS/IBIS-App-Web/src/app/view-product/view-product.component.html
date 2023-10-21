@@ -26,7 +26,7 @@
           
 
           <!-- <div> -->
-          
+<!--           
             <ion-item class="drop-down-sub2">
               <ion-label position="floating">Category</ion-label>
               <ion-select interface="popover" formControlName="category_ID" (ionChange)="onCategoryChange($any($event.target).value)">
@@ -42,8 +42,26 @@
                 <ion-select interface="popover" formControlName="subCategory_ID">
                   <ion-select-option *ngFor="let subcategory of filteredSubcategories" [value]="subcategory.subCategory_ID">{{ subcategory.name }}</ion-select-option>
                 </ion-select>
-              </ion-item>
-            
+              </ion-item> -->
+              <div class="input-box">
+                <span  class="details">Category</span>
+                  
+                 <mat-form-field style=" height: 60%;background-color: white;margin-left: 30px;width: 60%;">
+                   <mat-label>Category</mat-label>
+                 <mat-select style="background-color: white;" formControlName="category_ID" (selectionChange)="onCategoryChange($event)">
+                   <mat-option *ngFor="let category of categories" [value]="category.category_ID">{{ category.name }}</mat-option>
+                 </mat-select>
+               </mat-form-field>
+               </div>
+               <div class="input-box">
+               <span  class="details">Sub-Category</span>
+               <mat-form-field class="input-box" style="height: 60%;background-color: white;margin-left: 30px;width: 60%;">
+                 <mat-label>Sub-Category</mat-label>
+                 <mat-select style="height: 100%;" formControlName="subCategory_ID" >
+                   <mat-option *ngFor="let subcategory of filteredSubcategories" [value]="subcategory.subCategory_ID">{{ subcategory.name }}</mat-option>
+                 </mat-select>
+               </mat-form-field>
+               </div>
            
           <div class="input-box">
             <span class="details">Quantity</span>

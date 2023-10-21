@@ -22,11 +22,17 @@ body{
   background-color: black;
   border:yellow 10px;
   padding-bottom:  5px;
-  padding-left: 25px;;
+  /* padding-left: 25px;; */
   border-radius: 5px;
   box-shadow: 0 5px 10px rgba(0,0,0,0.15);
   justify-content: center;
 }
+body{
+  background-color: black;
+}
+/* .mat-dialog-container{
+  background-color: black;
+} */
 .container .title{
   font-size: 25px;
   font-weight: 500;
@@ -313,7 +319,7 @@ color: grey;
 form .user-details .input-box{
     
     width: 100%;
-    color: yellow;
+    color: gray;
   }
   form .category{
     width: 100%;

@@ -74,13 +74,13 @@ minExpiryDateValidator(control: any): { [key: string]: boolean } | null {
   return null;
 }
 
-onCategoryChange(value: any) {
+onCategoryChange(event: any) {
   if(this.form){
     console.log(this.form.value)
     this.form.get('subCategory_ID')?.setValue(null);
   }
   
-  const selectedCategory = value
+  const selectedCategory = event.value
   this.selectedCategory = selectedCategory;
   this.filteredSubcategories = []
   console.log(this.subCategories)
